@@ -6,9 +6,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { RenderProp } from '@ui-kitten/components/devsupport';
 import PhoneInput from 'react-native-phone-input'
+import { StackScreenProps } from '@react-navigation/stack';
+import { ScreenProps } from '../types';
 
 
-export default ({ navigation }) => {
+export default ({ navigation }: StackScreenProps<ScreenProps>) => {
     const [secureTextEntry, setSecureTextEntry] = useState(true);
 
     const toggleSecureEntry = () => {

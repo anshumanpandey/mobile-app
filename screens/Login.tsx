@@ -9,9 +9,11 @@ import useAxios from 'axios-hooks'
 import { Formik } from 'formik';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import { dispatchGlobalState } from '../state';
+import { StackScreenProps } from '@react-navigation/stack';
+import { ScreenProps } from '../types';
 
 
-export default ({ navigation }) => {
+export default ({ navigation }: StackScreenProps<ScreenProps>) => {
     const [{ data, loading, error }, doLogin] = useAxios({
         url: `${GRCGDS_BACKEND}/login`,
         method: 'POST'
