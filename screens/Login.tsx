@@ -10,10 +10,10 @@ import { Formik } from 'formik';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import { dispatchGlobalState } from '../state';
 import { StackScreenProps } from '@react-navigation/stack';
-import { ScreenProps } from '../types';
+import { NonLoginScreenProps, LoginScreenProps } from '../types';
 
 
-export default ({ navigation }: StackScreenProps<ScreenProps>) => {
+export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
     const [{ data, loading, error }, doLogin] = useAxios({
         url: `${GRCGDS_BACKEND}/login`,
         method: 'POST'
@@ -71,7 +71,7 @@ export default ({ navigation }: StackScreenProps<ScreenProps>) => {
                     .then((res) => {
                         dispatchGlobalState({ type: 'token', state: res.data.token})
                         dispatchGlobalState({ type: 'profile', state: res.data})
-                        navigation.navigate('Home')
+                        navigation.navigate('Bookings')
                     })
                 }}
             >

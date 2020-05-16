@@ -7,10 +7,10 @@ import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { RenderProp } from '@ui-kitten/components/devsupport';
 import PhoneInput from 'react-native-phone-input'
 import { StackScreenProps } from '@react-navigation/stack';
-import { ScreenProps } from '../types';
+import { NonLoginScreenProps } from '../types';
 
 
-export default ({ navigation }: StackScreenProps<ScreenProps>) => {
+export default ({ navigation }: StackScreenProps<NonLoginScreenProps>) => {
     const [secureTextEntry, setSecureTextEntry] = useState(true);
 
     const toggleSecureEntry = () => {
