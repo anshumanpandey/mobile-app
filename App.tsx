@@ -5,7 +5,7 @@
  * @format
  * @flow strict-local
  */
-
+import 'react-native-gesture-handler';
 import React from 'react'
 import { Component } from 'react'
 import {
@@ -25,16 +25,19 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import * as eva from '@eva-design/eva';
-import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
+import { ApplicationProvider } from '@ui-kitten/components';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import Login from './screens/Login';
 
-
-const HomeScreen = () => (
-  <Login />
-);
+const Stack = createStackNavigator();
 
 export default () => (
   <ApplicationProvider {...eva} theme={eva.light}>
-    <HomeScreen />
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Login" component={Login} />
+      </Stack.Navigator>
+    </NavigationContainer>
   </ApplicationProvider>
 );
