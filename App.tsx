@@ -28,18 +28,34 @@ import * as eva from '@eva-design/eva';
 import { ApplicationProvider } from '@ui-kitten/components';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import './utils/AxiosBootstrap';
 import Login from './screens/Login';
 import Signup from './screens/Signup';
+import Home from './screens/Home';
+import { useGlobalState } from './state';
 
 const Stack = createStackNavigator();
 
-export default () => (
-  <ApplicationProvider {...eva} theme={eva.light}>
-    <NavigationContainer>
-      <Stack.Navigator headerMode='none'>
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Signup" component={Signup} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  </ApplicationProvider>
-);
+export default () => {
+  const [token] = useGlobalState('token');
+  return (
+    <ApplicationProvider {...eva} theme={eva.light}>
+      <NavigationContainer>
+        <Stack.Navigator headerMode='none'>
+          {token ? (
+            <>
+              <Stack.Screen name="Home" component={Home} />
+            </>
+          ) : (
+              <>
+                <Stack.Screen name="Login" component={Login} />
+                <Stack.Screen name="Signup" component={Signup} />
+              </>
+            )}
+
+
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ApplicationProvider>
+  )
+};
