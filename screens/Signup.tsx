@@ -1,10 +1,11 @@
 
 import React, { useState } from 'react'
-import { Layout, Text, Input, Button } from '@ui-kitten/components';
+import { Layout, Text, Input, Button, Select, SelectItem } from '@ui-kitten/components';
 import { TouchableWithoutFeedback, ImageProps } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { RenderProp } from '@ui-kitten/components/devsupport';
+import PhoneInput from 'react-native-phone-input'
 
 
 export default ({ navigation }) => {
@@ -16,15 +17,18 @@ export default ({ navigation }) => {
 
     const renderInputIcon: RenderProp<Partial<ImageProps>> = (props) => (
         <TouchableWithoutFeedback onPress={toggleSecureEntry}>
-            <Icon style={{ color: secureTextEntry ? '#e4e9f2' :'black'}} name={secureTextEntry ? 'eye' : 'eye-slash'} size={30} />
+            <Icon style={{ color: secureTextEntry ? '#e4e9f2' : 'black' }} name={secureTextEntry ? 'eye' : 'eye-slash'} size={30} />
         </TouchableWithoutFeedback>
     );
 
     return (
-        <Layout style={{ flex: 1, padding: 10 }}>
+        <Layout style={{ flex: 1, padding: 10, overflow: 'scroll' }}>
             <Layout style={{ paddingBottom: 35 }}>
-                <Text style={{ textAlign: 'left', fontSize: 25, marginBottom: 10 }} category='s2'>Welcome back, Guy!</Text>
-                <Text style={{ textAlign: 'left', fontSize: 15, color: '#8f9bb5' }} category='s2'>Sign in to your account</Text>
+                <Text style={{ textAlign: 'left', fontSize: 25, marginBottom: 10 }} category='s2'>Create your account</Text>
+                <Layout style={{ display: 'flex', flexDirection: 'row' }}>
+                    <Text style={{ color: 'black' }}>Already have an account? </Text>
+                    <Text onPress={() => navigation.navigate('Login')} style={{ color: '#41d5fb' }}>Log in</Text>
+                </Layout>
             </Layout>
 
             <Input
@@ -35,7 +39,7 @@ export default ({ navigation }) => {
             />
 
             <Input
-                style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: 20 }}
+                style={{ backgroundColor: '#ffffff', borderRadius: 10 }}
                 size="large"
                 label={() => <Text style={{ fontSize: 15, marginBottom: 10 }} category='s2'>Password</Text>}
                 placeholder='Enter your password'
@@ -43,11 +47,18 @@ export default ({ navigation }) => {
                 accessoryRight={renderInputIcon}
             />
 
-            <Text style={{ fontSize: 15, textAlign: 'right', color: '#70dffb', marginBottom: 20 }} category='s2'> Forgot your password? </Text>
+            <Layout>
+                <Text style={{ fontSize: 15, marginBottom: 10 }} category='s2'>Phone number</Text>
+                <PhoneInput
+                    style={{ borderWidth: 1, borderRadius: 10, borderColor: '#e5eaf2', padding: 15, marginBottom: 25 }}
+                    textProps={{ placeholder: 'Mobile number' }}
+                />
+            </Layout>
+
             <Button size="giant" style={{
                 backgroundColor: '#41d5fb',
                 borderColor: '#41d5fb',
-                marginBottom: 45,
+                marginBottom: 40,
                 borderRadius: 10,
                 shadowColor: '#41d5fb',
                 shadowOffset: {
@@ -58,9 +69,9 @@ export default ({ navigation }) => {
                 shadowRadius: 13.16,
                 elevation: 10,
             }}>
-                Sign in
+                Sign up
             </Button>
-            <Text style={{ textAlign: 'center', color: '#8f9bb5', marginBottom: 10 }} category='s2'>Or sign in with social account</Text>
+            <Text style={{ textAlign: 'center', color: '#8f9bb5', marginBottom: 20 }} category='s2'>Or sign in with social account</Text>
 
             <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
                 <Button size="small" accessoryLeft={() => <EntypoIcon style={{ color: '#ffffff' }} name="facebook-with-circle" size={22} />} style={{ borderRadius: 10, backgroundColor: '#3b5a99', borderColor: '#3b5a99', paddingLeft: 20, paddingRight: 20 }}>
@@ -72,9 +83,11 @@ export default ({ navigation }) => {
             </Button>
             </Layout>
 
-            <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: 30 }}>
-                <Text style={{ color: 'black' }}> Don't have an account? </Text>
-                <Text onPress={() => navigation.navigate('Signup')} style={{ color: '#41d5fb' }}>Sign up</Text>
+            <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: 30, flexWrap: 'wrap' }}>
+                <Text style={{ color: 'black' }}>By clicking "Sign Up" you agree to our</Text>
+                <Text style={{ color: '#41d5fb' }}>terms and conditions </Text>
+                <Text style={{ color: 'black' }}>as well as our </Text>
+                <Text style={{ color: '#41d5fb' }}>privacy policy</Text>
             </Layout>
         </Layout>
     )
