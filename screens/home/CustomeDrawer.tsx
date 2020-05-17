@@ -22,10 +22,10 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
     const [profile] = useGlobalState('profile')
     return (
         <View style={styles.container}>
-            <Layout style={{ display: 'flex', flexDirection: 'row', paddingBottom: 40 }}>
+            <Layout style={{ width: '75%',display: 'flex', flexDirection: 'row', paddingBottom: '20%' }}>
                 <Avatar size='giant' source={{ uri: "http://lorempixel.com/400/400" }} />
-                <Layout style={{ marginLeft: 20 }}>
-                    <Text category='h3'>{profile?.firstName}</Text>
+                <Layout style={{ marginLeft: '10%' }}>
+                    <Text category='h3'>{profile?.firstName || profile?.email}</Text>
                     <Text style={{ color: '#52e6fe' }} category='s1'>Edit profile</Text>
                 </Layout>
 
@@ -33,7 +33,7 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
             <Divider/>
 
             <FlatList
-            style={{ paddingTop: 30 }}
+            style={{ paddingTop: '15%' }}
                 data={menuData}
                 renderItem={({ item }) => (
                     // @ts-ignore
@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "rgba(255,255,255,0.43)",
-        paddingTop: 50,
-        paddingLeft: 30
+        paddingTop: '20%',
+        paddingLeft: '10%'
     },
     menuItem: {
         flexDirection: "row"
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     menuItemText: {
         fontSize: 20,
         fontWeight: "300",
-        margin: 15
+        marginBottom: '15%'
     },
 });
 

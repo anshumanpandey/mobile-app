@@ -11,6 +11,7 @@ import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import { dispatchGlobalState } from '../state';
 import { StackScreenProps } from '@react-navigation/stack';
 import { NonLoginScreenProps, LoginScreenProps } from '../types';
+import LoadingSpinner from '../partials/LoadingSpinner';
 
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
@@ -37,8 +38,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     }, [loading]);
 
     return (
-        <Layout style={{ flex: 1, padding: 10 }}>
-            <Layout style={{ paddingBottom: 35 }}>
+        <Layout style={{ flex: 1, padding: '3%' }}>
+            <Layout style={{ paddingBottom: '10%' }}>
                 <Text style={{ textAlign: 'left', fontSize: 25, marginBottom: 10 }} category='s2'>Welcome back, Guy!</Text>
                 <Text style={{ textAlign: 'left', fontSize: 15, color: '#8f9bb5' }} category='s2'>Sign in to your account</Text>
             </Layout>
@@ -60,7 +61,6 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
             <Formik
                 initialValues={{ clientname: 'bookingclik', password: 'bookingclik' }}
                 onSubmit={values => {
-                    console.log(values)
                     if (!values.clientname) return
                     if (!values.password) return
                     const data = {
@@ -81,30 +81,32 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             <Input
                                 value={values.clientname}
                                 onChangeText={handleChange('clientname')}
-                                style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: 10 }}
+                                style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                 size="large"
-                                label={() => <Text style={{ fontSize: 15, marginBottom: 10 }} category='s2'>Email</Text>}
+                                label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Email</Text>}
                                 placeholder='Enter your email'
                             />
 
                             <Input
                                 value={values.password}
                                 onChangeText={handleChange('password')}
-                                style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: 20 }}
+                                style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                 size="large"
-                                label={() => <Text style={{ fontSize: 15, marginBottom: 10 }} category='s2'>Password</Text>}
+                                label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Password</Text>}
                                 placeholder='Enter your password'
                                 secureTextEntry={secureTextEntry}
                                 accessoryRight={renderInputIcon}
                             />
-                            <Text style={{ fontSize: 15, textAlign: 'right', color: '#70dffb', marginBottom: 20 }} category='s2'> Forgot your password? </Text>
+                            <Text style={{ fontSize: 15, textAlign: 'right', color: '#70dffb', marginBottom: '6%' }} category='s2'> Forgot your password? </Text>
                             <Button
+                                accessoryRight={loading ? LoadingSpinner : undefined}
+                                disabled={loading}
                                 onPress={(e) => { handleSubmit() }}
                                 size="giant"
                                 style={{
                                     backgroundColor: '#41d5fb',
                                     borderColor: '#41d5fb',
-                                    marginBottom: 45,
+                                    marginBottom: '15%',
                                     borderRadius: 10,
                                     shadowColor: '#41d5fb',
                                     shadowOffset: {
@@ -122,7 +124,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                 }}
             </Formik>
 
-            <Text style={{ textAlign: 'center', color: '#8f9bb5', marginBottom: 10 }} category='s2'>Or sign in with social account</Text>
+            <Text style={{ textAlign: 'center', color: '#8f9bb5', marginBottom: '5%' }} category='s2'>Or sign in with social account</Text>
 
             <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
                 <Button size="small" accessoryLeft={() => <EntypoIcon style={{ color: '#ffffff' }} name="facebook-with-circle" size={22} />} style={{ borderRadius: 10, backgroundColor: '#3b5a99', borderColor: '#3b5a99', paddingLeft: 20, paddingRight: 20 }}>
@@ -134,7 +136,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
             </Button>
             </Layout>
 
-            <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: 30 }}>
+            <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10%' }}>
                 <Text style={{ color: 'black' }}> Don't have an account? </Text>
                 <Text onPress={() => navigation.navigate('Signup')} style={{ color: '#41d5fb' }}>Sign up</Text>
             </Layout>

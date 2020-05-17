@@ -13,6 +13,8 @@ axios.interceptors.request.use(
         config.headers.Authorization = `Bearer ${state.token}`;
       }
 
+      console.log(config.url)
+
       return config;
     }
   );
