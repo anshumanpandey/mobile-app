@@ -9,12 +9,14 @@ import NotificationScreen from './NotificationScreen';
 import ProfileScreen from './ProfileScreen';
 import DocumentScreen from './DocumentScreen';
 import MyTripsScreens from './MyTripsScreen';
+import ActivateScreen from './ActivateScreen';
 
 const Drawer = createDrawerNavigator();
 export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
 
     return (
         <Drawer.Navigator drawerContent={(props) => <DrawerMenu navigation={props.navigation} />} initialRouteName="Home">
+            <Drawer.Screen name="Activate" component={ActivateScreen} />
             <Drawer.Screen name="MyTrips" component={MyTripsScreens} />
             <Drawer.Screen name="Bookings" component={BookingScreen} />
             <Drawer.Screen name="Notifications" component={NotificationScreen} />

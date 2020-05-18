@@ -17,6 +17,7 @@ const menuData = [
     { name: "Profile", screenName: "Profile", key: 3 },
     { name: "Documents", screenName: "Documents", key: 4 },
     { name: "My Trips", screenName: "MyTrips", key: 5 },
+    { name: "Activate", screenName: "Activate", key: 6 },
 ];
 
 const DrawerMenu = ({ navigation }: { navigation: any }) => {

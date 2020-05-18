@@ -17,7 +17,7 @@ const DocumentScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Layout style={{ flex: 1, backgroundColor: 'green' }}>
+      <Layout style={{ flex: 1 }}>
 
         <Layout style={{ display: 'flex', alignItems: 'flex-end',paddingBottom: '5%' }}>
           <Datepicker

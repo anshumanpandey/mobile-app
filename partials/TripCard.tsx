@@ -15,13 +15,18 @@ type Props = {
   finalCost: string
   arrivalTime: string
 
+  leftImage?: JSX.Element
+
 }
 const TripCard: React.FC<Props> = (props) => {
   return (
     <Layout style={{ backgroundColor: '#00000000', marginBottom: '5%' }}>
-      <Text style={{ marginBottom: '3%' }}>{props.tripDate}</Text>
+      <Layout style={{ backgroundColor: '#00000000', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end'}}>
+        <Text style={{ marginBottom: '3%' }}>{props.tripDate}</Text>
+        {props.leftImage}
+      </Layout>
 
-      <Card style={{ display: 'flex', flexDirection: 'column', borderRadius: 16, borderWidth: 0 }}>
+      <Card disabled={true} style={{ display: 'flex', flexDirection: 'column', borderRadius: 16, borderWidth: 0 }}>
         <Layout style={{ display: 'flex', flexDirection: 'row' }}>
           <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', marginRight: '5%' }}>
             <FontAwesomeIcon size={15} style={{ color: '#41d5fb' }} name="circle" />
@@ -45,19 +50,19 @@ const TripCard: React.FC<Props> = (props) => {
           </Layout>
         </Layout>
         <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 1, paddingTop: '5%' }}>
-          <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '50%' }}>
             <Layout style={{ marginRight: '3%' }}>
               <Avatar style={{ borderRadius: 10 }} shape='square' source={{ uri: "http://lorempixel.com/400/400" }} />
             </Layout>
 
             <Layout>
-              <Text category='h6'>{props.driver}</Text>
+              <Text style={{ width: '80%'}} numberOfLines={1} textBreakStrategy="balanced" category='h6'>{props.driver}</Text>
               <Text>{props.score}</Text>
             </Layout>
           </Layout>
 
-          <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Layout style={{ marginRight: '5%' }}>
+          <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '50%' }}>
+            <Layout>
               <Text style={{ color: '#c8b5d3' }}>Final cost</Text>
               <Text>{props.finalCost}</Text>
             </Layout>
