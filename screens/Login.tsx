@@ -16,7 +16,7 @@ import LoadingSpinner from '../partials/LoadingSpinner';
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
     const [{ data, loading, error }, doLogin] = useAxios({
-        url: `${GRCGDS_BACKEND}/login`,
+        url: `${GRCGDS_BACKEND}/public/login`,
         method: 'POST'
     }, { manual: true })
 
@@ -71,7 +71,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     .then((res) => {
                         dispatchGlobalState({ type: 'token', state: res.data.token})
                         dispatchGlobalState({ type: 'profile', state: res.data})
-                        navigation.navigate('Bookings')
+                        navigation.navigate('Home')
                     })
                 }}
             >

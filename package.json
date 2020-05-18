@@ -6,6 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
+    "start:reset-cache": "react-native start --reset-cache",
     "test": "jest",
     "lint": "eslint .",
     "build:debug": "react-native run-android --variant=release"
