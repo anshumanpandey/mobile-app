@@ -1,10 +1,7 @@
 
-import React, { useState, useRef, useEffect } from 'react'
+import React from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { View } from 'react-native';
-import { Button } from '@ui-kitten/components';
 import { LoginScreenProps } from '../../types';
 import DrawerMenu from './CustomeDrawer';
 import BookingScreen from './BookingScreen';
