@@ -35,7 +35,7 @@ const DocumentScreen = () => {
 
           <Layout style={{ padding: '5%', backgroundColor: '#f7f9fc'}}>
           <TripCard
-            tripDate={"Today, 08:30 AM"}
+            tripDate={moment()}
             pickupLocation={"Main Street, Darlington "}
             dropOffLocation={"Main Street, Darlington "}
             pickupTime={"7:15 PM"}
@@ -49,8 +49,8 @@ const DocumentScreen = () => {
 
             leftImage={
               <Image
-                style={{ width: 120, height: 120 }}
-                source={require('../../image/key.png')}
+                style={{ width: 60, height: 60 }}
+                source={require('../../image/rightcars.png')}
               />
             }
 
@@ -58,19 +58,20 @@ const DocumentScreen = () => {
 
             <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#00000000' }}>
               <Image
+                style={{ width: 120, height: 120 }}
                 source={require('../../image/start.png')}
               />
               <Layout style={{ display: 'flex', flexDirection: 'row', backgroundColor: '#00000000' }}>
                 <Image
-                  style={{ width: 120, height: 120 }}
+                  style={{ width: 100, height: 100 }}
                   source={require('../../image/lock.png')}
                 />
                 <Image
-                  style={{ width: 120, height: 120 }}
+                  style={{ width: 100, height: 100 }}
                   source={require('../../image/g1.jpg')}
                 />
                 <Image
-                  style={{ width: 120, height: 120 }}
+                  style={{ width: 100, height: 100 }}
                   source={require('../../image/unlock.png')}
                 />
               </Layout>

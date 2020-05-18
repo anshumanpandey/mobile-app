@@ -3,8 +3,8 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Layout, Text, Button, TabBar, Tab, Datepicker, NativeDateService, TabView, Card, Avatar } from '@ui-kitten/components';
 
-type Props = {
-  tripDate: string
+export type TripCardProps = {
+  tripDate: moment.Moment
   pickupLocation: string
   pickupTime: string
   dropOffLocation: string
@@ -17,12 +17,15 @@ type Props = {
 
   leftImage?: JSX.Element
 
+  completed?: boolean
+  canceled?: boolean
+
 }
-const TripCard: React.FC<Props> = (props) => {
+const TripCard: React.FC<TripCardProps> = (props) => {
   return (
     <Layout style={{ backgroundColor: '#00000000', marginBottom: '5%' }}>
       <Layout style={{ backgroundColor: '#00000000', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end'}}>
-        <Text style={{ marginBottom: '3%' }}>{props.tripDate}</Text>
+        <Text style={{ marginBottom: '3%' }}>{props.tripDate.format('LLL')}</Text>
         {props.leftImage}
       </Layout>
 
