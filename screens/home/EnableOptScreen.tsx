@@ -1,13 +1,15 @@
 import React, { useRef } from 'react';
 import { Layout, Text, Button, Datepicker, NativeDateService, TabView, Card, Avatar } from '@ui-kitten/components';
 import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const DocumentScreen = () => {
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
 
-      <Layout style={{ flex: 1, padding: '5%', backgroundColor: '#f7f9fc' }}>
+      <Layout style={{ flex: 1, padding: '5%', backgroundColor: 'white' }}>
 
         <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginBottom: '70%' }}>
           <Text style={{ textAlign: 'center' }} category="h3">Do you want to enable 2-factor authentication</Text>
@@ -15,6 +17,7 @@ const DocumentScreen = () => {
 
 
         <Button
+          onPress={() => navigation.navigate('VerifyPhone')}
           size="giant"
           style={{
             backgroundColor: '#41d5fb',
@@ -33,7 +36,9 @@ const DocumentScreen = () => {
           Enable it
                             </Button>
         <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', backgroundColor: '#00000000' }}>
-          <Text style={{ textAlign: 'center', color: '#41d5fb' }}>Skip for now</Text>
+          <Text onPress={() => {
+            navigation.navigate('Home')
+          }} style={{ textAlign: 'center', color: '#41d5fb' }}>Skip for now</Text>
         </Layout>
 
       </Layout>

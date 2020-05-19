@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import {
     StyleSheet,
     TouchableOpacity,
@@ -6,48 +6,72 @@ import {
     FlatList
 } from "react-native";
 
-import { Layout, Avatar, Text, Divider } from "@ui-kitten/components";
+import { Layout, Avatar, Text, Divider, Button, Modal, Card } from "@ui-kitten/components";
 import { LoginScreenProps } from "../../types";
 import { StackScreenProps } from "@react-navigation/stack";
-import { useGlobalState } from "../../state";
+import { useGlobalState, dispatchGlobalState } from "../../state";
 
 const menuData = [
-    { name: "Notifications", screenName: "Notifications", key: 2 },
-    { name: "Profile", screenName: "Profile", key: 3 },
-    { name: "Documents", screenName: "Documents", key: 4 },
-    { name: "My Bookings", screenName: "MyBookings", key: 5 },
-    { name: "Location", screenName: "Location", key: 6 },
-    { name: "Damage", screenName: "Damage", key: 6 },
+    { name: "My trips", screenName: "MyBookings", key: 5 },
+    { name: "Reservation", screenName: "Reservation", key: 10 },
 ];
 
 const DrawerMenu = ({ navigation }: { navigation: any }) => {
+    const [logout, setLogout] = useState(false)
     const [profile] = useGlobalState('profile')
+
+    const LogouModal = () => {
+        return (
+            <Modal visible={true}>
+                <Card disabled={true}>
+                    <Text>Do you want to logout?</Text>
+                    <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around'}}>
+                    <Button onPress={() => {
+                        setLogout(false)
+                        dispatchGlobalState({ type: 'logout' })
+                    }} status="basic">
+                        Yes
+                    </Button>
+                    <Button onPress={() => setLogout(false)}>
+                        No
+                    </Button>
+                    </Layout>
+                </Card>
+            </Modal>
+        );
+    }
+
     return (
-        <View style={styles.container}>
-            <Layout style={{ width: '75%',display: 'flex', flexDirection: 'row', paddingBottom: '20%' }}>
-                <Avatar size='giant' source={{ uri: "http://lorempixel.com/400/400" }} />
-                <Layout style={{ marginLeft: '10%' }}>
-                    <Text category='h3'>{profile?.firstName || profile?.email}</Text>
-                    <Text style={{ color: '#52e6fe' }} category='s1'>Edit profile</Text>
+        <>
+            <View style={styles.container}>
+                <Layout style={{ width: '75%', display: 'flex', flexDirection: 'row', paddingBottom: '20%' }}>
+                    <Avatar size='giant' source={{ uri: "http://lorempixel.com/400/400" }} />
+                    <Layout style={{ marginLeft: '10%' }}>
+                        <Text category='h3'>{profile?.firstName || profile?.email}</Text>
+                        <Text style={{ color: '#52e6fe' }} category='s1'>Edit profile</Text>
+                    </Layout>
+
                 </Layout>
+                <Divider />
 
-            </Layout>
-            <Divider/>
-
-            <FlatList
-            style={{ paddingTop: '15%' }}
-                data={menuData}
-                renderItem={({ item }) => (
-                    // @ts-ignore
-                    <DrawerItem
-                        navigation={navigation}
-                        screenName={item.screenName as keyof LoginScreenProps}
-                        name={item.name}
-                        key={item.key}
-                    />
-                )}
-            />
-        </View>
+                <FlatList
+                    data={menuData}
+                    renderItem={({ item }) => (
+                        // @ts-ignore
+                        <DrawerItem
+                            navigation={navigation}
+                            screenName={item.screenName as keyof LoginScreenProps}
+                            name={item.name}
+                            key={item.key}
+                        />
+                    )}
+                />
+            </View>
+            <Button onPress={() => setLogout(true)} size="giant" style={{ borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', marginRight: '10%', marginLeft: '10%', marginBottom: '5%' }}>
+                Logout
+            </Button>
+            {logout && <LogouModal />}
+        </>
     );
 }
 

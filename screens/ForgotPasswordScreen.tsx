@@ -1,8 +1,10 @@
 import React, { useRef } from 'react';
 import { Layout, Text, Button, Datepicker, NativeDateService, TabView, Card, Avatar, Input } from '@ui-kitten/components';
 import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const DocumentScreen = () => {
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -41,7 +43,7 @@ const DocumentScreen = () => {
           Sent
                             </Button>
         <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', backgroundColor: '#00000000' }}>
-          <Text style={{ color: '#41d5fb' }}>Back to Sign in</Text>
+          <Text onPress={() => navigation.navigate("Login")} style={{ color: '#41d5fb' }}>Back to Sign in</Text>
         </Layout>
 
       </Layout>

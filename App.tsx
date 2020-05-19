@@ -16,14 +16,6 @@ import {
   StatusBar,
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider } from '@ui-kitten/components';
 import { NavigationContainer } from '@react-navigation/native';
@@ -32,6 +24,7 @@ import './utils/AxiosBootstrap';
 import Login from './screens/Login';
 import Signup from './screens/Signup';
 import Home from './screens/home/Home';
+import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import { useGlobalState } from './state';
 
 const Stack = createStackNavigator();
@@ -50,6 +43,7 @@ export default () => {
               <>
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Signup" component={Signup} />
+                <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
               </>
             )}
 

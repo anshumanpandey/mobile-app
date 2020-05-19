@@ -60,7 +60,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                 )}
 
                 <Formik
-                    initialValues={{ clientname: 'bookingclik', password: 'bookingclik' }}
+                    initialValues={{ clientname: '', password: '' }}
                     onSubmit={values => {
                         if (!values.clientname) return
                         if (!values.password) return
@@ -98,7 +98,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     secureTextEntry={secureTextEntry}
                                     accessoryRight={renderInputIcon}
                                 />
-                                <Text style={{ fontSize: 15, textAlign: 'right', color: '#70dffb', marginBottom: '6%' }} category='s2'> Forgot your password? </Text>
+                                <Text onPress={() => navigation.navigate("ForgotPassword")} style={{ fontSize: 15, textAlign: 'right', color: '#70dffb', marginBottom: '6%' }} category='s2'> Forgot your password? </Text>
                                 <Button
                                     accessoryRight={loading ? LoadingSpinner : undefined}
                                     disabled={loading}

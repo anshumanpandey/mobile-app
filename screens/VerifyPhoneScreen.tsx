@@ -1,8 +1,11 @@
 import React, { useRef } from 'react';
 import { Layout, Text, Button, Datepicker, NativeDateService, TabView, Card, Avatar } from '@ui-kitten/components';
 import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const DocumentScreen = () => {
+  const navigation = useNavigation();
+
   const inputs = [
     useRef<TextInput | null>(null),
     useRef<TextInput | null>(null),
@@ -56,6 +59,7 @@ const DocumentScreen = () => {
         </Layout>
 
         <Button
+          onPress={() => navigation.navigate('Location')}
           size="giant"
           style={{
             backgroundColor: '#41d5fb',
@@ -71,7 +75,7 @@ const DocumentScreen = () => {
             shadowRadius: 13.16,
             elevation: 10,
           }}>
-          Sign in
+            Verify
                             </Button>
         <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', backgroundColor: '#00000000' }}>
           <Text style={{ textAlign: 'center' }}>Didn't receive SMS</Text>

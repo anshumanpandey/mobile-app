@@ -16,9 +16,12 @@ import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import useAxios from 'axios-hooks'
 import LoadingSpinner from '../partials/LoadingSpinner';
 import { dispatchGlobalState } from '../state';
+import { useNavigation } from '@react-navigation/native';
 
 
-export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
+export default () => {
+    const navigation = useNavigation();
+
     const [secureTextEntry, setSecureTextEntry] = useState(true);
     const [phonenumberToShow, setPhonenumberToShow] = useState<string>('');
     const [countryCode, setCountryCode] = useState<string>(`+1`);
@@ -95,7 +98,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 .then((res) => {
                                     dispatchGlobalState({ type: 'token', state: res.data.token })
                                     dispatchGlobalState({ type: 'profile', state: res.data })
-                                    navigation.navigate('Home')
+                                    navigation.navigate('Home', { screen: 'EnableOpt' })
                                 })
 
                         }}
