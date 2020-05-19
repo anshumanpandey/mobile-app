@@ -19,6 +19,8 @@ export type TripCardProps = {
 
   leftImageUri?: string
 
+  reservationNumber?: string
+
   keyLess: boolean
 
   completed?: boolean
@@ -27,21 +29,31 @@ export type TripCardProps = {
 }
 const TripCard: React.FC<TripCardProps> = (props) => {
   const navigation = useNavigation();
-  
+
   return (
     <Layout style={{ backgroundColor: '#00000000', marginBottom: '5%' }}>
       <Layout style={{ backgroundColor: '#00000000', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
         <Text style={{ marginBottom: '3%' }}>{props.tripDate.format('LLL')}</Text>
         {props.leftImageUri && (
           <Image
-          style={{ width: 50, height: 50 }}
-          source={require('../image/rightcars.png')}
-        />
+            style={{ width: 50, height: 50 }}
+            source={require('../image/rightcars.png')}
+          />
         )}
 
       </Layout>
 
-      <Card onPress={() => navigation.navigate('Activate', {...props, leftImageUri: undefined})} style={{ display: 'flex', flexDirection: 'column', borderRadius: 16, borderWidth: 0 }}>
+      <Card onPress={() => navigation.navigate('Activate', { ...props, leftImageUri: undefined })} style={{ display: 'flex', flexDirection: 'column', borderRadius: 16, borderWidth: 0 }}>
+        {props.reservationNumber && (
+          <Layout style={{ marginBottom: '3%' }}>
+            <Text style={{ textAlign: 'center' }} category="h6">
+              Reservation Number
+        </Text>
+            <Text style={{ textAlign: 'center' }} category="h6">
+              {props.reservationNumber}
+        </Text>
+          </Layout>
+        )}
         <Layout style={{ display: 'flex', flexDirection: 'row' }}>
           <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', marginRight: '5%' }}>
             <FontAwesomeIcon size={15} style={{ color: '#41d5fb' }} name="circle" />

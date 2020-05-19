@@ -20,7 +20,7 @@ const DocumentScreen = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
 
-        <Layout style={{ padding: '5%', backgroundColor: '#f7f9fc' }}>
+        <Layout style={{ flex: 1, padding: '5%', backgroundColor: '#f7f9fc' }}>
           <TripCard
             leftImageUri='../image/rightcars.png'
             keyLess={false}
