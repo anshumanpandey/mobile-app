@@ -59,7 +59,7 @@ const DocumentScreen = () => {
         </Layout>
 
         <Button
-          onPress={() => navigation.navigate('Location')}
+          onPress={() => navigation.navigate('MyBookings')}
           size="giant"
           style={{
             backgroundColor: '#41d5fb',

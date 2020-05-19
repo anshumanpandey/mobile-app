@@ -2,7 +2,7 @@ import React from 'react';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Image } from 'react-native';
-import { Layout, Text, Card, Avatar } from '@ui-kitten/components';
+import { Layout, Text, Card, Avatar, Button } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 
 export type TripCardProps = {
@@ -101,6 +101,16 @@ const TripCard: React.FC<TripCardProps> = (props) => {
           </Layout>
 
         </Layout>
+        {props.upcoming && (
+          <Button style={{ backgroundColor: '#cf1830', borderColor: '#cf1830'}} size={'small'}>
+            Cancel
+          </Button>
+        )}
+        {props.completed && (
+          <Button size={'small'}>
+            Generate Invoice
+          </Button>
+        )}
       </Card>
     </Layout>
 

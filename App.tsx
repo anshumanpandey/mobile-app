@@ -6,15 +6,8 @@
  * @flow strict-local
  */
 import 'react-native-gesture-handler';
-import React from 'react'
-import { Component } from 'react'
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  StatusBar,
-} from 'react-native';
+import React, {useEffect} from 'react'
+
 
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider } from '@ui-kitten/components';
@@ -26,13 +19,20 @@ import Signup from './screens/Signup';
 import Home from './screens/home/Home';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import { useGlobalState } from './state';
+//@ts-ignore
+import { default as mapping } from './mapping.json';
+import SplashScreen from 'react-native-splash-screen'
 
 const Stack = createStackNavigator();
 
 export default () => {
   const [token] = useGlobalState('token');
+
+  useEffect(() => {
+    SplashScreen.hide()
+  }, []);
   return (
-    <ApplicationProvider {...eva} theme={eva.light}>
+    <ApplicationProvider mapping={mapping} {...eva} theme={eva.light}>
       <NavigationContainer>
         <Stack.Navigator headerMode='none'>
           {token ? (
