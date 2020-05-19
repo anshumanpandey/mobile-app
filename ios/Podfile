@@ -77,6 +77,8 @@ target 'AnotherApp' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
+  pod 'react-native-gps-state', :path => '../node_modules/react-native-gps-state'
+
   target 'AnotherAppTests' do
     inherit! :complete
     # Pods for testing

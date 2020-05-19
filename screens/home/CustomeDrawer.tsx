@@ -12,12 +12,11 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { useGlobalState } from "../../state";
 
 const menuData = [
-    { name: "Bookings", screenName: "Bookings", key: 1 },
     { name: "Notifications", screenName: "Notifications", key: 2 },
     { name: "Profile", screenName: "Profile", key: 3 },
     { name: "Documents", screenName: "Documents", key: 4 },
-    { name: "My Trips", screenName: "MyTrips", key: 5 },
-    { name: "Activate", screenName: "Activate", key: 6 },
+    { name: "My Bookings", screenName: "MyBookings", key: 5 },
+    { name: "Location", screenName: "Location", key: 6 },
 ];
 
 const DrawerMenu = ({ navigation }: { navigation: any }) => {

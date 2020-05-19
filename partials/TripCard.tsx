@@ -1,7 +1,9 @@
 import React from 'react';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Layout, Text, Button, TabBar, Tab, Datepicker, NativeDateService, TabView, Card, Avatar } from '@ui-kitten/components';
+import { Image } from 'react-native';
+import { Layout, Text, Card, Avatar } from '@ui-kitten/components';
+import { useNavigation } from '@react-navigation/native';
 
 export type TripCardProps = {
   tripDate: moment.Moment
@@ -10,26 +12,36 @@ export type TripCardProps = {
   dropOffLocation: string
   dropoffTime: string
 
-  driver: string
-  score: string
+  carName: string
+  registratioNumber: string
   finalCost: string
   arrivalTime: string
 
-  leftImage?: JSX.Element
+  leftImageUri?: string
+
+  keyLess: boolean
 
   completed?: boolean
-  canceled?: boolean
+  upcoming?: boolean
 
 }
 const TripCard: React.FC<TripCardProps> = (props) => {
+  const navigation = useNavigation();
+  
   return (
     <Layout style={{ backgroundColor: '#00000000', marginBottom: '5%' }}>
-      <Layout style={{ backgroundColor: '#00000000', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end'}}>
+      <Layout style={{ backgroundColor: '#00000000', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
         <Text style={{ marginBottom: '3%' }}>{props.tripDate.format('LLL')}</Text>
-        {props.leftImage}
+        {props.leftImageUri && (
+          <Image
+          style={{ width: 50, height: 50 }}
+          source={require('../image/rightcars.png')}
+        />
+        )}
+
       </Layout>
 
-      <Card disabled={true} style={{ display: 'flex', flexDirection: 'column', borderRadius: 16, borderWidth: 0 }}>
+      <Card onPress={() => navigation.navigate('Activate', {...props, leftImageUri: undefined})} style={{ display: 'flex', flexDirection: 'column', borderRadius: 16, borderWidth: 0 }}>
         <Layout style={{ display: 'flex', flexDirection: 'row' }}>
           <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', marginRight: '5%' }}>
             <FontAwesomeIcon size={15} style={{ color: '#41d5fb' }} name="circle" />
@@ -53,14 +65,14 @@ const TripCard: React.FC<TripCardProps> = (props) => {
           </Layout>
         </Layout>
         <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 1, paddingTop: '5%' }}>
-          <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '50%' }}>
+          <Layout style={{ display: 'flex', flexDirection: 'row', width: '50%' }}>
             <Layout style={{ marginRight: '3%' }}>
-              <Avatar style={{ borderRadius: 10 }} shape='square' source={{ uri: "http://lorempixel.com/400/400" }} />
+              <Avatar style={{ borderRadius: 10 }} shape='square' source={props.keyLess ? require('../image/keyx.png') : require('../image/key.png')} />
             </Layout>
 
             <Layout>
-              <Text style={{ width: '80%'}} numberOfLines={1} textBreakStrategy="balanced" category='h6'>{props.driver}</Text>
-              <Text>{props.score}</Text>
+              <Text style={{ width: '90%' }} numberOfLines={1} textBreakStrategy="balanced" category='h6'>{props.carName}</Text>
+              <Text>{props.registratioNumber}</Text>
             </Layout>
           </Layout>
 
