@@ -17,6 +17,7 @@ import useAxios from 'axios-hooks'
 import LoadingSpinner from '../partials/LoadingSpinner';
 import { dispatchGlobalState } from '../state';
 import { useNavigation } from '@react-navigation/native';
+import BackButton from '../partials/BackButton';
 
 
 export default () => {
@@ -48,9 +49,12 @@ export default () => {
     );
 
     return (
-        <SafeAreaView >
+        <SafeAreaView style={{ flex: 1 }} >
             <ScrollView >
-                <Layout style={{ flex: 1, padding: '3%', overflow: 'scroll' }}>
+                <Layout style={{ flex: 1, paddingLeft: '1.5%', paddingTop: '3%' }}>
+                    <BackButton />
+                </Layout>
+                <Layout style={{ flex: 1, paddingLeft: '3%', paddingRight: '3%', paddingBottom: '3%' }}>
                     <Layout style={{ paddingBottom: '5%' }}>
                         <Text style={{ textAlign: 'left', fontSize: 25, marginBottom: '3%' }} category='s2'>Create your account</Text>
                         <Layout style={{ display: 'flex', flexDirection: 'row' }}>
@@ -219,7 +223,7 @@ export default () => {
                         }}
                     </Formik>
 
-                    <Text style={{ textAlign: 'center', color: '#8f9bb5', marginBottom: '5%' }} category='s2'>Or sign in with social account</Text>
+                    <Text style={{ textAlign: 'center', color: '#8f9bb5', marginBottom: '5%' }} category='s2'>Or sign up with social media</Text>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
                         <Button size="small" accessoryLeft={() => <EntypoIcon style={{ color: '#ffffff' }} name="facebook-with-circle" size={22} />} style={{ borderRadius: 10, backgroundColor: '#3b5a99', borderColor: '#3b5a99', paddingLeft: 20, paddingRight: 20 }}>
