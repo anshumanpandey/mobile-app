@@ -10,12 +10,14 @@ import DocumentScreen from './DocumentScreen';
 import MyTripsScreens from './MyTripsScreen';
 import ActivateScreen from './ActivateScreen';
 import LocalitationScreen from './Localitation';
+import DamageScreen from './DamageScreen';
 
 const Drawer = createDrawerNavigator();
 export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
 
     return (
         <Drawer.Navigator drawerContent={(props) => <DrawerMenu navigation={props.navigation} />} initialRouteName="Home">
+            <Drawer.Screen name="Damage" component={DamageScreen} />
             <Drawer.Screen name="Location" component={LocalitationScreen} />
             <Drawer.Screen name="Activate" component={ActivateScreen} />
             <Drawer.Screen name="MyBookings" component={MyTripsScreens} />
