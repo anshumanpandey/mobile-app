@@ -14,12 +14,14 @@ import DamageScreen from './DamageScreen';
 import ReservationScreen from './ReservationScreen';
 import VerifyPhoneScreen from '../VerifyPhoneScreen';
 import EnableOptScreen from './EnableOptScreen';
+import SelectLocation from './createBookings/index';
 
 const Drawer = createDrawerNavigator();
 export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
 
     return (
         <Drawer.Navigator drawerContent={(props) => <DrawerMenu navigation={props.navigation} />} initialRouteName="Home">
+            <Drawer.Screen name="CreateBooking" component={SelectLocation} />
             <Drawer.Screen name="MyBookings" component={MyTripsScreens} />
             <Drawer.Screen name="Location" component={LocalitationScreen} />
             <Drawer.Screen name="EnableOpt" component={EnableOptScreen} />

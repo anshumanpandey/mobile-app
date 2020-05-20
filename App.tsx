@@ -36,6 +36,7 @@ export default () => {
   const j = { ...EvaMapping }
   j.strict["text-font-family"] = "SF-UI-Display-Regular"
   j.components.Input.appearances.default.variantGroups.status.basic.state.focused.borderColor = '#41D5FB'
+  j.components.Input.appearances.default.variantGroups.status.basic.backgroundColor = "white"
 
   return (
     <ApplicationProvider mapping={EvaMapping} theme={eva.light} customMapping={j}>
