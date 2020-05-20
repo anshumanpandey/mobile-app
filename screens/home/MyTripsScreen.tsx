@@ -153,7 +153,7 @@ const DocumentScreen = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <Layout style={{ flex: 1, backgroundColor: 'red' }}>
 
-        <Layout style={{ paddingBottom: '5%' }}>
+        <Layout>
           <Layout style={{ paddingTop: '3%', paddingLeft: '3%',display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between' }}>
             <MenuButton />
             <Datepicker
@@ -175,7 +175,7 @@ const DocumentScreen = () => {
             indicatorStyle={{ backgroundColor: '#41d5fb' }}
             selectedIndex={selectedIndex}
             onSelect={index => setSelectedIndex(index)}>
-            <Tab title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold',color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>ACTIVE</Text>} >
+            <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold',color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>ACTIVE</Text>} >
               <Layout style={{ height: '96%' }}>
                 <List
                   style={{ backgroundColor: '#f7f9fc', padding: '5%' }}
@@ -191,7 +191,7 @@ const DocumentScreen = () => {
                 />
               </Layout>
             </Tab>
-            <Tab title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold',color: selectedIndex == 1 ? '#41d5fb' : '#aeb1c3' }}>UPCOMING</Text>} >
+            <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold',color: selectedIndex == 1 ? '#41d5fb' : '#aeb1c3' }}>UPCOMING</Text>} >
               <Layout style={{ height: '96%' }}>
                 <List
                   style={{ backgroundColor: '#f7f9fc', padding: '5%', display: 'flex', flexDirection: 'column' }}
@@ -208,7 +208,7 @@ const DocumentScreen = () => {
               </Layout>
             </Tab>
 
-            <Tab title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold',color: selectedIndex == 2 ? '#41d5fb' : '#aeb1c3' }}>COMPLETED</Text>} >
+            <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold',color: selectedIndex == 2 ? '#41d5fb' : '#aeb1c3' }}>COMPLETED</Text>} >
               <Layout style={{ height: '96%' }}>
 
                 <List
