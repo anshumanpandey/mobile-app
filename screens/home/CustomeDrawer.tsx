@@ -30,10 +30,10 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
                         setLogout(false)
                         dispatchGlobalState({ type: 'logout' })
                     }} status="basic">
-                        Yes
+                        {() => <Text style={{ color: 'black'}}>Yes</Text>}
                     </Button>
                     <Button onPress={() => setLogout(false)}>
-                        No
+                        {() => <Text style={{ color: 'white'}}>No</Text>}
                     </Button>
                     </Layout>
                 </Card>
@@ -68,7 +68,7 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
                 />
             </View>
             <Button onPress={() => setLogout(true)} size="giant" style={{ borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', marginRight: '10%', marginLeft: '10%', marginBottom: '5%' }}>
-                Logout
+                {() => <Text style={{ color: 'white'}}>Logout</Text>}
             </Button>
             {logout && <LogouModal />}
         </>

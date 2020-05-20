@@ -167,7 +167,7 @@ const DocumentScreen = () => {
               accessoryLeft={() => <EntypoIcon style={{ color: 'black' }} name="calendar" size={22} />}
             />
           </Layout>
-          <Text style={{ alignSelf: 'flex-start', marginLeft: '3%' }} category="h3">My Trips</Text>
+          <Text style={{ alignSelf: 'flex-start', marginLeft: '3%', fontFamily: 'SF-UI-Display_Bold', fontSize: 29 }}>My Trips</Text>
         </Layout>
 
         <Layout style={{ flex: 1 }}>
@@ -175,11 +175,11 @@ const DocumentScreen = () => {
             indicatorStyle={{ backgroundColor: '#41d5fb' }}
             selectedIndex={selectedIndex}
             onSelect={index => setSelectedIndex(index)}>
-            <Tab title={evaProps => <Text {...evaProps} style={{ color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>ACTIVE</Text>} >
+            <Tab title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold',color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>ACTIVE</Text>} >
               <Layout style={{ height: '96%' }}>
                 <List
                   style={{ backgroundColor: '#f7f9fc', padding: '5%' }}
-                  data={LIST_DATA.sort((a, b) => a.tripDate.diff(b.tripDate)).filter(i => moment(date).isSame(i.tripDate, "day"))}
+                  data={LIST_DATA.sort((a, b) => a.tripDate.diff(b.tripDate)).filter(i => moment(date).isSame(i.tripDate, "day")).filter(i => !i.upcoming).filter(i => !i.completed)}
                   renderItem={(data: any) => {
                     return (
                       <TripCard
@@ -191,7 +191,7 @@ const DocumentScreen = () => {
                 />
               </Layout>
             </Tab>
-            <Tab title={evaProps => <Text {...evaProps} style={{ color: selectedIndex == 1 ? '#41d5fb' : '#aeb1c3' }}>UPCOMING</Text>} >
+            <Tab title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold',color: selectedIndex == 1 ? '#41d5fb' : '#aeb1c3' }}>UPCOMING</Text>} >
               <Layout style={{ height: '96%' }}>
                 <List
                   style={{ backgroundColor: '#f7f9fc', padding: '5%', display: 'flex', flexDirection: 'column' }}
@@ -208,7 +208,7 @@ const DocumentScreen = () => {
               </Layout>
             </Tab>
 
-            <Tab title={evaProps => <Text {...evaProps} style={{ color: selectedIndex == 2 ? '#41d5fb' : '#aeb1c3' }}>COMPLETED</Text>} >
+            <Tab title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold',color: selectedIndex == 2 ? '#41d5fb' : '#aeb1c3' }}>COMPLETED</Text>} >
               <Layout style={{ height: '96%' }}>
 
                 <List

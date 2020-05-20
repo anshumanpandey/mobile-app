@@ -54,7 +54,7 @@ const DocumentScreen = () => {
                 }
               });
             }} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '25%', backgroundColor: 'gray' }}>
-              TAKE PICTURE
+                {() => <Text style={{ color: 'white'}}>TAKE PICTURE</Text>}
             </Button>
             {picture && <Image source={{ uri: picture }} />}
           </Layout>

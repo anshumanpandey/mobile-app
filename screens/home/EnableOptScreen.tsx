@@ -11,8 +11,8 @@ const DocumentScreen = () => {
 
       <Layout style={{ flex: 1, padding: '5%', backgroundColor: 'white' }}>
 
-        <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginBottom: '70%' }}>
-          <Text style={{ textAlign: 'center' }} category="h3">Do you want to enable 2-factor authentication</Text>
+        <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginBottom: '60%' }}>
+          <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display_Bold' }} category="h3">Do you want to enable 2-factor authentication</Text>
         </Layout>
 
 
@@ -33,7 +33,7 @@ const DocumentScreen = () => {
             shadowRadius: 13.16,
             elevation: 10,
           }}>
-          Enable it
+          {() => <Text style={{ color: 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18}}>Enable it</Text>}
                             </Button>
         <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', backgroundColor: '#00000000' }}>
           <Text onPress={() => {

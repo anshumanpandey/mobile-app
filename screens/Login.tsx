@@ -3,7 +3,6 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Text, Input, Button, Popover } from '@ui-kitten/components';
 import { TouchableWithoutFeedback, ImageProps, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { RenderProp } from '@ui-kitten/components/devsupport';
 import useAxios from 'axios-hooks'
 import { Formik } from 'formik';
@@ -12,6 +11,8 @@ import { dispatchGlobalState } from '../state';
 import { StackScreenProps } from '@react-navigation/stack';
 import { NonLoginScreenProps, LoginScreenProps } from '../types';
 import LoadingSpinner from '../partials/LoadingSpinner';
+import FacebookButton from '../partials/FacebookButton';
+import TwitterButton from '../partials/TwitterButton';
 
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
@@ -41,7 +42,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
         <SafeAreaView style={{ flex: 1 }}>
             <Layout style={{ flex: 1, padding: '3%' }}>
                 <Layout style={{ paddingBottom: '10%' }}>
-                    <Text style={{ textAlign: 'left', fontSize: 25, marginBottom: 10 }} category='s2'>Welcome back, Guy!</Text>
+                    <Text style={{ textAlign: 'left', fontSize: 24, marginBottom: 10, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>Welcome back, Guy!</Text>
                     <Text style={{ textAlign: 'left', fontSize: 15, color: '#8f9bb5' }} category='s2'>Sign in to your account</Text>
                 </Layout>
 
@@ -118,7 +119,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         shadowRadius: 13.16,
                                         elevation: 10,
                                     }}>
-                                    Sign in
+                                    {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold',color: 'white', fontSize: 18}}>Sign in</Text>}
                             </Button>
                             </>
                         )
@@ -128,13 +129,9 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                 <Text style={{ textAlign: 'center', color: '#8f9bb5', marginBottom: '5%' }} category='s2'>Or sign in with social account</Text>
 
                 <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                    <Button size="small" accessoryLeft={() => <EntypoIcon style={{ color: '#ffffff' }} name="facebook-with-circle" size={22} />} style={{ borderRadius: 10, backgroundColor: '#3b5a99', borderColor: '#3b5a99', paddingLeft: 20, paddingRight: 20 }}>
-                        Facebook
-            </Button>
+                    <FacebookButton />
 
-                    <Button size="small" accessoryLeft={() => <EntypoIcon style={{ color: '#ffffff' }} name="twitter-with-circle" size={22} />} style={{ borderRadius: 10, backgroundColor: '#41d5fb', borderColor: '#41d5fb', paddingLeft: 20, paddingRight: 20 }}>
-                        Twitter
-            </Button>
+                    <TwitterButton />
                 </Layout>
 
                 <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10%' }}>

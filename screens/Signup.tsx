@@ -7,8 +7,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { RenderProp } from '@ui-kitten/components/devsupport';
 import PhoneInput from 'react-native-phone-input'
-import { StackScreenProps } from '@react-navigation/stack';
-import { NonLoginScreenProps, LoginScreenProps } from '../types';
 import { TextInput } from 'react-native-gesture-handler';
 import ReactNativePhoneInput from 'react-native-phone-input';
 import ErrorLabel from '../partials/ErrorLabel';
@@ -18,6 +16,8 @@ import LoadingSpinner from '../partials/LoadingSpinner';
 import { dispatchGlobalState } from '../state';
 import { useNavigation } from '@react-navigation/native';
 import BackButton from '../partials/BackButton';
+import FacebookButton from '../partials/FacebookButton';
+import TwitterButton from '../partials/TwitterButton';
 
 
 export default () => {
@@ -51,12 +51,12 @@ export default () => {
     return (
         <SafeAreaView style={{ flex: 1 }} >
             <ScrollView >
-                <Layout style={{ flex: 1, paddingLeft: '1.5%', paddingTop: '3%' }}>
+                <Layout style={{ flex: 1, paddingLeft: '3%', paddingTop: '3%', paddingBottom: '2%' }}>
                     <BackButton />
                 </Layout>
                 <Layout style={{ flex: 1, paddingLeft: '3%', paddingRight: '3%', paddingBottom: '3%' }}>
                     <Layout style={{ paddingBottom: '5%' }}>
-                        <Text style={{ textAlign: 'left', fontSize: 25, marginBottom: '3%' }} category='s2'>Create your account</Text>
+                        <Text style={{ textAlign: 'left', fontSize: 25, marginBottom: '3%', fontFamily: 'SF-UI-Display_Bold' }} category='s2'>Create your account</Text>
                         <Layout style={{ display: 'flex', flexDirection: 'row' }}>
                             <Text style={{ color: 'black' }}>Already have an account? </Text>
                             <Text onPress={() => navigation.navigate('Login')} style={{ color: '#41d5fb' }}>Log in</Text>
@@ -226,13 +226,9 @@ export default () => {
                     <Text style={{ textAlign: 'center', color: '#8f9bb5', marginBottom: '5%' }} category='s2'>Or sign up with social media</Text>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                        <Button size="small" accessoryLeft={() => <EntypoIcon style={{ color: '#ffffff' }} name="facebook-with-circle" size={22} />} style={{ borderRadius: 10, backgroundColor: '#3b5a99', borderColor: '#3b5a99', paddingLeft: 20, paddingRight: 20 }}>
-                            Facebook
-                </Button>
+                        <FacebookButton />
 
-                        <Button size="small" accessoryLeft={() => <EntypoIcon style={{ color: '#ffffff' }} name="twitter-with-circle" size={22} />} style={{ borderRadius: 10, backgroundColor: '#41d5fb', borderColor: '#41d5fb', paddingLeft: 20, paddingRight: 20 }}>
-                            Twitter
-            </Button>
+                        <TwitterButton />
                     </Layout>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '5%', flexWrap: 'wrap' }}>

@@ -10,6 +10,7 @@ import React, {useEffect} from 'react'
 
 
 import * as eva from '@eva-design/eva';
+import EvaMapping from '@eva-design/eva/mapping';
 import { ApplicationProvider } from '@ui-kitten/components';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -25,14 +26,19 @@ import SplashScreen from 'react-native-splash-screen'
 
 const Stack = createStackNavigator();
 
+
 export default () => {
   const [token] = useGlobalState('token');
 
   useEffect(() => {
     SplashScreen.hide()
   }, []);
+  const j = { ...EvaMapping }
+  j.strict["text-font-family"] = "SF-UI-Display-Regular"
+  j.components.Input.appearances.default.variantGroups.status.basic.state.focused.borderColor = '#41D5FB'
+
   return (
-    <ApplicationProvider mapping={mapping} {...eva} theme={eva.light}>
+    <ApplicationProvider mapping={EvaMapping} theme={eva.light} customMapping={j}>
       <NavigationContainer>
         <Stack.Navigator headerMode='none'>
           {token ? (

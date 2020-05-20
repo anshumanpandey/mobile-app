@@ -38,10 +38,10 @@ const DocumentScreen = () => {
 
           <Layout style={{ backgroundColor: '#00000000' }}>
             <Button size="giant" style={{ borderRadius: 10, backgroundColor: '#5ac8fa', borderColor: '#5ac8fa', paddingLeft: 20, paddingRight: 20, marginBottom: '2%' }}>
-              GET DIRECTIONS 
+              {() => <Text style={{ color: 'white'}}>GET DIRECTIONS </Text>}
             </Button>
             <Button size="giant" style={{ borderRadius: 10, backgroundColor: '#0c66ff', borderColor: '#0c66ff', paddingLeft: 20, paddingRight: 20 }}>
-              REPORT A PROBLEM 
+              {() => <Text style={{ color: 'white'}}>REPORT A PROBLEM</Text>}
             </Button>
           </Layout>
 
