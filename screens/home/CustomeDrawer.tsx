@@ -3,7 +3,8 @@ import {
     StyleSheet,
     TouchableOpacity,
     View,
-    FlatList
+    FlatList,
+    Alert
 } from "react-native";
 
 import { Layout, Avatar, Text, Divider, Button, Modal, Card } from "@ui-kitten/components";
@@ -19,27 +20,6 @@ const menuData = [
 const DrawerMenu = ({ navigation }: { navigation: any }) => {
     const [logout, setLogout] = useState(false)
     const [profile] = useGlobalState('profile')
-
-    const LogouModal = () => {
-        return (
-            <Modal visible={true} backdropStyle={{ backgroundColor: '#00000040'}}>
-                <Card disabled={true}>
-                    <Text style={{ textAlign: 'center'}}>Do you want to logout?</Text>
-                    <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around'}}>
-                    <Button style={{ width: '30%', borderRadius: 10 }} onPress={() => {
-                        setLogout(false)
-                        dispatchGlobalState({ type: 'logout' })
-                    }} status="basic">
-                        {() => <Text style={{ color: 'black'}}>Yes</Text>}
-                    </Button>
-                    <Button style={{ backgroundColor: '#41d5fb', borderColor: '#41d5fb', width: '30%', borderRadius: 10 }} onPress={() => setLogout(false)}>
-                        {() => <Text style={{ color: 'white'}}>No</Text>}
-                    </Button>
-                    </Layout>
-                </Card>
-            </Modal>
-        );
-    }
 
     return (
         <>
@@ -67,10 +47,23 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
                     )}
                 />
             </View>
-            <Button onPress={() => setLogout(true)} size="giant" style={{ borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', marginRight: '10%', marginLeft: '10%', marginBottom: '5%' }}>
+            <Button onPress={() => {
+                Alert.alert(
+                    "Do you want to logout?",
+                    "You will be send the Sign in",
+                    [
+                      {
+                        text: "No",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel"
+                      },
+                      { text: "Yes", onPress: () => dispatchGlobalState({ type: 'logout' }) }
+                    ],
+                    { cancelable: false }
+                  );
+            }} size="giant" style={{ borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', marginRight: '10%', marginLeft: '10%', marginBottom: '5%' }}>
                 {() => <Text style={{ color: 'white'}}>Logout</Text>}
             </Button>
-            {logout && <LogouModal />}
         </>
     );
 }
