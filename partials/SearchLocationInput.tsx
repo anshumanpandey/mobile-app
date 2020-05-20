@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EvilIcon from 'react-native-vector-icons/EvilIcons';
 import { Layout, List, Text, Spinner } from '@ui-kitten/components';
-import { TextInput, TouchableWithoutFeedback } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { TextInput, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
+import Modal from 'react-native-modal';
 import useAxios from 'axios-hooks'
+import axios, { CancelTokenSource } from 'axios';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
+
+const CancelToken = axios.CancelToken;
 
 export type LocationSearchInputProps = {
   pickupLocation?: string
@@ -16,13 +19,38 @@ export type LocationSearchInputProps = {
   onReturnLocationSelected: (location: any) => void
 }
 const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
+  const [isFetching, setIsFetching] = useState<null | CancelTokenSource>(null);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [originLocation, setOriginLocation] = useState<{[k: string]: any} | null>(null);
+  const [returnLocation, setReturnLocation] = useState<{[k: string]: any} | null>(null);
   const [searchingFor, setSearchingFor] = useState<"ORIGIN" | "RETURN">("ORIGIN");
+
   const [{ data, loading, error }, doSearch] = useAxios({
     url: `${GRCGDS_BACKEND}/public/locationCodes`,
   }, { manual: true })
 
   const onChangeText = (txt: string) => {
+    if (isFetching) isFetching.cancel()
+
+    const source = CancelToken.source()
+    setIsFetching(source);
     doSearch({ params: { search: txt } })
+      .then(() => setIsFetching(null))
+      .catch(() => setIsFetching(null))
+  }
+
+  useEffect(() => {
+    if (data) setShowModal(true)
+  }, [loading])
+
+  const Back: React.FC = ({ children }) => {
+    return (
+      <TouchableWithoutFeedback onPress={() => setShowModal(false)} >
+        <Layout style={{ top: 0, bottom: 0, left: 0, right: 0, flex: 1, position: 'absolute', zIndex: 5, backgroundColor: '#000000' }}>
+          {children}
+        </Layout>
+      </TouchableWithoutFeedback>
+    );
   }
 
   return (
@@ -40,42 +68,65 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
         </Layout>
         <Layout style={{ display: 'flex', flexDirection: 'column' }}>
           <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <TextInput onChangeText={(txt) => {
+            <TextInput value={originLocation ? originLocation.locationname : undefined} onChangeText={(txt) => {
               onChangeText(txt)
               setSearchingFor("ORIGIN")
             }} style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 18, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }} placeholder="Enter Origin"></TextInput>
           </Layout>
           <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <TextInput onChangeText={(txt) => {
+            <TextInput value={returnLocation ? returnLocation.locationname : undefined} onChangeText={(txt) => {
               onChangeText(txt)
               setSearchingFor("RETURN")
             }} style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 18, width: '100%', borderColor: 'white' }} placeholder="Enter Destionation"></TextInput>
           </Layout>
         </Layout>
       </Layout>
-      {loading ? (
-        <Layout style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-          <Spinner size='small'/>
-        </Layout>
-      ) : (
-        <List
-          style={{ backgroundColor: 'white', display: 'flex', flexDirection: 'column' }}
-          data={data}
-          renderItem={(data: any) => {
-            return (
-              <TouchableWithoutFeedback onPress={() => {
-                if (searchingFor === "ORIGIN") props.onOriginLocationSelected(data.item)
-                if (searchingFor === "RETURN") props.onReturnLocationSelected(data.item)
-              }} >
-                <Layout style={{ display: 'flex', flexDirection: 'row', borderBottomColor: '#E4E9F2', borderBottomWidth: 1, paddingBottom: '5%', paddingTop: '5%' }}>
-                <EvilIcon style={{ color: '#41D5FB' }} name="location" size={32} />
-                <Text style={{ fontSize: 18 }}>{data.item.locationname}</Text>
-                </Layout>
-              </TouchableWithoutFeedback>
-            );
-          }}
-        />
-      )}
+      <Modal isVisible={showModal} customBackdrop={<Back />} style={{ display: 'flex', justifyContent: 'flex-end', backgroundColor: '#00000000', flex: 1, margin: 0 }} >
+          {loading && (
+            <Layout style={{ flex: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', height: '15%' }}>
+              <Spinner size='small' />
+            </Layout>
+          )}
+          {loading == false && data && data.length == 0 && (
+            <Layout style={{ height: '15%', display: 'flex', justifyContent: 'center' }}>
+              <Text style={{ textAlign: 'center', fontSize: 42 }}>No locations found</Text>
+            </Layout>
+          )}
+
+          {loading == false && data && data.length !== 0 && (
+            <List
+              keyboardShouldPersistTaps={"handled"}
+              style={{ backgroundColor: 'green', display: 'flex', flexGrow:0 }}
+              data={data}
+              renderItem={(data: any) => {
+                let extraStyles = {}
+                if (data.index == 0) {
+                  extraStyles = {
+                    borderTopRightRadius: 30, borderTopLeftRadius: 30
+                  }
+                }
+                return (
+                  <TouchableHighlight onPress={() => {
+                    if (searchingFor === "ORIGIN") {
+                      props.onOriginLocationSelected(data.item)
+                      setOriginLocation(data.item)
+                    }
+                    if (searchingFor === "RETURN") {
+                      setReturnLocation(data.item)
+                    }
+                    setShowModal(false)
+                  }} >
+                    <Layout style={{ display: 'flex', flexDirection: 'row', borderBottomColor: '#E4E9F2', borderBottomWidth: 1, paddingBottom: '5%', paddingTop: '5%' }}>
+                      <EvilIcon style={{ color: '#41D5FB' }} name="location" size={32} />
+                      <Text style={{ fontSize: 18 }}>{data.item.locationname}</Text>
+                    </Layout>
+                  </TouchableHighlight>
+                );
+              }}
+            />
+          )}
+
+      </Modal>
     </>
   );
 }
