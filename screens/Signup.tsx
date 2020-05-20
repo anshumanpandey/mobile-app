@@ -50,7 +50,7 @@ export default () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }} >
-            <ScrollView >
+            <ScrollView keyboardShouldPersistTaps={"handled"} >
                 <Layout style={{ flex: 1, paddingLeft: '3%', paddingTop: '3%', paddingBottom: '2%' }}>
                     <BackButton />
                 </Layout>
