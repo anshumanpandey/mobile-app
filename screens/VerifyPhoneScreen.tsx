@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import { Layout, Text, Button, Datepicker, NativeDateService, TabView, Card, Avatar } from '@ui-kitten/components';
 import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { set } from 'react-native-reanimated';
 
 const DocumentScreen = () => {
   const navigation = useNavigation();
@@ -17,24 +16,25 @@ const DocumentScreen = () => {
   const [idxFocusInput, setIdxFocusInput] = React.useState<number>(-1);
   const [pin, setPin] = React.useState<Array<number>>([-1, -1, -1, -1]);
 
-  const onInput = (e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+  const onInput = ({ nativeEvent: { key }, ...e}: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
 
     setPin(p => {
-      if (e.nativeEvent.key === 'Backspace') {
+      if (key === 'Backspace') {
         //@ts-ignore
-        const lastElemet = [...p].reverse().find(i => i != -1);
+        let lastElemet = p.findIndex(i => i == -1);
+        if (lastElemet == -1) lastElemet = p.length
         p[lastElemet - 1] = -1
-        const nextInput = inputs[lastElemet - 1]
-        if (nextInput) nextInput.current?.focus()
+        const nextInput = inputs[lastElemet - 2]
+        if (nextInput && nextInput.current) nextInput.current?.focus()
 
         return [...p]
       }
 
-      if (!RegExp(`[0-9]`).test(e.nativeEvent.key)) return p
+      if (!RegExp(`[0-9]`).test(key)) return p
 
       const firstNull = p.indexOf(-1)
       if (firstNull !== -1) {
-        p[firstNull] = parseInt(e.nativeEvent.key)
+        p[firstNull] = parseInt(key)
         const nextInput = inputs[firstNull+1]
         if (nextInput) nextInput.current?.focus()
       }
