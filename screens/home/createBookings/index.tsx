@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import SelectLocation from "./SelectLocation"
 import SelectTime from "./SelectTime"
 
 const Stack = createStackNavigator();

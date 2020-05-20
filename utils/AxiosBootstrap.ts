@@ -36,15 +36,17 @@ axios.interceptors.request.use(
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
+        dispatchGlobalState({ type: 'error', state: 'we  could not connect to the server.'});
         console.log('error.request');
         console.log(error.request);
       } else {
         // Something happened in setting up the request that triggered an Error
         console.log('Something happened in setting up the request that triggered an Error');
+        dispatchGlobalState({ type: 'error', state: 'UNKWON ERROR'});
         console.log(error.message);
         console.log('error.message');
       }
-      return Promise.reject(error);
+      throw error;
     }
   );
 

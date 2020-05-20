@@ -19,16 +19,18 @@ import Login from './screens/Login';
 import Signup from './screens/Signup';
 import Home from './screens/home/Home';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
-import { useGlobalState } from './state';
+import { useGlobalState, dispatchGlobalState } from './state';
 //@ts-ignore
 import { default as mapping } from './mapping.json';
 import SplashScreen from 'react-native-splash-screen'
+import { Alert } from 'react-native';
 
 const Stack = createStackNavigator();
 
 
 export default () => {
   const [token] = useGlobalState('token');
+  const [error] = useGlobalState('error');
 
   useEffect(() => {
     SplashScreen.hide()
@@ -48,6 +50,17 @@ export default () => {
   j.components.CheckBox.appearances.default.variantGroups.status.basic.state.active.borderColor = "#41D5FB"
   j.components.CheckBox.appearances.default.variantGroups.status.basic.state["checked.active"].backgroundColor = "#41D5FB"
   j.components.CheckBox.appearances.default.variantGroups.status.basic.state["checked.active"].borderColor = "#41D5FB"
+
+  if (error) {
+    Alert.alert(
+      "Error",
+      error,
+      [
+        { text: "Close", onPress: () => dispatchGlobalState({ type: 'error', state: null }) }
+      ],
+      { cancelable: false }
+    );
+  }
 
 
   return (

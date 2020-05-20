@@ -81,7 +81,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
           </Layout>
         </Layout>
       </Layout>
-      <Modal isVisible={showModal} customBackdrop={<Back />} style={{ display: 'flex', justifyContent: 'flex-end', backgroundColor: '#00000000', flex: 1, margin: 0 }} >
+      <Modal onBackButtonPress={() => setShowModal(false)} isVisible={showModal} customBackdrop={<Back />} style={{ display: 'flex', justifyContent: 'flex-end', backgroundColor: '#00000000', flex: 1, margin: 0 }} >
           {loading && (
             <Layout style={{ flex: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', height: '15%' }}>
               <Spinner size='small' />
@@ -112,6 +112,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
                       setOriginLocation(data.item)
                     }
                     if (searchingFor === "RETURN") {
+                      props.onReturnLocationSelected(data.item)
                       setReturnLocation(data.item)
                     }
                     setShowModal(false)

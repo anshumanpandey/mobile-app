@@ -18,6 +18,9 @@ const initialState: InitialState = {
 
 const normalReducer = (state: any, action: { type: string, state?: any }): InitialState => {
     switch (action.type) {
+        case 'error': {
+            return { ...state, error: action.state };
+        }
         case 'loading': {
             return { ...state, loading: action.state };
         }
