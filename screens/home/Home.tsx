@@ -21,8 +21,8 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
 
     return (
         <Drawer.Navigator drawerContent={(props) => <DrawerMenu navigation={props.navigation} />} initialRouteName="Home">
-            <Drawer.Screen name="CreateBooking" component={SelectLocation} />
             <Drawer.Screen name="MyBookings" component={MyTripsScreens} />
+            <Drawer.Screen name="CreateBooking" component={SelectLocation} />
             <Drawer.Screen name="Location" component={LocalitationScreen} />
             <Drawer.Screen name="EnableOpt" component={EnableOptScreen} />
             <Drawer.Screen name="VerifyPhone" component={VerifyPhoneScreen} />

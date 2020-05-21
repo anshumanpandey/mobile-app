@@ -13,7 +13,6 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { useGlobalState, dispatchGlobalState } from "../../state";
 
 const menuData = [
-    { name: "Create Booking", screenName: "CreateBooking", key: 0 },
     { name: "My Trips", screenName: "MyBookings", key: 5 },
     { name: "Reservation", screenName: "Reservation", key: 10 },
 ];

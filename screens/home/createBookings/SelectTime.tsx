@@ -33,7 +33,10 @@ export default () => {
 
                 <Layout>
                     <LocationSearchInput
-                        onOriginLocationSelected={(l) => setOriginLocation(l)}
+                        onOriginLocationSelected={(l) => {
+                            setOriginLocation(l)
+                            setReturnLocation(l)
+                        }}
                         onReturnLocationSelected={(l) => setReturnLocation(l)}
                     />
                     <TimeCheckbox

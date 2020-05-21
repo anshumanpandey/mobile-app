@@ -1,10 +1,11 @@
 import React from 'react';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
-import { Layout, Text, Tab, Datepicker, NativeDateService, TabView, Card, Avatar, List } from '@ui-kitten/components';
-import { SafeAreaView } from 'react-native';
+import { Layout, Text, Tab, Datepicker, NativeDateService, TabView, Card, Avatar, List, Button } from '@ui-kitten/components';
+import { SafeAreaView, View } from 'react-native';
 import moment from 'moment';
 import TripCard, { TripCardProps } from '../../partials/TripCard';
 import MenuButton from '../../partials/MenuButton';
+import { useNavigation } from '@react-navigation/native';
 
 const DATE_FORMAT = 'MMM DD,YYYY'
 
@@ -146,6 +147,8 @@ const LIST_DATA: TripCardProps[] = [
 ]
 
 const DocumentScreen = () => {
+  const navigation = useNavigation();
+
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [date, setDate] = React.useState(new Date());
 
@@ -154,11 +157,11 @@ const DocumentScreen = () => {
       <Layout style={{ flex: 1, backgroundColor: 'red' }}>
 
         <Layout>
-          <Layout style={{ paddingTop: '3%', paddingLeft: '3%',display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between' }}>
+          <Layout style={{ paddingTop: '3%', paddingLeft: '3%', display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between' }}>
             <MenuButton />
             <Datepicker
               style={{ paddingLeft: '5%', paddingRight: '5%', width: '45%' }}
-              controlStyle={{ backgroundColor: 'white', borderRadius: 16, padding: '4%' }}
+              controlStyle={{ backgroundColor: 'white', borderRadius: 10, padding: '4%' }}
               placeholder='Pick Date'
               date={date}
               title={(d) => moment(d).format(DATE_FORMAT)}
@@ -167,7 +170,20 @@ const DocumentScreen = () => {
               accessoryLeft={() => <EntypoIcon style={{ color: 'black' }} name="calendar" size={22} />}
             />
           </Layout>
-          <Text style={{ alignSelf: 'flex-start', marginLeft: '3%', fontFamily: 'SF-UI-Display_Bold', fontSize: 29 }}>My Trips</Text>
+          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', paddingRight: '5%',}}>
+            <Text style={{ alignSelf: 'flex-start', marginLeft: '3%', fontFamily: 'SF-UI-Display_Bold', fontSize: 29 }}>My Trips</Text>
+            <Button
+              onPress={(e) => navigation.navigate("CreateBooking")}
+              size="small"
+              style={{
+                width: '35.8%',
+                backgroundColor: '#41d5fb',
+                borderColor: '#41d5fb',
+                borderRadius: 10,
+              }}>
+              {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 16 }}>Create Booking</Text>}
+            </Button>
+          </View>
         </Layout>
 
         <Layout style={{ flex: 1 }}>
@@ -175,7 +191,7 @@ const DocumentScreen = () => {
             indicatorStyle={{ backgroundColor: '#41d5fb' }}
             selectedIndex={selectedIndex}
             onSelect={index => setSelectedIndex(index)}>
-            <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold',color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>ACTIVE</Text>} >
+            <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold', color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>ACTIVE</Text>} >
               <Layout style={{ height: '86%' }}>
                 <List
                   style={{ backgroundColor: '#f7f9fc', padding: '5%', flexGrow: 1 }}
@@ -191,7 +207,7 @@ const DocumentScreen = () => {
                 />
               </Layout>
             </Tab>
-            <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold',color: selectedIndex == 1 ? '#41d5fb' : '#aeb1c3' }}>UPCOMING</Text>} >
+            <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold', color: selectedIndex == 1 ? '#41d5fb' : '#aeb1c3' }}>UPCOMING</Text>} >
               <Layout style={{ height: '96%' }}>
                 <List
                   style={{ backgroundColor: '#f7f9fc', padding: '5%', display: 'flex', flexDirection: 'column' }}
@@ -208,7 +224,7 @@ const DocumentScreen = () => {
               </Layout>
             </Tab>
 
-            <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold',color: selectedIndex == 2 ? '#41d5fb' : '#aeb1c3' }}>COMPLETED</Text>} >
+            <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold', color: selectedIndex == 2 ? '#41d5fb' : '#aeb1c3' }}>COMPLETED</Text>} >
               <Layout style={{ height: '96%' }}>
 
                 <List

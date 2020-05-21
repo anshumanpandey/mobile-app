@@ -2,17 +2,9 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Text, Input, Button, Select, SelectItem, Popover, Toggle } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView } from 'react-native';
-import DatePicker from 'react-native-date-picker'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useCreateBookingState } from './CreateBookingState';
-import TimeCheckbox from '../../../partials/TimeCheckbox';
-import LocationSearchInput from '../../../partials/SearchLocationInput';
-import BuildJson from '../../../utils/BuildJson';
-import useAxios from 'axios-hooks'
 import moment from 'moment';
-import { GRCGDS_BACKEND } from 'react-native-dotenv';
-import LoadingSpinner from '../../../partials/LoadingSpinner';
-import CarItem from '../../../partials/CarItem';
 import CarTripInfoCard from '../../../partials/CarTripInfoCard';
 
 
@@ -49,6 +41,7 @@ export default () => {
                         carName={vehicle.name}
                         registratioNumber={"RC00786587"}
                         finalCost={vehicle.price}
+                        currencyCode={vehicle.currency}
                         arrivalTime={moment(returnTime)}
                         image_preview_url={vehicle.image_preview_url}
                       

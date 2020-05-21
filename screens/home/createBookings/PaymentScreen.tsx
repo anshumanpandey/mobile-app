@@ -3,11 +3,73 @@ import { Layout, Text, Input, Button } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import useAxios from 'axios-hooks'
-import axios from 'axios'
+import { useCreateBookingState } from './CreateBookingState';
 import base64 from 'react-native-base64'
 import LoadingSpinner from '../../../partials/LoadingSpinner';
 
-const GET_PAYPAL_JSON = (vehicle) => {
+const GET_PAYPAL_JSON = (vehicle, meta, extras) => {
+    const items = [];
+
+    if (extras.babySeat) {
+        items.push({
+            "name": `Baby Seat`,
+            "description": `A baby seat`,
+            "quantity": "1",
+            "price": 10,
+            "tax": "0",
+            "sku": "1",
+            "currency": vehicle.currency || "USD"
+        })
+    }
+    if (extras.childSeat) {
+        items.push({
+            "name": `Child Seat`,
+            "description": `A child seat`,
+            "quantity": "1",
+            "price": 10,
+            "tax": "0",
+            "sku": "1",
+            "currency": vehicle.currency || "USD"
+        })
+    }
+    if (extras.seatBooster) {
+        items.push({
+            "name": `Seat Booster`,
+            "description": `A seat booster`,
+            "quantity": "1",
+            "price": 10,
+            "tax": "0",
+            "sku": "1",
+            "currency": vehicle.currency || "USD"
+        })
+    }
+    if (extras.wifi) {
+        items.push({
+            "name": `Wifi`,
+            "description": `a car with WIFI`,
+            "quantity": "1",
+            "price": 10,
+            "tax": "0",
+            "sku": "1",
+            "currency": vehicle.currency || "USD"
+        })
+    }
+    if (extras.gps) {
+        items.push({
+            "name": `GPS`,
+            "description": `a car with GPS`,
+            "quantity": "1",
+            "price": 10,
+            "tax": "0",
+            "sku": "1",
+            "currency": vehicle.currency || "USD"
+        })
+    }
+    const sum = items.reduce((prev, next) => {
+        prev = prev + next.price
+        return prev
+    }, 0)
+
     return {
         "intent": "sale",
         "payer": {
@@ -15,7 +77,10 @@ const GET_PAYPAL_JSON = (vehicle) => {
         },
         "transactions": [{
             "amount": {
-                "total": vehicle.price,
+                "total": parseFloat(vehicle.price) + items.reduce((prev, next) => {
+                    prev = prev + next.price
+                    return prev
+                }, 0),
                 "currency": vehicle.currency || "USD",
             },
             "description": "This is the payment transaction description.",
@@ -28,13 +93,15 @@ const GET_PAYPAL_JSON = (vehicle) => {
             "item_list": {
                 "items": [{
                     "name": `Ride on ${vehicle.name}`,
-                    "description": "A ride",
+                    "description": `A ride from ${meta.originLocation.locationname} to ${meta.returnLocation.locationname}`,
                     "quantity": "1",
                     "price": vehicle.price,
                     "tax": "0",
                     "sku": "1",
                     "currency": vehicle.currency || "USD"
-                }],
+                },
+                ...items
+            ],
             }
         }],
         "note_to_payer": "Contact us for any questions on your order.",
@@ -49,6 +116,16 @@ const GET_PAYPAL_JSON = (vehicle) => {
 export default () => {
     const navigation = useNavigation();
     const route = useRoute();
+
+    const [originLocation] = useCreateBookingState("originLocation");
+    const [returnLocation] = useCreateBookingState("returnLocation");
+
+    const [babySeat] = useCreateBookingState("babySeat");
+    const [childSeat] = useCreateBookingState("childSeat");
+    const [seatBooster] = useCreateBookingState("seatBooster");
+    const [wifi] = useCreateBookingState("wifi");
+    const [gps] = useCreateBookingState("gps");
+
 
     const params = new URLSearchParams();
     params.append('grant_type', 'client_credentials');
@@ -87,8 +164,11 @@ export default () => {
                                             headers: {
                                                 'Authorization': `Bearer ${res.data.access_token}`
                                             },
-                                            data: GET_PAYPAL_JSON(route.params.vehicle)
-                                        })
+                                            data: GET_PAYPAL_JSON(
+                                                route.params.vehicle,
+                                                { originLocation, returnLocation},
+                                                {babySeat,childSeat,seatBooster,wifi,gps}
+                                            )})
                                     })
                                     .then((res) => {
                                         navigation.navigate('WebView', { url: res.data.links.find(i => i.method == 'REDIRECT').href})

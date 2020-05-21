@@ -111,7 +111,6 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
                     if (searchingFor === "ORIGIN") {
                       props.onOriginLocationSelected(data.item)
                       setOriginLocation(data.item)
-                      setReturnLocation(data.item)
                     }
                     if (searchingFor === "RETURN") {
                       props.onReturnLocationSelected(data.item)

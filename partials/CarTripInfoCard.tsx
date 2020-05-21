@@ -4,6 +4,7 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import { Image, TouchableWithoutFeedback } from 'react-native';
 import { Layout, Text, Card, Avatar, Button, Divider } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
+import ResolveCurrencySymbol from '../utils/ResolveCurrencySymbol';
 
 export type TripCardProps = {
   tripDate: moment.Moment
@@ -15,6 +16,7 @@ export type TripCardProps = {
   carName: string
   registratioNumber: string
   finalCost: string
+  currencyCode: string
   arrivalTime: moment.Moment
 
   leftImageUri?: string
@@ -103,7 +105,7 @@ const CarTripInfoCard: React.FC<TripCardProps> = (props) => {
             <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '50%' }}>
               <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Text style={{ color: '#ACB1C0', fontSize: 13 }}>Final cost</Text>
-                <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{props.finalCost}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{props.finalCost}{ResolveCurrencySymbol(props.currencyCode)}</Text>
               </Layout>
 
               <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
