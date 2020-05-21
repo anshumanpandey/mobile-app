@@ -14,6 +14,12 @@ type InitialState = {
     inmediatePickup: boolean | null,
     departureTime: Date,
     returnTime: Date,
+
+    babySeat: boolean
+    childSeat: boolean
+    seatBooster: boolean
+    wifi: boolean
+    gps: boolean
 };
  
 const initialState: InitialState = {
@@ -22,6 +28,11 @@ const initialState: InitialState = {
     inmediatePickup: null,
     departureTime: new Date(),
     returnTime: new Date(),
+    babySeat: false,
+    childSeat: false,
+    seatBooster: false,
+    wifi: false,
+    gps: false,
 };
 
 export const { useGlobalState: useCreateBookingState } = createGlobalState<InitialState>(initialState);

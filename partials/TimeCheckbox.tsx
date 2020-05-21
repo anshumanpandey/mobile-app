@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Text, Button, CheckBox, Layout } from '@ui-kitten/components';
-import { StyleProp, ViewStyle } from 'react-native';
+import { Text, CheckBox, Layout } from '@ui-kitten/components';
+import { ViewStyle } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 export type TimeCheckboxProps = {
     title: string
-    subTitle: string
+    subTitle?: string
     style?: ViewStyle
     defaultChecked?: boolean
     checked?: boolean
@@ -36,13 +36,13 @@ const TimeCheckbox: React.FC<TimeCheckboxProps> = ({ title, subTitle, style, onC
     return (
         <TouchableWithoutFeedback onPress={() => {
             setChecked(p => {
-                onChange(!p)
+                onChange && onChange(!p)
                 return !p
             })
         }} style={{ ...style,backgroundColor: styles.backgroundColor,display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderWidth: 1, padding: '3%', borderRadius: 10, borderColor: styles.color}}>
             <Layout style={{ backgroundColor: '#00000000'}}>
                 <Text style={{ color: styles.textColor, fontFamily: 'SF-UI-Display_Bold' }}>{title}</Text>
-                <Text style={{ color: styles.textColor }}>{subTitle}</Text>
+                {subTitle && <Text style={{ color: styles.textColor }}>{subTitle}</Text>}
             </Layout>
             <CheckBox checked={checked} />
         </TouchableWithoutFeedback>
