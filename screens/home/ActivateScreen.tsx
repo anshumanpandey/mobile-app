@@ -2,11 +2,12 @@ import React from 'react';
 import { Layout, Text, Button, Datepicker, NativeDateService, TabView, Card, Avatar } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView, Image } from 'react-native';
 import TripCard, { TripCardProps } from '../../partials/TripCard';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 
 const DocumentScreen = () => {
   const route = useRoute();
-  
+  const navigation = useNavigation();
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView >
@@ -47,7 +48,7 @@ const DocumentScreen = () => {
               <Button size="giant" style={{ borderRadius: 10, backgroundColor: '#5ac8fa', borderColor: '#5ac8fa', paddingLeft: 20, paddingRight: 20, marginBottom: '2%' }}>
                 {() => <Text style={{ color: 'white'}}>END RENTAL</Text>}
             </Button>
-              <Button size="giant" style={{ borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', paddingLeft: 20, paddingRight: 20 }}>
+              <Button onPress={() => navigation.navigate('Damage', {...route.params})} size="giant" style={{ borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', paddingLeft: 20, paddingRight: 20 }}>
                 {() => <Text style={{ color: 'white'}}>HELP</Text>}
             </Button>
             </Layout>

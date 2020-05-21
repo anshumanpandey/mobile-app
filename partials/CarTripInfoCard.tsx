@@ -88,7 +88,7 @@ const CarTripInfoCard: React.FC<TripCardProps> = (props) => {
             </Layout>
           </Layout>
           <Layout style={{ display: 'flex', alignItems: 'center'}}>
-          <Image source={{ uri: props.image_preview_url }} style={{ flex: 1, width: 180, height: 180, resizeMode: 'contain' }} />
+          <Image source={{ uri: props.image_preview_url }} style={{ width: 180, height: 180, resizeMode: 'contain' }} />
           </Layout>
           <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingBottom: '5%', paddingLeft: '5%', paddingRight: '5%', borderBottomLeftRadius: (props.upcoming || props.completed) ? 0: 16, borderBottomRightRadius: (props.upcoming || props.completed) ? 0 : 16 }}>
             <Layout style={{ display: 'flex', flexDirection: 'row', width: '50%' }}>

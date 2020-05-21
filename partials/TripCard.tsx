@@ -4,18 +4,20 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import { Image, TouchableWithoutFeedback, View } from 'react-native';
 import { Layout, Text, Card, Avatar, Button, Divider } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
+import ResolveCurrencySymbol from '../utils/ResolveCurrencySymbol';
 
 export type TripCardProps = {
   tripDate: moment.Moment
   pickupLocation: string
-  pickupTime: string
+  pickupTime: moment.Moment
   dropOffLocation: string
-  dropoffTime: string
+  dropoffTime: moment.Moment
 
   carName: string
   registratioNumber: string
   finalCost: string
-  arrivalTime: string
+  currencyCode: string
+  arrivalTime: moment.Moment
 
   leftImageUri?: string
 
@@ -26,6 +28,9 @@ export type TripCardProps = {
   completed?: boolean
   upcoming?: boolean
 
+  image_preview_url?: string
+  displayPreview?: boolean
+
 }
 const TripCard: React.FC<TripCardProps> = (props) => {
   const navigation = useNavigation();
@@ -33,6 +38,7 @@ const TripCard: React.FC<TripCardProps> = (props) => {
   return (
     <TouchableWithoutFeedback onPress={() => {
       if (props.keyLess) navigation.navigate('Activate', { ...props, leftImageUri: undefined })
+      if (!props.keyLess) navigation.navigate('Reservation', { ...props, leftImageUri: undefined })
     }}>
       <Layout style={{ backgroundColor: '#00000000', marginBottom: '5%' }}>
         <Layout style={{ backgroundColor: '#00000000', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -72,16 +78,21 @@ const TripCard: React.FC<TripCardProps> = (props) => {
               <Layout style={{ display: 'flex', flexDirection: 'column', width: '90%' }}>
                 <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '5%' }}>
                   <Text style={{ fontSize: 16, fontFamily: 'SF-UI-Display_Bold' }}>{props.pickupLocation}</Text>
-                  <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.pickupTime}</Text>
+                  <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.pickupTime.format('HH:mm A DD, MMM')}</Text>
                 </Layout>
                 <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text style={{ fontSize: 16, fontFamily: 'SF-UI-Display_Bold' }}>{props.dropOffLocation}</Text>
-                  <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.dropoffTime}</Text>
+                  <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.dropoffTime.format('HH:mm A DD, MMM')}</Text>
                 </Layout>
               </Layout>
             </Layout>
+            { props.displayPreview == true && props.image_preview_url && (
+              <Layout style={{ display: 'flex', alignItems: 'center'}}>
+                <Image source={{ uri: props.image_preview_url }} style={{ width: 150, height: 150, resizeMode: 'contain' }} />
+              </Layout>
+            )}
             <Divider />
-            <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingTop: '5%', paddingBottom: '5%', paddingLeft: '5%', paddingRight: '5%', borderBottomLeftRadius: (props.upcoming || props.completed) ? 0 : 16, borderBottomRightRadius: (props.upcoming || props.completed) ? 0 : 16 }}>
+            <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingTop: props.displayPreview == true && props.image_preview_url ? 0 :'5%', paddingBottom: '5%', paddingLeft: '5%', paddingRight: '5%', borderBottomLeftRadius: (props.upcoming || props.completed) ? 0 : 16, borderBottomRightRadius: (props.upcoming || props.completed) ? 0 : 16 }}>
               <Layout style={{ display: 'flex', flexDirection: 'row', width: '50%' }}>
                 <Layout style={{ marginRight: '3%' }}>
                   <Avatar style={{ borderRadius: 10 }} shape='square' source={props.keyLess ? require('../image/keyx.png') : require('../image/key.png')} />
@@ -96,12 +107,15 @@ const TripCard: React.FC<TripCardProps> = (props) => {
               <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '50%' }}>
                 <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Text style={{ color: '#ACB1C0', fontSize: 13 }}>Final cost</Text>
-                  <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{props.finalCost}</Text>
+                  <View style={{ display: 'flex', flexDirection: 'row'}}>
+                    <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{props.finalCost}</Text>
+                    {props.currencyCode && <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{ResolveCurrencySymbol(props.currencyCode)}</Text>}
+                  </View>
                 </Layout>
 
                 <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Text style={{ color: '#ACB1C0', fontSize: 13 }}>Arrival time</Text>
-                  <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{props.arrivalTime}</Text>
+                  <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{props.arrivalTime.format('HH:mm A')}</Text>
                 </Layout>
               </Layout>
 

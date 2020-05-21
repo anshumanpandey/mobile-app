@@ -1,11 +1,12 @@
 import React from 'react';
-import { Layout, Text, Button, Datepicker, NativeDateService, TabView, Card, Avatar, Input } from '@ui-kitten/components';
-import { SafeAreaView, ScrollView, Image } from 'react-native';
+import { Layout, Text, Button, Input } from '@ui-kitten/components';
+import { SafeAreaView, ScrollView, Image, TextInput, View } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
-import TripCard, { TripCardProps } from '../../partials/TripCard';
-import moment from 'moment';
+import TripCard from '../../partials/TripCard';
+import { useRoute } from '@react-navigation/native';
 
 const DocumentScreen = () => {
+  const route = useRoute();
   const [picture, setPicture] = React.useState<string | null>(null);
 
   const options = {
@@ -19,20 +20,10 @@ const DocumentScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-
-        <Layout style={{ flex: 1, padding: '5%', backgroundColor: '#f7f9fc' }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: '25%', flexGrow: 1,display: 'flex' ,backgroundColor: '#f7f9fc' }}>
+        <View style={{ padding: '5%', backgroundColor: '#f7f9fc' }}>
           <TripCard
-            leftImageUri='../image/rightcars.png'
-            keyLess={false}
-            tripDate={moment()}
-            pickupLocation="205 Nixon Court"
-            dropOffLocation="577 Java Street"
-            pickupTime="4:06 AM"
-            dropoffTime="6:15 PM"
-            carName="Lange Rover"
-            registratioNumber="V45646EUU"
-            finalCost="$28.50"
-            arrivalTime="5:29 AM"
+            {...route.params}
           />
 
           <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#00000000' }}>
@@ -54,7 +45,7 @@ const DocumentScreen = () => {
                 }
               });
             }} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '25%', backgroundColor: 'gray' }}>
-                {() => <Text style={{ color: 'white'}}>TAKE PICTURE</Text>}
+              {() => <Text style={{ color: 'white' }}>TAKE PICTURE</Text>}
             </Button>
             {picture && <Image source={{ uri: picture }} />}
           </Layout>
@@ -67,9 +58,9 @@ const DocumentScreen = () => {
             />
           </Layout>
 
-        </Layout>
+        </View>
 
-
+      </ScrollView>
     </SafeAreaView>
   );
 };

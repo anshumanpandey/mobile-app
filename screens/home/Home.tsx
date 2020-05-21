@@ -15,6 +15,7 @@ import ReservationScreen from './ReservationScreen';
 import VerifyPhoneScreen from '../VerifyPhoneScreen';
 import EnableOptScreen from './EnableOptScreen';
 import SelectLocation from './createBookings/index';
+import KeyedReservation from './KeyedReservation';
 
 const Drawer = createDrawerNavigator();
 export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
@@ -32,6 +33,7 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
             <Drawer.Screen name="Notifications" component={NotificationScreen} />
             <Drawer.Screen name="Profile" component={ProfileScreen} />
             <Drawer.Screen name="Documents" component={DocumentScreen} />
+            <Drawer.Screen name="KeyedCarReservation" component={KeyedReservation} />
         </Drawer.Navigator>
     )
 };
