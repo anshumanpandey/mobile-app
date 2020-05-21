@@ -176,9 +176,9 @@ const DocumentScreen = () => {
             selectedIndex={selectedIndex}
             onSelect={index => setSelectedIndex(index)}>
             <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold',color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>ACTIVE</Text>} >
-              <Layout style={{ height: '96%' }}>
+              <Layout style={{ height: '86%' }}>
                 <List
-                  style={{ backgroundColor: '#f7f9fc', padding: '5%' }}
+                  style={{ backgroundColor: '#f7f9fc', padding: '5%', flexGrow: 1 }}
                   data={LIST_DATA.sort((a, b) => a.tripDate.diff(b.tripDate)).filter(i => moment(date).isSame(i.tripDate, "day")).filter(i => !i.upcoming).filter(i => !i.completed)}
                   renderItem={(data: any) => {
                     return (
