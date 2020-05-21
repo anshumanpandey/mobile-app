@@ -97,26 +97,23 @@ const ListItem = ({ vehicle, isActive, onClick }: { onClick: () => void, isActiv
   );
 }
 
+const _dataProvider = new DataProvider((r1, r2) => r1.vehicle.deeplink !== r2.vehicle.deeplink)
+
 const DocumentScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-
   const [selectedIdx, setSelectedIdx] = useState(-1)
+
+  const cars = route.params.cars
+
+  const [dataToUse, setDataToUse] = useState(_dataProvider.cloneWithRows(cars));
+
+  useEffect(() => {
+    cars.unshift({ header: true, vehicle: {deeplink: 'q'} })
+  },[])
 
   return (
     <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: 'white' }}>
-      <View style={{ display: 'flex', flexDirection: 'row', paddingLeft: '5%', paddingRight: '5%', paddingTop: '5%' }}>
-        <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>From: {route.params.searchParams.pickUpLocation.locationname}</Text>
-        <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>To: {route.params.searchParams.dropOffLocation.locationname}</Text>
-      </View>
-
-      <View style={{ display: 'flex', flexDirection: 'row', paddingLeft: '5%', paddingRight: '5%' }}>
-        <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>At: {route.params.searchParams.pickUpDate.format('MMM DD, h:mm')}</Text>
-        <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>Until: {route.params.searchParams.pickUpDate.format('MMM DD, h:mm')}</Text>
-      </View>
-
-
-      <Text style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 16, textAlign: 'left', width: '100%', marginBottom: '2%', marginLeft: '10%' }}>AVAILABLE VEHICLES</Text>
       <View style={{ flex: 1, width: '100%', display: 'flex', justifyContent: 'center' }}>
         {route.params.cars.length == 0 && (
           <>
@@ -129,18 +126,40 @@ const DocumentScreen = () => {
             style={{ paddingLeft: '5%', paddingRight: '5%' }}
             layoutProvider={new LayoutProvider(
               index => {
-                return '0'
+                if (index == 0) return 'HEADER'
+                return 0
               },
               (type, dim) => {
-                dim.width = Dimensions.get("window").width - ((Dimensions.get("window").width / 100) * 10);
-                dim.height = (Dimensions.get("window").height / 100) * 18;
+                if (type === 'HEADER') {
+                  dim.width = Dimensions.get("window").width - ((Dimensions.get("window").width / 100) * 10);
+                  dim.height = (Dimensions.get("window").height / 100) * 11;
+                } else {
+                  dim.width = Dimensions.get("window").width - ((Dimensions.get("window").width / 100) * 10);
+                  dim.height = (Dimensions.get("window").height / 100) * 18;
+                }
               }
             )}
-            dataProvider={new DataProvider((r1, r2) => r1.vehicle.deeplink !== r2.vehicle.deeplink).cloneWithRows(route.params.cars)}
+            dataProvider={dataToUse}
             rowRenderer={(type, o, idx) => {
 
+              if (o.header) {
+                return (
+                  <View>
+                    <View style={{ display: 'flex', flexDirection: 'row', paddingLeft: '5%', paddingRight: '5%' }}>
+                      <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>From: {route.params.searchParams.pickUpLocation.locationname}</Text>
+                      <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>To: {route.params.searchParams.dropOffLocation.locationname}</Text>
+                    </View>
+
+                    <View style={{ display: 'flex', flexDirection: 'row', paddingLeft: '5%', paddingRight: '5%' }}>
+                      <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>At: {route.params.searchParams.pickUpDate.format('MMM DD, h:mm')}</Text>
+                      <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>Until: {route.params.searchParams.pickUpDate.format('MMM DD, h:mm')}</Text>
+                    </View>
+                  </View>
+                );
+              }
+
               return (
-                <ListItem vehicle={o.vehicle} isActive={selectedIdx == idx} onClick={() => {
+                <ListItem key={o.vehicle.deeplink} vehicle={o.vehicle} isActive={selectedIdx == idx} onClick={() => {
                   if (idx == selectedIdx) return setSelectedIdx(-1)
                   return setSelectedIdx(idx)
                 }} />
