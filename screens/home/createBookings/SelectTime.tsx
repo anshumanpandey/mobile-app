@@ -11,6 +11,7 @@ import BuildJson from '../../../utils/BuildJson';
 import useAxios from 'axios-hooks'
 import moment from 'moment';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
+import LoadingSpinner from '../../../partials/LoadingSpinner';
 
 
 export default () => {
@@ -28,7 +29,7 @@ export default () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }} >
-            <ScrollView contentContainerStyle={{ minHeight: '80%', padding: '5%', justifyContent: 'space-between', display: 'flex' }} keyboardShouldPersistTaps={"handled"} style={{ backgroundColor: 'white' }}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1, padding: '5%', justifyContent: 'space-between', display: 'flex' }} keyboardShouldPersistTaps={"handled"} style={{ backgroundColor: 'white' }}>
 
                 <Layout>
                     <LocationSearchInput
@@ -71,30 +72,56 @@ export default () => {
                     )}
                 </Layout>
                 <Layout style={{ marginTop: '5%' }}>
-                    <Button onPress={() => {
-                        console.log(originLocation)
-                        console.log(returnLocation)
-                        if (!originLocation) return
-                        if (!returnLocation) return
-                        doSearch({
-                            data: {
-                                json: BuildJson({
-                                    pickUpDate: moment(departureTime),
-                                    pickUpTime: moment(departureTime),
+                    <Button
+                        disabled={originLocation == null || inmediatePickup == null || loading == true}
+                        accessoryRight={loading ? LoadingSpinner : undefined}
+                        onPress={() => {
+                            console.log(originLocation)
+                            console.log(returnLocation)
+                            if (!originLocation) return
 
-                                    dropOffDate: moment(returnTime),
-                                    dropOffTime: moment(returnTime),
+                            doSearch({
+                                data: {
+                                    json: BuildJson({
+                                        pickUpDate: moment(departureTime),
+                                        pickUpTime: moment(departureTime),
 
-                                    pickUpLocation: originLocation,
-                                    dropOffLocation: returnLocation,
+                                        dropOffDate: moment(returnTime),
+                                        dropOffTime: moment(returnTime),
+
+                                        pickUpLocation: originLocation,
+                                        dropOffLocation: returnLocation ? returnLocation : originLocation,
+                                    })
+                                }
+                            })
+                                .then(res => {
+                                    navigation.navigate(
+                                        'CarsList',
+                                        {
+                                            cars: res.data.scrape.vehicle,
+                                            metadata: res.data.scrape.details,
+                                            searchParams: {
+                                                pickUpDate: moment(departureTime),
+                                                pickUpTime: moment(departureTime),
+
+                                                dropOffDate: moment(returnTime),
+                                                dropOffTime: moment(returnTime),
+
+                                                pickUpLocation: originLocation,
+                                                dropOffLocation: returnLocation ? returnLocation : originLocation,
+                                            }
+                                        }
+                                    );
                                 })
-                            }
-                        })
-                        .then(res => {
-                            console.log(res.data)
-                        })
-                    }} size="giant" style={{ borderRadius: 10, backgroundColor: '#5ac8fa', borderColor: '#5ac8fa', paddingLeft: 20, paddingRight: 20, marginBottom: '2%' }}>
-                        {() => <Text style={{ color: 'white' }}>Search</Text>}
+                        }} size="giant" style={{
+                            borderRadius: 10,
+                            backgroundColor: (originLocation != null && inmediatePickup != null) && loading == false ? '#41d5fb' : '#e4e9f2',
+                            borderColor: (originLocation != null && inmediatePickup != null) && loading == false ? '#41d5fb' : '#e4e9f2',
+                            paddingLeft: 20,
+                            paddingRight: 20,
+                            marginBottom: '2%'
+                        }}>
+                        {() => <Text style={{ color: loading ? "#ACB1C0" : 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>Search</Text>}
                     </Button>
                 </Layout>
             </ScrollView >

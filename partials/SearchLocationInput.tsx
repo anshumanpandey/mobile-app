@@ -40,6 +40,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
   }
 
   useEffect(() => {
+    if (loading == true) setShowModal(true)
     if (data) setShowModal(true)
   }, [loading])
 
@@ -68,14 +69,14 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
         </Layout>
         <Layout style={{ display: 'flex', flexDirection: 'column' }}>
           <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <TextInput value={originLocation ? originLocation.locationname : undefined} onChangeText={(txt) => {
-              onChangeText(txt)
+            <TextInput defaultValue={originLocation ? originLocation.locationname : undefined} onEndEditing={(e) => {
+              onChangeText(e.nativeEvent.text)
               setSearchingFor("ORIGIN")
             }} style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 18, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }} placeholder="Enter Origin"></TextInput>
           </Layout>
           <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <TextInput value={returnLocation ? returnLocation.locationname : undefined} onChangeText={(txt) => {
-              onChangeText(txt)
+            <TextInput defaultValue={returnLocation ? returnLocation.locationname : undefined} onEndEditing={(e) => {
+              onChangeText(e.nativeEvent.text)
               setSearchingFor("RETURN")
             }} style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 18, width: '100%', borderColor: 'white' }} placeholder="Enter Destionation"></TextInput>
           </Layout>

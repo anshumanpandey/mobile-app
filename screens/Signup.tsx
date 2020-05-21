@@ -216,7 +216,7 @@ export default () => {
                                             shadowRadius: 13.16,
                                             elevation: 10,
                                         }}>
-                                        Sign up
+                                        {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold',color: loading ? "#ACB1C0" : 'white', fontSize: 18}}>Sign up</Text>}
             </Button>
                                 </>
                             );

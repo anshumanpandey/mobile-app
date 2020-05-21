@@ -119,7 +119,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         shadowRadius: 13.16,
                                         elevation: 10,
                                     }}>
-                                    {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold',color: 'white', fontSize: 18}}>Sign in</Text>}
+                                    {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold',color: loading ? "#ACB1C0" : 'white', fontSize: 18}}>Sign in</Text>}
                             </Button>
                             </>
                         )
