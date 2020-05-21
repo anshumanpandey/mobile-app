@@ -54,7 +54,7 @@ const DocumentScreen = () => {
             <Text category="h4"> DESCRIPTION OF DAMAGE</Text>
             <Input
               multiline={true}
-              textStyle={{ minHeight: 64 }}
+              numberOfLines = {10}
             />
           </Layout>
 

@@ -30,6 +30,8 @@ export type TripCardProps = {
 
   image_preview_url: string
 
+  confirmation?: boolean
+
 }
 const CarTripInfoCard: React.FC<TripCardProps> = (props) => {
   const navigation = useNavigation();
@@ -49,9 +51,16 @@ const CarTripInfoCard: React.FC<TripCardProps> = (props) => {
 
       <TouchableWithoutFeedback onPress={() => navigation.navigate('Activate', { ...props, leftImageUri: undefined })} style={{ display: 'flex', flexDirection: 'column', borderRadius: 16, borderWidth: 0 }}>
         <>
-          <Text style={{ textAlign: 'center' }} category="h6">
-            CONFIRMATION
+          {(props.confirmation == true || props.confirmation == undefined) && (
+            <>
+              <Text style={{ textAlign: 'center' }} category="h6">
+                CONFIRMATION
           </Text>
+              <Text style={{ textAlign: 'center', color: 'blue' }} category="h6">
+                PAYMENT HAS BEEN TAKEN FROM YOUR PAYPAL ACCOUNT
+          </Text>
+            </>
+          )}
           {props.reservationNumber && (
             <Layout style={{ marginBottom: '3%' }}>
               <Text style={{ textAlign: 'center' }} category="h6">
@@ -62,9 +71,6 @@ const CarTripInfoCard: React.FC<TripCardProps> = (props) => {
               </Text>
             </Layout>
           )}
-          <Text style={{ textAlign: 'center', color: 'blue' }} category="h6">
-            PAYMENT HAS BEEN TAKEN FROM YOUR PAYPAL ACCOUNT
-          </Text>
           <Layout style={{ display: 'flex', flexDirection: 'row', paddingTop: '5%', paddingLeft: '5%', paddingRight: '5%', borderTopRightRadius: 16, borderTopLeftRadius: 16 }}>
             <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', marginRight: '5%' }}>
               <FontAwesomeIcon size={15} style={{ color: '#41d5fb' }} name="circle" />
@@ -87,10 +93,10 @@ const CarTripInfoCard: React.FC<TripCardProps> = (props) => {
               </Layout>
             </Layout>
           </Layout>
-          <Layout style={{ display: 'flex', alignItems: 'center'}}>
-          <Image source={{ uri: props.image_preview_url }} style={{ width: 180, height: 180, resizeMode: 'contain' }} />
+          <Layout style={{ display: 'flex', alignItems: 'center' }}>
+            <Image source={{ uri: props.image_preview_url }} style={{ width: 180, height: 180, resizeMode: 'contain' }} />
           </Layout>
-          <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingBottom: '5%', paddingLeft: '5%', paddingRight: '5%', borderBottomLeftRadius: (props.upcoming || props.completed) ? 0: 16, borderBottomRightRadius: (props.upcoming || props.completed) ? 0 : 16 }}>
+          <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingBottom: '5%', paddingLeft: '5%', paddingRight: '5%', borderBottomLeftRadius: (props.upcoming || props.completed) ? 0 : 16, borderBottomRightRadius: (props.upcoming || props.completed) ? 0 : 16 }}>
             <Layout style={{ display: 'flex', flexDirection: 'row', width: '50%' }}>
               <Layout style={{ marginRight: '3%' }}>
                 <Avatar style={{ borderRadius: 10 }} shape='square' source={props.keyLess ? require('../image/keyx.png') : require('../image/key.png')} />

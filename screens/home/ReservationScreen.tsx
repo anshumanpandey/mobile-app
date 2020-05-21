@@ -15,7 +15,9 @@ const DocumentScreen = () => {
       <ScrollView>
         <Layout style={{ padding: '5%', backgroundColor: '#f7f9fc', flex: 1 }}>
           <CarTripInfoCard
+            confirmation={false}
             {...route.params}
+            reservationNumber="RC00786587"
           />
 
           <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#00000000' }}>
@@ -32,7 +34,7 @@ const DocumentScreen = () => {
             <Button onPress={() => navigation.navigate('KeyedCarReservation', {...route.params})} size="giant" style={{ borderRadius: 10, backgroundColor: '#5ac8fa', borderColor: '#5ac8fa', paddingLeft: 20, paddingRight: 20, marginBottom: '2%' }}>
               {() => <Text style={{ color: 'white'}}>GET DIRECTIONS </Text>}
             </Button>
-            <Button size="giant" style={{ borderRadius: 10, backgroundColor: '#0c66ff', borderColor: '#0c66ff', paddingLeft: 20, paddingRight: 20 }}>
+            <Button onPress={() => navigation.navigate('NoPicturDamage', {...route.params})} size="giant" style={{ borderRadius: 10, backgroundColor: '#0c66ff', borderColor: '#0c66ff', paddingLeft: 20, paddingRight: 20 }}>
               {() => <Text style={{ color: 'white'}}>REPORT A PROBLEM</Text>}
             </Button>
           </Layout>

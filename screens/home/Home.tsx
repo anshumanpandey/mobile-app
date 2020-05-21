@@ -11,6 +11,7 @@ import MyTripsScreens from './MyTripsScreen';
 import ActivateScreen from './ActivateScreen';
 import LocalitationScreen from './Localitation';
 import DamageScreen from './DamageScreen';
+import NoPictureDamageScreen from './NoPictureDamageScreen';
 import ReservationScreen from './ReservationScreen';
 import VerifyPhoneScreen from '../VerifyPhoneScreen';
 import EnableOptScreen from './EnableOptScreen';
@@ -29,6 +30,7 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
             <Drawer.Screen name="VerifyPhone" component={VerifyPhoneScreen} />
             <Drawer.Screen name="Reservation" component={ReservationScreen} />
             <Drawer.Screen name="Damage" component={DamageScreen} />
+            <Drawer.Screen name="NoPicturDamage" component={NoPictureDamageScreen} />
             <Drawer.Screen name="Activate" component={ActivateScreen} />
             <Drawer.Screen name="Notifications" component={NotificationScreen} />
             <Drawer.Screen name="Profile" component={ProfileScreen} />
