@@ -13,79 +13,55 @@ import moment from 'moment';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
 import CarItem from '../../../partials/CarItem';
+import CarTripInfoCard from '../../../partials/CarTripInfoCard';
 
 
 export default () => {
     const navigation = useNavigation();
     const route = useRoute();
 
+    const [departureTime] = useCreateBookingState("departureTime");
+    const [returnTime] = useCreateBookingState("returnTime");
+    const [originLocation] = useCreateBookingState("originLocation");
+    const [returnLocation] = useCreateBookingState("returnLocation");
+
     const [, setBabySeat] = useCreateBookingState("babySeat");
     const [, setChildSeat] = useCreateBookingState("childSeat");
     const [, setSeatBooster] = useCreateBookingState("seatBooster");
     const [, setWifi] = useCreateBookingState("wifi");
     const [, setGps] = useCreateBookingState("gps");
+    const [vehicle] = useCreateBookingState("vehicle");
+
+    console.log(returnLocation)
 
     return (
         <SafeAreaView style={{ flex: 1 }} >
             <ScrollView contentContainerStyle={{ flexGrow: 1, padding: '5%', justifyContent: 'space-between', display: 'flex' }} keyboardShouldPersistTaps={"handled"} style={{ backgroundColor: 'white' }}>
 
                 <Layout>
-                    <CarItem style={{ marginBottom: '5%'}} vehicle={route.params.vehicle} />
-
-                    <Text style={{ marginBottom: '5%'}}>EQUIPEMENT (OPTIONAL EXTRAS)</Text>
-
-                    <TimeCheckbox
-                        style={{ marginBottom: '5%' }}
-                        title="BABY SEAT"
-                        onChange={() => {
-                            setBabySeat(p => {
-                                return !p
-                            })
-                        }}
-                    />
-                    <TimeCheckbox
-                        style={{ marginBottom: '5%' }}
-                        title="CHILD SEAT"
-                        onChange={() => {
-                            setChildSeat(p => {
-                                return !p
-                            })
-                        }}
-                    />
-                    <TimeCheckbox
-                        style={{ marginBottom: '5%' }}
-                        title="SEAT BOOSTER"
-                        onChange={() => {
-                            setSeatBooster(p => {
-                                return !p
-                            })
-                        }}
-                    />
-
-                    <TimeCheckbox
-                        style={{ marginBottom: '5%' }}
-                        title="WIFI"
-                        onChange={() => {
-                            setWifi(p => {
-                                return !p
-                            })
-                        }}
-                    />
-
-                    <TimeCheckbox
-                        style={{ marginBottom: '5%' }}
-                        title="GPS"
-                        onChange={() => {
-                            setGps(p => {
-                                return !p
-                            })
-                        }}
+                    <CarTripInfoCard
+                        tripDate={moment(departureTime)}
+                        pickupLocation={originLocation?.internalcode}
+                        pickupTime={moment(departureTime)}
+                        dropOffLocation={returnLocation?.internalcode}
+                        dropoffTime={moment(returnTime)}
+                      
+                        carName={vehicle.name}
+                        registratioNumber={"RC00786587"}
+                        finalCost={vehicle.price}
+                        arrivalTime={moment(returnTime)}
+                        image_preview_url={vehicle.image_preview_url}
+                      
+                        leftImageUri={vehicle.supplier_logo}
+                      
+                        reservationNumber={"0000"}
+                      
                     />
 
 
                     <Layout style={{ marginTop: '5%' }}>
                         <Button
-                            onPress={() => navigation.navigate('Payment', { vehicle: route.params.vehicle })}
+                            onPress={() => navigation.navigate('MyBookings')}
                             size="giant" style={{
                                 borderRadius: 10,
                                 backgroundColor: '#41d5fb',
@@ -94,7 +70,7 @@ export default () => {
                                 paddingRight: 20,
                                 marginBottom: '2%'
                             }}>
-                            {() => <Text style={{ color: 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>CONTINUE</Text>}
+                            {() => <Text style={{ color: 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>Go My Trips</Text>}
                         </Button>
                     </Layout>
                 </Layout>

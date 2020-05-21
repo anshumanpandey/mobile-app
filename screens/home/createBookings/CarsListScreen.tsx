@@ -3,18 +3,15 @@ import { Layout, Text, List, Button } from '@ui-kitten/components';
 import { SafeAreaView, Image, TouchableWithoutFeedback, Dimensions, View } from 'react-native';
 import { RecyclerListView, DataProvider, LayoutProvider } from "recyclerlistview";
 import { useRoute, useNavigation } from '@react-navigation/native';
-import GetCategoryByAcrissCode from '../../../utils/GetCategoryByAcrissCode';
-import ResolveCurrencySymbol from '../../../utils/ResolveCurrencySymbol';
-import ResolveTransmission from '../../../utils/ResolveTransmission';
-import ResolveDoors from '../../../utils/ResolveDoors';
-import LocationSearchInput from '../../../partials/SearchLocationInput';
 import CarItem from '../../../partials/CarItem';
+import { useCreateBookingState } from './CreateBookingState';
 
 const _dataProvider = new DataProvider((r1, r2) => r1.vehicle.deeplink !== r2.vehicle.deeplink)
 
 const DocumentScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
+  const [, setVehicle] = useCreateBookingState('vehicle')
   const [selectedIdx, setSelectedIdx] = useState(-1)
 
   const cars = route.params.cars
@@ -107,8 +104,7 @@ const DocumentScreen = () => {
       {route.params.cars.length != 0 && (
         <Button
           onPress={() => {
-            console.log(selectedIdx)
-            console.log(cars[selectedIdx])
+            setVehicle(cars[selectedIdx].vehicle)
             navigation.navigate('CarExtras', { vehicle: cars[selectedIdx].vehicle})
           }}
           disabled={selectedIdx == -1 ? true : false}

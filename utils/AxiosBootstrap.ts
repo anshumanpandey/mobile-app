@@ -7,9 +7,8 @@ const axios = Axios.create({})
 axios.interceptors.request.use(
     config => {
         const state = getGlobalState()
-        console.log(state)
 
-      if (state.token) {
+      if (state.token && !config.headers.Authorization) {
         config.headers.Authorization = `Bearer ${state.token}`;
       }
 
@@ -27,11 +26,12 @@ axios.interceptors.request.use(
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         dispatchGlobalState({ type: 'error', state: error.response.data.error});
-        if (error.response.status === 401) {
+        /*if (error.response.status === 401) {
             dispatchGlobalState({ type: 'logout' });
-        }
+        }*/
         console.log('error.response');
         console.log(error.response.headers);
+        console.log(error.response.data.error);
       } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of

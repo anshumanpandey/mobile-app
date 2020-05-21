@@ -31,6 +31,7 @@
     "react": "16.11.0",
     "react-hooks-global-state": "^1.0.0",
     "react-native": "0.62.2",
+    "react-native-base64": "^0.0.2",
     "react-native-date-picker": "^2.7.10",
     "react-native-dotenv": "^0.2.0",
     "react-native-gesture-handler": "^1.6.1",
@@ -46,6 +47,7 @@
     "react-native-svg": "^12.1.0",
     "react-native-system-setting": "^1.7.4",
     "react-native-vector-icons": "^6.6.0",
+    "react-native-webview": "^9.4.0",
     "recyclerlistview": "^3.0.0"
   },
   "devDependencies": {

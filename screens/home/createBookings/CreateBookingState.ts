@@ -20,6 +20,8 @@ type InitialState = {
     seatBooster: boolean
     wifi: boolean
     gps: boolean
+
+    vehicle: {[k: string]: any} | null
 };
  
 const initialState: InitialState = {
@@ -33,6 +35,7 @@ const initialState: InitialState = {
     seatBooster: false,
     wifi: false,
     gps: false,
+    vehicle: null
 };
 
 export const { useGlobalState: useCreateBookingState } = createGlobalState<InitialState>(initialState);
