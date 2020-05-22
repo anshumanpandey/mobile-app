@@ -18,6 +18,8 @@ import { useNavigation } from '@react-navigation/native';
 import BackButton from '../partials/BackButton';
 import FacebookButton from '../partials/FacebookButton';
 import TwitterButton from '../partials/TwitterButton';
+import { LoginManager, GraphRequest, GraphRequestManager } from "react-native-fbsdk";
+import { handlePermissionPromt, handleUserData } from '../utils/FacebookAuth';
 
 
 export default () => {
@@ -198,8 +200,8 @@ export default () => {
                                             shadowRadius: 13.16,
                                             elevation: 10,
                                         }}>
-                                        {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold',color: loading ? "#ACB1C0" : 'white', fontSize: 18}}>Sign up</Text>}
-            </Button>
+                                        {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: loading ? "#ACB1C0" : 'white', fontSize: 18 }}>Sign up</Text>}
+                                    </Button>
                                 </>
                             );
                         }}
@@ -208,7 +210,13 @@ export default () => {
                     <Text style={{ textAlign: 'center', color: '#8f9bb5', marginBottom: '5%' }} category='s2'>Or sign up with social media</Text>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                        <FacebookButton />
+                        <FacebookButton onPress={() => {
+                            LoginManager.logInWithPermissions(["public_profile", "email"])
+                                .then(handlePermissionPromt)
+                                .then(handleUserData)
+                                .then(() => navigation.navigate('Home'))
+                                .catch((error) => console.log("Login fail with error: " + error))
+                        }} />
 
                         <TwitterButton />
                     </Layout>
