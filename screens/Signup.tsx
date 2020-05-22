@@ -203,8 +203,8 @@ export default () => {
                                         size="giant"
                                         style={{
                                             marginTop: '10%',
-                                            backgroundColor: '#41d5fb',
-                                            borderColor: '#41d5fb',
+                                            backgroundColor: loading == false ? '#41d5fb' : '#e4e9f2',
+                                            borderColor: loading == false ? '#41d5fb' : '#e4e9f2',
                                             marginBottom: '10%',
                                             borderRadius: 10,
                                             shadowColor: '#41d5fb',

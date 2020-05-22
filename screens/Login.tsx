@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Text, Input, Button, Popover } from '@ui-kitten/components';
-import { TouchableWithoutFeedback, ImageProps, SafeAreaView } from 'react-native';
+import { TouchableWithoutFeedback, ImageProps, SafeAreaView, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { RenderProp } from '@ui-kitten/components/devsupport';
 import useAxios from 'axios-hooks'
@@ -13,6 +13,7 @@ import { NonLoginScreenProps, LoginScreenProps } from '../types';
 import LoadingSpinner from '../partials/LoadingSpinner';
 import FacebookButton from '../partials/FacebookButton';
 import TwitterButton from '../partials/TwitterButton';
+import ErrorLabel from '../partials/ErrorLabel';
 
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
@@ -40,6 +41,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView keyboardShouldPersistTaps={"handled"} >
+
             <Layout style={{ flex: 1, padding: '3%' }}>
                 <Layout style={{ paddingBottom: '10%' }}>
                     <Text style={{ textAlign: 'left', fontSize: 24, marginBottom: 10, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>Welcome back, Guy!</Text>
@@ -62,6 +65,19 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
                 <Formik
                     initialValues={{ clientname: '', password: '' }}
+                    validate={(values) => {
+                        const errors: { clientname?: string, password?: string } = {};
+                        if (!values.clientname) {
+                            errors.clientname = 'Required';
+                        }
+
+                        if (!values.password) {
+                            errors.password = 'Required';
+                        }
+
+                        return errors
+
+                    }}
                     onSubmit={values => {
                         if (!values.clientname) return
                         if (!values.password) return
@@ -77,19 +93,23 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             })
                     }}
                 >
-                    {({ handleChange, handleBlur, handleSubmit, values }) => {
+                    {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => {
                         return (
                             <>
                                 <Input
+                                    status={errors.clientname && touched.clientname ? 'danger' : undefined}
                                     value={values.clientname}
                                     onChangeText={handleChange('clientname')}
                                     style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                     size="large"
                                     label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Email</Text>}
                                     placeholder='Enter your email'
+                                    caption={errors.clientname && touched.clientname ? () => <ErrorLabel text={errors.clientname} /> : undefined}
+
                                 />
 
                                 <Input
+                                    status={errors.password && touched.password ? 'danger' : undefined}
                                     value={values.password}
                                     onChangeText={handleChange('password')}
                                     style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
@@ -98,6 +118,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     placeholder='Enter your password'
                                     secureTextEntry={secureTextEntry}
                                     accessoryRight={renderInputIcon}
+                                    caption={errors.password && touched.password ? () => <ErrorLabel text={errors.password} /> : undefined}
                                 />
                                 <Text onPress={() => navigation.navigate("ForgotPassword")} style={{ fontSize: 15, textAlign: 'right', color: '#70dffb', marginBottom: '6%' }} category='s2'> Forgot your password? </Text>
                                 <Button
@@ -106,8 +127,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     onPress={(e) => { handleSubmit() }}
                                     size="giant"
                                     style={{
-                                        backgroundColor: '#41d5fb',
-                                        borderColor: '#41d5fb',
+                                        backgroundColor: loading == false ? '#41d5fb' : '#e4e9f2',
+                                        borderColor: loading == false ? '#41d5fb' : '#e4e9f2',
                                         marginBottom: '15%',
                                         borderRadius: 10,
                                         shadowColor: '#41d5fb',
@@ -139,6 +160,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     <Text onPress={() => navigation.navigate('Signup')} style={{ color: '#41d5fb' }}>Sign up</Text>
                 </Layout>
             </Layout>
+            </ScrollView>
+
         </SafeAreaView>
     )
 };
