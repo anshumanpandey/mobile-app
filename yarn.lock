@@ -5612,6 +5612,11 @@ react-native-keyevent@^0.2.8:
   resolved "https://registry.yarnpkg.com/react-native-keyevent/-/react-native-keyevent-0.2.8.tgz#f6c035bf17b8d8221e546e85e430cd1d3021c5d7"
   integrity sha512-tqZwJXDpAL7rBUGRAz4AaoAyQkaWA7k1Bq+l7P4GLsWAD7g0z/KSAOMY3cJanLYJxr4+t4FEZ8seA1YQ/7kchg==
 
+react-native-maps@0.27.1:
+  version "0.27.1"
+  resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.27.1.tgz#2f10cd417bb2fd938c9e015b1c9b6d9b1a44b97f"
+  integrity sha512-HygBkZBecTnIVRYrSiLRAvu4OmXOYso/A7c6Cy73HkOh9CgGV8Ap5eBea24tvmFGptjj5Hg8AJ94/YbmWK1Okw==
+
 react-native-modal@^11.5.6:
   version "11.5.6"
   resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-11.5.6.tgz#bb25a78c35a5e24f45de060e5f64284397d38a87"

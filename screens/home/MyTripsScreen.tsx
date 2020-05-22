@@ -24,7 +24,7 @@ const LIST_DATA: TripCardProps[] = [
     "dropoffTime": moment(),
     carName: "Nissan",
     registratioNumber: "V45646EUU",
-    "finalCost": "$32.15",
+    "finalCost": "32.15",
     "arrivalTime": moment()
   },
   {
@@ -39,7 +39,7 @@ const LIST_DATA: TripCardProps[] = [
     "dropoffTime": moment(),
     carName: "Toyota",
     registratioNumber: "V45646EUU",
-    "finalCost": "$80.24",
+    "finalCost": "80.24",
     "arrivalTime": moment()
   },
   {
@@ -54,7 +54,7 @@ const LIST_DATA: TripCardProps[] = [
     "dropoffTime": moment(),
     carName: "Mazda",
     registratioNumber: "V45646EUU",
-    "finalCost": "$18.21",
+    "finalCost": "18.21",
     "arrivalTime": moment()
   },
   {
@@ -69,7 +69,7 @@ const LIST_DATA: TripCardProps[] = [
     "dropoffTime": moment(),
     carName: "Aston Martin",
     registratioNumber: "V45646EUU",
-    "finalCost": "$20.65",
+    "finalCost": "20.65",
     "arrivalTime": moment()
   },
   {
@@ -84,7 +84,7 @@ const LIST_DATA: TripCardProps[] = [
     "dropoffTime": moment(),
     carName: "Suzuki",
     registratioNumber: "V45646EUU",
-    "finalCost": "$19.01",
+    "finalCost": "19.01",
     "arrivalTime": moment(),
     completed: true
   },
@@ -100,7 +100,7 @@ const LIST_DATA: TripCardProps[] = [
     "dropoffTime": moment(),
     carName: "Porche",
     registratioNumber: "V45646EUU",
-    "finalCost": "$82.77",
+    "finalCost": "82.77",
     "arrivalTime": moment(),
     upcoming: true
   },
@@ -116,7 +116,7 @@ const LIST_DATA: TripCardProps[] = [
     "dropoffTime": moment(),
     carName: "Cherokee",
     registratioNumber: "V45646EUU",
-    "finalCost": "$23.22",
+    "finalCost": "23.22",
     "arrivalTime": moment(),
   },
   {
@@ -131,7 +131,7 @@ const LIST_DATA: TripCardProps[] = [
     "dropoffTime": moment(),
     carName: "Ferrari",
     registratioNumber: "V45646EUU",
-    "finalCost": "$48.57",
+    "finalCost": "48.57",
     "arrivalTime": moment()
   },
   {
@@ -146,7 +146,7 @@ const LIST_DATA: TripCardProps[] = [
     "dropoffTime": moment(),
     carName: "Lange Rover",
     registratioNumber: "V45646EUU",
-    "finalCost": "$28.50",
+    "finalCost": "28.50",
     "arrivalTime": moment()
   },
   {
@@ -161,7 +161,7 @@ const LIST_DATA: TripCardProps[] = [
     "dropoffTime": moment(),
     carName: "Nissan",
     registratioNumber: "V45646EUU",
-    "finalCost": "$88.04",
+    "finalCost": "88.04",
     "arrivalTime": moment()
   }
 ]

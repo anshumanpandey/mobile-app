@@ -45,7 +45,7 @@ const DocumentScreen = () => {
             </Layout>
 
             <Layout style={{ backgroundColor: '#00000000' }}>
-              <Button size="giant" style={{ borderRadius: 10, backgroundColor: '#5ac8fa', borderColor: '#5ac8fa', paddingLeft: 20, paddingRight: 20, marginBottom: '2%' }}>
+              <Button onPress={() => navigation.navigate('EndRental', {...route.params})} size="giant" style={{ borderRadius: 10, backgroundColor: '#5ac8fa', borderColor: '#5ac8fa', paddingLeft: 20, paddingRight: 20, marginBottom: '2%' }}>
                 {() => <Text style={{ color: 'white'}}>END RENTAL</Text>}
             </Button>
               <Button onPress={() => navigation.navigate('Damage', {...route.params})} size="giant" style={{ borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', paddingLeft: 20, paddingRight: 20 }}>

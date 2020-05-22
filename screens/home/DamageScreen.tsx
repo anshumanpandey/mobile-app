@@ -20,7 +20,7 @@ const DocumentScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ paddingBottom: '25%', flexGrow: 1,display: 'flex' ,backgroundColor: '#f7f9fc' }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: '45%', flexGrow: 1,display: 'flex' ,backgroundColor: '#f7f9fc' }}>
         <View style={{ padding: '5%', backgroundColor: '#f7f9fc' }}>
           <TripCard
             {...route.params}

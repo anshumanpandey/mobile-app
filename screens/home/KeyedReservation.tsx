@@ -4,6 +4,7 @@ import { Layout, Text, Input, Button, Select, SelectItem, Popover, Toggle } from
 import { SafeAreaView, ScrollView, Image, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import moment from 'moment';
+import MapView from "react-native-maps";
 import CarTripInfoCard from '../../partials/CarTripInfoCard';
 import TripCard from '../../partials/TripCard';
 
@@ -14,19 +15,28 @@ export default () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }} >
-            <Layout style={{ paddingLeft: '5%', paddingRight: '5%'}}>
+            <Layout style={{ paddingLeft: '5%', paddingRight: '5%', paddingTop: '5%' }}>
                 <TripCard
                     displayPreview={true}
                     {...route.params}
                 />
             </Layout>
             <View style={{ display: 'flex', alignItems: 'flex-end', height: '50%' }}>
-                <Image source={require('../../image/map.jpg')} style={{ alignSelf: 'center', position: 'absolute', zIndex: -2, }} />
+            <Image source={require('../../image/map.jpg')} style={{ alignSelf: 'center', position: 'absolute', zIndex: -2, }} />
                 <Button onPress={() => {
 
-                }} size="small" style={{ marginTop: '2%', marginLeft: '2%',borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', width: '30%' }}>
+                }} size="small" style={{ marginTop: '2%', marginLeft: '2%', borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', width: '30%' }}>
                     {() => <Text style={{ color: 'white' }}>HELP</Text>}
                 </Button>
+                {/*<MapView
+                    style={{ flex: 1 }}
+                    initialRegion={{
+                        latitude: 37.78825,
+                        longitude: -122.4324,
+                        latitudeDelta: 0.05,
+                        longitudeDelta: 0.05
+                    }}
+                />*/}
             </View>
 
         </SafeAreaView>
