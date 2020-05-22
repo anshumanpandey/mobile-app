@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Layout, Text, Button, Input } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView, Image, TextInput, View } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
@@ -11,22 +11,25 @@ const DocumentScreen = () => {
 
   const options = {
     title: 'Select Avatar',
-    customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
     storageOptions: {
       skipBackup: true,
       path: 'images',
     },
   };
 
+  useEffect(() => {
+    return () => setPicture(null)
+  },[])
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ paddingBottom: '45%', flexGrow: 1,display: 'flex' ,backgroundColor: '#f7f9fc' }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: '20%', flexGrow: 1,display: 'flex' ,backgroundColor: '#f7f9fc' }}>
         <View style={{ padding: '5%', backgroundColor: '#f7f9fc' }}>
           <TripCard
             {...route.params}
           />
 
-          <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#00000000' }}>
+          <Layout style={{ height: '30%',display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#00000000' }}>
             <Text style={{ color: '#d0021b', textAlign: 'center' }} category="h2">
               PLEASE TAKE PICTURES OF ANY DAMAGE TO THE VEHICLE
             </Text>
@@ -44,11 +47,14 @@ const DocumentScreen = () => {
                   setPicture(response.uri)
                 }
               });
-            }} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '25%', backgroundColor: 'gray' }}>
+            }} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '25%', backgroundColor: 'gray', borderColor: 'gray' }}>
               {() => <Text style={{ color: 'white' }}>TAKE PICTURE</Text>}
             </Button>
-            {picture && <Image source={{ uri: picture }} />}
           </Layout>
+
+          <View style={{ display: 'flex', alignItems: 'center'}}>
+            {picture && <Image source={{ uri: picture }} style={{ width: 200, height: 200 }} />}
+          </View>
 
           <Layout style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: '#00000000' }}>
             <Text category="h4"> DESCRIPTION OF DAMAGE</Text>

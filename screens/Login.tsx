@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react'
-import { Layout, Text, Input, Button, Popover } from '@ui-kitten/components';
+import { Layout, Text, Input, Button } from '@ui-kitten/components';
 import { TouchableWithoutFeedback, ImageProps, SafeAreaView, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { RenderProp } from '@ui-kitten/components/devsupport';
@@ -22,7 +22,6 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
         method: 'POST'
     }, { manual: true })
 
-    const [displayError, setDisplayError] = useState(false);
     const [secureTextEntry, setSecureTextEntry] = useState(true);
 
     const toggleSecureEntry = () => {
@@ -35,10 +34,6 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
         </TouchableWithoutFeedback>
     );
 
-    useEffect(() => {
-        if (error) setDisplayError(true)
-    }, [loading]);
-
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView keyboardShouldPersistTaps={"handled"} >
@@ -48,20 +43,6 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     <Text style={{ textAlign: 'left', fontSize: 24, marginBottom: 10, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>Welcome back, Guy!</Text>
                     <Text style={{ textAlign: 'left', fontSize: 15, color: '#8f9bb5' }} category='s2'>Sign in to your account</Text>
                 </Layout>
-
-                {displayError && (
-                    <Popover
-                        backdropStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-                        anchor={renderInputIcon}
-                        visible={displayError}
-                        onBackdropPress={() => setDisplayError(false)}>
-                        <Layout >
-                            <Text>
-                                {error?.response?.data.error}
-                            </Text>
-                        </Layout>
-                    </Popover>
-                )}
 
                 <Formik
                     initialValues={{ clientname: '', password: '' }}

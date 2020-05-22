@@ -1,6 +1,6 @@
 
-import React, { useState, useRef, useEffect } from 'react'
-import { Layout, Text, Input, Button, Select, SelectItem, Popover, Toggle } from '@ui-kitten/components';
+import React, { useState, useRef } from 'react'
+import { Layout, Text, Input, Button, Toggle } from '@ui-kitten/components';
 import { TouchableWithoutFeedback, ImageProps, ScrollView, SafeAreaView } from 'react-native';
 import { Formik } from 'formik';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -26,7 +26,6 @@ export default () => {
     const [secureTextEntry, setSecureTextEntry] = useState(true);
     const [phonenumberToShow, setPhonenumberToShow] = useState<string>('');
     const [countryCode, setCountryCode] = useState<string>(`+1`);
-    const [displayError, setDisplayError] = useState(false);
     const [asCompany, setAsCompany] = useState(false);
     const phoneInput = useRef<ReactNativePhoneInput<typeof TextInput> | null>(null);
     const [{ data, loading, error }, doRegister] = useAxios({
@@ -34,9 +33,6 @@ export default () => {
         method: 'POST'
     }, { manual: true })
 
-    useEffect(() => {
-        if (error) setDisplayError(true)
-    }, [loading]);
 
     const toggleSecureEntry = () => {
         setSecureTextEntry(!secureTextEntry);
@@ -62,20 +58,6 @@ export default () => {
                             <Text onPress={() => navigation.navigate('Login')} style={{ color: '#41d5fb' }}>Log in</Text>
                         </Layout>
                     </Layout>
-
-                    {displayError && (
-                        <Popover
-                            backdropStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-                            anchor={renderInputIcon}
-                            visible={displayError}
-                            onBackdropPress={() => setDisplayError(false)}>
-                            <Layout >
-                                <Text>
-                                    {error?.response?.data.error}
-                                </Text>
-                            </Layout>
-                        </Popover>
-                    )}
 
                     <Formik
                         initialValues={{ email: '', password: '', phonenumber: '', confirmPassword: '', companyName: '', companyVatNumber: '' }}
