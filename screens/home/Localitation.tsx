@@ -8,28 +8,36 @@ import { Layout, Text, Button } from '@ui-kitten/components';
 import Geolocation from '@react-native-community/geolocation';
 import MenuButton from '../../partials/MenuButton';
 import LocationIconComponent from '../../image/LocationIconComponent';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, StackActions, CommonActions } from '@react-navigation/native';
 
 const DocumentScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
 
-  const [position, setPosition] = React.useState<{ lat: number, lon: number } | null>(null);
-  const [positionError, setPositionError] = React.useState<string | null>(null);
   const [isLocationEnabled, setIsLocationEnabled] = React.useState<boolean>(false);
-  const [isLocationGprsAuthorized, setIsLocationGprsAuthorized] = React.useState<boolean>(GPSState.isDenied());
+  const [isLocationGprsAuthorized, setIsLocationGprsAuthorized] = React.useState<boolean>(GPSState.isAuthorized());
 
   useEffect(() => {
-    Geolocation.getCurrentPosition(info => {
-      console.log(info)
-      setPosition({
-        lat: info.coords.latitude,
-        lon: info.coords.longitude
-      })
-    }, (err) => {
-      setPositionError(err.message)
-      console.log(err)
-    });
+    if (GPSState.isAuthorized()) {
+      navigation.dispatch((state) => {
+        // Add the home route to the start of the stack
+        const routes = [...state.routes];
+        routes.pop()
+        routes.push({
+          name: route.params.passTo,
+          params: route.params.parentProps,
+        })
 
+        return CommonActions.reset({
+          ...state,
+          routes,
+          index: routes.length - 1,
+        });
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     SystemSetting.isLocationEnabled().then((enable: boolean) => {
       setIsLocationEnabled(enable)
       const state = enable ? 'On' : 'Off';
@@ -37,30 +45,65 @@ const DocumentScreen = () => {
     })
 
     GPSState.addListener((status: any) => {
+      console.log(e)
       switch (status) {
         case GPSState.NOT_DETERMINED:
           setIsLocationGprsAuthorized(false)
+          //TODO: handle case when user does not authorize login
           alert('Please, allow the location, for us to do amazing things for you!')
           break;
 
         case GPSState.RESTRICTED:
           setIsLocationGprsAuthorized(false)
           GPSState.openLocationSettings()
+          navigation.goBack()
           break;
 
         case GPSState.DENIED:
           setIsLocationGprsAuthorized(false)
+          //TODO: handle case when user does not authorize login
           alert('It`s a shame that you do not allowed us to use location :(')
+          navigation.goBack()
           break;
 
         case GPSState.AUTHORIZED_ALWAYS:
           console.log('GPSState.AUTHORIZED_ALWAYS')
           setIsLocationGprsAuthorized(true)
+          navigation.dispatch((state) => {
+            // Add the home route to the start of the stack
+            const routes = [...state.routes];
+            routes.pop()
+            routes.push({
+              name: route.params.passTo,
+              params: route.params.parentProps,
+            })
+
+            return CommonActions.reset({
+              ...state,
+              routes,
+              index: routes.length - 1,
+            });
+          });
           break;
 
         case GPSState.AUTHORIZED_WHENINUSE:
           console.log('GPSState.AUTHORIZED_WHENINUSE')
           setIsLocationGprsAuthorized(true)
+          navigation.dispatch((state) => {
+            // Add the home route to the start of the stack
+            const routes = [...state.routes];
+            routes.pop()
+            routes.push({
+              name: route.params.passTo,
+              params: route.params.parentProps,
+            })
+
+            return CommonActions.reset({
+              ...state,
+              routes,
+              index: routes.length - 1,
+            });
+          });
           break;
       }
     })
@@ -77,8 +120,8 @@ const DocumentScreen = () => {
             :
             <>
               <Text style={{ textAlign: 'center', fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }} category="h4">Enable Location</Text>
-              <Layout style={{ width: '70%'}}>
-                <Text style={{ textAlign: 'center',fontSize: 13, color: '#8F9BB3', marginBottom: '15%' }}>Choose your location to start find the request around you.</Text>
+              <Layout style={{ width: '70%' }}>
+                <Text style={{ textAlign: 'center', fontSize: 13, color: '#8F9BB3', marginBottom: '15%' }}>Choose your location to start find the request around you.</Text>
               </Layout>
               <Button
                 onPress={(e) => { GPSState.requestAuthorization(GPSState.AUTHORIZED_WHENINUSE) }}
@@ -98,7 +141,7 @@ const DocumentScreen = () => {
                   elevation: 10,
                 }}>
 
-                {() => <Text style={{ color: 'white', fontSize: 18,fontFamily: 'SF-UI-Display_Bold', textAlign: 'center',width: '100%' }}>Allow access</Text>}
+                {() => <Text style={{ color: 'white', fontSize: 18, fontFamily: 'SF-UI-Display_Bold', textAlign: 'center', width: '100%' }}>Allow access</Text>}
               </Button>
             </>
           }

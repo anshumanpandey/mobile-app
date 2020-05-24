@@ -5630,6 +5630,11 @@ react-native-keyevent@^0.2.8:
   resolved "https://registry.yarnpkg.com/react-native-keyevent/-/react-native-keyevent-0.2.8.tgz#f6c035bf17b8d8221e546e85e430cd1d3021c5d7"
   integrity sha512-tqZwJXDpAL7rBUGRAz4AaoAyQkaWA7k1Bq+l7P4GLsWAD7g0z/KSAOMY3cJanLYJxr4+t4FEZ8seA1YQ/7kchg==
 
+react-native-login-twitter@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-login-twitter/-/react-native-login-twitter-3.0.2.tgz#5f3de9114c51d867b09b4bc3ef69c6ced742fc82"
+  integrity sha512-pJVnC5ruhND6BuzB332aUIW7ncmTrB087AmUylb7UcnkCdxxVuLAEeNdblvS+2pnDeV+dpzucnmLClzRZL6lUw==
+
 react-native-maps-directions@^1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/react-native-maps-directions/-/react-native-maps-directions-1.8.0.tgz#ced452efeb153e54dfb9315480b0ae9539dfbcc7"

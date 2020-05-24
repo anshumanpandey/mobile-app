@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Text, Button, Datepicker, NativeDateService, TabView, Card, Avatar } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView, Image } from 'react-native';
-import TripCard, { TripCardProps } from '../../partials/TripCard';
+import GPSState from 'react-native-gps-state'
 import { useRoute, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import CarTripInfoCard from '../../partials/CarTripInfoCard';
@@ -31,7 +31,16 @@ const DocumentScreen = () => {
           </Layout>
 
           <Layout style={{ backgroundColor: '#00000000' }}>
-            <Button onPress={() => navigation.navigate('KeyedCarReservation', {...route.params})} size="giant" style={{ borderRadius: 10, backgroundColor: '#5ac8fa', borderColor: '#5ac8fa', paddingLeft: 20, paddingRight: 20, marginBottom: '2%' }}>
+            <Button onPress={() => {
+              navigation.navigate('KeyedCarReservation', {...route.params})
+              return
+              /*
+              if (GPSState.isAuthorized()) {
+                navigation.navigate('KeyedCarReservation', {...route.params})
+              } else {
+                navigation.navigate('Location', { parentProps: route.params, passTo: "KeyedCarReservation"})
+              }*/
+            }} size="giant" style={{ borderRadius: 10, backgroundColor: '#5ac8fa', borderColor: '#5ac8fa', paddingLeft: 20, paddingRight: 20, marginBottom: '2%' }}>
               {() => <Text style={{ color: 'white'}}>GET DIRECTIONS </Text>}
             </Button>
             <Button onPress={() => navigation.navigate('NoPicturDamage', {...route.params})} size="giant" style={{ borderRadius: 10, backgroundColor: '#0c66ff', borderColor: '#0c66ff', paddingLeft: 20, paddingRight: 20 }}>
