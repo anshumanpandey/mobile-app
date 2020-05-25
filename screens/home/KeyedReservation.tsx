@@ -26,9 +26,9 @@ export default () => {
         React.useCallback(() => {
             refecthOrigin()
             refetchReturn();
-    
+
         }, [])
-      );
+    );
 
     return (
         <SafeAreaView style={{ flex: 1 }} >
@@ -77,11 +77,11 @@ export default () => {
                         <Text category="h2">We could not load your route</Text>
                     </View>
                 )}
-                <Button onPress={() => {
+                {(originLocationReq.data && returnLocationReq.data && !originLocationReq.loading && !returnLocationReq.loading) && <Button onPress={() => {
 
-                }} size="small" style={{ position: 'absolute', right: 0,marginTop: '2%', marginLeft: '2%', borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', width: '30%' }}>
+                }} size="small" style={{ position: 'absolute', right: 0, marginTop: '2%', marginLeft: '2%', borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', width: '30%' }}>
                     {() => <Text style={{ color: 'white' }}>HELP</Text>}
-                </Button>
+                </Button>}
             </View>
 
         </SafeAreaView>
