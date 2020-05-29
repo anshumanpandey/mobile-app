@@ -190,7 +190,7 @@ const DocumentScreen = () => {
               accessoryLeft={() => <EntypoIcon style={{ color: 'black' }} name="calendar" size={22} />}
             />
           </Layout>
-          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', paddingRight: '5%',}}>
+          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', paddingRight: '5%', }}>
             <Text style={{ alignSelf: 'flex-start', marginLeft: '3%', fontFamily: 'SF-UI-Display_Bold', fontSize: 29 }}>My Trips</Text>
             <Button
               onPress={(e) => navigation.navigate("CreateBooking")}

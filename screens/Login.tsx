@@ -20,7 +20,7 @@ import { handlePermissionPromt, handleUserData } from '../utils/FacebookAuth';
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
     const [{ data, loading, error }, doLogin] = useAxios({
-        url: `${GRCGDS_BACKEND}/public/login`,
+        url: `${GRCGDS_BACKEND}/user/login`,
         method: 'POST'
     }, { manual: true })
 
@@ -47,7 +47,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     </Layout>
 
                     <Formik
-                        initialValues={{ clientname: '', password: '' }}
+                        initialValues={{ clientname: 'info@activerentcar.com', password: 'antalyaofis2018' }}
                         validate={(values) => {
                             const errors: { clientname?: string, password?: string } = {};
                             if (!values.clientname) {
@@ -65,11 +65,12 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             if (!values.clientname) return
                             if (!values.password) return
                             const data = {
-                                clientname: values.clientname,
+                                username: values.clientname,
                                 password: values.password
                             }
-                            doLogin({ data })
+                            doLogin({ data, method: 'POST' })
                                 .then((res) => {
+                                    console.log(res)
                                     dispatchGlobalState({ type: 'token', state: res.data.token })
                                     dispatchGlobalState({ type: 'profile', state: res.data })
                                     navigation.navigate('Home')

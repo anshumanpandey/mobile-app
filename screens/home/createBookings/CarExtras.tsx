@@ -8,7 +8,6 @@ import { useCreateBookingState } from './CreateBookingState';
 import TimeCheckbox from '../../../partials/TimeCheckbox';
 import LocationSearchInput from '../../../partials/SearchLocationInput';
 import BuildJson from '../../../utils/BuildJson';
-import useAxios from 'axios-hooks'
 import moment from 'moment';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import LoadingSpinner from '../../../partials/LoadingSpinner';

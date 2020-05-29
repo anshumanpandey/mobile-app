@@ -13,14 +13,16 @@ axiosInstance.interceptors.request.use(
         config.headers.Authorization = `Bearer ${state.token}`;
       }
 
-      config.data = JSON.parse(encrypt(config.data))
+      //config.data = JSON.parse(encrypt(config.data))
+
+      console.log(config.url)
 
       return config;
     }
   );
   axiosInstance.interceptors.response.use(
     config => {
-      config.data = JSON.parse(decrypt(config.data))
+      // config.data = JSON.parse(decrypt(config.data))
       return config;
     },
     (error) => {
@@ -33,7 +35,7 @@ axiosInstance.interceptors.request.use(
         }*/
         console.log('error.response');
         console.log(error.response.headers);
-        console.log(error.response.data.error);
+        console.log(error.response.data);
       } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of

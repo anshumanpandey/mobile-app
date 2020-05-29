@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import { Button, Icon, Layout, Spinner } from '@ui-kitten/components';
 
 
-const LoadingSpinner = () => (
-  <View>
+const LoadingSpinner = ({ styles }: {styles?: ViewStyle}) => (
+  <View style={styles}>
     <Spinner size='small'/>
   </View>
 );
