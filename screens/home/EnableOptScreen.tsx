@@ -37,7 +37,7 @@ const DocumentScreen = () => {
                             </Button>
         <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', backgroundColor: '#00000000' }}>
           <Text onPress={() => {
-            navigation.navigate('Home')
+            navigation.navigate('MyBookings')
           }} style={{ textAlign: 'center', color: '#41d5fb' }}>Skip for now</Text>
         </Layout>
 

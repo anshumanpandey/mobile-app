@@ -178,8 +178,6 @@ const DocumentScreen = () => {
     url: `${GRCGDS_BACKEND}/bookings`,
   })
 
-  console.log(data)
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Layout style={{ flex: 1, backgroundColor: 'red' }}>

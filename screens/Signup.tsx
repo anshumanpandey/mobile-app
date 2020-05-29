@@ -31,7 +31,12 @@ export default () => {
     const [asCompany, setAsCompany] = useState(false);
     const phoneInput = useRef<ReactNativePhoneInput<typeof TextInput> | null>(null);
     const [{ data, loading, error }, doRegister] = useAxios({
-        url: `${GRCGDS_BACKEND}/public/register`,
+        url: `${GRCGDS_BACKEND}/user/register`,
+        method: 'POST'
+    }, { manual: true })
+
+    const [loginReq, doLogin] = useAxios({
+        url: `${GRCGDS_BACKEND}/user/login`,
         method: 'POST'
     }, { manual: true })
 
@@ -62,19 +67,19 @@ export default () => {
                     </Layout>
 
                     <Formik
-                        initialValues={{ email: '', password: '', phonenumber: '', confirmPassword: '', companyName: '', companyVatNumber: '' }}
+                        initialValues={{ emailaddress: '', password: '', tele: '', confirmPassword: '', companyName: '', companyVatNumber: '' }}
                         validate={(values) => {
-                            const errors: { email?: string, password?: string, phonenumber?: string } = {};
-                            if (!values.email) {
-                                errors.email = 'Required';
+                            const errors: { emailaddress?: string, password?: string, tele?: string } = {};
+                            if (!values.emailaddress) {
+                                errors.emailaddress = 'Required';
                             }
 
                             if (!values.password) {
                                 errors.password = 'Required';
                             }
 
-                            if (!values.phonenumber) {
-                                errors.phonenumber = 'Required';
+                            if (!values.tele) {
+                                errors.tele = 'Required';
                             }
 
                             return errors
@@ -82,8 +87,18 @@ export default () => {
                         }}
                         onSubmit={values => {
 
-                            doRegister({ data: { ...values, asCompany } })
+                            const data = values
+                            data.username = values.emailaddress
+
+                            doRegister({ data: { ...data, asCompany } })
                                 .then((res) => {
+                                    const data = {
+                                        username: values.emailaddress,
+                                        password: values.password
+                                    }
+                                    return doLogin({ data })
+                                })
+                                .then(res => {
                                     dispatchGlobalState({ type: 'token', state: res.data.token })
                                     dispatchGlobalState({ type: 'profile', state: res.data })
                                     navigation.navigate('Home', { screen: 'EnableOpt' })
@@ -95,14 +110,14 @@ export default () => {
                             return (
                                 <>
                                     <Input
-                                        status={errors.email && touched.email ? 'danger' : undefined}
+                                        status={errors.emailaddress && touched.emailaddress ? 'danger' : undefined}
                                         style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                         size="large"
                                         label={() => <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>Email</Text>}
                                         placeholder='Enter your email'
-                                        value={values.email}
-                                        onChangeText={handleChange('email')}
-                                        caption={errors.email && touched.email ? () => <ErrorLabel text={errors.email} /> : undefined}
+                                        value={values.emailaddress}
+                                        onChangeText={handleChange('emailaddress')}
+                                        caption={errors.emailaddress && touched.emailaddress ? () => <ErrorLabel text={errors.emailaddress} /> : undefined}
                                     />
 
 
@@ -126,14 +141,14 @@ export default () => {
                                         <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>Phone number</Text>
                                         <PhoneInput
                                             initialCountry="us"
-                                            style={{ borderColor: errors.phonenumber && touched.phonenumber ? '#ffa5bc' : '#e5eaf2', borderWidth: 1, borderRadius: 10, padding: 15 }}
+                                            style={{ borderColor: errors.tele && touched.tele ? '#ffa5bc' : '#e5eaf2', borderWidth: 1, borderRadius: 10, padding: 15 }}
                                             textProps={{
                                                 placeholder: 'Mobile number',
                                                 value: `${countryCode} ${phonenumberToShow}`,
                                                 onChangeText: (c: string) => {
                                                     const currentValue = c.replace(' ', '')
                                                     console.log(currentValue)
-                                                    handleChange('phonenumber')(currentValue)
+                                                    handleChange('tele')(currentValue)
                                                     setPhonenumberToShow(p => {
                                                         const number = c.toString().split(' ')[1]
                                                         return number || ''
@@ -148,7 +163,7 @@ export default () => {
                                                 setCountryCode(`+${phoneInput.current?.getCountryCode()}` || '+1')
                                             }}
                                         />
-                                        {errors.phonenumber && touched.phonenumber && <ErrorLabel text={errors.phonenumber} />}
+                                        {errors.tele && touched.tele && <ErrorLabel text={errors.tele} />}
                                     </Layout>
 
                                     <Toggle checked={asCompany} onChange={() => setAsCompany(p => !p)}>
@@ -181,7 +196,7 @@ export default () => {
                                     )}
 
                                     <Button
-                                        disabled={loading}
+                                        disabled={loading == true || loginReq.loading == true}
                                         accessoryRight={loading ? LoadingSpinner : undefined}
                                         onPress={(e) => { handleSubmit() }}
                                         size="giant"
