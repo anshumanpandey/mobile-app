@@ -6,6 +6,8 @@ import moment from 'moment';
 import TripCard, { TripCardProps } from '../../partials/TripCard';
 import MenuButton from '../../partials/MenuButton';
 import { useNavigation } from '@react-navigation/native';
+import { GRCGDS_BACKEND } from 'react-native-dotenv'
+import useAxios from 'axios-hooks'
 
 const DATE_FORMAT = 'MMM DD,YYYY'
 
@@ -171,6 +173,12 @@ const DocumentScreen = () => {
 
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [date, setDate] = React.useState(new Date());
+
+  const [{ data, loading, error }] = useAxios({
+    url: `${GRCGDS_BACKEND}/bookings`,
+  })
+
+  console.log(data)
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
