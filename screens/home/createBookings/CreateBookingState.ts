@@ -1,11 +1,8 @@
 import { createGlobalState } from 'react-hooks-global-state';
 
 export type LocationCode = {
-    country: string,
-    id: number,
-    internalcode: string,
-    locationname: string,
-    locationvariation: string
+    Branchid: string,
+    Branchname: string,
 }
 
 type InitialState = {

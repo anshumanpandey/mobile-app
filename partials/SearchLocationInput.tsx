@@ -26,7 +26,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
   const [searchingFor, setSearchingFor] = useState<"ORIGIN" | "RETURN">("ORIGIN");
 
   const [{ data, loading, error }, doSearch] = useAxios({
-    url: `${GRCGDS_BACKEND}/public/locationCodes`,
+    url: `${GRCGDS_BACKEND}/location/search`,
   }, { manual: true })
 
   const onChangeText = (txt: string) => {
@@ -34,7 +34,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
 
     const source = CancelToken.source()
     setIsFetching(source);
-    doSearch({ params: { search: txt } })
+    doSearch({ params: { q: txt, module_name: 'LOCATION_SEARCH'  } })
       .then(() => setIsFetching(null))
       .catch(() => setIsFetching(null))
   }
@@ -69,13 +69,13 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
         </Layout>
         <Layout style={{ display: 'flex', flexDirection: 'column' }}>
           <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <TextInput defaultValue={originLocation ? originLocation.locationname : undefined} onEndEditing={(e) => {
+            <TextInput defaultValue={originLocation ? originLocation.Branchname : undefined} onEndEditing={(e) => {
               onChangeText(e.nativeEvent.text)
               setSearchingFor("ORIGIN")
             }} style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 18, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }} placeholder="Enter Origin"></TextInput>
           </Layout>
           <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <TextInput defaultValue={returnLocation ? returnLocation.locationname : undefined} onEndEditing={(e) => {
+            <TextInput defaultValue={returnLocation ? returnLocation.Branchname : undefined} onEndEditing={(e) => {
               onChangeText(e.nativeEvent.text)
               setSearchingFor("RETURN")
             }} style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 18, width: '100%', borderColor: 'white' }} placeholder="Enter Destionation"></TextInput>
@@ -98,7 +98,10 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
             <List
               keyboardShouldPersistTaps={"handled"}
               style={{ backgroundColor: 'green', display: 'flex', flexGrow:0 }}
-              data={data}
+              data={data.reduce((prev,next) => {
+                prev.push(...next.branches)
+                return prev
+              },[])}
               renderItem={(data: any) => {
                 let extraStyles = {}
                 if (data.index == 0) {
@@ -120,7 +123,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
                   }} >
                     <Layout style={{ display: 'flex', flexDirection: 'row', borderBottomColor: '#E4E9F2', borderBottomWidth: 1, paddingBottom: '5%', paddingTop: '5%' }}>
                       <EvilIcon style={{ color: '#41D5FB' }} name="location" size={32} />
-                      <Text style={{ fontSize: 18 }}>{data.item.locationname}</Text>
+                      <Text style={{ fontSize: 18 }}>{data.item.Branchname}</Text>
                     </Layout>
                   </TouchableHighlight>
                 );

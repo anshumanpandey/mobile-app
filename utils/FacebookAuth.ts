@@ -19,7 +19,7 @@ export const handleUserData = async (response: LoginResult) => {
     return axiosInstance({
         url: `${GRCGDS_BACKEND}/public/withFacebook`,
         method: 'POST',
-        data: {token: access.accessToken}
+        data: {token: access.accessToken, module_name: 'LOGIN_WITH_FACEBOOK'}
     })
         .then((res) => {
             dispatchGlobalState({ type: 'token', state: res.data.token })

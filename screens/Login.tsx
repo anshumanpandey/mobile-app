@@ -66,7 +66,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             if (!values.password) return
                             const data = {
                                 username: values.clientname,
-                                password: values.password
+                                password: values.password,
+                                module_name: "LOGIN"
                             }
                             doLogin({ data, method: 'POST' })
                                 .then((res) => {

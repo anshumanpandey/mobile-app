@@ -23,8 +23,8 @@ export default () => {
     const [returnTime, setReturnTime] = useCreateBookingState("returnTime");
 
     const [{ data, loading, error }, doSearch] = useAxios({
-        url: `${GRCGDS_BACKEND}/brokers/importer`,
-        method: 'POST'
+        url: `${GRCGDS_BACKEND}/vehicle/search`,
+        method: 'GET'
     }, { manual: true })
 
     return (
@@ -84,17 +84,17 @@ export default () => {
                             if (!originLocation) return
 
                             doSearch({
-                                data: {
-                                    json: BuildJson({
-                                        pickUpDate: moment(departureTime),
-                                        pickUpTime: moment(departureTime),
+                                params: {
+                                    module_name: "SEARCH_VEHICLE",
 
-                                        dropOffDate: moment(returnTime),
-                                        dropOffTime: moment(returnTime),
+                                    pickup_date: moment(departureTime).format(`DD-MM-YYYY`),
+                                    pickup_time: moment(departureTime).format(`HH:ss`),
 
-                                        pickUpLocation: originLocation,
-                                        dropOffLocation: returnLocation ? returnLocation : originLocation,
-                                    })
+                                    dropoff_date: moment(returnTime).format(`DD-MM-YYYY`),
+                                    dropoff_time: moment(returnTime).format(`HH:ss`),
+
+                                    pickup_location: originLocation.Branchid,
+                                    dropoff_location: returnLocation ? returnLocation.Branchid : originLocation.Branchid,
                                 }
                             })
                                 .then(res => {

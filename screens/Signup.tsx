@@ -89,6 +89,7 @@ export default () => {
 
                             const data = values
                             data.username = values.emailaddress
+                            data.module_name = "REGISTER"
 
                             doRegister({ data: { ...data, asCompany } })
                                 .then((res) => {

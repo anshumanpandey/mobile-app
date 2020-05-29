@@ -35,8 +35,8 @@ export default (params: Params) => {
           "@PickUpTime": params.pickUpTime.format(`HH:mm:ss`),
           "@ReturnDate": params.dropOffDate.format(`YYYY-MM-DD`),
           "@ReturnTime": params.dropOffTime.format(`HH:mm:ss`),
-          "PickUpLocation": { "@LocationCode": params.pickUpLocation.internalcode },
-          "ReturnLocation": { "@LocationCode": params.dropOffLocation.internalcode }
+          "PickUpLocation": { "@LocationCode": params.pickUpLocation.Branchid },
+          "ReturnLocation": { "@LocationCode": params.dropOffLocation.Branchid }
         },
       },
       "VehAvailRQInfo": {
