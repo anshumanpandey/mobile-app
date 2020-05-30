@@ -12,6 +12,7 @@ import useAxios from 'axios-hooks'
 import moment from 'moment';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
+import { VehicleResponse } from '../../../types/SearchVehicleResponse';
 
 
 export default () => {
@@ -22,8 +23,8 @@ export default () => {
     const [departureTime, setDepartureTime] = useCreateBookingState("departureTime");
     const [returnTime, setReturnTime] = useCreateBookingState("returnTime");
 
-    const [{ data, loading, error }, doSearch] = useAxios({
-        url: `${GRCGDS_BACKEND}/vehicle/search`,
+    const [{ data, loading, error }, doSearch] = useAxios<VehicleResponse>({
+        url: `${GRCGDS_BACKEND}/SEARCH_VEHICLE`,
         method: 'GET'
     }, { manual: true })
 
@@ -87,10 +88,10 @@ export default () => {
                                 params: {
                                     module_name: "SEARCH_VEHICLE",
 
-                                    pickup_date: moment(departureTime).format(`DD-MM-YYYY`),
+                                    pickup_date: moment(departureTime).format(`YYYY-MM-DD`),
                                     pickup_time: moment(departureTime).format(`HH:ss`),
 
-                                    dropoff_date: moment(returnTime).format(`DD-MM-YYYY`),
+                                    dropoff_date: moment(returnTime).format(`YYYY-MM-DD`),
                                     dropoff_time: moment(returnTime).format(`HH:ss`),
 
                                     pickup_location: originLocation.Branchid,
@@ -101,8 +102,8 @@ export default () => {
                                     navigation.navigate(
                                         'CarsList',
                                         {
-                                            cars: res.data.scrape.vehicle,
-                                            metadata: res.data.scrape.details,
+                                            cars: res.data.VehAvailRSCore.VehVendorAvails,
+                                            metadata: res.data.VehAvailRSCore.VehRentalCore,
                                             searchParams: {
                                                 pickUpDate: moment(departureTime),
                                                 pickUpTime: moment(departureTime),

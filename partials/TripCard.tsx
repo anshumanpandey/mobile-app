@@ -14,7 +14,7 @@ export type TripCardProps = {
   dropoffTime: moment.Moment
 
   carName: string
-  registratioNumber: string
+  registratioNumber?: string
   finalCost: string
   currencyCode: string
   arrivalTime: moment.Moment

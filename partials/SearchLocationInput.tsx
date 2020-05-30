@@ -26,7 +26,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
   const [searchingFor, setSearchingFor] = useState<"ORIGIN" | "RETURN">("ORIGIN");
 
   const [{ data, loading, error }, doSearch] = useAxios({
-    url: `${GRCGDS_BACKEND}/location/search`,
+    url: `${GRCGDS_BACKEND}/LOCATION_SEARCH`,
   }, { manual: true })
 
   const onChangeText = (txt: string) => {

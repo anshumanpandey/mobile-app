@@ -5,26 +5,7 @@ import ResolveDoors from '../utils/ResolveDoors';
 import ResolveTransmission from '../utils/ResolveTransmission';
 import ResolveCurrencySymbol from '../utils/ResolveCurrencySymbol';
 import GetCategoryByAcrissCode from '../utils/GetCategoryByAcrissCode';
-
-type Vehicle = {
-    doors: string | number;
-    seats: string | number;
-    luggages?: string | number;
-    name: string;
-    transmission: string;
-    acriss: string;
-    price: number;
-    secondary_price: number;
-    currency?: string,
-    custom_location: string
-    image_preview_url?: string
-    suppliername?: string
-    carrentalcompanyname?: string
-    supplier_logo?: string
-    airConditioner: string
-    clickThroughUrl: string
-    [k: string]: any | undefined
-}
+import { VehVendorAvail } from '../types/SearchVehicleResponse';
 
 const hightLightStyles = {
     backgroundColor: '#41d5fb',
@@ -34,7 +15,7 @@ const hightLightStyles = {
 type Props = {
     onClick?: () => void,
     isActive?: boolean,
-    vehicle: Vehicle
+    vehicle: VehVendorAvail
     style?: ViewStyle
 }
 
@@ -48,13 +29,13 @@ const CarItem: React.FC<Props> = ({ vehicle, isActive, onClick, style: customeSt
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', backgroundColor: '#00000000' }}>
                         <Layout style={{ width: '40%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#00000000' }}>
-                            <Image source={{ uri: vehicle.image_preview_url }} style={{ flex: 1, width: 80, height: 80, resizeMode: 'contain' }} />
+                            <Image source={{ uri: vehicle.Vehicle.VehMakeModel.PictureURL }} style={{ flex: 1, width: 80, height: 80, resizeMode: 'contain' }} />
                         </Layout>
 
 
                         <Layout style={{ backgroundColor: '#00000000' }}>
-                            <Text style={{ fontSize: 16, fontFamily: 'SF-UI-Display_Bold' }}>{GetCategoryByAcrissCode(vehicle.acriss)}</Text>
-                            <Text style={{ fontSize: 10 }}>{vehicle.name}</Text>
+                            <Text style={{ fontSize: 14, fontFamily: 'SF-UI-Display_Bold' }}>{GetCategoryByAcrissCode(vehicle.Vehicle.VehType.VehicleCategory)}</Text>
+                            <Text style={{ fontSize: 12 }}>{vehicle.Vehicle.VehMakeModel.Name}</Text>
                             <Text>Mileage: Unlimited</Text>
                         </Layout>
                     </Layout>
@@ -63,18 +44,18 @@ const CarItem: React.FC<Props> = ({ vehicle, isActive, onClick, style: customeSt
                     <Layout style={{ width: '100%', display: 'flex', flexDirection: 'row', backgroundColor: '#00000000' }}>
                         <Layout style={{ display: 'flex', flexDirection: 'row' }}>
                             <Image source={require('../image/door.png')} style={{ width: 20, height: 20 }} />
-                            <Text>{ResolveDoors(vehicle.acriss)}</Text>
+                            <Text>{ResolveDoors(vehicle.Vehicle.VehType.VehicleCategory)}</Text>
                         </Layout>
-                        {(vehicle.seats !== null && vehicle.seats !== undefined && vehicle.seats !== 0) && (
+                        {(vehicle.Vehicle.VehClass.Size !== null && vehicle.Vehicle.VehClass.Size !== undefined && vehicle.Vehicle.VehClass.Size != 0) && (
                             <Layout style={{ display: 'flex', flexDirection: 'row' }}>
                                 <Image source={require('../image/seats.png')} style={{ width: 20, height: 20 }} />
-                                <Text>{vehicle.seats}</Text>
+                                <Text>{vehicle.Vehicle.VehClass.Size}</Text>
                             </Layout>
                         )}
-                        {vehicle.ac && (
+                        {vehicle.Vehicle.AirConditionInd && (
                             <Image source={require('../image/AC.png')} style={{ width: 20, height: 20 }} />
                         )}
-                        {ResolveTransmission(vehicle.acriss) && (
+                        {ResolveTransmission(vehicle.Vehicle.VehType.VehicleCategory) && (
                             <Image source={require('../image/manual.png')} style={{ width: 20, height: 20 }} />
                         )}
                     </Layout>
@@ -84,8 +65,8 @@ const CarItem: React.FC<Props> = ({ vehicle, isActive, onClick, style: customeSt
                     <Image source={{ uri: vehicle.supplier_logo }} style={{ flex: 1, width: 50, height: 50, resizeMode: 'contain' }} />
                     <Image source={require('../image/key.png')} style={{ flex: 1, width: 40, height: 40, resizeMode: 'contain' }} />
                     <Layout style={{ display: 'flex', flexDirection: 'row', backgroundColor: '#00000000' }}>
-                        <Text style={{ color: currentStyles.priceColor }}>{ResolveCurrencySymbol(vehicle.currency || '')} </Text>
-                        <Text style={{ color: currentStyles.priceColor }}>{vehicle.price}</Text>
+                        <Text style={{ color: currentStyles.priceColor }}>{ResolveCurrencySymbol(vehicle.TotalCharge.CurrencyCode || '')} </Text>
+                        <Text style={{ color: currentStyles.priceColor }}>{vehicle.TotalCharge.RateTotalAmount}</Text>
                     </Layout>
                 </Layout>
             </Layout>

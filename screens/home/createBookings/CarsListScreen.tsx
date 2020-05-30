@@ -2,14 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Layout, Text, List, Button } from '@ui-kitten/components';
 import { SafeAreaView, Image, TouchableWithoutFeedback, Dimensions, View } from 'react-native';
 import { RecyclerListView, DataProvider, LayoutProvider } from "recyclerlistview";
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import CarItem from '../../../partials/CarItem';
 import { useCreateBookingState } from './CreateBookingState';
+import { VehVendorAvail, VehRentalCore } from '../../../types/SearchVehicleResponse';
 
-const _dataProvider = new DataProvider((r1, r2) => r1.vehicle.deeplink !== r2.vehicle.deeplink)
+const _dataProvider = new DataProvider((r1, r2) => r1.VehID !== r2.VehID)
 
+type ParamList = {
+  CarsList: {
+    cars: VehVendorAvail[];
+  };
+};
 const DocumentScreen = () => {
-  const route = useRoute();
+  const route = useRoute<RouteProp<ParamList, 'CarsList'>>();
   const navigation = useNavigation();
   const [, setVehicle] = useCreateBookingState('vehicle')
   const [selectedIdx, setSelectedIdx] = useState(-1)
@@ -50,26 +56,27 @@ const DocumentScreen = () => {
               }
             )}
             dataProvider={dataToUse}
-            rowRenderer={(type, o, idx) => {
+            rowRenderer={(type, o:VehVendorAvail, idx) => {
 
+              // @ts-ignore
               if (o.header) {
                 return (
                   <View>
                     <View style={{ display: 'flex', flexDirection: 'row' }}>
-                      <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>From: {route.params.searchParams.pickUpLocation.locationname}</Text>
-                      <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>To: {route.params.searchParams.dropOffLocation.locationname}</Text>
+                      <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>From: {route.params.searchParams.pickUpLocation.Branchname}</Text>
+                      <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>To: {route.params.searchParams.dropOffLocation.Branchname}</Text>
                     </View>
 
                     <View style={{ display: 'flex', flexDirection: 'row' }}>
                       <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>At: {route.params.searchParams.pickUpDate.format('MMM DD, h:mm')}</Text>
-                      <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>Until: {route.params.searchParams.pickUpDate.format('MMM DD, h:mm')}</Text>
+                      <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>Until: {route.params.searchParams.dropOffDate.format('MMM DD, h:mm')}</Text>
                     </View>
                   </View>
                 );
               }
 
               return (
-                <CarItem key={o.vehicle.deeplink} vehicle={o.vehicle} isActive={selectedIdx == idx} onClick={() => {
+                <CarItem key={o.VehID} vehicle={o} isActive={selectedIdx == idx} onClick={() => {
                   if (idx == selectedIdx) return setSelectedIdx(-1)
                   return setSelectedIdx(idx)
                 }} />
@@ -104,8 +111,8 @@ const DocumentScreen = () => {
       {route.params.cars.length != 0 && (
         <Button
           onPress={() => {
-            setVehicle(cars[selectedIdx].vehicle)
-            navigation.navigate('CarExtras', { vehicle: cars[selectedIdx].vehicle})
+            setVehicle(cars[selectedIdx])
+            navigation.navigate('CarExtras', { vehicle: cars[selectedIdx]})
           }}
           disabled={selectedIdx == -1 ? true : false}
           size="medium"

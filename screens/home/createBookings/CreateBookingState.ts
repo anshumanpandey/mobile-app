@@ -1,4 +1,5 @@
 import { createGlobalState } from 'react-hooks-global-state';
+import { PricedEquip, VehVendorAvail } from '../../../types/SearchVehicleResponse';
 
 export type LocationCode = {
     Branchid: string,
@@ -12,13 +13,9 @@ type InitialState = {
     departureTime: Date,
     returnTime: Date,
 
-    babySeat: boolean
-    childSeat: boolean
-    seatBooster: boolean
-    wifi: boolean
-    gps: boolean
+    extras: PricedEquip[]
 
-    vehicle: {[k: string]: any} | null
+    vehicle: VehVendorAvail | null
 };
  
 const initialState: InitialState = {
@@ -27,11 +24,7 @@ const initialState: InitialState = {
     inmediatePickup: null,
     departureTime: new Date(),
     returnTime: new Date(),
-    babySeat: false,
-    childSeat: false,
-    seatBooster: false,
-    wifi: false,
-    gps: false,
+    extras: [],
     vehicle: null
 };
 

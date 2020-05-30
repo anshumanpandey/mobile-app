@@ -2,84 +2,48 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Text, Input, Button, Select, SelectItem, Popover, Toggle } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView } from 'react-native';
-import DatePicker from 'react-native-date-picker'
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useCreateBookingState } from './CreateBookingState';
 import TimeCheckbox from '../../../partials/TimeCheckbox';
-import LocationSearchInput from '../../../partials/SearchLocationInput';
-import BuildJson from '../../../utils/BuildJson';
-import moment from 'moment';
-import { GRCGDS_BACKEND } from 'react-native-dotenv';
-import LoadingSpinner from '../../../partials/LoadingSpinner';
 import CarItem from '../../../partials/CarItem';
+import { VehVendorAvail } from '../../../types/SearchVehicleResponse';
 
-
+type ParamList = {
+    CarExtras: {
+        vehicle: VehVendorAvail;
+    };
+};
 export default () => {
     const navigation = useNavigation();
-    const route = useRoute();
+    const route = useRoute<RouteProp<ParamList, 'CarExtras'>>();
 
-    const [, setBabySeat] = useCreateBookingState("babySeat");
-    const [, setChildSeat] = useCreateBookingState("childSeat");
-    const [, setSeatBooster] = useCreateBookingState("seatBooster");
-    const [, setWifi] = useCreateBookingState("wifi");
-    const [, setGps] = useCreateBookingState("gps");
+    const [, setExtras] = useCreateBookingState("extras");
 
     return (
         <SafeAreaView style={{ flex: 1 }} >
             <ScrollView contentContainerStyle={{ flexGrow: 1, padding: '5%', justifyContent: 'space-between', display: 'flex' }} keyboardShouldPersistTaps={"handled"} style={{ backgroundColor: 'white' }}>
 
                 <Layout>
-                    <CarItem style={{ marginBottom: '5%'}} vehicle={route.params.vehicle} />
+                    <CarItem style={{ marginBottom: '5%' }} vehicle={route.params.vehicle} />
 
-                    <Text style={{ marginBottom: '5%'}}>EQUIPEMENT (OPTIONAL EXTRAS)</Text>
+                    <Text style={{ marginBottom: '5%' }}>EQUIPEMENT (OPTIONAL EXTRAS)</Text>
 
-                    <TimeCheckbox
-                        style={{ marginBottom: '5%' }}
-                        title="BABY SEAT"
-                        onChange={() => {
-                            setBabySeat(p => {
-                                return !p
-                            })
-                        }}
-                    />
-                    <TimeCheckbox
-                        style={{ marginBottom: '5%' }}
-                        title="CHILD SEAT"
-                        onChange={() => {
-                            setChildSeat(p => {
-                                return !p
-                            })
-                        }}
-                    />
-                    <TimeCheckbox
-                        style={{ marginBottom: '5%' }}
-                        title="SEAT BOOSTER"
-                        onChange={() => {
-                            setSeatBooster(p => {
-                                return !p
-                            })
-                        }}
-                    />
+                    {route.params.vehicle.PricedEquips.map(equip => {
+                        return (
+                            <TimeCheckbox
+                                style={{ marginBottom: '5%' }}
+                                title={equip.Equipment.Description}
+                                onChange={() => {
+                                    setExtras(p => {
+                                        const found = p.find(i => i.Equipment.vendorEquipID == equip.Equipment.vendorEquipID)
+                                        if (found) return [...p.filter(i => i.Equipment.vendorEquipID !== equip.Equipment.vendorEquipID)]
+                                        return [...p, equip]
+                                    })
+                                }}
+                            />
+                        );
+                    })}
 
-                    <TimeCheckbox
-                        style={{ marginBottom: '5%' }}
-                        title="WIFI"
-                        onChange={() => {
-                            setWifi(p => {
-                                return !p
-                            })
-                        }}
-                    />
-
-                    <TimeCheckbox
-                        style={{ marginBottom: '5%' }}
-                        title="GPS"
-                        onChange={() => {
-                            setGps(p => {
-                                return !p
-                            })
-                        }}
-                    />
 
 
                     <Layout style={{ marginTop: '5%' }}>

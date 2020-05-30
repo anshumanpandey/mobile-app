@@ -18,73 +18,11 @@ export default () => {
     const [originLocation] = useCreateBookingState("originLocation");
     const [returnLocation] = useCreateBookingState("returnLocation");
 
-    const [babySeat, setBabySeat] = useCreateBookingState("babySeat");
-    const [childSeat, setChildSeat] = useCreateBookingState("childSeat");
-    const [seatBooster, setSeatBooster] = useCreateBookingState("seatBooster");
-    const [wifi, setWifi] = useCreateBookingState("wifi");
-    const [gps, setGps] = useCreateBookingState("gps");
+    const [extras] = useCreateBookingState("extras");
     const [vehicle] = useCreateBookingState("vehicle");
 
-    const items = []
-
-    if (babySeat) {
-        items.push({
-            "name": `Baby Seat`,
-            "description": `A baby seat`,
-            "quantity": "1",
-            "price": 10,
-            "tax": "0",
-            "sku": "1",
-            "currency": vehicle.currency || "USD"
-        })
-    }
-    if (childSeat) {
-        items.push({
-            "name": `Child Seat`,
-            "description": `A child seat`,
-            "quantity": "1",
-            "price": 10,
-            "tax": "0",
-            "sku": "1",
-            "currency": vehicle.currency || "USD"
-        })
-    }
-    if (seatBooster) {
-        items.push({
-            "name": `Seat Booster`,
-            "description": `A seat booster`,
-            "quantity": "1",
-            "price": 10,
-            "tax": "0",
-            "sku": "1",
-            "currency": vehicle.currency || "USD"
-        })
-    }
-    if (wifi) {
-        items.push({
-            "name": `Wifi`,
-            "description": `a car with WIFI`,
-            "quantity": "1",
-            "price": 10,
-            "tax": "0",
-            "sku": "1",
-            "currency": vehicle.currency || "USD"
-        })
-    }
-    if (gps) {
-        items.push({
-            "name": `GPS`,
-            "description": `a car with GPS`,
-            "quantity": "1",
-            "price": 10,
-            "tax": "0",
-            "sku": "1",
-            "currency": vehicle.currency || "USD"
-        })
-    }
-
-    const totalToCharge = parseFloat(vehicle.price) + items.reduce((prev, next) => {
-        prev = prev + next.price
+    const totalToCharge = parseFloat(vehicle?.TotalCharge.RateTotalAmount || '0.0') + extras.reduce((prev, next) => {
+        prev = prev + parseFloat(next.Charge.Amount)
         return prev
     }, 0)
 
@@ -95,18 +33,19 @@ export default () => {
                 <Layout>
                     <TripCard
                         tripDate={moment(departureTime)}
-                        pickupLocation={originLocation?.locationname}
+                        pickupLocation={originLocation?.Branchname || ''}
                         pickupTime={moment(departureTime)}
-                        dropOffLocation={returnLocation?.locationname}
+                        dropOffLocation={returnLocation?.Branchname || ''}
                         dropoffTime={moment(returnTime)}
 
-                        carName={vehicle.name}
-                        finalCost={totalToCharge}
-                        currencyCode={vehicle.currency}
+                        carName={vehicle?.Vehicle.VehMakeModel.Name || 'Car'}
+                        finalCost={totalToCharge.toString()}
+                        currencyCode={vehicle?.TotalCharge.CurrencyCode || 'USD'}
                         arrivalTime={moment(returnTime)}
-                        image_preview_url={vehicle.image_preview_url}
+                        image_preview_url={vehicle?.Vehicle.VehMakeModel.PictureURL}
 
-                        leftImageUri={vehicle.supplier_logo}
+                        leftImageUri={''}
+                        keyLess={false}
                     />
 
                     <Text style={{ textAlign: 'center', color: '#d1021b', fontSize: 22 }}>DURATION {moment(returnTime).diff(moment(departureTime), 'hour')} Hrs - Mileage 23 Miles</Text>

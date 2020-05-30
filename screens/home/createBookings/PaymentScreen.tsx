@@ -1,70 +1,27 @@
 import React from 'react'
 import { Layout, Text, Input, Button } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import useAxios from 'axios-hooks'
 import { useCreateBookingState } from './CreateBookingState';
 import base64 from 'react-native-base64'
 import LoadingSpinner from '../../../partials/LoadingSpinner';
+import { VehVendorAvail, PricedEquip } from '../../../types/SearchVehicleResponse';
 
-const GET_PAYPAL_JSON = (vehicle, meta, extras) => {
-    const items = [];
+const GET_PAYPAL_JSON = (vehicle: VehVendorAvail, meta, extras: PricedEquip[]) => {
+    const items = extras.map(i => {
+        return {
+            "name": i.Equipment.EquipType,
+            "description": i.Equipment.Description,
+            "quantity": "1",
+            "price": parseFloat(i.Charge.Amount),
+            "tax": "0",
+            "sku": "1",
+            "currency": i.Charge.Taxamount.CurrencyCode || "USD"
+        }
+    });
 
-    if (extras.babySeat) {
-        items.push({
-            "name": `Baby Seat`,
-            "description": `A baby seat`,
-            "quantity": "1",
-            "price": 10,
-            "tax": "0",
-            "sku": "1",
-            "currency": vehicle.currency || "USD"
-        })
-    }
-    if (extras.childSeat) {
-        items.push({
-            "name": `Child Seat`,
-            "description": `A child seat`,
-            "quantity": "1",
-            "price": 10,
-            "tax": "0",
-            "sku": "1",
-            "currency": vehicle.currency || "USD"
-        })
-    }
-    if (extras.seatBooster) {
-        items.push({
-            "name": `Seat Booster`,
-            "description": `A seat booster`,
-            "quantity": "1",
-            "price": 10,
-            "tax": "0",
-            "sku": "1",
-            "currency": vehicle.currency || "USD"
-        })
-    }
-    if (extras.wifi) {
-        items.push({
-            "name": `Wifi`,
-            "description": `a car with WIFI`,
-            "quantity": "1",
-            "price": 10,
-            "tax": "0",
-            "sku": "1",
-            "currency": vehicle.currency || "USD"
-        })
-    }
-    if (extras.gps) {
-        items.push({
-            "name": `GPS`,
-            "description": `a car with GPS`,
-            "quantity": "1",
-            "price": 10,
-            "tax": "0",
-            "sku": "1",
-            "currency": vehicle.currency || "USD"
-        })
-    }
+
     const sum = items.reduce((prev, next) => {
         prev = prev + next.price
         return prev
@@ -77,11 +34,11 @@ const GET_PAYPAL_JSON = (vehicle, meta, extras) => {
         },
         "transactions": [{
             "amount": {
-                "total": parseFloat(vehicle.price) + items.reduce((prev, next) => {
+                "total": parseFloat(vehicle.TotalCharge.RateTotalAmount) + items.reduce((prev, next) => {
                     prev = prev + next.price
                     return prev
                 }, 0),
-                "currency": vehicle.currency || "USD",
+                "currency": vehicle.VehicleCharge.CurrencyCode || "USD",
             },
             "description": "This is the payment transaction description.",
             "custom": "EBAY_EMS_90048630024435",
@@ -92,16 +49,16 @@ const GET_PAYPAL_JSON = (vehicle, meta, extras) => {
             "soft_descriptor": "ECHI5786786",
             "item_list": {
                 "items": [{
-                    "name": `Ride on ${vehicle.name}`,
+                    "name": `Ride on ${vehicle.Vehicle.VehMakeModel.Name}`,
                     "description": `A ride from ${meta.originLocation.locationname} to ${meta.returnLocation.locationname}`,
                     "quantity": "1",
-                    "price": vehicle.price,
+                    "price": vehicle.TotalCharge.RateTotalAmount,
                     "tax": "0",
                     "sku": "1",
-                    "currency": vehicle.currency || "USD"
+                    "currency": vehicle.VehicleCharge.CurrencyCode || "USD"
                 },
                 ...items
-            ],
+                ],
             }
         }],
         "note_to_payer": "Contact us for any questions on your order.",
@@ -112,20 +69,19 @@ const GET_PAYPAL_JSON = (vehicle, meta, extras) => {
     }
 };
 
-
+type ParamList = {
+    Payment: {
+        vehicle: VehVendorAvail;
+    };
+};
 export default () => {
     const navigation = useNavigation();
-    const route = useRoute();
+    const route = useRoute<RouteProp<ParamList, 'Payment'>>();
 
     const [originLocation] = useCreateBookingState("originLocation");
     const [returnLocation] = useCreateBookingState("returnLocation");
 
-    const [babySeat] = useCreateBookingState("babySeat");
-    const [childSeat] = useCreateBookingState("childSeat");
-    const [seatBooster] = useCreateBookingState("seatBooster");
-    const [wifi] = useCreateBookingState("wifi");
-    const [gps] = useCreateBookingState("gps");
-
+    const [extras] = useCreateBookingState("extras");
 
     const params = new URLSearchParams();
     params.append('grant_type', 'client_credentials');
@@ -152,7 +108,7 @@ export default () => {
                 <Layout>
                     <Layout style={{ marginTop: '5%' }}>
                         <Layout>
-                            <Text style={{ fontSize: 24, fontFamily: 'SF-UI-Display_Bold'}}>Payment</Text>
+                            <Text style={{ fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }}>Payment</Text>
                             <Text>Choose desired vehicle type. We offer cars suitable for most every day needs.</Text>
                         </Layout>
                         <Button
@@ -166,12 +122,13 @@ export default () => {
                                             },
                                             data: GET_PAYPAL_JSON(
                                                 route.params.vehicle,
-                                                { originLocation, returnLocation},
-                                                {babySeat,childSeat,seatBooster,wifi,gps}
-                                            )})
+                                                { originLocation, returnLocation },
+                                                extras
+                                            )
+                                        })
                                     })
                                     .then((res) => {
-                                        navigation.navigate('WebView', { url: res.data.links.find(i => i.method == 'REDIRECT').href})
+                                        navigation.navigate('WebView', { url: res.data.links.find(i => i.method == 'REDIRECT').href })
                                     })
                                     .catch(err => {
                                         console.log(err)
