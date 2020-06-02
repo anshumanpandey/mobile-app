@@ -32,7 +32,6 @@ export default () => {
 
                 <Layout>
                     <TripCard
-                        tripDate={moment(departureTime)}
                         pickupLocation={originLocation?.Branchname || ''}
                         pickupTime={moment(departureTime)}
                         dropOffLocation={returnLocation?.Branchname || ''}

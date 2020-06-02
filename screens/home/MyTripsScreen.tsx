@@ -175,7 +175,7 @@ const DocumentScreen = () => {
   const [date, setDate] = React.useState(new Date());
 
   const [{ data, loading, error }] = useAxios({
-    url: `${GRCGDS_BACKEND}/bookings`,
+    url: `${GRCGDS_BACKEND}?module_name=GET_BOOKINGS`,
   })
 
   return (
@@ -218,9 +218,15 @@ const DocumentScreen = () => {
             onSelect={index => setSelectedIndex(index)}>
             <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold', color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>ACTIVE</Text>} >
               <Layout style={{ height: '86%' }}>
-                <List
+                {data && data.length !== 0 && <List
                   style={{ backgroundColor: '#f7f9fc', padding: '5%', flexGrow: 1 }}
-                  data={LIST_DATA.sort((a, b) => a.tripDate.diff(b.tripDate)).filter(i => moment(date).isSame(i.tripDate, "day")).filter(i => !i.upcoming).filter(i => !i.completed)}
+                  data={data.map(booking =>  {
+                    return {
+                      ...booking,
+                      pickupTime: moment.unix(booking.pickupTime),
+                      dropoffTime: moment.unix(booking.dropoffTime)
+                    }
+                  })/*.sort((a, b) => a.tripDate.diff(b.tripDate)).filter(i => moment(date).isSame(i.tripDate, "day"))*/.filter(i => !i.upcoming).filter(i => !i.completed)}
                   renderItem={(data: any) => {
                     return (
                       <TripCard
@@ -229,7 +235,8 @@ const DocumentScreen = () => {
                       />
                     );
                   }}
-                />
+                />}
+                {data && data.length == 0 && <Text style={{ textAlign: 'center', marginTop: '20%'}} category="h5">No bookings found!</Text>}
               </Layout>
             </Tab>
             <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold', color: selectedIndex == 1 ? '#41d5fb' : '#aeb1c3' }}>UPCOMING</Text>} >

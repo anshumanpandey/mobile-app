@@ -22,11 +22,6 @@ const GET_PAYPAL_JSON = (vehicle: VehVendorAvail, meta, extras: PricedEquip[]) =
     });
 
 
-    const sum = items.reduce((prev, next) => {
-        prev = prev + next.price
-        return prev
-    }, 0)
-
     return {
         "intent": "sale",
         "payer": {
@@ -50,7 +45,7 @@ const GET_PAYPAL_JSON = (vehicle: VehVendorAvail, meta, extras: PricedEquip[]) =
             "item_list": {
                 "items": [{
                     "name": `Ride on ${vehicle.Vehicle.VehMakeModel.Name}`,
-                    "description": `A ride from ${meta.originLocation.locationname} to ${meta.returnLocation.locationname}`,
+                    "description": `A ride from ${meta.originLocation.Branchname} to ${meta.returnLocation.Branchname}`,
                     "quantity": "1",
                     "price": vehicle.TotalCharge.RateTotalAmount,
                     "tax": "0",
@@ -63,7 +58,7 @@ const GET_PAYPAL_JSON = (vehicle: VehVendorAvail, meta, extras: PricedEquip[]) =
         }],
         "note_to_payer": "Contact us for any questions on your order.",
         "redirect_urls": {
-            "return_url": "https://example.com",
+            "return_url": "https://right-cars-club.com/",
             "cancel_url": "https://example.com"
         }
     }
@@ -113,6 +108,11 @@ export default () => {
                         </Layout>
                         <Button
                             onPress={async () => {
+                                const paypalJson = GET_PAYPAL_JSON(
+                                    route.params.vehicle,
+                                    { originLocation, returnLocation },
+                                    extras
+                                )
                                 getAccessToken()
                                     .then(res => {
 
@@ -120,15 +120,11 @@ export default () => {
                                             headers: {
                                                 'Authorization': `Bearer ${res.data.access_token}`
                                             },
-                                            data: GET_PAYPAL_JSON(
-                                                route.params.vehicle,
-                                                { originLocation, returnLocation },
-                                                extras
-                                            )
+                                            data: paypalJson
                                         })
                                     })
                                     .then((res) => {
-                                        navigation.navigate('WebView', { url: res.data.links.find(i => i.method == 'REDIRECT').href })
+                                        navigation.navigate('WebView', { url: res.data.links.find(i => i.method == 'REDIRECT').href, paypalPaymentId: res.data.id , ...paypalJson})
                                     })
                                     .catch(err => {
                                         console.log(err)

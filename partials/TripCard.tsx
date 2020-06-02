@@ -5,9 +5,9 @@ import { Image, TouchableWithoutFeedback, View } from 'react-native';
 import { Layout, Text, Card, Avatar, Button, Divider } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 import ResolveCurrencySymbol from '../utils/ResolveCurrencySymbol';
+import useAxios from 'axios-hooks'
 
 export type TripCardProps = {
-  tripDate: moment.Moment
   pickupLocation: string
   pickupTime: moment.Moment
   dropOffLocation: string
@@ -17,7 +17,6 @@ export type TripCardProps = {
   registratioNumber?: string
   finalCost: string
   currencyCode: string
-  arrivalTime: moment.Moment
 
   leftImageUri?: string
 
@@ -32,9 +31,15 @@ export type TripCardProps = {
   displayPreview?: boolean
 
 }
+
 const TripCard: React.FC<TripCardProps> = (props) => {
   const navigation = useNavigation();
 
+  const [{ data, loading, error }] = useAxios({
+    url: `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${props.pickupLocation} ${props.pickupCountry}&destinations=${props.dropOffLocation} ${props.dropoffCountry}&key=AIzaSyBJ8evu2aDcSyb2F2NIuNQ3L5TeLAGpino`
+  })
+
+//props.pickupTime.format('LLL')
   return (
     <TouchableWithoutFeedback onPress={() => {
       if (props.keyLess) navigation.navigate('Activate', { ...props, leftImageUri: undefined })
@@ -42,14 +47,13 @@ const TripCard: React.FC<TripCardProps> = (props) => {
     }}>
       <Layout style={{ backgroundColor: '#00000000', marginBottom: '5%' }}>
         <Layout style={{ backgroundColor: '#00000000', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-          <Text style={{ marginBottom: '3%', color: '#ACB1C0' }}>{props.tripDate.format('LLL')}</Text>
-          {props.leftImageUri && (
+          <Text style={{ marginBottom: '3%', color: '#ACB1C0' }}>{props.pickupTime.format('LLL')}</Text>
+          {props.leftImageUri ? (
             <Image
               style={{ width: 50, height: 50 }}
               source={require('../image/rightcars.png')}
             />
-          )}
-
+          ) : null}
         </Layout>
 
         <View style={{ display: 'flex', flexDirection: 'column', borderRadius: 16, borderWidth: 0 }}>
@@ -115,7 +119,7 @@ const TripCard: React.FC<TripCardProps> = (props) => {
 
                 <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Text style={{ color: '#ACB1C0', fontSize: 13 }}>Arrival time</Text>
-                  <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{props.arrivalTime.format('HH:mm A')}</Text>
+                  {data && <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{data.rows[0].elements[0].duration.text}</Text>}
                 </Layout>
               </Layout>
 
