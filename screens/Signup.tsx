@@ -147,8 +147,8 @@ export default () => {
                                                 placeholder: 'Mobile number',
                                                 value: `${countryCode} ${phonenumberToShow}`,
                                                 onChangeText: (c: string) => {
-                                                    const currentValue = c.replace(' ', '')
-                                                    (currentValue)
+                                                    const currentValue = c.replace(' ', '');
+                                                    console.log(currentValue)
                                                     handleChange('tele')(currentValue)
                                                     setPhonenumberToShow(p => {
                                                         const number = c.toString().split(' ')[1]
