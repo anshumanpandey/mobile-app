@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Text, Input, Button, Select, SelectItem, Popover, Toggle } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView, Image } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, CommonActions } from '@react-navigation/native';
 import { useCreateBookingState } from './CreateBookingState';
 import moment from 'moment';
 import TripCard from '../../../partials/TripCard';
@@ -17,6 +17,7 @@ export default () => {
     const [returnTime] = useCreateBookingState("returnTime");
     const [originLocation] = useCreateBookingState("originLocation");
     const [returnLocation] = useCreateBookingState("returnLocation");
+    const [arrivalTime] = useCreateBookingState("arrivalTime");
 
     const [extras] = useCreateBookingState("extras");
     const [vehicle] = useCreateBookingState("vehicle");
@@ -40,7 +41,7 @@ export default () => {
                         carName={vehicle?.Vehicle.VehMakeModel.Name || 'Car'}
                         finalCost={totalToCharge.toString()}
                         currencyCode={vehicle?.TotalCharge.CurrencyCode || 'USD'}
-                        arrivalTime={moment(returnTime)}
+                        arrivalTime={arrivalTime}
                         image_preview_url={vehicle?.Vehicle.VehMakeModel.PictureURL}
 
                         leftImageUri={''}
@@ -62,7 +63,16 @@ export default () => {
 
                     <Layout style={{ marginTop: '5%' }}>
                         <Button
-                            onPress={() => navigation.navigate('MyBookings')}
+                            onPress={() => {
+                                navigation.dispatch(
+                                    CommonActions.reset({
+                                      index: 1,
+                                      routes: [
+                                        { name: 'Home' },
+                                      ],
+                                    })
+                                  );
+                            }}
                             size="giant" style={{
                                 borderRadius: 10,
                                 backgroundColor: '#41d5fb',

@@ -13,6 +13,8 @@ type InitialState = {
     departureTime: Date,
     returnTime: Date,
 
+    arrivalTime: '',
+
     extras: PricedEquip[]
 
     vehicle: VehVendorAvail | null
@@ -25,7 +27,8 @@ const initialState: InitialState = {
     departureTime: new Date(),
     returnTime: new Date(),
     extras: [],
-    vehicle: null
+    vehicle: null,
+    arrivalTime: '',
 };
 
 export const { useGlobalState: useCreateBookingState } = createGlobalState<InitialState>(initialState);

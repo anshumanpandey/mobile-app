@@ -5,9 +5,10 @@ import { SafeAreaView, View } from 'react-native';
 import moment from 'moment';
 import TripCard, { TripCardProps } from '../../partials/TripCard';
 import MenuButton from '../../partials/MenuButton';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import useAxios from 'axios-hooks'
+import LoadingSpinner from '../../partials/LoadingSpinner';
 
 const DATE_FORMAT = 'MMM DD,YYYY'
 
@@ -174,9 +175,35 @@ const DocumentScreen = () => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [date, setDate] = React.useState(new Date());
 
-  const [{ data, loading, error }] = useAxios({
+  const [{ data, loading, error }, refetch] = useAxios({
     url: `${GRCGDS_BACKEND}?module_name=GET_BOOKINGS`,
   })
+
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch();
+    }, [])
+  );
+
+  const parsedData = data ? data.map((booking: any) => {
+    return {
+      ...booking,
+      pickupTime: moment.unix(booking.pickupTime),
+      dropoffTime: moment.unix(booking.dropoffTime)
+    }
+  }) : null
+
+  const activeTrips = parsedData ? parsedData.filter(booking => {
+    return booking.pickupTime.isSame(moment(), 'day')
+  }) : null
+
+  const upcommingTrips = parsedData ? parsedData.filter(booking => {
+    return booking.pickupTime.isAfter(moment())
+  }) : null
+
+  const completedTrips = parsedData ? parsedData.filter(booking => {
+    return booking.dropoffTime.isBefore(moment())
+  }) : null
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -218,15 +245,9 @@ const DocumentScreen = () => {
             onSelect={index => setSelectedIndex(index)}>
             <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold', color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>ACTIVE</Text>} >
               <Layout style={{ height: '86%' }}>
-                {data && data.length !== 0 && <List
+                {!loading && activeTrips && activeTrips.length !== 0 && <List
                   style={{ backgroundColor: '#f7f9fc', padding: '5%', flexGrow: 1 }}
-                  data={data.map(booking =>  {
-                    return {
-                      ...booking,
-                      pickupTime: moment.unix(booking.pickupTime),
-                      dropoffTime: moment.unix(booking.dropoffTime)
-                    }
-                  })/*.sort((a, b) => a.tripDate.diff(b.tripDate)).filter(i => moment(date).isSame(i.tripDate, "day"))*/.filter(i => !i.upcoming).filter(i => !i.completed)}
+                  data={activeTrips}
                   renderItem={(data: any) => {
                     return (
                       <TripCard
@@ -236,14 +257,19 @@ const DocumentScreen = () => {
                     );
                   }}
                 />}
-                {data && data.length == 0 && <Text style={{ textAlign: 'center', marginTop: '20%'}} category="h5">No bookings found!</Text>}
+                {!loading && activeTrips && activeTrips.length == 0 && <Text style={{ textAlign: 'center', marginTop: '20%' }} category="h5">No active bookings!</Text>}
+                {loading && (
+                  <Layout style={{ display: 'flex', justifyContent: 'center', alignItems: "center" }}>
+                    <LoadingSpinner />
+                  </Layout>
+                )}
               </Layout>
             </Tab>
             <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold', color: selectedIndex == 1 ? '#41d5fb' : '#aeb1c3' }}>UPCOMING</Text>} >
               <Layout style={{ height: '96%' }}>
-                <List
-                  style={{ backgroundColor: '#f7f9fc', padding: '5%', display: 'flex', flexDirection: 'column' }}
-                  data={LIST_DATA.sort((a, b) => a.tripDate.diff(b.tripDate)).filter(i => moment(date).isSame(i.tripDate, "day")).filter(i => i.upcoming == true)}
+                {!loading && upcommingTrips && upcommingTrips.length !== 0 && <List
+                  style={{ backgroundColor: '#f7f9fc', padding: '5%', flexGrow: 1, marginBottom: 70 }}
+                  data={upcommingTrips}
                   renderItem={(data: any) => {
                     return (
                       <TripCard
@@ -252,16 +278,23 @@ const DocumentScreen = () => {
                       />
                     );
                   }}
-                />
+                />}
+
+                {!loading && upcommingTrips && upcommingTrips.length == 0 && <Text style={{ textAlign: 'center', marginTop: '20%' }} category="h5">No upcomming bookings!</Text>}
+                {loading && (
+                  <Layout style={{ display: 'flex', justifyContent: 'center', alignItems: "center" }}>
+                    <LoadingSpinner />
+                  </Layout>
+                )}
               </Layout>
             </Tab>
 
             <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold', color: selectedIndex == 2 ? '#41d5fb' : '#aeb1c3' }}>COMPLETED</Text>} >
               <Layout style={{ height: '96%' }}>
 
-                <List
+              {!loading && completedTrips && completedTrips.length !== 0 && <List
                   style={{ backgroundColor: '#f7f9fc', padding: '5%', display: 'flex', flexDirection: 'column' }}
-                  data={LIST_DATA.sort((a, b) => a.tripDate.diff(b.tripDate)).filter(i => moment(date).isSame(i.tripDate, "day")).filter(i => i.completed == true)}
+                  data={completedTrips}
                   renderItem={(data: any) => {
                     return (
                       <TripCard
@@ -270,7 +303,14 @@ const DocumentScreen = () => {
                       />
                     );
                   }}
-                />
+                />}
+
+                {!loading && completedTrips && completedTrips.length == 0 && <Text style={{ textAlign: 'center', marginTop: '20%' }} category="h5">No completed bookings!</Text>}
+                {loading && (
+                  <Layout style={{ display: 'flex', justifyContent: 'center', alignItems: "center" }}>
+                    <LoadingSpinner />
+                  </Layout>
+                )}
               </Layout>
             </Tab>
 

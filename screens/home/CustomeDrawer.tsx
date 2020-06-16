@@ -15,6 +15,7 @@ import { useGlobalState, dispatchGlobalState } from "../../state";
 const menuData = [
     { name: "My Trips", screenName: "MyBookings", key: 5 },
     { name: "Reservation", screenName: "Reservation", key: 10 },
+    { name: "Document", screenName: "Documents", key: 4 },
 ];
 
 const DrawerMenu = ({ navigation }: { navigation: any }) => {
@@ -27,7 +28,7 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
                 <Layout style={{ width: '75%', display: 'flex', flexDirection: 'row', paddingBottom: '20%' }}>
                     <Avatar size='giant' source={{ uri: "http://lorempixel.com/400/400" }} />
                     <Layout style={{ marginLeft: '10%' }}>
-                        <Text category='h3'>{profile?.firstName || profile?.email}</Text>
+                        <Text category='h3'>{profile?.username || profile?.email}</Text>
                         <Text style={{ color: '#52e6fe' }} category='s1'>Edit profile</Text>
                     </Layout>
 

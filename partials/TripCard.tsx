@@ -30,16 +30,12 @@ export type TripCardProps = {
   image_preview_url?: string
   displayPreview?: boolean
 
+  arrivalTime: string
 }
 
 const TripCard: React.FC<TripCardProps> = (props) => {
   const navigation = useNavigation();
 
-  const [{ data, loading, error }] = useAxios({
-    url: `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${props.pickupLocation} ${props.pickupCountry}&destinations=${props.dropOffLocation} ${props.dropoffCountry}&key=AIzaSyBJ8evu2aDcSyb2F2NIuNQ3L5TeLAGpino`
-  })
-
-//props.pickupTime.format('LLL')
   return (
     <TouchableWithoutFeedback onPress={() => {
       if (props.keyLess) navigation.navigate('Activate', { ...props, leftImageUri: undefined })
@@ -119,7 +115,9 @@ const TripCard: React.FC<TripCardProps> = (props) => {
 
                 <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Text style={{ color: '#ACB1C0', fontSize: 13 }}>Arrival time</Text>
-                  {data && <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{data.rows[0].elements[0].duration.text}</Text>}
+                  {props.arrivalTime && <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>
+                    {props.arrivalTime}
+                  </Text>}
                 </Layout>
               </Layout>
 
