@@ -95,7 +95,8 @@ export default () => {
                                 .then((res) => {
                                     const data = {
                                         username: values.emailaddress,
-                                        password: values.password
+                                        password: values.password,
+                                        module_name: "LOGIN"
                                     }
                                     return doLogin({ data })
                                 })
