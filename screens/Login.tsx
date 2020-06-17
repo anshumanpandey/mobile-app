@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Text, Input, Button } from '@ui-kitten/components';
-import { TouchableWithoutFeedback, ImageProps, SafeAreaView, ScrollView, NativeModules } from 'react-native';
+import { TouchableWithoutFeedback, ImageProps, SafeAreaView, ScrollView, NativeModules, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { RenderProp } from '@ui-kitten/components/devsupport';
 import useAxios from 'axios-hooks'
@@ -37,13 +37,14 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     );
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
             <ScrollView keyboardShouldPersistTaps={"handled"} >
 
                 <Layout style={{ flex: 1, padding: '3%' }}>
                     <Layout style={{ paddingBottom: '10%' }}>
-                        <Text style={{ textAlign: 'left', fontSize: 24, marginBottom: 10, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>Welcome back, Guy!</Text>
-                        <Text style={{ textAlign: 'left', fontSize: 15, color: '#8f9bb5' }} category='s2'>Sign in to your account</Text>
+                        <Text style={{ textAlign: 'left', fontSize: 24, marginBottom: 10, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
+                            Sign in to your account
+                        </Text>
                     </Layout>
 
                     <Formik
