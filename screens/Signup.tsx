@@ -1,12 +1,11 @@
 
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Text, Input, Button, Toggle } from '@ui-kitten/components';
 import { TouchableWithoutFeedback, ImageProps, ScrollView, SafeAreaView } from 'react-native';
 import { Formik } from 'formik';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { RenderProp } from '@ui-kitten/components/devsupport';
-import PhoneInput from 'react-native-phone-input'
+import PhoneInputComponent from '../partials/PhoneInput';
 import { TextInput } from 'react-native-gesture-handler';
 import ReactNativePhoneInput from 'react-native-phone-input';
 import ErrorLabel from '../partials/ErrorLabel';
@@ -27,7 +26,7 @@ export default () => {
 
     const [secureTextEntry, setSecureTextEntry] = useState(true);
     const [phonenumberToShow, setPhonenumberToShow] = useState<string>('');
-    const [countryCode, setCountryCode] = useState<string>(`+1`);
+    const [isoCountry, setIsoCountry] = useState<string>('us');
     const [asCompany, setAsCompany] = useState(false);
     const phoneInput = useRef<ReactNativePhoneInput<typeof TextInput> | null>(null);
     const [{ data, loading, error }, doRegister] = useAxios({
@@ -67,7 +66,7 @@ export default () => {
                     </Layout>
 
                     <Formik
-                        initialValues={{ emailaddress: '', password: '', tele: '', confirmPassword: '', companyName: '', companyVatNumber: '' }}
+                        initialValues={{ emailaddress: '', password: '', telecode: '',tele: '', confirmPassword: '', companyName: '', companyVatNumber: '' }}
                         validate={(values) => {
                             const errors: { emailaddress?: string, password?: string, tele?: string } = {};
                             if (!values.emailaddress) {
@@ -108,7 +107,7 @@ export default () => {
 
                         }}
                     >
-                        {({ handleChange, touched, handleSubmit, values, errors }) => {
+                        {({ handleChange, touched, handleSubmit, values, errors, setFieldValue }) => {
                             return (
                                 <>
                                     <Input
@@ -121,8 +120,6 @@ export default () => {
                                         onChangeText={handleChange('emailaddress')}
                                         caption={errors.emailaddress && touched.emailaddress ? () => <ErrorLabel text={errors.emailaddress} /> : undefined}
                                     />
-
-
                                     <Input
                                         status={errors.password && touched.password ? 'danger' : undefined}
                                         style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
@@ -141,28 +138,15 @@ export default () => {
 
                                     <Layout style={{ marginBottom: '3%' }}>
                                         <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>Phone number</Text>
-                                        <PhoneInput
-                                            initialCountry="us"
-                                            style={{ borderColor: errors.tele && touched.tele ? '#ffa5bc' : '#e5eaf2', borderWidth: 1, borderRadius: 10, padding: 15 }}
-                                            textProps={{
-                                                placeholder: 'Mobile number',
-                                                value: `${countryCode} ${phonenumberToShow}`,
-                                                onChangeText: (c: string) => {
-                                                    const currentValue = c.replace(' ', '');
-                                                    console.log(currentValue)
-                                                    handleChange('tele')(currentValue)
-                                                    setPhonenumberToShow(p => {
-                                                        const number = c.toString().split(' ')[1]
-                                                        return number || ''
-                                                    })
-                                                    return null
-                                                }
+                                        <PhoneInputComponent
+                                            styles={{ borderColor: errors.tele && touched.tele ? '#ffa5bc' : '#e5eaf2', }}
+                                            mobilecode={values.telecode}
+                                            mobileNumber={phonenumberToShow}
+                                            onCodeChange={(code) => {
+                                                setFieldValue('telecode', code)
                                             }}
-                                            ref={ref => {
-                                                phoneInput.current = ref;
-                                            }}
-                                            onSelectCountry={(c) => {
-                                                setCountryCode(`+${phoneInput.current?.getCountryCode()}` || '+1')
+                                            onNumberChange={(number) => {
+                                                handleChange('tele')(number)
                                             }}
                                         />
                                         {errors.tele && touched.tele && <ErrorLabel text={errors.tele} />}

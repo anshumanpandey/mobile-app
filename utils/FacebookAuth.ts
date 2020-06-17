@@ -17,7 +17,7 @@ export const handlePermissionPromt = (result: LoginResult) => {
 export const handleUserData = async (response: LoginResult) => {
     const access = await AccessToken.getCurrentAccessToken()
     return axiosInstance({
-        url: `${GRCGDS_BACKEND}/public/withFacebook`,
+        url: `${GRCGDS_BACKEND}`,
         method: 'POST',
         data: {token: access.accessToken, module_name: 'LOGIN_WITH_FACEBOOK'}
     })

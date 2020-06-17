@@ -1,11 +1,20 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Layout, Text, Button, Datepicker, NativeDateService, TabView, Card, Avatar, Input } from '@ui-kitten/components';
-import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native';
+import { SafeAreaView } from 'react-native';
+import LoadingSpinner from '../partials/LoadingSpinner';
 import { useNavigation } from '@react-navigation/native';
 import BackButton from '../partials/BackButton';
+import useAxios from 'axios-hooks'
+import { GRCGDS_BACKEND } from 'react-native-dotenv'
 
 const DocumentScreen = () => {
   const navigation = useNavigation();
+  const [email, setEmail] = useState<null | string>(null);
+
+  const [{ data, loading, error }, doRecover] = useAxios({
+    url: `${GRCGDS_BACKEND}`,
+    method: 'POST'
+}, { manual: true })
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -21,15 +30,28 @@ const DocumentScreen = () => {
         <Input
           style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
           size='large'
+          onChangeText={(e) => setEmail(e)}
           label={() => <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>Email</Text>}
           placeholder='Enter your email'
         />
 
         <Button
+          disabled={loading}
+          accessoryRight={loading ? LoadingSpinner : undefined}
+          onPress={() => {
+            if (email == null) return 
+            doRecover({ data: {
+              module_name: 'RECOVER_PASS',
+              username: email
+            }})
+            .then(r => {
+              navigation.navigate("Login")
+            })
+          }}
           size="large"
           style={{
-            backgroundColor: '#41d5fb',
-            borderColor: '#41d5fb',
+            backgroundColor: loading == false ? '#41d5fb' : '#e4e9f2',
+            borderColor: loading == false ? '#41d5fb' : '#e4e9f2',
             marginBottom: '15%',
             borderRadius: 10,
             shadowColor: '#41d5fb',

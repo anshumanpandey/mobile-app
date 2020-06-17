@@ -14,7 +14,7 @@ import { useGlobalState, dispatchGlobalState } from "../../state";
 
 const menuData = [
     { name: "My Trips", screenName: "MyBookings", key: 5 },
-    { name: "Reservation", screenName: "Reservation", key: 10 },
+    { name: "Profile", screenName: "EditProfile", key: 10 },
     { name: "Document", screenName: "Documents", key: 4 },
 ];
 
