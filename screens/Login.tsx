@@ -1,12 +1,12 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Text, Input, Button } from '@ui-kitten/components';
-import { TouchableWithoutFeedback, ImageProps, SafeAreaView, ScrollView, NativeModules, Alert } from 'react-native';
+import { TouchableWithoutFeedback, ImageProps, SafeAreaView, ScrollView, NativeModules, Linking, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { RenderProp } from '@ui-kitten/components/devsupport';
 import useAxios from 'axios-hooks'
 import { Formik } from 'formik';
-import { GRCGDS_BACKEND } from 'react-native-dotenv'
+import { GRCGDS_BACKEND, TWITTER_API_KEY, TWITTER_API_SECRET } from 'react-native-dotenv'
 import { dispatchGlobalState } from '../state';
 import { StackScreenProps } from '@react-navigation/stack';
 import { NonLoginScreenProps, LoginScreenProps } from '../types';
@@ -16,7 +16,7 @@ import TwitterButton from '../partials/TwitterButton';
 import ErrorLabel from '../partials/ErrorLabel';
 import { LoginManager, GraphRequest, GraphRequestManager } from "react-native-fbsdk";
 import { handlePermissionPromt, handleUserData } from '../utils/FacebookAuth';
-
+import { axiosInstance } from '../utils/AxiosBootstrap';
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
     const [{ data, loading, error }, doLogin] = useAxios({
@@ -137,13 +137,24 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
                         <FacebookButton onPress={() => {
                             LoginManager.logInWithPermissions(["public_profile", "email"])
-                            .then(handlePermissionPromt)
-                            .then(handleUserData)
-                            .then(() => navigation.navigate('Home'))
-                            .catch((error) => console.log("Login fail with error: " + error))
+                                .then(handlePermissionPromt)
+                                .then(handleUserData)
+                                .then(() => navigation.navigate('Home'))
+                                .catch((error) => console.log("Login fail with error: " + error))
                         }} />
 
-                        <TwitterButton />
+                        <TwitterButton onPress={() => {
+                            axiosInstance({
+                                method: "POST",
+                                url: GRCGDS_BACKEND,
+                                data: { module_name: "LOGIN_WITH_TWITTER" }
+                            })
+                                .then(res => {
+                                    navigation.navigate('TwitterLogin', res.data)
+                                })
+                                .catch(err => console.log(err))
+
+                        }} />
                     </Layout>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10%' }}>

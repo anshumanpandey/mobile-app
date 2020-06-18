@@ -18,6 +18,7 @@ import './utils/AxiosBootstrap';
 import Login from './screens/Login';
 import Signup from './screens/Signup';
 import Home from './screens/home/Home';
+import TwitterLoginScreen from './screens/TwitterLoginWebview';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import { useGlobalState, dispatchGlobalState } from './state';
 //@ts-ignore
@@ -80,6 +81,7 @@ export default () => {
               <>
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Signup" component={Signup} />
+                <Stack.Screen name="TwitterLogin" component={TwitterLoginScreen} />
                 <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
               </>
             )}

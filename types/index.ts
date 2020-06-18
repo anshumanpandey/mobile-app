@@ -10,4 +10,5 @@ export type LoginScreenProps = {
     Notifications: undefined,
     Profile: undefined,
     Documents: undefined,    
+    TwitterLogin:undefined,
 }

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import RNPhoneInput from 'react-native-phone-input'
-import { useNavigation, DrawerActions } from '@react-navigation/native';
 import ReactNativePhoneInput from 'react-native-phone-input';
 import { TextInput } from 'react-native-gesture-handler';
 import { StyleProp, TextStyle } from 'react-native';
