@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Text, Input, Button } from '@ui-kitten/components';
-import { TouchableWithoutFeedback, ImageProps, SafeAreaView, ScrollView, NativeModules, Linking, Alert } from 'react-native';
+import { TouchableWithoutFeedback, ImageProps, SafeAreaView, ScrollView, NativeModules, Alert, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { RenderProp } from '@ui-kitten/components/devsupport';
 import useAxios from 'axios-hooks'
@@ -136,6 +136,9 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
                         <FacebookButton onPress={() => {
+                            if (Platform.OS === "android") {
+                                LoginManager.setLoginBehavior("web_only")
+                            }
                             LoginManager.logInWithPermissions(["public_profile", "email"])
                                 .then(handlePermissionPromt)
                                 .then(handleUserData)
