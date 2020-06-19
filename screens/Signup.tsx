@@ -19,6 +19,7 @@ import FacebookButton from '../partials/FacebookButton';
 import TwitterButton from '../partials/TwitterButton';
 import { LoginManager, GraphRequest, GraphRequestManager } from "react-native-fbsdk";
 import { handlePermissionPromt, handleUserData } from '../utils/FacebookAuth';
+import { axiosInstance } from '../utils/AxiosBootstrap';
 
 
 export default () => {
@@ -66,7 +67,7 @@ export default () => {
                     </Layout>
 
                     <Formik
-                        initialValues={{ emailaddress: '', password: '', telecode: '',tele: '', confirmPassword: '', companyName: '', companyVatNumber: '' }}
+                        initialValues={{ emailaddress: '', password: '', telecode: '', tele: '', confirmPassword: '', companyName: '', companyVatNumber: '' }}
                         validate={(values) => {
                             const errors: { emailaddress?: string, password?: string, tele?: string } = {};
                             if (!values.emailaddress) {
@@ -219,7 +220,18 @@ export default () => {
                                 .catch((error) => console.log("Login fail with error: " + error))
                         }} />
 
-                        <TwitterButton />
+                        <TwitterButton onPress={() => {
+                            axiosInstance({
+                                method: "POST",
+                                url: GRCGDS_BACKEND,
+                                data: { module_name: "LOGIN_WITH_TWITTER" }
+                            })
+                                .then(res => {
+                                    navigation.navigate('TwitterLogin', res.data)
+                                })
+                                .catch(err => console.log(err))
+
+                        }} />
                     </Layout>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '5%', flexWrap: 'wrap' }}>
