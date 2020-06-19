@@ -12,6 +12,7 @@ import LoadingSpinner from '../../partials/LoadingSpinner';
 import ErrorLabel from '../../partials/ErrorLabel';
 import PhoneInputComponent from '../../partials/PhoneInput';
 import BackButton from '../../partials/BackButton';
+import { axiosInstance } from '../../utils/AxiosBootstrap';
 
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
@@ -58,12 +59,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         }}
                         onSubmit={values => {
                             doLogin({ data: { ...values, module_name: "EDIT_PROFILE" } })
-                                .then((res) => {
-                                    console.log('then')
-                                    dispatchGlobalState({ type: 'token', state: res.data.token })
-                                    dispatchGlobalState({ type: 'profile', state: res.data })
-                                })
-                                .catch(err => console.log(err))
+                            .then((res) => {
+                                dispatchGlobalState({ type: 'token', state: res.data.token })
+                                dispatchGlobalState({ type: 'profile', state: res.data })
+                            })
+                            .catch(err => console.log(err))
                         }}
                     >
                         {({ handleChange, setFieldValue, handleSubmit, values, errors, touched }) => {

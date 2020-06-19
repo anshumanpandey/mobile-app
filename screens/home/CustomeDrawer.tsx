@@ -1,10 +1,11 @@
-import React, { Component, useState } from "react";
+import React from "react";
 import {
     StyleSheet,
     TouchableOpacity,
     View,
     FlatList,
-    Alert
+    Alert,
+    Image
 } from "react-native";
 
 import { Layout, Avatar, Text, Divider, Button, Modal, Card } from "@ui-kitten/components";
@@ -14,22 +15,23 @@ import { useGlobalState, dispatchGlobalState } from "../../state";
 
 const menuData = [
     { name: "My Trips", screenName: "MyBookings", key: 5 },
-    { name: "Profile", screenName: "EditProfile", key: 10 },
     { name: "Document", screenName: "Documents", key: 4 },
 ];
 
 const DrawerMenu = ({ navigation }: { navigation: any }) => {
-    const [logout, setLogout] = useState(false)
     const [profile] = useGlobalState('profile')
 
     return (
         <>
             <View style={styles.container}>
                 <Layout style={{ width: '75%', display: 'flex', flexDirection: 'row', paddingBottom: '20%' }}>
-                    <Avatar size='giant' source={{ uri: "http://lorempixel.com/400/400" }} />
+                    <Image
+                        style={{ width: 80, height: 80, resizeMode:'contain' }}
+                        source={require('../../image/rightcars.png')}
+                    />
                     <Layout style={{ marginLeft: '10%' }}>
                         <Text category='h3'>{profile?.username || profile?.email}</Text>
-                        <Text style={{ color: '#52e6fe' }} category='s1'>Edit profile</Text>
+                        <Text onPress={() => navigation.navigate("EditProfile")} style={{ color: '#52e6fe' }} category='s1'>Edit profile</Text>
                     </Layout>
 
                 </Layout>

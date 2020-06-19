@@ -72,7 +72,6 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             }
                             doLogin({ data, method: 'POST' })
                                 .then((res) => {
-                                    console.log(res.data)
                                     dispatchGlobalState({ type: 'token', state: res.data.token })
                                     dispatchGlobalState({ type: 'profile', state: res.data })
                                     if (res.data.verifies.toLowerCase() == "no") navigation.navigate('Opt')

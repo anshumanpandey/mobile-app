@@ -4,6 +4,7 @@ import ReactNativePhoneInput from 'react-native-phone-input';
 import { TextInput } from 'react-native-gesture-handler';
 import { TextStyle, View } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal'
+import { useFocusEffect } from '@react-navigation/native';
 
 type Props = {
     mobilecode?: string
@@ -30,6 +31,22 @@ const PhoneInput: React.FC<Props> = ({ mobilecode, mobileNumber = "", onCodeChan
         })
         phoneInput.current.selectCountry(code ? code.iso2 : 'us')
     }, [phoneInput.current])
+
+    useFocusEffect(
+        React.useCallback(() => {
+            if (!phoneInput.current) return
+            if (!mobilecode) {
+                phoneInput.current.selectCountry('us');
+                return
+            }
+            const code = phoneInput.current.getAllCountries().find(obj => {
+                const countryDialCode = obj.dialCode
+                const copy = mobilecode.toString()
+                return copy.replace("+", "") == countryDialCode;
+            })
+            phoneInput.current.selectCountry(code ? code.iso2 : 'us')
+        }, [])
+      );
 
     return (
         <>
