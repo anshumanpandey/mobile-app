@@ -104,10 +104,10 @@ const DocumentScreen = () => {
           <Text
             onPress={() => {
               if (!profile) return
-              axiosInstance.post(GRCGDS_BACKEND, {
+              doVerify({ data: {
                 "module_name": "RESEND_VERIFY",
                 "id": profile.id
-              })
+              }})
             }}
             style={{ color: '#41d5fb' }}>Resend Code</Text>
         </Layout>
