@@ -69,13 +69,13 @@ export default () => {
     <ApplicationProvider mapping={EvaMapping} theme={eva.light} customMapping={j}>
       <NavigationContainer>
         <Stack.Navigator headerMode='none'>
-          {(profile && profile.verifies.toLowerCase() == "yes") && (
+          {(profile && profile.verifies &&profile.verifies.toLowerCase() == "yes") && (
             <>
               <Stack.Screen name="Home" component={Home} />
             </>
           )}
 
-          {(!profile || profile.verifies.toLowerCase() == "no") && (
+          {(!profile || !profile.verifies ||profile.verifies.toLowerCase() == "no") && (
               <>
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Signup" component={Signup} />
