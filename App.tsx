@@ -22,8 +22,6 @@ import TwitterLoginScreen from './screens/TwitterLoginWebview';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import VerifyPhoneScreen from './screens/VerifyPhoneScreen';
 import { useGlobalState, dispatchGlobalState } from './state';
-//@ts-ignore
-import { default as mapping } from './mapping.json';
 import SplashScreen from 'react-native-splash-screen'
 import { Alert } from 'react-native';
 
@@ -55,8 +53,6 @@ export default () => {
   j.components.CheckBox.appearances.default.variantGroups.status.basic.state.active.borderColor = "#41D5FB"
   j.components.CheckBox.appearances.default.variantGroups.status.basic.state["checked.active"].backgroundColor = "#41D5FB"
   j.components.CheckBox.appearances.default.variantGroups.status.basic.state["checked.active"].borderColor = "#41D5FB"
-
-  console.log("error",error)
 
   if (error) {
     Alert.alert(
