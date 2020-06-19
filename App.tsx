@@ -34,6 +34,10 @@ export default () => {
 
   useEffect(() => {
     SplashScreen.hide()
+    if (profile && !profile.verifies) {
+      dispatchGlobalState({ type: 'token', state: null })
+      dispatchGlobalState({ type: 'profile', state: null })
+    }
   }, []);
   const j = { ...EvaMapping }
   j.strict["text-font-family"] = "SF-UI-Display-Regular"
