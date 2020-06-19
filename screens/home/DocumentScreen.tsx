@@ -5,18 +5,28 @@ import DocumentPicker from 'react-native-document-picker';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import { Alert, Platform } from 'react-native';
-import useAxios from 'axios-hooks'
-
+import useAxios, { makeUseAxios } from 'axios-hooks'
+import RNFetchBlob from 'rn-fetch-blob'
+import { getGlobalState } from '../../state';
 
 const DocumentScreen = () => {
   const [filesToUpload, setFilesToUpload] = useState(new Map());
+  const state = getGlobalState()
+
+  const [getFilesReq, refetch] = useAxios({
+    url: `${GRCGDS_BACKEND}`,
+    method: 'POST',
+    data: { module_name: 'GET_FILES'}
+  })
+
 
   const [{ data, loading, error }, doPost] = useAxios({
-      url: `${GRCGDS_BACKEND}`,
-      method: 'POST',
-      headers: {
-        "Content-Type": "multipart/form-data; charset=utf-8;"
-      }
+    url: `${GRCGDS_BACKEND}`,
+    method: 'POST',
+    headers: {
+      "Content-Type": "multipart/form-data",
+      'Accept': 'application/json'
+    }
   }, { manual: true })
 
   const fileTypes = [
@@ -37,10 +47,7 @@ const DocumentScreen = () => {
                 });
                 setFilesToUpload(p => {
                   p.set(type.id, {
-                    uri: Platform.OS === "android" ? res.uri : res.uri.replace("file://", ""),
-                    type: res.type,
-                    name: res.name,
-                    size: res.size
+                    ...res,
                   });
 
                   return p;
@@ -54,17 +61,20 @@ const DocumentScreen = () => {
         })}
       </Layout>
       <Button onPress={() => {
-        const data = new FormData();
-        data.append("module_name", "FILE_UPLOAD");
+        const formData = new FormData();
 
-        Array.from(filesToUpload.entries()).forEach(([fileCategory, fileObj]) => {
-          data.append(fileCategory, JSON.stringify(fileObj));
+        formData.append('module_name', "FILE_UPLOAD");
+
+        Array.from(filesToUpload.entries()).forEach(([fileCategory, fileObj], i) => {
+          formData.append(fileCategory, { uri: fileObj.uri, name: fileObj.name, type: 'image/jpeg' });
         });
 
-        doPost({ data })
+        console.log(formData)
+
+        doPost({ data: formData })
         .then(res => {
           console.log(res.data)
-        })
+        }).catch(err => console.log(err.response.data))
       }}>Upload</Button>
     </Layout>
   )

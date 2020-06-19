@@ -1,7 +1,9 @@
 export type NonLoginScreenProps = {
     Login: undefined,
     Signup: undefined,
+    Opt: undefined,
     ForgotPassword: undefined,
+    TwitterLogin:undefined,
 }
 
 export type LoginScreenProps = {
@@ -10,5 +12,4 @@ export type LoginScreenProps = {
     Notifications: undefined,
     Profile: undefined,
     Documents: undefined,    
-    TwitterLogin:undefined,
 }

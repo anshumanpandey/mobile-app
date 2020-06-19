@@ -1,10 +1,14 @@
 import React, { useRef } from 'react';
-import { Layout, Text, Button, Datepicker, NativeDateService, TabView, Card, Avatar } from '@ui-kitten/components';
+import { Layout, Text, Button } from '@ui-kitten/components';
 import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useGlobalState, dispatchGlobalState } from '../state';
+import { axiosInstance } from '../utils/AxiosBootstrap';
+import { GRCGDS_BACKEND } from 'react-native-dotenv';
 
 const DocumentScreen = () => {
   const navigation = useNavigation();
+  const [profile] = useGlobalState('profile');
 
   const inputs = [
     useRef<TextInput | null>(null),
@@ -50,7 +54,7 @@ const DocumentScreen = () => {
         <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000' }}>
           <Text style={{ textAlign: 'left' }} category="h3">Verify phone number</Text>
           <Text category="s1"> Check your SMS messages. We've sent you the PIN at </Text>
-          <Text style={{ color: '#41d5fb' }}>(+1) 080-744-5078</Text>
+          <Text style={{ color: '#41d5fb' }}>({profile?.mobilecode}) {profile?.mobilenumber}</Text>
         </Layout>
 
 
@@ -62,7 +66,15 @@ const DocumentScreen = () => {
         </Layout>
 
         <Button
-          onPress={() => navigation.navigate('MyBookings')}
+          onPress={() => {
+            axiosInstance.post(GRCGDS_BACKEND, {
+              "module_name": "VERIFY",
+              "code": parseInt(pin.join(""))
+            })
+            .then(() => {
+              dispatchGlobalState({ type: 'profile', state: {...profile, verifies: "Yes"} })
+            })
+          }}
           size="giant"
           style={{
             backgroundColor: '#41d5fb',
@@ -82,7 +94,15 @@ const DocumentScreen = () => {
           </Button>
         <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', backgroundColor: '#00000000' }}>
           <Text style={{ textAlign: 'center' }}>Didn't receive SMS</Text>
-          <Text style={{ color: '#41d5fb' }}> Resend Code</Text>
+          <Text
+            onPress={() => {
+              if (!profile) return
+              axiosInstance.post(GRCGDS_BACKEND, {
+                "module_name": "RESEND_VERIFY",
+                "id": profile.id
+              })
+            }}
+            style={{ color: '#41d5fb' }}>Resend Code</Text>
         </Layout>
 
       </Layout>

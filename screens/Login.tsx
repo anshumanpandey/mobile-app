@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { RenderProp } from '@ui-kitten/components/devsupport';
 import useAxios from 'axios-hooks'
 import { Formik } from 'formik';
-import { GRCGDS_BACKEND, TWITTER_API_KEY, TWITTER_API_SECRET } from 'react-native-dotenv'
+import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import { dispatchGlobalState } from '../state';
 import { StackScreenProps } from '@react-navigation/stack';
 import { NonLoginScreenProps, LoginScreenProps } from '../types';
@@ -72,9 +72,12 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             }
                             doLogin({ data, method: 'POST' })
                                 .then((res) => {
+                                    console.log(res.data)
                                     dispatchGlobalState({ type: 'token', state: res.data.token })
                                     dispatchGlobalState({ type: 'profile', state: res.data })
-                                    navigation.navigate('Home')
+                                    if (res.data.verifies.toLowerCase() == "no") navigation.navigate('Opt')
+                                    if (res.data.verifies.toLowerCase() == "yes") navigation.navigate('Home')
+                                    
                                 })
                         }}
                     >

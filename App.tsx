@@ -20,6 +20,7 @@ import Signup from './screens/Signup';
 import Home from './screens/home/Home';
 import TwitterLoginScreen from './screens/TwitterLoginWebview';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
+import VerifyPhoneScreen from './screens/VerifyPhoneScreen';
 import { useGlobalState, dispatchGlobalState } from './state';
 //@ts-ignore
 import { default as mapping } from './mapping.json';
@@ -30,7 +31,7 @@ const Stack = createStackNavigator();
 
 
 export default () => {
-  const [token] = useGlobalState('token');
+  const [profile] = useGlobalState('profile');
   const [error] = useGlobalState('error');
 
   useEffect(() => {
@@ -68,20 +69,22 @@ export default () => {
     );
   }
 
-
   return (
     <ApplicationProvider mapping={EvaMapping} theme={eva.light} customMapping={j}>
       <NavigationContainer>
         <Stack.Navigator headerMode='none'>
-          {token ? (
+          {(profile && profile.verifies.toLowerCase() == "yes") && (
             <>
               <Stack.Screen name="Home" component={Home} />
             </>
-          ) : (
+          )}
+
+          {(!profile || profile.verifies.toLowerCase() == "no") && (
               <>
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Signup" component={Signup} />
                 <Stack.Screen name="TwitterLogin" component={TwitterLoginScreen} />
+                <Stack.Screen name="Opt" component={VerifyPhoneScreen} />
                 <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
               </>
             )}

@@ -34,7 +34,8 @@ const normalReducer = (state: any, action: { type: string, state?: any }): Initi
         }
         case 'logout': {
             AsyncStorage.removeItem('token')
-            return { ...state, token: null };
+            AsyncStorage.removeItem('profile')
+            return { ...state, token: null, profile: null };
         }
         case 'error': {
             return { ...state, error: action.state };

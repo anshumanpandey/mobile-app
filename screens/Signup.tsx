@@ -102,7 +102,7 @@ export default () => {
                                 .then(res => {
                                     dispatchGlobalState({ type: 'token', state: res.data.token })
                                     dispatchGlobalState({ type: 'profile', state: res.data })
-                                    navigation.navigate('Home', { screen: 'EnableOpt' })
+                                    navigation.navigate('Opt')
                                 })
 
                         }}

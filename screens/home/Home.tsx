@@ -13,7 +13,6 @@ import DamageScreen from './DamageScreen';
 import NoPictureDamageScreen from './NoPictureDamageScreen';
 import ReservationScreen from './ReservationScreen';
 import VerifyPhoneScreen from '../VerifyPhoneScreen';
-import EnableOptScreen from './EnableOptScreen';
 import SelectLocation from './createBookings/index';
 import KeyedReservation from './KeyedReservation';
 import EndRentalScreen from './EndRentalScreen';
@@ -27,8 +26,6 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
             <Drawer.Screen name="MyBookings" component={MyTripsScreens} />
             <Drawer.Screen name="CreateBooking" component={SelectLocation} />
             <Drawer.Screen name="Location" component={LocalitationScreen} />
-            <Drawer.Screen name="EnableOpt" component={EnableOptScreen} />
-            <Drawer.Screen name="VerifyPhone" component={VerifyPhoneScreen} />
             <Drawer.Screen name="Reservation" component={ReservationScreen} />
             <Drawer.Screen name="EditProfile" component={EditProfile} />
             <Drawer.Screen name="Damage" component={DamageScreen} />
