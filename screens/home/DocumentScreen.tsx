@@ -7,6 +7,7 @@ import { Image, Alert } from 'react-native';
 import useAxios from 'axios-hooks'
 import { useFocusEffect } from '@react-navigation/native';
 import LoadingSpinner from '../../partials/LoadingSpinner';
+import BackButton from '../../partials/BackButton';
 
 const DocumentScreen = () => {
   const [filesToUpload, setFilesToUpload] = useState(new Map());
@@ -47,8 +48,16 @@ const DocumentScreen = () => {
   ]
 
   return (
-    <Layout style={{ display: 'flex', flex: 1 }}>
-      <Layout style={{ flex: 1, display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+    <Layout style={{ display: 'flex', flex: 1, padding: '3%' }}>
+      <Layout style={{ paddingBottom: '10%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
+        <Layout style={{ paddingRight: '3%' }}>
+          <BackButton />
+        </Layout>
+        <Text style={{ textAlign: 'left', fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
+          Upload files
+        </Text>
+      </Layout>
+      <Layout style={{ flex: 1, display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
         {fileTypes.map((type) => {
           if (filesToUpload.has(type.id)) {
             return (
@@ -67,13 +76,13 @@ const DocumentScreen = () => {
               }}>
                 {change ? <Image
                   key={filesToUpload.get(type.id).uri.toString()}
-                  style={{ width: 180, height: 250, resizeMode: 'cover' }}
+                  style={{ width: 150, height: 200, resizeMode: 'cover' }}
                   source={{ uri: filesToUpload.get(type.id).uri.toString(), cache: 'reload' }}
-                />: <Image
-                key={filesToUpload.get(type.id).uri.toString()}
-                style={{ width: 180, height: 250, resizeMode: 'cover' }}
-                source={{ uri: filesToUpload.get(type.id).uri.toString(), cache: 'reload' }}
-              />}
+                /> : <Image
+                    key={filesToUpload.get(type.id).uri.toString()}
+                    style={{ width: 150, height: 200, resizeMode: 'cover' }}
+                    source={{ uri: filesToUpload.get(type.id).uri.toString(), cache: 'reload' }}
+                  />}
               </TouchableWithoutFeedback>
             );
           }
@@ -101,12 +110,12 @@ const DocumentScreen = () => {
                     key={`https://www.right-cars.com/mobileapp/docs/${found[type.id]}`}
                     style={{ width: 180, height: 250 }}
                     source={{ uri: `https://www.right-cars.com/mobileapp/docs/${found[type.id]}`, cache: 'reload' }}
-                  />:
-                  <Image
-                    key={`https://www.right-cars.com/mobileapp/docs/${found[type.id]}`}
-                    style={{ width: 180, height: 250 }}
-                    source={{ uri: `https://www.right-cars.com/mobileapp/docs/${found[type.id]}`, cache: 'reload' }}
-                  />}
+                  /> :
+                    <Image
+                      key={`https://www.right-cars.com/mobileapp/docs/${found[type.id]}`}
+                      style={{ width: 180, height: 250 }}
+                      source={{ uri: `https://www.right-cars.com/mobileapp/docs/${found[type.id]}`, cache: 'reload' }}
+                    />}
                 </TouchableWithoutFeedback>
               );
             }
@@ -114,7 +123,7 @@ const DocumentScreen = () => {
 
           return (
             <TouchableWithoutFeedback
-              style={{ width: 170, height: 250, margin: '2%', backgroundColor: type.color, display: "flex", justifyContent: 'center', alignItems: 'center' }}
+              style={{ width: 150, height: '65%', margin: '2%', backgroundColor: type.color, display: "flex", justifyContent: 'center', alignItems: 'center' }}
               onPress={async () => {
                 const res = await DocumentPicker.pick({
                   type: [DocumentPicker.types.images],
@@ -136,7 +145,7 @@ const DocumentScreen = () => {
 
         })}
       </Layout>
-      <Layout style={{ padding: '2%' }}>
+      <Layout style={{ paddingTop: '2%' }}>
         <Button
           accessoryRight={postReq.loading ? LoadingSpinner : undefined}
           disabled={postReq.loading || filesToUpload.size == 0}
