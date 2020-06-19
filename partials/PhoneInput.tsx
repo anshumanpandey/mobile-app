@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import RNPhoneInput from 'react-native-phone-input'
 import ReactNativePhoneInput from 'react-native-phone-input';
 import { TextInput } from 'react-native-gesture-handler';
-import { StyleProp, TextStyle } from 'react-native';
+import { TextStyle, View } from 'react-native';
+import CountryPicker from 'react-native-country-picker-modal'
 
 type Props = {
     mobilecode?: string
@@ -13,6 +14,7 @@ type Props = {
 }
 const PhoneInput: React.FC<Props> = ({ mobilecode, mobileNumber = "", onCodeChange, onNumberChange, styles }) => {
     const [phonenumberToShow, setPhonenumberToShow] = useState<string>(mobileNumber);
+    const [showFlagModal, setShowFlagModal] = useState<boolean>(false);
     const phoneInput = useRef<ReactNativePhoneInput<typeof TextInput> | null>(null);
 
     useEffect(() => {
@@ -30,30 +32,44 @@ const PhoneInput: React.FC<Props> = ({ mobilecode, mobileNumber = "", onCodeChan
     }, [phoneInput.current])
 
     return (
-        <RNPhoneInput
-            style={{ borderWidth: 1, borderRadius: 10, padding: 15, ...styles }}
-            textProps={{
-                placeholder: 'Mobile number',
-                value: `${mobilecode || '+1'} ${phonenumberToShow}`,
-                onChangeText: (c: string) => {
-                    setPhonenumberToShow(p => {
-                        const number = c.toString().replace(mobilecode || '+1', "").replace(" ", "")
-                        const rawNumber = (number || '').replace('+', '')
+        <>
+            <RNPhoneInput
+                style={{ borderWidth: 1, borderRadius: 10, padding: 15, ...styles }}
+                textProps={{
+                    placeholder: 'Mobile number',
+                    value: `${mobilecode || '+1'} ${phonenumberToShow}`,
+                    onChangeText: (c: string) => {
+                        setPhonenumberToShow(p => {
+                            const number = c.toString().replace(mobilecode || '+1', "").replace(" ", "")
+                            const rawNumber = (number || '').replace('+', '')
 
-                        onNumberChange(rawNumber)
-                        return rawNumber
-                    })
-                    return null
-                }
-            }}
-            ref={ref => {
-                phoneInput.current = ref;
-            }}
-            onSelectCountry={(c) => {
-                if (!phoneInput.current?.getCountryCode()) return
-                onCodeChange(`+${phoneInput.current?.getCountryCode()}` || '+1')
-            }}
-        />
+                            onNumberChange(rawNumber)
+                            return rawNumber
+                        })
+                        return null
+                    }
+                }}
+                ref={ref => {
+                    phoneInput.current = ref;
+                }}
+                onSelectCountry={(c) => {
+                    if (!phoneInput.current?.getCountryCode()) return
+                    onCodeChange(`+${phoneInput.current?.getCountryCode()}` || '+1')
+                }}
+                onPressFlag={() => setShowFlagModal(true)}
+            />
+            <CountryPicker
+                countryCode="US"
+                visible={showFlagModal}
+                withFlagButton={false}
+                onSelect={(country) => {
+                    phoneInput.current?.selectCountry(country.cca2.toLowerCase())
+                    setTimeout(() => {
+                        setShowFlagModal(false)
+                    }, 0);
+                }}
+            />
+        </>
     )
 };
 

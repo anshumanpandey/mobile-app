@@ -2,8 +2,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Text, Input, Button } from '@ui-kitten/components';
 import { TouchableWithoutFeedback, ImageProps, SafeAreaView, ScrollView, NativeModules, Alert, TextInput } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { RenderProp } from '@ui-kitten/components/devsupport';
 import useAxios from 'axios-hooks'
 import { Formik } from 'formik';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
