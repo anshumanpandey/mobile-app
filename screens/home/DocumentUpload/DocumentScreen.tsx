@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { Layout, Text, Button } from '@ui-kitten/components';
-import DocumentPicker from 'react-native-document-picker';
+import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import { Image, Alert } from 'react-native';
 import useAxios from 'axios-hooks'
-import { useFocusEffect } from '@react-navigation/native';
-import LoadingSpinner from '../../partials/LoadingSpinner';
-import BackButton from '../../partials/BackButton';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import LoadingSpinner from '../../../partials/LoadingSpinner';
+import BackButton from '../../../partials/BackButton';
+import { FileTypeEnum } from './DocumentState';
 
 const DocumentScreen = () => {
+  const navigation = useNavigation();
   const [filesToUpload, setFilesToUpload] = useState(new Map());
   const [change, triggerChange] = useState(true);
 
@@ -41,10 +43,10 @@ const DocumentScreen = () => {
   }, { manual: true })
 
   const fileTypes = [
-    { tag: "Passport", id: "passport", color: 'gray' },
-    { tag: "Driving License", id: "driving_license", color: 'gray' },
-    { tag: "Utility Bill", id: "utility_bill", color: 'gray' },
-    { tag: "Selfi With Licence", id: "selfi_licence", color: 'gray' },
+    { tag: "Passport", id: FileTypeEnum.passport, color: 'gray' },
+    { tag: "Driving License", id: FileTypeEnum.driving_license, color: 'gray' },
+    { tag: "Utility Bill", id: FileTypeEnum.utility_bill, color: 'gray' },
+    { tag: "Selfi With Licence", id: FileTypeEnum.selfi_licence, color: 'gray' },
   ]
 
   return (
@@ -95,16 +97,7 @@ const DocumentScreen = () => {
             if (found) {
               return (
                 <TouchableWithoutFeedback onPress={async () => {
-                  const res = await DocumentPicker.pick({
-                    type: [DocumentPicker.types.images],
-                  });
-                  triggerChange(p => !p)
-                  setFilesToUpload(p => {
-                    p.set(type.id, {
-                      ...res,
-                    });
-                    return new Map(p);
-                  });
+                  navigation.navigate("DocumentMetadata", { fileType: type.id })
                 }}>
                   {change ? <Image
                     key={`https://www.right-cars.com/mobileapp/docs/${found[type.id]}`}
@@ -125,17 +118,7 @@ const DocumentScreen = () => {
             <TouchableWithoutFeedback
               style={{ width: 150, height: '65%', margin: '2%', backgroundColor: type.color, display: "flex", justifyContent: 'center', alignItems: 'center' }}
               onPress={async () => {
-                const res = await DocumentPicker.pick({
-                  type: [DocumentPicker.types.images],
-                });
-                setFilesToUpload(p => {
-                  p.set(type.id, {
-                    ...res,
-                  });
-                  triggerChange(p => !p)
-
-                  return p;
-                });
+                navigation.navigate("DocumentMetadata", { fileType: type.id })
               }}>
               <Layout style={{ backgroundColor: type.color }}>
                 <Text>{type.tag}</Text>

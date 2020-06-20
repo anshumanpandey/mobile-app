@@ -5,14 +5,14 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { LoginScreenProps } from '../../types';
 import DrawerMenu from './CustomeDrawer';
 import NotificationScreen from './NotificationScreen';
-import DocumentScreen from './DocumentScreen';
+import DocumentScreen from './DocumentUpload/DocumentScreen';
+import DocumentMetadataScreen from './DocumentUpload/DocumentMetadataScreen';
 import MyTripsScreens from './MyTripsScreen';
 import ActivateScreen from './ActivateScreen';
 import LocalitationScreen from './Localitation';
 import DamageScreen from './DamageScreen';
 import NoPictureDamageScreen from './NoPictureDamageScreen';
 import ReservationScreen from './ReservationScreen';
-import VerifyPhoneScreen from '../VerifyPhoneScreen';
 import SelectLocation from './createBookings/index';
 import KeyedReservation from './KeyedReservation';
 import EndRentalScreen from './EndRentalScreen';
@@ -35,6 +35,7 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
             <Drawer.Screen name="Documents" component={DocumentScreen} />
             <Drawer.Screen name="KeyedCarReservation" component={KeyedReservation} />
             <Drawer.Screen name="EndRental" component={EndRentalScreen} />
+            <Drawer.Screen name="DocumentMetadata" component={DocumentMetadataScreen} />
         </Drawer.Navigator>
     )
 };
