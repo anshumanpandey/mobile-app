@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { Layout, Text, Tab, Datepicker, NativeDateService, TabView, Card, Avatar, List, Button } from '@ui-kitten/components';
-import { SafeAreaView, View } from 'react-native';
+import { SafeAreaView, View, AsyncStorage } from 'react-native';
 import moment from 'moment';
 import TripCard, { TripCardProps } from '../../partials/TripCard';
 import MenuButton from '../../partials/MenuButton';
@@ -184,6 +184,22 @@ const DocumentScreen = () => {
       refetch();
     }, [])
   );
+
+  const [locationReq, doSearch] = useAxios({
+    url: `${GRCGDS_BACKEND}`,
+    params: { module_name: 'LOCATION_SEARCH'  }
+  })
+
+  useEffect(() => {
+    if (locationReq.data) {
+      try {
+        const jsonStringData = JSON.stringify(locationReq.data);
+        AsyncStorage.setItem('locationsData', jsonStringData)
+      } catch (error) {
+        console.log('We fail to save location data: ' + error.toString())
+      }
+    }
+  },[locationReq.loading]);
 
   const parsedData = data ? data.map((booking: any) => {
     return {

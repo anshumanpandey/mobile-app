@@ -13,3 +13,11 @@ export type LoginScreenProps = {
     Profile: undefined,
     Documents: undefined,    
 }
+
+export type GrcgdsLocation = {
+    "id": number,
+    "internalcode": string,
+    "locationname": string,
+    "locationvariation": string,
+    "country": string
+}

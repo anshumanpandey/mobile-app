@@ -2,14 +2,11 @@ import React, { useState, useEffect } from 'react';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EvilIcon from 'react-native-vector-icons/EvilIcons';
-import { Layout, List, Text, Spinner } from '@ui-kitten/components';
-import { TextInput, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
+import { Layout, List, Text } from '@ui-kitten/components';
+import { TextInput, TouchableHighlight, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
 import Modal from 'react-native-modal';
-import useAxios from 'axios-hooks'
-import axios, { CancelTokenSource } from 'axios';
-import { GRCGDS_BACKEND } from 'react-native-dotenv'
-
-const CancelToken = axios.CancelToken;
+import FuzzySearch from 'fuzzy-search';
+import { GrcgdsLocation } from '../types';
 
 export type LocationSearchInputProps = {
   pickupLocation?: string
@@ -19,30 +16,25 @@ export type LocationSearchInputProps = {
   onReturnLocationSelected: (location: any) => void
 }
 const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
-  const [isFetching, setIsFetching] = useState<null | CancelTokenSource>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [originLocation, setOriginLocation] = useState<{[k: string]: any} | null>(null);
   const [returnLocation, setReturnLocation] = useState<{[k: string]: any} | null>(null);
   const [searchingFor, setSearchingFor] = useState<"ORIGIN" | "RETURN">("ORIGIN");
-
-  const [{ data, loading, error }, doSearch] = useAxios({
-    url: `${GRCGDS_BACKEND}/LOCATION_SEARCH`,
-  }, { manual: true })
-
-  const onChangeText = (txt: string) => {
-    if (isFetching) isFetching.cancel()
-
-    const source = CancelToken.source()
-    setIsFetching(source);
-    doSearch({ params: { q: txt, module_name: 'LOCATION_SEARCH'  } })
-      .then(() => setIsFetching(null))
-      .catch(() => setIsFetching(null))
-  }
+  const [locations, setLocations] = useState<GrcgdsLocation[]>([]);
+  const [resultLocations, setResultLocations] = useState<GrcgdsLocation[]>([]);
 
   useEffect(() => {
-    if (loading == true) setShowModal(true)
-    if (data) setShowModal(true)
-  }, [loading])
+    AsyncStorage.getItem('locationsData')
+    .then(stringData => {
+      if (!stringData) return
+      try {
+        const jsonData = JSON.parse(stringData)
+        setLocations(jsonData);
+      } catch (error) {
+        console.log('We could not parse the string location data: ' + error.toString());
+      }
+    })
+  }, [])
 
   const Back: React.FC = ({ children }) => {
     return (
@@ -70,38 +62,31 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
         <Layout style={{ display: 'flex', flexDirection: 'column' }}>
           <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <TextInput defaultValue={originLocation ? originLocation.Branchname : undefined} onEndEditing={(e) => {
-              onChangeText(e.nativeEvent.text)
+              const searcher = new FuzzySearch(locations, ['internalcode', 'locationname', "locationvariation"]);
+              const result = searcher.search(e.nativeEvent.text)
+              setResultLocations(result)
+              setShowModal(true)
               setSearchingFor("ORIGIN")
             }} style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 18, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }} placeholder="Enter Origin"></TextInput>
           </Layout>
           <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <TextInput defaultValue={returnLocation ? returnLocation.Branchname : undefined} onEndEditing={(e) => {
-              onChangeText(e.nativeEvent.text)
+              const searcher = new FuzzySearch(locations, ['internalcode', 'locationname', "locationvariation"]);
+              const result = searcher.search(e.nativeEvent.text)
+              setResultLocations(result)
+              setShowModal(true)
               setSearchingFor("RETURN")
             }} style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 18, width: '100%', borderColor: 'white' }} placeholder="Enter Destionation"></TextInput>
           </Layout>
         </Layout>
       </Layout>
       <Modal onBackButtonPress={() => setShowModal(false)} isVisible={showModal} customBackdrop={<Back />} style={{ display: 'flex', justifyContent: 'flex-end', backgroundColor: '#00000000', flex: 1, margin: 0 }} >
-          {loading && (
-            <Layout style={{ flex: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', height: '15%' }}>
-              <Spinner size='small' />
-            </Layout>
-          )}
-          {loading == false && data && data.length == 0 && (
-            <Layout style={{ height: '15%', display: 'flex', justifyContent: 'center' }}>
-              <Text style={{ textAlign: 'center', fontSize: 42 }}>No locations found</Text>
-            </Layout>
-          )}
 
-          {loading == false && data && data.length !== 0 && (
+          {resultLocations.length !== 0 && (
             <List
               keyboardShouldPersistTaps={"handled"}
               style={{ backgroundColor: 'green', display: 'flex', flexGrow:0 }}
-              data={data.reduce((prev,next) => {
-                prev.push(...next.branches)
-                return prev
-              },[])}
+              data={resultLocations}
               renderItem={(data: any) => {
                 let extraStyles = {}
                 if (data.index == 0) {
@@ -123,13 +108,13 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
                   }} >
                     <Layout style={{ display: 'flex', flexDirection: 'row', borderBottomColor: '#E4E9F2', borderBottomWidth: 1, paddingBottom: '5%', paddingTop: '5%' }}>
                       <EvilIcon style={{ color: '#41D5FB' }} name="location" size={32} />
-                      <Text style={{ fontSize: 18 }}>{data.item.Branchname}</Text>
+                      <Text style={{ fontSize: 18 }}>{data.item.locationname}</Text>
                     </Layout>
                   </TouchableHighlight>
                 );
               }}
             />
-          )}
+            )}
 
       </Modal>
     </>
