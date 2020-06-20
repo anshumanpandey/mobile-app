@@ -21,6 +21,7 @@ import Home from './screens/home/Home';
 import TwitterLoginScreen from './screens/TwitterLoginWebview';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import VerifyPhoneScreen from './screens/VerifyPhoneScreen';
+import VerifyEmailScreen from './screens/VerifyEmailScreen';
 import { useGlobalState, dispatchGlobalState } from './state';
 import SplashScreen from 'react-native-splash-screen'
 import { Alert } from 'react-native';
@@ -73,18 +74,19 @@ export default () => {
     <ApplicationProvider mapping={EvaMapping} theme={eva.light} customMapping={j}>
       <NavigationContainer>
         <Stack.Navigator headerMode='none'>
-          {(profile && profile.verifies &&profile.verifies.toLowerCase() == "yes") && (
+          {(profile && profile.vphone == 1 && profile.vemail == 1) && (
             <>
               <Stack.Screen name="Home" component={Home} />
             </>
           )}
 
-          {(!profile || !profile.verifies ||profile.verifies.toLowerCase() == "no") && (
+          {(!profile || profile.vphone == 0 || profile.vemail == 0) && (
               <>
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Signup" component={Signup} />
                 <Stack.Screen name="TwitterLogin" component={TwitterLoginScreen} />
                 <Stack.Screen name="Opt" component={VerifyPhoneScreen} />
+                <Stack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
                 <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
               </>
             )}

@@ -14,7 +14,7 @@ import LoadingSpinner from '../partials/LoadingSpinner';
 import FacebookButton from '../partials/FacebookButton';
 import TwitterButton from '../partials/TwitterButton';
 import ErrorLabel from '../partials/ErrorLabel';
-import { LoginManager, GraphRequest, GraphRequestManager } from "react-native-fbsdk";
+import { LoginManager } from "react-native-fbsdk";
 import { handlePermissionPromt, handleUserData } from '../utils/FacebookAuth';
 import { axiosInstance } from '../utils/AxiosBootstrap';
 
@@ -48,7 +48,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     </Layout>
 
                     <Formik
-                        initialValues={{ clientname: 'leot@test.com', password: 'karlandrick' }}
+                        initialValues={{ clientname: 'dup70380@cuoly.com', password: '123' }}
                         validate={(values) => {
                             const errors: { clientname?: string, password?: string } = {};
                             if (!values.clientname) {
@@ -72,10 +72,12 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             }
                             doLogin({ data, method: 'POST' })
                                 .then((res) => {
+                                    console.log(res.data)
                                     dispatchGlobalState({ type: 'token', state: res.data.token })
                                     dispatchGlobalState({ type: 'profile', state: res.data })
-                                    if (res.data.verifies.toLowerCase() == "no") navigation.navigate('Opt')
-                                    if (res.data.verifies.toLowerCase() == "yes") navigation.navigate('Home')
+                                    if (res.data.vphone == 0) navigation.navigate('Opt')
+                                    if (res.data.vemail == 0) navigation.navigate('VerifyEmail')
+                                    if (res.data.vphone != 0 && res.data.vemail != 0) navigation.navigate('Home')
                                     
                                 })
                         }}

@@ -1,14 +1,16 @@
 import React, { useRef } from 'react';
 import { Layout, Text, Button } from '@ui-kitten/components';
-import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native';
+import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData, Alert } from 'react-native';
 import useAxios from 'axios-hooks'
 import { useGlobalState, dispatchGlobalState } from '../state';
 import { axiosInstance } from '../utils/AxiosBootstrap';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import LoadingSpinner from '../partials/LoadingSpinner';
+import { useNavigation } from '@react-navigation/native';
 
 const DocumentScreen = () => {
   const [profile] = useGlobalState('profile');
+  const navigation = useNavigation();
 
   const [{ data, loading, error }, doVerify] = useAxios({
     url: `${GRCGDS_BACKEND}`,
@@ -72,13 +74,19 @@ const DocumentScreen = () => {
 
         <Button
           onPress={() => {
-            axiosInstance.post(GRCGDS_BACKEND, {
-              "module_name": "VERIFY",
-              "code": parseInt(pin.join(""))
+            doVerify({
+              url: GRCGDS_BACKEND,
+              data: {
+                "module_name": "VERIFY",
+                "code": parseInt(pin.join(""))
+              }
             })
-              .then(() => {
-                dispatchGlobalState({ type: 'profile', state: { ...profile, verifies: "Yes" } })
-              })
+            .then(() => {
+              dispatchGlobalState({ type: 'profile', state: profile })
+              Alert.alert('Code verified');
+              navigation.navigate('Login');
+            })
+              
           }}
           size="giant"
           disabled={loading}
@@ -110,6 +118,14 @@ const DocumentScreen = () => {
               }})
             }}
             style={{ color: '#41d5fb' }}>Resend Code</Text>
+        </Layout>
+
+        <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', backgroundColor: '#00000000', marginTop: '5%' }}>
+          <Text
+            onPress={() => {
+              navigation.navigate('Login')
+            }}
+            style={{ color: '#41d5fb' }}>Verify later</Text>
         </Layout>
 
       </Layout>
