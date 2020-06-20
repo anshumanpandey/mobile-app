@@ -48,7 +48,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     </Layout>
 
                     <Formik
-                        initialValues={{ clientname: 'dup70380@cuoly.com', password: '123' }}
+                        initialValues={{ clientname: 'jbqwhbpiwomhgayrxu@awdrt.com', password: '123' }}
                         validate={(values) => {
                             const errors: { clientname?: string, password?: string } = {};
                             if (!values.clientname) {
@@ -72,12 +72,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             }
                             doLogin({ data, method: 'POST' })
                                 .then((res) => {
-                                    console.log(res.data)
                                     dispatchGlobalState({ type: 'token', state: res.data.token })
                                     dispatchGlobalState({ type: 'profile', state: res.data })
-                                    if (res.data.vphone == 0) navigation.navigate('Opt')
-                                    if (res.data.vemail == 0) navigation.navigate('VerifyEmail')
-                                    if (res.data.vphone != 0 && res.data.vemail != 0) navigation.navigate('Home')
+                                    if (res.data.vphone != 1) navigation.navigate('Opt')
+                                    if (res.data.vemail != 1) navigation.navigate('VerifyEmail')
+                                    if (res.data.vphone == 1 && res.data.vemail == 1) navigation.navigate('Home')
                                     
                                 })
                         }}

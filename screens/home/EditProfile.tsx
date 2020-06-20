@@ -1,7 +1,7 @@
 
-import React, { useState, useRef, useEffect } from 'react'
+import React from 'react'
 import { Layout, Text, Input, Button } from '@ui-kitten/components';
-import { TouchableWithoutFeedback, ImageProps, SafeAreaView, ScrollView, NativeModules, Alert, TextInput } from 'react-native';
+import { SafeAreaView, ScrollView } from 'react-native';
 import useAxios from 'axios-hooks'
 import { Formik } from 'formik';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
@@ -12,7 +12,6 @@ import LoadingSpinner from '../../partials/LoadingSpinner';
 import ErrorLabel from '../../partials/ErrorLabel';
 import PhoneInputComponent from '../../partials/PhoneInput';
 import BackButton from '../../partials/BackButton';
-import { axiosInstance } from '../../utils/AxiosBootstrap';
 
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
@@ -46,6 +45,9 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             lastname: '',
                             mobilecode: '+1',
                             add1: '',
+                            add2: '',
+                            city: '',
+                            country: '',
                             ...profile
                         }}
                         enableReinitialize
@@ -59,11 +61,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         }}
                         onSubmit={values => {
                             doLogin({ data: { ...values, module_name: "EDIT_PROFILE" } })
-                            .then((res) => {
-                                dispatchGlobalState({ type: 'token', state: res.data.token })
-                                dispatchGlobalState({ type: 'profile', state: res.data })
-                            })
-                            .catch(err => console.log(err))
+                                .then((res) => {
+                                    dispatchGlobalState({ type: 'token', state: res.data.token })
+                                    dispatchGlobalState({ type: 'profile', state: res.data })
+                                })
+                                .catch(err => console.log(err))
                         }}
                     >
                         {({ handleChange, setFieldValue, handleSubmit, values, errors, touched }) => {
@@ -125,9 +127,31 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         onChangeText={handleChange('add1')}
                                         style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                         size="large"
-                                        label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Address</Text>}
+                                        label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Address 1</Text>}
                                         placeholder='Enter your address'
                                         caption={errors.add1 && touched.add1 ? () => <ErrorLabel text={errors.add1} /> : undefined}
+                                    />
+
+                                    <Input
+                                        status={errors.add2 && touched.add2 ? 'danger' : undefined}
+                                        value={values.add2}
+                                        onChangeText={handleChange('add2')}
+                                        style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
+                                        size="large"
+                                        label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Address 2</Text>}
+                                        placeholder='Enter your address'
+                                        caption={errors.add2 && touched.add2 ? () => <ErrorLabel text={errors.add2} /> : undefined}
+                                    />
+
+                                    <Input
+                                        status={errors.city && touched.city ? 'danger' : undefined}
+                                        value={values.city}
+                                        onChangeText={handleChange('city')}
+                                        style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
+                                        size="large"
+                                        label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>City</Text>}
+                                        placeholder='Enter your address'
+                                        caption={errors.city && touched.city ? () => <ErrorLabel text={errors.city} /> : undefined}
                                     />
 
                                     <Button

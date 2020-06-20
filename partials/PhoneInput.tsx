@@ -11,9 +11,10 @@ type Props = {
     mobileNumber?: string
     onCodeChange: (number: string) => void
     onNumberChange: (code: string) => void
+    onCountryChanged?: (code: string) => void
     styles?: TextStyle
 }
-const PhoneInput: React.FC<Props> = ({ mobilecode, mobileNumber = "", onCodeChange, onNumberChange, styles }) => {
+const PhoneInput: React.FC<Props> = ({ mobilecode, mobileNumber = "", onCodeChange, onNumberChange, styles, onCountryChanged }) => {
     const [phonenumberToShow, setPhonenumberToShow] = useState<string>(mobileNumber);
     const [showFlagModal, setShowFlagModal] = useState<boolean>(false);
     const phoneInput = useRef<ReactNativePhoneInput<typeof TextInput> | null>(null);
@@ -82,6 +83,7 @@ const PhoneInput: React.FC<Props> = ({ mobilecode, mobileNumber = "", onCodeChan
                 onSelect={(country) => {
                     phoneInput.current?.selectCountry(country.cca2.toLowerCase())
                     setTimeout(() => {
+                        onCountryChanged && onCountryChanged(country.cca2.toLowerCase())
                         setShowFlagModal(false)
                     }, 0);
                 }}

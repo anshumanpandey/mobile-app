@@ -54,12 +54,12 @@ export default () => {
     return (
         <SafeAreaView style={{ flex: 1 }} >
             <ScrollView keyboardShouldPersistTaps={"handled"} >
-                <Layout style={{ flex: 1, paddingLeft: '3%', paddingTop: '3%', paddingBottom: '2%' }}>
-                    <BackButton />
-                </Layout>
                 <Layout style={{ flex: 1, paddingLeft: '3%', paddingRight: '3%', paddingBottom: '3%' }}>
                     <Layout style={{ paddingBottom: '5%' }}>
-                        <Text style={{ textAlign: 'left', fontSize: 25, marginBottom: '3%', fontFamily: 'SF-UI-Display_Bold' }} category='s2'>Create your account</Text>
+                        <Layout style={{ flex: 1, paddingTop: '3%', paddingBottom: '2%', display: 'flex', flexDirection: 'row' }}>
+                            <BackButton />
+                            <Text style={{ textAlign: 'left', paddingLeft: '3%',fontSize: 25, marginBottom: '3%', fontFamily: 'SF-UI-Display_Bold' }} category='s2'>Create your account</Text>
+                        </Layout>
                         <Layout style={{ display: 'flex', flexDirection: 'row' }}>
                             <Text style={{ color: 'black' }}>Already have an account? </Text>
                             <Text onPress={() => navigation.navigate('Login')} style={{ color: '#41d5fb' }}>Log in</Text>
@@ -67,7 +67,16 @@ export default () => {
                     </Layout>
 
                     <Formik
-                        initialValues={{ emailaddress: '', password: '', telecode: '', tele: '', confirmPassword: '', companyName: '', companyVatNumber: '' }}
+                        initialValues={{
+                            emailaddress: '',
+                            password: '',
+                            telecode: '',
+                            tele: '',
+                            countryCode: '',
+                            confirmPassword: '',
+                            companyName: '',
+                            companyVatNumber: ''
+                        }}
                         validate={(values) => {
                             const errors: { emailaddress?: string, password?: string, tele?: string } = {};
                             if (!values.emailaddress) {
@@ -143,6 +152,9 @@ export default () => {
                                             styles={{ borderColor: errors.tele && touched.tele ? '#ffa5bc' : '#e5eaf2', }}
                                             mobilecode={values.telecode}
                                             mobileNumber={phonenumberToShow}
+                                            onCountryChanged={(countryCode) => {
+                                                setFieldValue('countryCode', countryCode)
+                                            }}
                                             onCodeChange={(code) => {
                                                 setFieldValue('telecode', code)
                                             }}

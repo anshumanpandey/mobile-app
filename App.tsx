@@ -80,7 +80,7 @@ export default () => {
             </>
           )}
 
-          {(!profile || profile.vphone == 0 || profile.vemail == 0) && (
+          {(!profile || profile.vphone != 1 || profile.vemail != 1) && (
               <>
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Signup" component={Signup} />
