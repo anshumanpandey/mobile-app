@@ -12,6 +12,7 @@ export type LoginScreenProps = {
     Notifications: undefined,
     Profile: undefined,
     Documents: undefined,    
+    DocumentMetadata: undefined
 }
 
 export type GrcgdsLocation = {

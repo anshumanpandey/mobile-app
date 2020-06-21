@@ -47,7 +47,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             add1: '',
                             add2: '',
                             city: '',
-                            country: '',
+                            countryCode: '',
                             ...profile
                         }}
                         enableReinitialize
@@ -89,6 +89,9 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                             styles={{ borderColor: errors.mobilenumber && touched.mobilenumber ? '#ffa5bc' : '#e5eaf2', }}
                                             mobilecode={values.mobilecode}
                                             mobileNumber={values.mobilenumber}
+                                            onCountryChanged={(countryCode) => {
+                                                setFieldValue('countryCode', countryCode)
+                                            }}
                                             onCodeChange={(code) => {
                                                 setFieldValue('mobilecode', code)
                                             }}

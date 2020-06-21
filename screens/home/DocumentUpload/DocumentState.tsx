@@ -1,12 +1,20 @@
 import { createStore } from 'react-hooks-global-state';
 import { DocumentPickerResponse } from 'react-native-document-picker';
 
-export enum  FileTypeEnum {"passport" , "driving_license" , "utility_bill" , "selfi_licence"}
+export enum  FileTypeEnum {
+    "passport" = "Passport",
+    "driving_license" = "Driving License",
+    "selfi" = "Selfi"
+}
+
+export enum Actions {
+    "RESET" = "RESET"
+}
 type FileEntity = {
     file?: DocumentPickerResponse
     metadata?: {
-        expDate: moment.Moment
-        country: string
+        expDate?: string
+        country?: string
     }
 }
 type InitialState = {
@@ -16,15 +24,27 @@ const initialState: InitialState = {
     dictionary: new Map(),
 };
  
-
 export const { 
     dispatch: dispatchFileState,
     useGlobalState: useDocumentState,
-} = createStore<InitialState, { type: FileTypeEnum, state: FileEntity}>((state, action) => {
+} = createStore<InitialState, { type: FileTypeEnum | Actions, state: FileEntity}>((state, action) => {
     switch (action.type) {
         case FileTypeEnum.passport: {
+            const currentState = state.dictionary.get(action.type)
+            state.dictionary.set(action.type, {...currentState, ...action.state})
+            return { dictionary: new Map(state.dictionary) };
+        }
+        case FileTypeEnum.driving_license: {
+            const currentState = state.dictionary.get(action.type)
+            state.dictionary.set(action.type, {...currentState, ...action.state})
+            return { dictionary: new Map(state.dictionary) };
+        }
+        case FileTypeEnum.selfi: {
             state.dictionary.set(action.type, action.state)
             return { dictionary: new Map(state.dictionary) };
+        }
+        case Actions.RESET: {
+            return { dictionary: new Map() };
         }
         default: return state;
     }

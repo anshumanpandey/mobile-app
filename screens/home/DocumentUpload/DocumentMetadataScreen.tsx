@@ -1,133 +1,212 @@
 import React, { useState } from 'react';
-import { Layout, Text, Input } from '@ui-kitten/components';
+import { Layout, Text, Input, Button, Datepicker, NativeDateService } from '@ui-kitten/components';
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { TouchableWithoutFeedback, ScrollView } from 'react-native-gesture-handler';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
-import { Image, Alert } from 'react-native';
-import useAxios from 'axios-hooks'
-import { useFocusEffect, useRoute } from '@react-navigation/native';
+import { Image, Alert, SafeAreaView } from 'react-native';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
+import { useFocusEffect, useRoute, RouteProp } from '@react-navigation/native';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
 import BackButton from '../../../partials/BackButton';
 import { dispatchFileState, FileTypeEnum, useDocumentState } from './DocumentState';
 import { Formik } from 'formik';
-import ErrorLabel from '../../../partials/ErrorLabel';
+import moment from 'moment';
+import useAxios from 'axios-hooks'
+import { useGlobalState } from '../../../state';
+
+const DATE_FORMAT = 'MMM DD,YYYY'
+const formatDateService = new NativeDateService('en', { format: DATE_FORMAT });
+
+type ParamList = {
+  DocumentMetadata: {
+    fileType: FileTypeEnum,
+    metadata: boolean,
+    year: string,
+    month: string,
+    day: string,
+    image:string
+  }
+}
 
 const DocumentScreen = () => {
-  const route = useRoute()
+  const route = useRoute<RouteProp<ParamList, 'DocumentMetadata'>>();
   const [change, triggerChange] = useState(true);
   const [dictionary] = useDocumentState("dictionary")
+  const [profile] = useGlobalState('profile')
+
+  const [getFilesReq, sendFile] = useAxios({
+    url: `${GRCGDS_BACKEND}`,
+    method: 'POST',
+  })
+
+  const initialValues = {
+    country: '',
+    expDate: moment()
+  }
+  if (route.params.day && route.params.month && route.params.year) {
+    console.log(`${route.params.year}-${route.params.month}-${route.params.day}`)
+    initialValues.expDate = moment(`${route.params.year}-${route.params.month}-${route.params.day}`, 'YYYY-MM-DD')
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        triggerChange(p => !p)
+      }
+    }, [])
+  );
 
   return (
     <Layout style={{ display: 'flex', flex: 1, padding: '3%' }}>
-      <Layout style={{ paddingBottom: '10%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-        <Layout style={{ paddingRight: '3%' }}>
-          <BackButton />
-        </Layout>
-        <Text style={{ textAlign: 'left', fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
-          Upload files
-        </Text>
-      </Layout>
-      <Layout style={{ flex: 1, backgroundColor: 'red' }}>
-        {dictionary.get(route.params.fileType)?.file && (
-          <Formik
-            initialValues={{ expDate: "", country: '' }}
-            onSubmit={values => {
+      <Formik
+        initialValues={initialValues}
+        enableReinitialize={true}
+        onSubmit={values => {
 
-            }}
-          >
-            {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => {
-              <>
-                <TouchableWithoutFeedback onPress={async () => {
-                  triggerChange(p => !p)
-                  const res = await DocumentPicker.pick({
-                    type: [DocumentPicker.types.images],
-                  });
-                }}>
-                  {change ? <Image
-                    style={{ width: '80%', height: "90%", resizeMode: 'contain' }}
-                    source={{ uri: dictionary.get(route.params.fileType)?.file.uri.toString(), cache: 'reload' }}
-                  /> : <Image
-                      style={{ width: '80%', height: "90%", resizeMode: 'contain' }}
-                      source={{ uri: dictionary.get(route.params.fileType)?.file.uri.toString(), cache: 'reload' }}
-                    />}
-                </TouchableWithoutFeedback>
-                <Input
-                  status={errors.expDate && touched.expDate ? 'danger' : undefined}
-                  value={values.expDate}
-                  onChangeText={handleChange('expDate')}
-                  style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
-                  size="large"
-                  label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Email</Text>}
-                  placeholder='Enter your email'
-                  caption={errors.expDate && touched.expDate ? () => <ErrorLabel text={errors.expDate} /> : undefined}
-                />
-                <Input
-                  status={errors.country && touched.country ? 'danger' : undefined}
-                  value={values.country}
-                  onChangeText={handleChange('country')}
-                  style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
-                  size="large"
-                  label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Email</Text>}
-                  placeholder='Enter your email'
-                  caption={errors.country && touched.country ? () => <ErrorLabel text={errors.country} /> : undefined}
+          console.log({
+            file: dictionary.get(route.params.fileType)?.file,
+            fileType: route.params.fileType,
+            expDate: values.expDate
+          });
 
-                />
-              </>
-            }}
-        </Formik>
-        )}
-        {!dictionary.get(route.params.fileType)?.file && (
-          <TouchableWithoutFeedback
-            style={{ width: 150, height: '65%', margin: '2%', backgroundColor: 'gray', display: "flex", justifyContent: 'center', alignItems: 'center' }}
-            onPress={async () => {
-              const res = await DocumentPicker.pick({
-                type: [DocumentPicker.types.images],
-              });
-              dispatchFileState({ type: route.params.fileType, state: { file: res } })
-            }}>
-            <Layout style={{ backgroundColor: 'gray' }}>
-              <Text>{route.params.fileType}</Text>
-            </Layout>
-          </TouchableWithoutFeedback>
-        )}
-      </Layout>
-      <Layout style={{ paddingTop: '2%' }}>
-        {/*<Button
-          accessoryRight={postReq.loading ? LoadingSpinner : undefined}
-          disabled={postReq.loading || filesToUpload.size == 0}
-          onPress={(e) => {
-            const formData = new FormData();
+          const data = new FormData();
 
-            formData.append('module_name', "FILE_UPLOAD");
+          data.append("module_name", "FILE_UPLOAD");
+          data.append("file", dictionary.get(route.params.fileType)?.file);
+          data.append("fileType", route.params.fileType);
+          data.append("expDate", values.expDate.format('YYYY-MM-DD'));
 
-            Array.from(filesToUpload.entries()).forEach(([fileCategory, fileObj], i) => {
-              formData.append(fileCategory, { uri: fileObj.uri, name: fileObj.name, type: 'image/jpeg' });
-            });
+          sendFile({ data })
+            .then(r => {
+              Alert.alert("Success", "Data saved!")
+            })
+            .catch(r => console.log(r))
 
-            doPost({ data: formData })
-              .then(res => {
-                Alert.alert("Images saved");
-                refetch();
-              }).catch(err => console.log(err.response.data))
-          }}
-          size="giant"
-          style={{
-            backgroundColor: postReq.loading == false ? '#41d5fb' : '#e4e9f2',
-            borderColor: postReq.loading == false ? '#41d5fb' : '#e4e9f2',
-            marginBottom: '5%',
-            borderRadius: 10,
-            shadowColor: '#41d5fb',
-            shadowOffset: {
-              width: 0,
-              height: 10,
-            },
-            shadowOpacity: 0.51,
-            shadowRadius: 13.16,
-            elevation: 10,
-          }}>
-          {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: postReq.loading ? "#ACB1C0" : 'white', fontSize: 18 }}>Save</Text>}
-        </Button>
-        */}</Layout>
+        }}
+      >
+        {({ handleChange, setFieldValue, handleSubmit, values, errors, touched }) => {
+          return (
+            <>
+              <ScrollView keyboardShouldPersistTaps={"handled"} style={{ height: '100%', display: 'flex', backgroundColor: 'blue' }}>
+                <Layout style={{ paddingBottom: '10%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
+                  <Layout style={{ paddingRight: '3%' }}>
+                    <BackButton />
+                  </Layout>
+                  <Text style={{ textAlign: 'left', fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
+                    Upload files
+                  </Text>
+                </Layout>
+                <Layout style={{ height: '100%', paddingBottom: '120%', alignItems: 'center' }}>
+                  {dictionary.get(route.params.fileType)?.file && (
+                    <>
+                      <TouchableWithoutFeedback style={{ display: 'flex', alignItems: 'center' }} onPress={async () => {
+                        const res = await DocumentPicker.pick({
+                          type: [DocumentPicker.types.images],
+                        });
+                        dispatchFileState({ type: route.params.fileType, state: { file: res } })
+                        triggerChange(p => !p)
+                      }}>
+                        {change ? <Image
+                          key={Math.random().toString()}
+                          style={{ width: 250, height: 250, resizeMode: 'contain' }}
+                          source={{ uri: dictionary.get(route.params.fileType)?.file.uri, cache: 'reload' }}
+                        /> : <Image
+                            key={Math.random().toString()}
+                            style={{ width: 250, height: 250, resizeMode: 'contain' }}
+                            source={{ uri: dictionary.get(route.params.fileType)?.file.uri, cache: 'reload' }}
+                        />}
+                      </TouchableWithoutFeedback>
+                      <Text style={{ textAlign: 'center', fontSize: 24, fontFamily: 'SF-UI-Display' }} category='s2'>
+                        {route.params.fileType}
+                      </Text>
+                      {(route.params.metadata && dictionary.get(route.params.fileType)?.file) && (
+                        <Datepicker
+                          style={{ paddingLeft: '5%', paddingRight: '5%', width: '100%' }}
+                          controlStyle={{ backgroundColor: 'white', borderRadius: 10, padding: '4%' }}
+                          placeholder='Pick Date'
+                          date={values.expDate?.toDate()}
+                          title={(d) => moment(d)?.format(DATE_FORMAT)}
+                          dateService={formatDateService}
+                          onSelect={nextDate => setFieldValue("expDate", moment(nextDate))}
+                          accessoryLeft={() => <EntypoIcon style={{ color: 'black' }} name="calendar" size={22} />}
+                        />
+                      )}
+                    </>
+                  )}
+
+                  {(route.params.image) && (!dictionary.get(route.params.fileType)?.file) &&(
+                    <>
+                      <TouchableWithoutFeedback onPress={async () => {
+                        const res = await DocumentPicker.pick({
+                          type: [DocumentPicker.types.images],
+                        });
+                        dispatchFileState({ type: route.params.fileType, state: { file: res } })
+                      }}>
+                        <Image
+                          key={`https://www.right-cars.com/mobileapp/docs/${profile?.passimage}`}
+                          style={{ width: 180, height: 250 }}
+                          source={{ uri: `https://www.right-cars.com/mobileapp/docs/${profile?.passimage}`, cache: 'reload' }}
+                        />
+                      </TouchableWithoutFeedback>
+                      <Text style={{ textAlign: 'center', fontSize: 24, fontFamily: 'SF-UI-Display' }} category='s2'>
+                        {route.params.fileType}
+                      </Text>
+                      <Datepicker
+                        style={{ paddingLeft: '5%', paddingRight: '5%', width: '100%' }}
+                        controlStyle={{ backgroundColor: 'white', borderRadius: 10, padding: '4%' }}
+                        placeholder='Pick Date'
+                        date={values.expDate?.toDate()}
+                        title={(d) => moment(d)?.format(DATE_FORMAT)}
+                        dateService={formatDateService}
+                        onSelect={nextDate => setFieldValue("expDate", moment(nextDate))}
+                        accessoryLeft={() => <EntypoIcon style={{ color: 'black' }} name="calendar" size={22} />}
+                      />
+                    </>
+                  )}
+                  {!dictionary.get(route.params.fileType)?.file && !profile?.passimage && (
+                    <TouchableWithoutFeedback
+                      style={{ width: '100%', height: '100%', margin: '2%', backgroundColor: 'gray', display: "flex", justifyContent: 'center', alignItems: 'center' }}
+                      onPress={async () => {
+                        const res = await DocumentPicker.pick({
+                          type: [DocumentPicker.types.images],
+                        });
+                        dispatchFileState({ type: route.params.fileType, state: { file: res } })
+                      }}>
+                      <Layout style={{ backgroundColor: 'gray' }}>
+                        <Text>{route.params.fileType}</Text>
+                      </Layout>
+                    </TouchableWithoutFeedback>
+                  )}
+                </Layout>
+              </ScrollView>
+
+              <Layout style={{ paddingTop: '2%' }}>
+                <Button
+                disabled={!dictionary.get(route.params.fileType)?.file && values.expDate.unix() == initialValues.expDate.unix()}
+                  onPress={(e) => {
+                    handleSubmit();
+                  }}
+                  size="giant"
+                  style={{
+                    backgroundColor: values.expDate.unix() != initialValues.expDate.unix() || dictionary.get(route.params.fileType)?.file ? '#41d5fb' : '#e4e9f2',
+                    borderColor: values.expDate.unix() != initialValues.expDate.unix() || dictionary.get(route.params.fileType)?.file ? '#41d5fb' : '#e4e9f2',
+                    borderRadius: 10,
+                    shadowColor: '#41d5fb',
+                    shadowOffset: {
+                      width: 0,
+                      height: 10,
+                    },
+                    shadowOpacity: 0.51,
+                    shadowRadius: 13.16,
+                    elevation: 10,
+                  }}>
+                  {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Save</Text>}
+                </Button>
+              </Layout>
+            </>
+          )
+        }}
+      </Formik>
     </Layout>
   )
 };

@@ -8,12 +8,14 @@ import useAxios from 'axios-hooks'
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
 import BackButton from '../../../partials/BackButton';
-import { FileTypeEnum } from './DocumentState';
+import { FileTypeEnum, dispatchFileState, useDocumentState, Actions } from './DocumentState';
+import { useGlobalState } from '../../../state';
 
 const DocumentScreen = () => {
   const navigation = useNavigation();
-  const [filesToUpload, setFilesToUpload] = useState(new Map());
   const [change, triggerChange] = useState(true);
+  const [dictionary] = useDocumentState("dictionary")
+  const [profile] = useGlobalState('profile')
 
   const [getFilesReq, refetch] = useAxios({
     url: `${GRCGDS_BACKEND}`,
@@ -24,12 +26,9 @@ const DocumentScreen = () => {
   useFocusEffect(
     React.useCallback(() => {
       refetch();
-      return () => {
-        setFilesToUpload(p => {
-          p.clear();
-          return p;
-        });
-      }
+      /*return () => {
+        dispatchFileState({ type: Actions.RESET, state: {} });
+      }*/
     }, [])
   );
 
@@ -43,10 +42,9 @@ const DocumentScreen = () => {
   }, { manual: true })
 
   const fileTypes = [
-    { tag: "Passport", id: FileTypeEnum.passport, color: 'gray' },
-    { tag: "Driving License", id: FileTypeEnum.driving_license, color: 'gray' },
-    { tag: "Utility Bill", id: FileTypeEnum.utility_bill, color: 'gray' },
-    { tag: "Selfi With Licence", id: FileTypeEnum.selfi_licence, color: 'gray' },
+    { tag: "Passport", id: FileTypeEnum.passport, color: 'gray', metadata: true },
+    { tag: "Driving License", id: FileTypeEnum.driving_license, color: 'gray', metadata: true },
+    { tag: "Selfi", id: FileTypeEnum.selfi, color: 'gray' },
   ]
 
   return (
@@ -61,64 +59,72 @@ const DocumentScreen = () => {
       </Layout>
       <Layout style={{ flex: 1, display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
         {fileTypes.map((type) => {
-          if (filesToUpload.has(type.id)) {
+          if (dictionary.get(type.id)?.file) {
             return (
               <TouchableWithoutFeedback onPress={async () => {
-                triggerChange(p => !p)
-                const res = await DocumentPicker.pick({
-                  type: [DocumentPicker.types.images],
-                });
-                setFilesToUpload(p => {
-                  p.set(type.id, {
-                    ...res,
-                  });
-
-                  return new Map(p);
-                });
+                navigation.navigate("DocumentMetadata", { fileType: type.id, metadata: type.metadata })
               }}>
                 {change ? <Image
-                  key={filesToUpload.get(type.id).uri.toString()}
+                  key={dictionary.get(type.id)?.file.uri.toString()}
                   style={{ width: 150, height: 200, resizeMode: 'cover' }}
-                  source={{ uri: filesToUpload.get(type.id).uri.toString(), cache: 'reload' }}
+                  source={{ uri: dictionary.get(type.id)?.file.uri.toString(), cache: 'reload' }}
                 /> : <Image
-                    key={filesToUpload.get(type.id).uri.toString()}
+                    key={dictionary.get(type.id)?.file.uri.toString()}
                     style={{ width: 150, height: 200, resizeMode: 'cover' }}
-                    source={{ uri: filesToUpload.get(type.id).uri.toString(), cache: 'reload' }}
+                    source={{ uri: dictionary.get(type.id)?.file.uri.toString(), cache: 'reload' }}
                   />}
               </TouchableWithoutFeedback>
             );
           }
 
-          if (getFilesReq.data) {
-            const found = getFilesReq.data.find((fileFromServer: { [k: string]: string }) => {
-              return fileFromServer[type.id]
-            })
-
-            if (found) {
-              return (
-                <TouchableWithoutFeedback onPress={async () => {
-                  navigation.navigate("DocumentMetadata", { fileType: type.id })
-                }}>
-                  {change ? <Image
-                    key={`https://www.right-cars.com/mobileapp/docs/${found[type.id]}`}
+          if (type.id == FileTypeEnum.passport && profile?.passimage) {
+            return (
+              <TouchableWithoutFeedback onPress={async () => {
+                navigation.navigate("DocumentMetadata", {
+                  fileType: type.id,
+                  year: profile?.passday,
+                  month: profile?.passmonth,
+                  day: profile?.passday,
+                  image: profile?.passimage
+                })
+              }}>
+                
+                <Image
+                    key={`https://www.right-cars.com/mobileapp/docs/${profile?.passimage}`}
                     style={{ width: 180, height: 250 }}
-                    source={{ uri: `https://www.right-cars.com/mobileapp/docs/${found[type.id]}`, cache: 'reload' }}
-                  /> :
-                    <Image
-                      key={`https://www.right-cars.com/mobileapp/docs/${found[type.id]}`}
-                      style={{ width: 180, height: 250 }}
-                      source={{ uri: `https://www.right-cars.com/mobileapp/docs/${found[type.id]}`, cache: 'reload' }}
-                    />}
-                </TouchableWithoutFeedback>
-              );
-            }
+                    source={{ uri: `https://www.right-cars.com/mobileapp/docs/${profile?.passimage}`, cache: 'reload' }}
+                  />
+              </TouchableWithoutFeedback>
+            );
           }
+
+          if (type.id == FileTypeEnum.driving_license && profile?.drimage) {
+            return (
+              <TouchableWithoutFeedback onPress={async () => {
+                navigation.navigate("DocumentMetadata", {
+                  fileType: type.id,
+                  year: profile?.dryear,
+                  month: profile?.drmonth,
+                  day: profile?.drday,
+                  image: profile?.drimage
+                })
+              }}>
+                
+                <Image
+                    key={`https://www.right-cars.com/mobileapp/docs/${profile?.passimage}`}
+                    style={{ width: 180, height: 250 }}
+                    source={{ uri: `https://www.right-cars.com/mobileapp/docs/${profile?.passimage}`, cache: 'reload' }}
+                  />
+              </TouchableWithoutFeedback>
+            );
+          }
+
 
           return (
             <TouchableWithoutFeedback
               style={{ width: 150, height: '65%', margin: '2%', backgroundColor: type.color, display: "flex", justifyContent: 'center', alignItems: 'center' }}
               onPress={async () => {
-                navigation.navigate("DocumentMetadata", { fileType: type.id })
+                navigation.navigate("DocumentMetadata", { fileType: type.id, metadata: type.metadata })
               }}>
               <Layout style={{ backgroundColor: type.color }}>
                 <Text>{type.tag}</Text>
@@ -127,43 +133,6 @@ const DocumentScreen = () => {
           );
 
         })}
-      </Layout>
-      <Layout style={{ paddingTop: '2%' }}>
-        <Button
-          accessoryRight={postReq.loading ? LoadingSpinner : undefined}
-          disabled={postReq.loading || filesToUpload.size == 0}
-          onPress={(e) => {
-            const formData = new FormData();
-
-            formData.append('module_name', "FILE_UPLOAD");
-
-            Array.from(filesToUpload.entries()).forEach(([fileCategory, fileObj], i) => {
-              formData.append(fileCategory, { uri: fileObj.uri, name: fileObj.name, type: 'image/jpeg' });
-            });
-
-            doPost({ data: formData })
-              .then(res => {
-                Alert.alert("Images saved");
-                refetch();
-              }).catch(err => console.log(err.response.data))
-          }}
-          size="giant"
-          style={{
-            backgroundColor: postReq.loading == false ? '#41d5fb' : '#e4e9f2',
-            borderColor: postReq.loading == false ? '#41d5fb' : '#e4e9f2',
-            marginBottom: '5%',
-            borderRadius: 10,
-            shadowColor: '#41d5fb',
-            shadowOffset: {
-              width: 0,
-              height: 10,
-            },
-            shadowOpacity: 0.51,
-            shadowRadius: 13.16,
-            elevation: 10,
-          }}>
-          {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: postReq.loading ? "#ACB1C0" : 'white', fontSize: 18 }}>Save</Text>}
-        </Button>
       </Layout>
     </Layout>
   )
