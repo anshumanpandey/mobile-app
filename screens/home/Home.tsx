@@ -26,13 +26,16 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
     const [profile] = useGlobalState('profile')
 
     const screens = [
-        <Drawer.Screen name="EditProfile" component={EditProfile} />,
         <Drawer.Screen name="Documents" component={DocumentScreen} />,
         <Drawer.Screen name="DocumentMetadata" component={DocumentMetadataScreen} />,
     ]
 
-    const hasFullProfile = userHasFullProfile(profile || {})
     const hasAllFiles = userHasAllFiles(profile || {})
+
+    const hasFullProfile = userHasFullProfile(profile || {})
+    if (!hasFullProfile) screens.unshift(<Drawer.Screen name="EditProfile" component={EditProfile} />);
+    if (hasFullProfile) screens.push(<Drawer.Screen name="EditProfile" component={EditProfile} />);
+
 
     if (hasFullProfile && hasAllFiles) {
         screens.push(

@@ -29,9 +29,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                 <Layout style={{ flex: 1, padding: '3%' }}>
 
                     <Layout style={{ paddingBottom: '10%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-                        <Layout style={{ paddingRight: '3%' }}>
-                            <BackButton />
-                        </Layout>
+                        {navigation.canGoBack() && (
+                            <Layout style={{ paddingRight: '3%' }}>
+                                <BackButton />
+                            </Layout>
+                        )}
                         <Text style={{ textAlign: 'left', fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
                             Edit your profile
                         </Text>
@@ -47,7 +49,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             add1: '',
                             add2: '',
                             city: '',
-                            countryCode: '',
+                            countryCode: profile?.country ? profile.country : '',
                             ...profile
                         }}
                         enableReinitialize
@@ -60,6 +62,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
                         }}
                         onSubmit={values => {
+                            console.log(values)
                             doLogin({ data: { ...values, module_name: "EDIT_PROFILE" } })
                                 .then((res) => {
                                     dispatchGlobalState({ type: 'token', state: res.data.token })

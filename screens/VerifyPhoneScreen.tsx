@@ -83,7 +83,7 @@ const DocumentScreen = () => {
             })
             .then(() => {
               dispatchGlobalState({ type: 'profile', state: profile })
-              Alert.alert('Code verified');
+              Alert.alert('Success', 'Code verified');
               navigation.navigate('Login');
             })
               

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     StyleSheet,
     TouchableOpacity,
@@ -12,21 +12,39 @@ import { Layout, Avatar, Text, Divider, Button, Modal, Card } from "@ui-kitten/c
 import { LoginScreenProps } from "../../types";
 import { StackScreenProps } from "@react-navigation/stack";
 import { useGlobalState, dispatchGlobalState } from "../../state";
+import userHasFullProfile from "../../utils/userHasFullProfile";
+import userHasAllFiles from "../../utils/userHasAllFiles";
+import { useIsDrawerOpen } from "@react-navigation/drawer";
 
 const menuData = [
-    { name: "My Trips", screenName: "MyBookings", key: 5 },
-    { name: "Document", screenName: "Documents", key: 4 },
+    { name: "Document", screenName: "Documents", key: 'xvs' },
 ];
 
 const DrawerMenu = ({ navigation }: { navigation: any }) => {
     const [profile] = useGlobalState('profile')
+
+    const hasFullProfile = userHasFullProfile(profile || {})
+    const hasAllFiles = userHasAllFiles(profile || {})
+
+    const wasDrawerOpen = useIsDrawerOpen();
+
+    useEffect(() => {
+        return () => {
+            if (wasDrawerOpen) {
+                if (hasFullProfile && hasAllFiles) {
+                    menuData.push({ name: "My Trips", screenName: "MyBookings", key: 'asd' },);
+                }
+            }
+        }
+    }, [wasDrawerOpen])
+
 
     return (
         <>
             <View style={styles.container}>
                 <Layout style={{ width: '75%', display: 'flex', flexDirection: 'row', paddingBottom: '20%' }}>
                     <Image
-                        style={{ width: 80, height: 80, resizeMode:'contain' }}
+                        style={{ width: 80, height: 80, resizeMode: 'contain' }}
                         source={require('../../image/rightcars.png')}
                     />
                     <Layout style={{ marginLeft: '10%' }}>
@@ -55,17 +73,17 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
                     "Do you want to logout?",
                     "You will be send the Sign in",
                     [
-                      {
-                        text: "No",
-                        onPress: () => console.log("Cancel Pressed"),
-                        style: "cancel"
-                      },
-                      { text: "Yes", onPress: () => dispatchGlobalState({ type: 'logout' }) }
+                        {
+                            text: "No",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                        },
+                        { text: "Yes", onPress: () => dispatchGlobalState({ type: 'logout' }) }
                     ],
                     { cancelable: false }
-                  );
+                );
             }} size="giant" style={{ borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', marginRight: '10%', marginLeft: '10%', marginBottom: '5%' }}>
-                {() => <Text style={{ color: 'white'}}>Logout</Text>}
+                {() => <Text style={{ color: 'white' }}>Logout</Text>}
             </Button>
         </>
     );

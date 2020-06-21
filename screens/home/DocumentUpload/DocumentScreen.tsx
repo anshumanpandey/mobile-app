@@ -32,29 +32,20 @@ const DocumentScreen = () => {
     }, [])
   );
 
-  const [postReq, doPost] = useAxios({
-    url: `${GRCGDS_BACKEND}`,
-    method: 'POST',
-    headers: {
-      "Content-Type": "multipart/form-data",
-      'Accept': 'application/json'
-    }
-  }, { manual: true })
-
   const fileTypes = [
     { tag: "Passport", id: FileTypeEnum.passport, color: 'gray', metadata: true },
     { tag: "Driving License", id: FileTypeEnum.driving_license, color: 'gray', metadata: true },
     { tag: "Selfi", id: FileTypeEnum.selfi, color: 'gray' },
   ]
 
-  console.log(`https://www.right-cars.com/uploads/pass/${profile?.passimage}`)
-
   return (
     <Layout style={{ display: 'flex', flex: 1, padding: '3%' }}>
       <Layout style={{ paddingBottom: '10%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-        <Layout style={{ paddingRight: '3%' }}>
-          <BackButton />
-        </Layout>
+        {navigation.canGoBack() && (
+          <Layout style={{ paddingRight: '3%' }}>
+            <BackButton />
+          </Layout>
+        )}
         <Text style={{ textAlign: 'left', fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
           Upload files
         </Text>
@@ -91,12 +82,12 @@ const DocumentScreen = () => {
                   fullUrl: `https://www.right-cars.com/uploads/pass/${profile?.passimage}`
                 })
               }}>
-                
+
                 <Image
-                    key={`https://www.right-cars.com/uploads/pass/${profile?.passimage}`}
-                    style={{ width: 180, height: 250 }}
-                    source={{ uri: `https://www.right-cars.com/uploads/pass/${profile?.passimage}`, cache: 'reload' }}
-                  />
+                  key={`https://www.right-cars.com/uploads/pass/${profile?.passimage}`}
+                  style={{ width: 180, height: 250 }}
+                  source={{ uri: `https://www.right-cars.com/uploads/pass/${profile?.passimage}`, cache: 'reload' }}
+                />
               </TouchableWithoutFeedback>
             );
           }
@@ -113,12 +104,12 @@ const DocumentScreen = () => {
                   fullUrl: `https://www.right-cars.com/uploads/drlic/${profile?.drimage}`
                 })
               }}>
-                
+
                 <Image
-                    key={`https://www.right-cars.com/uploads/drlic/${profile?.drimage}`}
-                    style={{ width: 180, height: 250 }}
-                    source={{ uri: `https://www.right-cars.com/uploads/drlic/${profile?.drimage}`, cache: 'reload' }}
-                  />
+                  key={`https://www.right-cars.com/uploads/drlic/${profile?.drimage}`}
+                  style={{ width: 180, height: 250 }}
+                  source={{ uri: `https://www.right-cars.com/uploads/drlic/${profile?.drimage}`, cache: 'reload' }}
+                />
               </TouchableWithoutFeedback>
             );
           }
@@ -132,12 +123,12 @@ const DocumentScreen = () => {
                   fullUrl: `https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}`
                 })
               }}>
-                
+
                 <Image
-                    key={`https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}`}
-                    style={{ width: 180, height: 250 }}
-                    source={{ uri: `https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}`, cache: 'reload' }}
-                  />
+                  key={`https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}`}
+                  style={{ width: 180, height: 250 }}
+                  source={{ uri: `https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}`, cache: 'reload' }}
+                />
               </TouchableWithoutFeedback>
             );
           }

@@ -36,6 +36,8 @@ export default () => {
   useEffect(() => {
     SplashScreen.hide()
     if (profile && !profile.verifies) {
+      // TODO: we cannot pass null since async storage cannot handle it, we should delete this block since we don't need this check anymore
+      // as long as users has the most current version on their phone with not old data stored
       dispatchGlobalState({ type: 'token', state: null })
       dispatchGlobalState({ type: 'profile', state: null })
     }

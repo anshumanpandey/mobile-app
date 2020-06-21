@@ -48,7 +48,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     </Layout>
 
                     <Formik
-                        initialValues={{ clientname: 'jbqwhbpiwomhgayrxu@awdrt.com', password: '123' }}
+                        initialValues={{ clientname: 'tsb83412@bcaoo.com', password: '123' }}
                         validate={(values) => {
                             const errors: { clientname?: string, password?: string } = {};
                             if (!values.clientname) {

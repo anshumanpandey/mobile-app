@@ -12,7 +12,7 @@ import { dispatchFileState, FileTypeEnum, useDocumentState } from './DocumentSta
 import { Formik } from 'formik';
 import moment from 'moment';
 import useAxios from 'axios-hooks'
-import { useGlobalState } from '../../../state';
+import { useGlobalState, dispatchGlobalState } from '../../../state';
 
 const DATE_FORMAT = 'MMM DD,YYYY'
 const formatDateService = new NativeDateService('en', { format: DATE_FORMAT });
@@ -63,12 +63,6 @@ const DocumentScreen = () => {
         enableReinitialize={true}
         onSubmit={values => {
 
-          console.log({
-            file: dictionary.get(route.params.fileType)?.file,
-            fileType: route.params.fileType,
-            expDate: values.expDate
-          });
-
           const data = new FormData();
 
           data.append("module_name", "FILE_UPLOAD");
@@ -78,6 +72,8 @@ const DocumentScreen = () => {
 
           sendFile({ data })
             .then(r => {
+              console.log(r.data)
+              dispatchGlobalState({ type: 'profile', state: r.data })
               Alert.alert("Success", "Data saved!")
             })
             .catch(r => console.log(r))
@@ -85,6 +81,10 @@ const DocumentScreen = () => {
         }}
       >
         {({ handleChange, setFieldValue, handleSubmit, values, errors, touched }) => {
+          const buttonIsDisabled = () => {
+            return !dictionary.get(route.params.fileType)?.file || values.expDate.unix() != initialValues.expDate.unix() || getFilesReq.loading
+          }
+
           return (
             <>
               <ScrollView keyboardShouldPersistTaps={"handled"} style={{ height: '100%', display: 'flex', backgroundColor: 'blue' }}>
@@ -96,7 +96,7 @@ const DocumentScreen = () => {
                     Upload files
                   </Text>
                 </Layout>
-                <Layout style={{ height: '100%', paddingBottom: '120%', alignItems: 'center' }}>
+                <Layout style={{ height: '100%', paddingBottom: '120%', alignItems: 'center'}}>
                   {dictionary.get(route.params.fileType)?.file && (
                     <>
                       <TouchableWithoutFeedback style={{ display: 'flex', alignItems: 'center' }} onPress={async () => {
@@ -163,9 +163,9 @@ const DocumentScreen = () => {
                       />
                     </>
                   )}
-                  {!dictionary.get(route.params.fileType)?.file && !profile?.passimage && (
+                  {!dictionary.get(route.params.fileType)?.file && !route.params.image && (
                     <TouchableWithoutFeedback
-                      style={{ width: '100%', height: '100%', margin: '2%', backgroundColor: 'gray', display: "flex", justifyContent: 'center', alignItems: 'center' }}
+                      style={{ width: '200%', height: '200%', padding: '2%', backgroundColor: 'gray', display: "flex", justifyContent: 'center', alignItems: 'center' }}
                       onPress={async () => {
                         const res = await DocumentPicker.pick({
                           type: [DocumentPicker.types.images],
@@ -173,7 +173,7 @@ const DocumentScreen = () => {
                         dispatchFileState({ type: route.params.fileType, state: { file: res } })
                       }}>
                       <Layout style={{ backgroundColor: 'gray' }}>
-                        <Text>{route.params.fileType}</Text>
+                        <Text>Press to upload {route.params.fileType}</Text>
                       </Layout>
                     </TouchableWithoutFeedback>
                   )}
@@ -182,14 +182,14 @@ const DocumentScreen = () => {
 
               <Layout style={{ paddingTop: '2%' }}>
                 <Button
-                disabled={!dictionary.get(route.params.fileType)?.file && values.expDate.unix() == initialValues.expDate.unix()}
+                disabled={buttonIsDisabled()}
                   onPress={(e) => {
                     handleSubmit();
                   }}
                   size="giant"
                   style={{
-                    backgroundColor: values.expDate.unix() != initialValues.expDate.unix() || dictionary.get(route.params.fileType)?.file ? '#41d5fb' : '#e4e9f2',
-                    borderColor: values.expDate.unix() != initialValues.expDate.unix() || dictionary.get(route.params.fileType)?.file ? '#41d5fb' : '#e4e9f2',
+                    backgroundColor: buttonIsDisabled() ? '#e4e9f2': '#41d5fb',
+                    borderColor: buttonIsDisabled() ? '#e4e9f2' : '#41d5fb',
                     borderRadius: 10,
                     shadowColor: '#41d5fb',
                     shadowOffset: {
