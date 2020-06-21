@@ -47,6 +47,8 @@ const DocumentScreen = () => {
     { tag: "Selfi", id: FileTypeEnum.selfi, color: 'gray' },
   ]
 
+  console.log(`https://www.right-cars.com/uploads/pass/${profile?.passimage}`)
+
   return (
     <Layout style={{ display: 'flex', flex: 1, padding: '3%' }}>
       <Layout style={{ paddingBottom: '10%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
@@ -85,14 +87,15 @@ const DocumentScreen = () => {
                   year: profile?.passday,
                   month: profile?.passmonth,
                   day: profile?.passday,
-                  image: profile?.passimage
+                  image: profile?.passimage,
+                  fullUrl: `https://www.right-cars.com/uploads/pass/${profile?.passimage}`
                 })
               }}>
                 
                 <Image
-                    key={`https://www.right-cars.com/mobileapp/docs/${profile?.passimage}`}
+                    key={`https://www.right-cars.com/uploads/pass/${profile?.passimage}`}
                     style={{ width: 180, height: 250 }}
-                    source={{ uri: `https://www.right-cars.com/mobileapp/docs/${profile?.passimage}`, cache: 'reload' }}
+                    source={{ uri: `https://www.right-cars.com/uploads/pass/${profile?.passimage}`, cache: 'reload' }}
                   />
               </TouchableWithoutFeedback>
             );
@@ -106,14 +109,34 @@ const DocumentScreen = () => {
                   year: profile?.dryear,
                   month: profile?.drmonth,
                   day: profile?.drday,
-                  image: profile?.drimage
+                  image: profile?.drimage,
+                  fullUrl: `https://www.right-cars.com/uploads/drlic/${profile?.drimage}`
                 })
               }}>
                 
                 <Image
-                    key={`https://www.right-cars.com/mobileapp/docs/${profile?.passimage}`}
+                    key={`https://www.right-cars.com/uploads/drlic/${profile?.drimage}`}
                     style={{ width: 180, height: 250 }}
-                    source={{ uri: `https://www.right-cars.com/mobileapp/docs/${profile?.passimage}`, cache: 'reload' }}
+                    source={{ uri: `https://www.right-cars.com/uploads/drlic/${profile?.drimage}`, cache: 'reload' }}
+                  />
+              </TouchableWithoutFeedback>
+            );
+          }
+
+          if (type.id == FileTypeEnum.selfi && profile?.selfiurl) {
+            return (
+              <TouchableWithoutFeedback onPress={async () => {
+                navigation.navigate("DocumentMetadata", {
+                  fileType: type.id,
+                  image: profile?.selfiurl,
+                  fullUrl: `https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}`
+                })
+              }}>
+                
+                <Image
+                    key={`https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}`}
+                    style={{ width: 180, height: 250 }}
+                    source={{ uri: `https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}`, cache: 'reload' }}
                   />
               </TouchableWithoutFeedback>
             );
