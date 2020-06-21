@@ -12,6 +12,8 @@ import LoadingSpinner from '../../partials/LoadingSpinner';
 import ErrorLabel from '../../partials/ErrorLabel';
 import PhoneInputComponent from '../../partials/PhoneInput';
 import BackButton from '../../partials/BackButton';
+import userHasFullProfile from '../../utils/userHasFullProfile';
+import userHasAllFiles from '../../utils/userHasAllFiles';
 
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
@@ -21,6 +23,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     }, { manual: true })
 
     const [profile] = useGlobalState('profile')
+    const hasFullProfile = userHasFullProfile(profile || {})
+    const hasAllFiles = userHasAllFiles(profile || {})
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -122,8 +126,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         onChangeText={handleChange('lastname')}
                                         style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                         size="large"
-                                        label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Second Name</Text>}
-                                        placeholder='Enter your second name'
+                                        label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Last Name</Text>}
+                                        placeholder='Enter your last name'
                                         caption={errors.lastname && touched.lastname ? () => <ErrorLabel text={errors.lastname} /> : undefined}
                                     />
 
@@ -163,7 +167,13 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     <Button
                                         accessoryRight={loading ? LoadingSpinner : undefined}
                                         disabled={loading}
-                                        onPress={(e) => { handleSubmit() }}
+                                        onPress={(e) => { 
+                                            if (hasFullProfile && !hasAllFiles){
+                                                navigation.navigate("Documents");
+                                            } else {
+                                                handleSubmit()
+                                            }
+                                        }}
                                         size="giant"
                                         style={{
                                             backgroundColor: loading == false ? '#41d5fb' : '#e4e9f2',
@@ -179,7 +189,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                             shadowRadius: 13.16,
                                             elevation: 10,
                                         }}>
-                                        {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: loading ? "#ACB1C0" : 'white', fontSize: 18 }}>Save</Text>}
+                                        {() => {
+                                            return <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: loading ? "#ACB1C0" : 'white', fontSize: 18 }}>
+                                                {hasFullProfile && !hasAllFiles ? "Next": 'Save'}
+                                            </Text>
+                                        }}
                                     </Button>
                                 </>
                             )
