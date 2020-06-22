@@ -1,3 +1,5 @@
+import { FileTypeEnum } from "../screens/home/DocumentUpload/DocumentState"
+
 export type NonLoginScreenProps = {
     Login: undefined,
     Signup: undefined,
@@ -12,7 +14,11 @@ export type LoginScreenProps = {
     Notifications: undefined,
     Profile: undefined,
     Documents: undefined,    
-    DocumentMetadata: undefined
+    DocumentMetadata: undefined,
+    SingleUpload: {
+        fileType: FileTypeEnum,
+    }
+    CompletedUpload: undefined
 }
 
 export type GrcgdsLocation = {

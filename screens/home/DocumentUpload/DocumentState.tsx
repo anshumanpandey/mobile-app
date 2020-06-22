@@ -1,5 +1,6 @@
 import { createStore } from 'react-hooks-global-state';
 import { DocumentPickerResponse } from 'react-native-document-picker';
+import { ImagePickerResponse } from 'react-native-image-picker';
 
 export enum  FileTypeEnum {
     "passport" = "Passport",
@@ -11,7 +12,7 @@ export enum Actions {
     "RESET" = "RESET"
 }
 type FileEntity = {
-    file?: DocumentPickerResponse
+    file?: DocumentPickerResponse | ImagePickerResponse
     metadata?: {
         expDate?: string
         country?: string

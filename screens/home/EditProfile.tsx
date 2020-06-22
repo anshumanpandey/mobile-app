@@ -14,6 +14,7 @@ import PhoneInputComponent from '../../partials/PhoneInput';
 import BackButton from '../../partials/BackButton';
 import userHasFullProfile from '../../utils/userHasFullProfile';
 import userHasAllFiles from '../../utils/userHasAllFiles';
+import { FileTypeEnum } from './DocumentUpload/DocumentState';
 
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
@@ -169,7 +170,9 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         disabled={loading}
                                         onPress={(e) => { 
                                             if (hasFullProfile && !hasAllFiles){
-                                                navigation.navigate("Documents");
+                                                navigation.navigate("SingleUpload", {
+                                                    fileType: FileTypeEnum.driving_license
+                                                });
                                             } else {
                                                 handleSubmit()
                                             }

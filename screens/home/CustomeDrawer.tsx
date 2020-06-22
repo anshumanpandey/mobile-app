@@ -29,11 +29,10 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
     const wasDrawerOpen = useIsDrawerOpen();
 
     useEffect(() => {
-        return () => {
-            if (wasDrawerOpen) {
-                if (hasFullProfile && hasAllFiles) {
-                    menuData.push({ name: "My Trips", screenName: "MyBookings", key: 'asd' },);
-                }
+        if (wasDrawerOpen) {
+            if (hasFullProfile && hasAllFiles) {
+                const found = menuData.find(i => i.key == "asd")
+                if (!found) menuData.push({ name: "My Trips", screenName: "MyBookings", key: 'asd' },);
             }
         }
     }, [wasDrawerOpen])

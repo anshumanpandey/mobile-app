@@ -7,6 +7,8 @@ import DrawerMenu from './CustomeDrawer';
 import NotificationScreen from './NotificationScreen';
 import DocumentScreen from './DocumentUpload/DocumentScreen';
 import DocumentMetadataScreen from './DocumentUpload/DocumentMetadataScreen';
+import SingleUploadScreen from './DocumentUpload/SingleUploadScreen';
+import CompletedUploadScreen from './DocumentUpload/CompletedUploadScreen';
 import MyTripsScreens from './MyTripsScreen';
 import ActivateScreen from './ActivateScreen';
 import LocalitationScreen from './Localitation';
@@ -26,6 +28,7 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
     const [profile] = useGlobalState('profile')
 
     const screens = [
+        <Drawer.Screen name="SingleUpload" component={SingleUploadScreen} />,
         <Drawer.Screen name="Documents" component={DocumentScreen} />,
         <Drawer.Screen name="DocumentMetadata" component={DocumentMetadataScreen} />,
     ]
@@ -48,6 +51,7 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
             <Drawer.Screen name="Notifications" component={NotificationScreen} />,
             <Drawer.Screen name="KeyedCarReservation" component={KeyedReservation} />,
             <Drawer.Screen name="EndRental" component={EndRentalScreen} />,
+            <Drawer.Screen name="CompletedUpload" component={CompletedUploadScreen} />,
         )
         screens.unshift(<Drawer.Screen name="MyBookings" component={MyTripsScreens} />)
     }
