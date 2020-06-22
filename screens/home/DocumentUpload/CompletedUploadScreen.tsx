@@ -94,8 +94,8 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                     return (
                         <>
                             <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1 }}>
-                                <View style={{ backgroundColor: '#2f378c', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                    <Text style={{ color: 'white', textAlign: 'left', fontSize: 26, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
+                                <View style={{ backgroundColor: '#2f378c', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Text style={{ color: 'white', textAlign: 'center', fontSize: 26, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
                                         You have completed the verification proccess!
                                     </Text>
                                 </View>
@@ -104,7 +104,9 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                             <Layout style={{ paddingTop: '2%' }}>
                                 <Button
                                     disabled={!dictionary.get(currentFileType)?.file || getFilesReq.loading}
-                                    onPress={handleSubmit}
+                                    onPress={() => {
+                                        navigation.navigate('MyBookings');
+                                    }}
                                     size="giant"
                                     style={{
                                         backgroundColor: (!dictionary.get(currentFileType)?.file || getFilesReq.loading) ? '#e4e9f2' : '#41d5fb',
@@ -119,7 +121,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                         shadowRadius: 13.16,
                                         elevation: 10,
                                     }}>
-                                    {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Save</Text>}
+                                    {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Start using the app</Text>}
                                 </Button>
                             </Layout>
                         </>

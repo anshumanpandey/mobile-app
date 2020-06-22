@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout, Text, Input, Button, Datepicker, NativeDateService } from '@ui-kitten/components';
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
 import { TouchableWithoutFeedback, ScrollView } from 'react-native-gesture-handler';
@@ -67,13 +67,22 @@ const DocumentScreen = ({ route, navigation }: Props) => {
     useFocusEffect(
         React.useCallback(() => {
             if (currentFileType == FileTypeEnum.passport && profile?.passimage) navigation.navigate("SingleUpload", { fileType: FileTypeEnum.driving_license });
-            if (currentFileType == FileTypeEnum.driving_license && profile?.drimage) navigation.navigate("SingleUpload", { fileType: FileTypeEnum.selfi });
             if (currentFileType == FileTypeEnum.selfi && profile?.selfiurl) navigation.navigate("CompletedUpload");
-            return () => {
-                triggerChange(p => !p)
-            }
+            if (currentFileType == FileTypeEnum.driving_license && profile?.drimage) navigation.navigate("SingleUpload", { fileType: FileTypeEnum.selfi });
         }, [])
     );
+
+    useEffect(() => {
+        console.log(currentFileType)
+        console.log("passimage", profile?.passimage)
+        console.log("selfiurl", profile?.selfiurl)
+        console.log("drimage", profile?.drimage)
+        if (profile?.passimage == "") navigation.navigate("SingleUpload", { fileType: FileTypeEnum.passport });
+        if (profile?.drimage == "") navigation.navigate("SingleUpload", { fileType: FileTypeEnum.driving_license });
+        if (profile?.selfiurl == "") navigation.navigate("SingleUpload", { fileType: FileTypeEnum.selfi });
+
+        if (profile?.passimage != "" && profile?.selfiurl != "" && profile?.drimage != "") navigation.navigate("CompletedUpload");
+    }, [getFilesReq.loading, profile]);
 
     return (
         <Layout style={{ display: 'flex', flex: 1, padding: '3%' }}>
@@ -87,12 +96,11 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                     const file = dictionary.get(currentFileType)?.file;
 
                     const currentFile = dictionary.get(currentFileType)?.file
-                    if (currentFile){
+                    if (currentFile) {
                         if ("fileName" in currentFile) {
                             (file as DocumentPickerResponse).name = (currentFile as ImagePickerResponse).fileName || currentFileType;
                         }
                     }
-
 
                     data.append("module_name", "FILE_UPLOAD");
                     data.append("file", file);
@@ -125,6 +133,9 @@ const DocumentScreen = ({ route, navigation }: Props) => {
 
                                 {dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: '#2f378c', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     <>
+                                        <Text style={{ color: 'white', textAlign: 'left', fontSize: 16, fontFamily: 'SF-UI-Display' }} category='s2'>
+                                            {currentFileType}
+                                        </Text>
                                         <Image
                                             key={dictionary.get(currentFileType)?.file?.uri}
                                             style={{ width: 150, height: 200, resizeMode: 'cover', marginBottom: '3%' }}
@@ -150,7 +161,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                     <Button
                                         onPress={(e) => {
                                             ImagePicker.showImagePicker(options, (response) => {
-                                                console.log('Response = ', response);
+                                                //console.log('Response = ', response);
 
                                                 if (response.didCancel) {
                                                     console.log('User cancelled image picker');

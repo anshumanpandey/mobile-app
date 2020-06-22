@@ -10,7 +10,7 @@ export type NonLoginScreenProps = {
 
 export type LoginScreenProps = {
     Home: undefined,
-    Bookings: undefined,
+    MyBookings: undefined,
     Notifications: undefined,
     Profile: undefined,
     Documents: undefined,    

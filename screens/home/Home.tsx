@@ -31,6 +31,7 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
         <Drawer.Screen name="SingleUpload" component={SingleUploadScreen} />,
         <Drawer.Screen name="Documents" component={DocumentScreen} />,
         <Drawer.Screen name="DocumentMetadata" component={DocumentMetadataScreen} />,
+        <Drawer.Screen name="CompletedUpload" component={CompletedUploadScreen} />,
     ]
 
     const hasAllFiles = userHasAllFiles(profile || {})
@@ -51,7 +52,6 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
             <Drawer.Screen name="Notifications" component={NotificationScreen} />,
             <Drawer.Screen name="KeyedCarReservation" component={KeyedReservation} />,
             <Drawer.Screen name="EndRental" component={EndRentalScreen} />,
-            <Drawer.Screen name="CompletedUpload" component={CompletedUploadScreen} />,
         )
         screens.unshift(<Drawer.Screen name="MyBookings" component={MyTripsScreens} />)
     }
