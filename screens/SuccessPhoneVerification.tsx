@@ -18,6 +18,7 @@ const DocumentScreen = () => {
     method: 'POST'
   }, { manual: true })
 
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
 
@@ -31,36 +32,17 @@ const DocumentScreen = () => {
 
         <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '15%', marginBottom: '10%' }}>
           <Text style={{ marginBottom: '10%', textAlign: 'center' }} category="h3">
-            Verify Your Email
+            Thank You for verifying your phone number
           </Text>
 
-          <Text style={{ textAlign: 'center' }} category="h5">
-            To access the app we need your to verify your email.
-            Please login to your email account {profile?.emailaddress} and click on Confirm Account button to verify your email account.
-          </Text>
-        </Layout>
-
-        <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '10%', marginBottom: '5%' }}>
-          <Text style={{ textAlign: 'center' }} category="h6">
-            Did not receive an email yet?
+          <Text style={{ textAlign: 'center', marginBottom: '30%' }} category="h5">
+            Please verify your email as well to start using the app
           </Text>
         </Layout>
-
 
         <Button
           onPress={() => {
-            doVerify({
-              url: GRCGDS_BACKEND,
-              data: {
-                "module_name": "RESEND_VERIFY_EMAIL",
-                "id": profile?.id
-              }
-            })
-              .then((r) => {
-                console.log(r.data)
-                dispatchGlobalState({ type: 'profile', state: profile })
-              })
-
+            navigation.navigate('Login')
           }}
           size="giant"
           disabled={loading}
@@ -79,7 +61,7 @@ const DocumentScreen = () => {
             shadowRadius: 13.16,
             elevation: 10,
           }}>
-          {() => <Text style={{ color: 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>Resend Email</Text>}
+          {() => <Text style={{ color: 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>Done</Text>}
         </Button>
 
       </Layout>
