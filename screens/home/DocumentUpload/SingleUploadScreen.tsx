@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Text, Input, Button, Datepicker, NativeDateService } from '@ui-kitten/components';
+import { Layout, Text, Button, Datepicker, NativeDateService } from '@ui-kitten/components';
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
 import { TouchableWithoutFeedback, ScrollView } from 'react-native-gesture-handler';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import ImagePicker, { ImagePickerResponse } from 'react-native-image-picker';
-import { Image, Alert, SafeAreaView, View } from 'react-native';
+import { Image, Alert, View } from 'react-native';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
-import { useFocusEffect, useRoute, RouteProp } from '@react-navigation/native';
-import LoadingSpinner from '../../../partials/LoadingSpinner';
-import BackButton from '../../../partials/BackButton';
+import { useFocusEffect } from '@react-navigation/native';
 import { dispatchFileState, FileTypeEnum, useDocumentState } from './DocumentState';
 import { Formik } from 'formik';
 import moment from 'moment';
@@ -16,6 +14,7 @@ import useAxios from 'axios-hooks'
 import { useGlobalState, dispatchGlobalState } from '../../../state';
 import { StackScreenProps } from '@react-navigation/stack';
 import { LoginScreenProps } from '../../../types';
+import UploadIconComponent from '../../../image/UploadIconComponent';
 
 const DATE_FORMAT = 'MMM DD,YYYY'
 const formatDateService = new NativeDateService('en', { format: DATE_FORMAT });
@@ -40,7 +39,6 @@ const options = {
     },
 };
 
-
 type Props = StackScreenProps<LoginScreenProps, 'SingleUpload'>;
 
 const DocumentScreen = ({ route, navigation }: Props) => {
@@ -64,21 +62,30 @@ const DocumentScreen = ({ route, navigation }: Props) => {
         expDate: moment()
     }
 
-    useFocusEffect(
-        React.useCallback(() => {
-            if (currentFileType == FileTypeEnum.passport && profile?.passimage) navigation.navigate("SingleUpload", { fileType: FileTypeEnum.driving_license });
-            if (currentFileType == FileTypeEnum.selfi && profile?.selfiurl) navigation.navigate("CompletedUpload");
-            if (currentFileType == FileTypeEnum.driving_license && profile?.drimage) navigation.navigate("SingleUpload", { fileType: FileTypeEnum.selfi });
-        }, [])
-    );
+    const currenButtonState = () => {
+        if (profile?.passimage != "" && profile?.passimage != "" && profile?.selfiurl != "" ) {
+            return { btnTxt: 'Done',disabled: false,canGoNext: true, goTo: 'CompletedUpload' }
+        }
 
-    useEffect(() => {
-        if (profile?.passimage == "") navigation.navigate("SingleUpload", { fileType: FileTypeEnum.passport });
-        if (profile?.drimage == "") navigation.navigate("SingleUpload", { fileType: FileTypeEnum.driving_license });
-        if (profile?.selfiurl == "") navigation.navigate("SingleUpload", { fileType: FileTypeEnum.selfi });
+        if (profile?.passimage != "" && currentFileType == FileTypeEnum.passport){
+            return { btnTxt: 'Next',disabled: false,canGoNext: true, goTo: 'SingleUpload', with: { fileType: FileTypeEnum.driving_license } }
+        }
 
-        if (profile?.passimage != "" && profile?.selfiurl != "" && profile?.drimage != "") navigation.navigate("CompletedUpload");
-    }, [getFilesReq.loading, profile]);
+        if (profile?.drimage != "" && currentFileType == FileTypeEnum.driving_license){
+            return { btnTxt: 'Next',disabled: false,canGoNext: true, goTo: 'SingleUpload', with: { fileType: FileTypeEnum.selfi } }
+        }
+
+        if (profile?.selfiurl != "" && currentFileType == FileTypeEnum.selfi){
+            return { btnTxt: 'Done',disabled: false,canGoNext: true, goTo: 'CompletedUpload' }
+        }
+
+        if (dictionary.get(currentFileType)?.file) {
+            return { btnTxt: 'Save', disabled: false, canGoNext: false }
+        }
+
+        return { btnTxt: 'Save', canGoNext: false, disabled: true }
+
+    }
 
     return (
         <Layout style={{ display: 'flex', flex: 1, padding: '3%' }}>
@@ -107,7 +114,6 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                         .then(r => {
                             console.log(r.data)
                             dispatchGlobalState({ type: 'profile', state: r.data })
-                            Alert.alert("Success", "Data saved!")
                         })
                         .catch(r => console.log(r))
 
@@ -115,23 +121,28 @@ const DocumentScreen = ({ route, navigation }: Props) => {
             >
                 {({ handleChange, setFieldValue, handleSubmit, values, errors, touched }) => {
 
+                    console.log(currenButtonState())
+
                     return (
                         <>
                             <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1 }}>
-                                {!dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: '#2f378c', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                    <Text style={{ color: 'white', textAlign: 'left', fontSize: 16, fontFamily: 'SF-UI-Display' }} category='s2'>
+                                <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                                    <Text style={{ textAlign: 'center', fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
+                                        {currentFileType}
+                                    </Text>
+                                </Layout>
+                                {!dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <UploadIconComponent />
+                                    <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, fontFamily: 'SF-UI-Display' }} category='s2'>
                                         We need you to upload your
                                     </Text>
-                                    <Text style={{ color: 'white', textAlign: 'left', fontSize: 26, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
+                                    <Text style={{ color: 'black', textAlign: 'left', fontSize: 26, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
                                         {currentFileType}
                                     </Text>
                                 </View>}
 
-                                {dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: '#2f378c', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                {dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     <>
-                                        <Text style={{ color: 'white', textAlign: 'left', fontSize: 16, fontFamily: 'SF-UI-Display' }} category='s2'>
-                                            {currentFileType}
-                                        </Text>
                                         <Image
                                             key={dictionary.get(currentFileType)?.file?.uri}
                                             style={{ width: 150, height: 200, resizeMode: 'cover', marginBottom: '3%' }}
@@ -153,7 +164,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                     </>
                                 </View>}
 
-                                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: '-20%', justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: '-35%', justifyContent: 'center', alignItems: 'center' }}>
                                     <Button
                                         onPress={(e) => {
                                             ImagePicker.showImagePicker(options, (response) => {
@@ -193,7 +204,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                 </View>
 
                                 <TouchableWithoutFeedback
-                                    style={{ backgroundColor: 'white', height: '70%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}
+                                    style={{ backgroundColor: 'white', height: '55%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}
                                     onPress={async () => {
                                         const res = await DocumentPicker.pick({
                                             type: [DocumentPicker.types.images],
@@ -201,8 +212,8 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                         dispatchFileState({ type: currentFileType, state: { file: res } })
                                     }}>
 
-                                    <EntypoIcon style={{ marginRight: '5%', color: '#2f378c' }} size={24} name="images" />
-                                    <Text style={{ color: '#2f378c', textAlign: 'left', fontSize: 16, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
+                                    <EntypoIcon style={{ marginRight: '5%', color: 'black' }} size={24} name="images" />
+                                    <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
                                         Select the document from gallery
                                     </Text>
 
@@ -213,12 +224,20 @@ const DocumentScreen = ({ route, navigation }: Props) => {
 
                             <Layout style={{ paddingTop: '2%' }}>
                                 <Button
-                                    disabled={!dictionary.get(currentFileType)?.file || getFilesReq.loading}
-                                    onPress={handleSubmit}
+                                    disabled={currenButtonState().disabled || getFilesReq.loading}
+                                    onPress={() => {
+                                        const currentState = currenButtonState()
+                                        if (currentState.canGoNext) {
+                                            navigation.navigate(currentState.goTo, currentState.with)
+                                            return
+                                        } else {
+                                            handleSubmit()
+                                        }
+                                    }}
                                     size="giant"
                                     style={{
-                                        backgroundColor: (!dictionary.get(currentFileType)?.file || getFilesReq.loading) ? '#e4e9f2' : '#41d5fb',
-                                        borderColor: (!dictionary.get(currentFileType)?.file || getFilesReq.loading) ? '#e4e9f2' : '#41d5fb',
+                                        backgroundColor: currenButtonState().disabled || getFilesReq.loading ? '#e4e9f2' : '#41d5fb',
+                                        borderColor: currenButtonState().disabled || getFilesReq.loading ? '#e4e9f2' : '#41d5fb',
                                         borderRadius: 10,
                                         shadowColor: '#41d5fb',
                                         shadowOffset: {
@@ -229,7 +248,9 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                         shadowRadius: 13.16,
                                         elevation: 10,
                                     }}>
-                                    {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Save</Text>}
+                                    {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>
+                                        {currenButtonState().btnTxt}
+                                    </Text>}
                                 </Button>
                             </Layout>
                         </>

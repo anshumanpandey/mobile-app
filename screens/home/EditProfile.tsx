@@ -41,7 +41,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             </Layout>
                         )}
                         <Text style={{ textAlign: 'left', fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
-                            Edit your profile
+                            Profile
                         </Text>
                     </Layout>
 

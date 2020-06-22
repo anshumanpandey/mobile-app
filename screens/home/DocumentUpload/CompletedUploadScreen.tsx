@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout, Text, Input, Button, Datepicker, NativeDateService } from '@ui-kitten/components';
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
 import { TouchableWithoutFeedback, ScrollView } from 'react-native-gesture-handler';
@@ -9,7 +9,7 @@ import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { useFocusEffect, useRoute, RouteProp } from '@react-navigation/native';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
 import BackButton from '../../../partials/BackButton';
-import { dispatchFileState, FileTypeEnum, useDocumentState } from './DocumentState';
+import { dispatchFileState, FileTypeEnum, useDocumentState, Actions } from './DocumentState';
 import { Formik } from 'formik';
 import moment from 'moment';
 import useAxios from 'axios-hooks'
@@ -64,53 +64,39 @@ const DocumentScreen = ({ route, navigation }: Props) => {
         expDate: moment()
     }
 
+    useEffect(() => {
+        dispatchFileState({ type: Actions.RESET, state: {}})
+    }, [])
+
 
     return (
         <Layout style={{ display: 'flex', flex: 1, padding: '3%' }}>
             <Formik
                 initialValues={initialValues}
                 enableReinitialize={true}
-                onSubmit={values => {
-
-                    const data = new FormData();
-
-                    data.append("module_name", "FILE_UPLOAD");
-                    data.append("file", dictionary.get(currentFileType)?.file);
-                    data.append("fileType", currentFileType);
-                    data.append("expDate", values.expDate.format('YYYY-MM-DD'));
-
-                    sendFile({ data })
-                        .then(r => {
-                            console.log(r.data)
-                            /*dispatchGlobalState({ type: 'profile', state: r.data })
-                            Alert.alert("Success", "Data saved!")*/
-                        })
-                        .catch(r => console.log(r))
-
-                }}
+                onSubmit={values => {}}
             >
                 {({ handleChange, setFieldValue, handleSubmit, values, errors, touched }) => {
 
                     return (
                         <>
                             <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1 }}>
-                                <View style={{ backgroundColor: '#2f378c', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                    <Text style={{ color: 'white', textAlign: 'center', fontSize: 26, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
-                                        You have completed the verification proccess!
+                                <View style={{ backgroundColor: 'white', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Text style={{ color: 'black', textAlign: 'center', fontSize: 26, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
+                                        Thanks! Your providing all your details, we are currently reviewing your information and shall let you know once they are approved
                                     </Text>
                                 </View>
                             </ScrollView>
 
                             <Layout style={{ paddingTop: '2%' }}>
                                 <Button
-                                    disabled={!dictionary.get(currentFileType)?.file || getFilesReq.loading}
                                     onPress={() => {
                                         navigation.navigate('MyBookings');
                                     }}
                                     size="giant"
                                     style={{
-                                        backgroundColor: (!dictionary.get(currentFileType)?.file || getFilesReq.loading) ? '#e4e9f2' : '#41d5fb',
-                                        borderColor: (!dictionary.get(currentFileType)?.file || getFilesReq.loading) ? '#e4e9f2' : '#41d5fb',
+                                        backgroundColor: '#41d5fb',
+                                        borderColor: '#41d5fb',
                                         borderRadius: 10,
                                         shadowColor: '#41d5fb',
                                         shadowOffset: {
@@ -121,7 +107,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                         shadowRadius: 13.16,
                                         elevation: 10,
                                     }}>
-                                    {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Start using the app</Text>}
+                                    {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Ok</Text>}
                                 </Button>
                             </Layout>
                         </>
