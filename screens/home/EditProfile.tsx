@@ -55,6 +55,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             add1: '',
                             add2: '',
                             city: '',
+                            postcode: '',
                             countryCode: profile?.country ? profile.country : '',
                             ...profile
                         }}
@@ -68,7 +69,6 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
                         }}
                         onSubmit={values => {
-                            console.log(values)
                             doLogin({ data: { ...values, module_name: "EDIT_PROFILE" } })
                                 .then((res) => {
                                     dispatchGlobalState({ type: 'token', state: res.data.token })
@@ -177,6 +177,17 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>City</Text>}
                                         placeholder='Enter your address'
                                         caption={errors.city && touched.city ? () => <ErrorLabel text={errors.city} /> : undefined}
+                                    />
+
+                                    <Input
+                                        status={errors.postcode && touched.postcode ? 'danger' : undefined}
+                                        value={values.postcode}
+                                        onChangeText={handleChange('postcode')}
+                                        style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
+                                        size="large"
+                                        label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Postcode</Text>}
+                                        placeholder='Enter your address'
+                                        caption={errors.postcode && touched.postcode ? () => <ErrorLabel text={errors.postcode} /> : undefined}
                                     />
 
                                     <Button
