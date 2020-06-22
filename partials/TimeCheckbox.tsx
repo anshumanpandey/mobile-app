@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, CheckBox, Layout } from '@ui-kitten/components';
-import { ViewStyle } from 'react-native';
+import { ViewStyle, View, TextStyle } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 export type TimeCheckboxProps = {
@@ -10,9 +10,10 @@ export type TimeCheckboxProps = {
     defaultChecked?: boolean
     checked?: boolean
     onChange: (v: boolean) => void
+    accessoryRight?: (props: { style: TextStyle}) => React.ReactNode;
 }
 
-const TimeCheckbox: React.FC<TimeCheckboxProps> = ({ title, subTitle, style, onChange, defaultChecked, checked: forceChecked }) => {
+const TimeCheckbox: React.FC<TimeCheckboxProps> = ({ title, subTitle, style, onChange, defaultChecked, checked: forceChecked, accessoryRight: AccessoryRight }) => {
     const [checked, setChecked] = useState(false);
     const styles = {
         color: '#EEF1F5',
@@ -33,17 +34,21 @@ const TimeCheckbox: React.FC<TimeCheckboxProps> = ({ title, subTitle, style, onC
     useEffect(() => {
         if (defaultChecked !== undefined) setChecked(defaultChecked)
     }, [])
+    const Node = AccessoryRight ? AccessoryRight({ style: { color: styles.textColor} }): null
     return (
         <TouchableWithoutFeedback onPress={() => {
             setChecked(p => {
                 onChange && onChange(!p)
                 return !p
             })
-        }} style={{ ...style,backgroundColor: styles.backgroundColor,display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderWidth: 1, padding: '3%', borderRadius: 10, borderColor: styles.color}}>
-            <Layout style={{ backgroundColor: '#00000000'}}>
-                <Text style={{ color: styles.textColor, fontFamily: 'SF-UI-Display_Bold' }}>{title}</Text>
-                {subTitle && <Text style={{ color: styles.textColor }}>{subTitle}</Text>}
-            </Layout>
+        }} style={{ ...style, backgroundColor: styles.backgroundColor, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderWidth: 1, padding: '3%', borderRadius: 10, borderColor: styles.color }}>
+            <View style={{ display: 'flex', flexDirection: 'row'}}>
+                {Node}
+                <Layout style={{ backgroundColor: '#00000000' }}>
+                    <Text style={{ color: styles.textColor, fontFamily: 'SF-UI-Display_Bold' }}>{title}</Text>
+                    {subTitle && <Text style={{ color: styles.textColor }}>{subTitle}</Text>}
+                </Layout>
+            </View>
             <CheckBox checked={checked} />
         </TouchableWithoutFeedback>
     )

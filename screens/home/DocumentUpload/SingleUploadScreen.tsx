@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Text, Button, Datepicker, NativeDateService } from '@ui-kitten/components';
+import { Layout, Text, Button, Datepicker, NativeDateService, Input } from '@ui-kitten/components';
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
 import { TouchableWithoutFeedback, ScrollView } from 'react-native-gesture-handler';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import ImagePicker, { ImagePickerResponse } from 'react-native-image-picker';
 import { Image, Alert, View } from 'react-native';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
-import { useFocusEffect } from '@react-navigation/native';
 import { dispatchFileState, FileTypeEnum, useDocumentState } from './DocumentState';
 import { Formik } from 'formik';
 import moment from 'moment';
@@ -15,7 +14,9 @@ import { useGlobalState, dispatchGlobalState } from '../../../state';
 import { StackScreenProps } from '@react-navigation/stack';
 import { LoginScreenProps } from '../../../types';
 import UploadIconComponent from '../../../image/UploadIconComponent';
-import { components } from '@eva-design/eva/mapping';
+import CountryPicker from 'react-native-country-picker-modal'
+import ErrorLabel from '../../../partials/ErrorLabel';
+
 
 const DATE_FORMAT = 'MMM DD,YYYY'
 const formatDateService = new NativeDateService('en', { format: DATE_FORMAT });
@@ -54,13 +55,14 @@ const DocumentScreen = ({ route, navigation }: Props) => {
     })
 
     const initialValues = {
+        docNumber: '',
         country: '',
-        expDate: moment()
+        expDate: null
     }
 
     useEffect(() => {
         if (route.params && route.params.fileType) {
-            console.log('params',route.params.fileType )
+            console.log('params', route.params.fileType)
             setCurrentFileType(route.params.fileType)
         } else {
             setCurrentFileType(FileTypeEnum.passport)
@@ -68,20 +70,20 @@ const DocumentScreen = ({ route, navigation }: Props) => {
     }, [route.params])
 
     const currenButtonState = () => {
-        if (profile?.passimage != "" && profile?.passimage != "" && profile?.selfiurl != "" ) {
-            return { btnTxt: 'Done',disabled: false,canGoNext: true, goTo: 'CompletedUpload' }
+        if (profile?.passimage != "" && profile?.passimage != "" && profile?.selfiurl != "") {
+            return { btnTxt: 'Done', disabled: false, canGoNext: true, goTo: 'CompletedUpload' }
         }
 
-        if (profile?.passimage != "" && currentFileType == FileTypeEnum.passport){
-            return { btnTxt: 'Next',disabled: false,canGoNext: true, goTo: 'SingleUpload', with: { fileType: FileTypeEnum.driving_license } }
+        if (profile?.passimage != "" && currentFileType == FileTypeEnum.passport) {
+            return { btnTxt: 'Next', disabled: false, canGoNext: true, goTo: 'SingleUpload', with: { fileType: FileTypeEnum.driving_license } }
         }
 
-        if (profile?.drimage != "" && currentFileType == FileTypeEnum.driving_license){
-            return { btnTxt: 'Next',disabled: false,canGoNext: true, goTo: 'SingleUpload', with: { fileType: FileTypeEnum.selfi } }
+        if (profile?.drimage != "" && currentFileType == FileTypeEnum.driving_license) {
+            return { btnTxt: 'Next', disabled: false, canGoNext: true, goTo: 'SingleUpload', with: { fileType: FileTypeEnum.selfi } }
         }
 
-        if (profile?.selfiurl != "" && currentFileType == FileTypeEnum.selfi){
-            return { btnTxt: 'Done',disabled: false,canGoNext: true, goTo: 'CompletedUpload' }
+        if (profile?.selfiurl != "" && currentFileType == FileTypeEnum.selfi) {
+            return { btnTxt: 'Done', disabled: false, canGoNext: true, goTo: 'CompletedUpload' }
         }
 
         if (dictionary.get(currentFileType)?.file) {
@@ -129,7 +131,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                     return (
                         <>
                             <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1 }}>
-                                <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                                <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center',zIndex: 2 }}>
                                     <Text style={{ textAlign: 'center', fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
                                         {currentFileType}
                                     </Text>
@@ -148,26 +150,48 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                     <>
                                         <Image
                                             key={dictionary.get(currentFileType)?.file?.uri}
-                                            style={{ width: 150, height: 200, resizeMode: 'cover', marginBottom: '3%' }}
+                                            style={{ width: 150, height: 200, resizeMode: 'cover', marginBottom: '3%', zIndex: -2 }}
                                             source={{ uri: dictionary.get(currentFileType)?.file?.uri, cache: 'reload' }}
                                         />
                                         {currentFileType != FileTypeEnum.selfi && (
-                                            <Datepicker
-                                                label="Expire Date"
-                                                style={{ paddingLeft: '5%', paddingRight: '5%', width: '100%' }}
-                                                controlStyle={{ backgroundColor: 'white', borderRadius: 10, padding: '4%' }}
-                                                placeholder='Pick Date'
-                                                date={values.expDate?.toDate()}
-                                                title={(d) => moment(d)?.format(DATE_FORMAT)}
-                                                dateService={formatDateService}
-                                                onSelect={nextDate => setFieldValue("expDate", moment(nextDate))}
-                                                accessoryLeft={() => <EntypoIcon style={{ color: 'black' }} name="calendar" size={22} />}
-                                            />
+                                            <>
+                                                <Datepicker
+                                                    style={{ paddingLeft: '5%', paddingRight: '5%', marginBottom: '2%', width: '100%' }}
+                                                    controlStyle={{ backgroundColor: 'white', borderRadius: 10, padding: '4%' }}
+                                                    placeholder='Expire Date'
+                                                    date={values?.expDate?.toDate()}
+                                                    title={(d) => moment(d)?.format(DATE_FORMAT)}
+                                                    dateService={formatDateService}
+                                                    onSelect={nextDate => setFieldValue("expDate", moment(nextDate))}
+                                                    accessoryLeft={() => <EntypoIcon style={{ color: 'black' }} name="calendar" size={22} />}
+                                                />
+                                                <Input
+                                                    status={errors.docNumber && touched.docNumber ? 'danger' : undefined}
+                                                    value={values.docNumber}
+                                                    onChangeText={handleChange('docNumber')}
+                                                    style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '2%', width: "90%" }}
+                                                    size="large"
+                                                    placeholder='Document Number'
+                                                    caption={errors.docNumber && touched.docNumber ? () => <ErrorLabel text={errors.docNumber} /> : undefined}
+                                                />
+                                                <Layout style={{ marginBottom: '2%' }}>
+                                                    <CountryPicker
+                                                        containerButtonStyle={{ borderWidth: 1, borderColor: '#E4E9F2', padding: '3%', borderRadius: 10, width: 350 }}
+                                                        countryCode={values.country.toUpperCase()}
+                                                        withFilter={true}
+                                                        withFlagButton={true}
+                                                        withCountryNameButton={true}
+                                                        onSelect={(country) => {
+                                                            setFieldValue('country', country.cca2.toLowerCase())
+                                                        }}
+                                                    />
+                                                </Layout>
+                                            </>
                                         )}
                                     </>
                                 </View>}
 
-                                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: '-35%', justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-55%': '-35%', justifyContent: 'center', alignItems: 'center' }}>
                                     <Button
                                         onPress={(e) => {
                                             ImagePicker.showImagePicker(options, (response) => {
@@ -207,7 +231,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                 </View>
 
                                 <TouchableWithoutFeedback
-                                    style={{ backgroundColor: 'white', height: '55%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}
+                                    style={{ backgroundColor: 'white', height: '55%', display: 'flex', justifyContent: 'center', alignItems: dictionary.get(currentFileType)?.file ? 'flex-end': 'center', flexDirection: 'row' }}
                                     onPress={async () => {
                                         const res = await DocumentPicker.pick({
                                             type: [DocumentPicker.types.images],

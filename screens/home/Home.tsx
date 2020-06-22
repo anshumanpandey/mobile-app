@@ -19,6 +19,7 @@ import SelectLocation from './createBookings/index';
 import KeyedReservation from './KeyedReservation';
 import EndRentalScreen from './EndRentalScreen';
 import EditProfile from './EditProfile';
+import ProfileVerificationScreen from './ProfileVerificationScreen';
 import { useGlobalState } from '../../state';
 import userHasFullProfile from '../../utils/userHasFullProfile';
 import userHasAllFiles from '../../utils/userHasAllFiles';
@@ -29,7 +30,6 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
 
     const screens = [
         <Drawer.Screen name="SingleUpload" component={SingleUploadScreen} />,
-        <Drawer.Screen name="Documents" component={DocumentScreen} />,
         <Drawer.Screen name="DocumentMetadata" component={DocumentMetadataScreen} />,
         <Drawer.Screen name="CompletedUpload" component={CompletedUploadScreen} />,
     ]
@@ -37,8 +37,8 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
     const hasAllFiles = userHasAllFiles(profile || {})
 
     const hasFullProfile = userHasFullProfile(profile || {})
-    if (!hasFullProfile) screens.unshift(<Drawer.Screen name="EditProfile" component={EditProfile} />);
-    if (hasFullProfile) screens.push(<Drawer.Screen name="EditProfile" component={EditProfile} />);
+    if (!hasFullProfile) screens.unshift(<Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} />);
+    if (hasFullProfile) screens.push(<Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} />);
 
 
     if (hasFullProfile && hasAllFiles) {
@@ -51,6 +51,8 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
             <Drawer.Screen name="Activate" component={ActivateScreen} />,
             <Drawer.Screen name="Notifications" component={NotificationScreen} />,
             <Drawer.Screen name="KeyedCarReservation" component={KeyedReservation} />,
+            <Drawer.Screen name="EditProfile" component={EditProfile} />,
+            <Drawer.Screen name="Documents" component={DocumentScreen} />,
             <Drawer.Screen name="EndRental" component={EndRentalScreen} />,
         )
         screens.unshift(<Drawer.Screen name="MyBookings" component={MyTripsScreens} />)
