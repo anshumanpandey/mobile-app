@@ -12,6 +12,7 @@ import LoadingSpinner from '../../partials/LoadingSpinner';
 import ErrorLabel from '../../partials/ErrorLabel';
 import PhoneInputComponent from '../../partials/PhoneInput';
 import BackButton from '../../partials/BackButton';
+import CountryPicker from 'react-native-country-picker-modal'
 import userHasFullProfile from '../../utils/userHasFullProfile';
 import userHasAllFiles from '../../utils/userHasAllFiles';
 import { FileTypeEnum } from './DocumentUpload/DocumentState';
@@ -98,7 +99,6 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                             mobilecode={values.mobilecode}
                                             mobileNumber={values.mobilenumber}
                                             onCountryChanged={(countryCode) => {
-                                                setFieldValue('countryCode', countryCode)
                                             }}
                                             onCodeChange={(code) => {
                                                 setFieldValue('mobilecode', code)
@@ -108,6 +108,20 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                             }}
                                         />
                                         {errors.mobilenumber && touched.mobilenumber && <ErrorLabel text={errors.mobilenumber} />}
+                                    </Layout>
+
+                                    <Layout style={{ marginBottom: '3%' }}>
+                                        <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>Country</Text>
+                                        <CountryPicker
+                                            containerButtonStyle={{ borderWidth: 1, borderColor: '#E4E9F2', padding: '2%', borderRadius: 10 }}
+                                            countryCode={values.countryCode.toUpperCase()}
+                                            withFilter={true}
+                                            withFlagButton={true}
+                                            withCountryNameButton={true}
+                                            onSelect={(country) => {
+                                                setFieldValue('countryCode', country.cca2.toLowerCase())
+                                            }}
+                                        />
                                     </Layout>
 
                                     <Input
@@ -168,8 +182,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     <Button
                                         accessoryRight={loading ? LoadingSpinner : undefined}
                                         disabled={loading}
-                                        onPress={(e) => { 
-                                            if (hasFullProfile && !hasAllFiles){
+                                        onPress={(e) => {
+                                            if (hasFullProfile && !hasAllFiles) {
                                                 navigation.navigate("SingleUpload", {
                                                     fileType: FileTypeEnum.driving_license
                                                 });
@@ -194,7 +208,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         }}>
                                         {() => {
                                             return <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: loading ? "#ACB1C0" : 'white', fontSize: 18 }}>
-                                                {hasFullProfile && !hasAllFiles ? "Next": 'Save'}
+                                                {hasFullProfile && !hasAllFiles ? "Next" : 'Save'}
                                             </Text>
                                         }}
                                     </Button>
