@@ -16,6 +16,7 @@ import CountryPicker from 'react-native-country-picker-modal'
 import userHasFullProfile from '../../utils/userHasFullProfile';
 import userHasAllFiles from '../../utils/userHasAllFiles';
 import { FileTypeEnum } from './DocumentUpload/DocumentState';
+import userIsCompany from '../../utils/userIsCompany';
 
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
@@ -57,13 +58,20 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             city: '',
                             postcode: '',
                             countryCode: profile?.country ? profile.country : '',
+                            company: '',
+                            vat: '',
                             ...profile
                         }}
                         enableReinitialize
                         validate={(values) => {
-                            const errors: { mobilenumber?: string, mobilecode?: string, tele?: string } = {};
+                            const errors: { mobilenumber?: string, mobilecode?: string, tele?: string, company?: string, vat?: string } = {};
                             if (!values.mobilenumber) errors.mobilenumber = 'Required';
                             if (!values.mobilecode) errors.mobilecode = 'Required';
+
+                            if (userIsCompany(profile || {})) {
+                                if (!values.company) errors.company = 'Required';
+                                if (!values.vat) errors.vat = 'Required';
+                            }
 
                             return errors
 
@@ -190,13 +198,37 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         caption={errors.postcode && touched.postcode ? () => <ErrorLabel text={errors.postcode} /> : undefined}
                                     />
 
+                                    {userIsCompany(profile || {}) && (
+                                        <>
+                                            <Input
+                                                status={errors.company && touched.company ? 'danger' : undefined}
+                                                value={values.company}
+                                                onChangeText={handleChange('company')}
+                                                style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
+                                                size="large"
+                                                label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Company Name</Text>}
+                                                placeholder='Enter your address'
+                                                caption={errors.company && touched.company ? () => <ErrorLabel text={errors.company} /> : undefined}
+                                            /><Input
+                                                status={errors.vat && touched.vat ? 'danger' : undefined}
+                                                value={values.vat}
+                                                onChangeText={handleChange('vat')}
+                                                style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
+                                                size="large"
+                                                label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Company VAT Number</Text>}
+                                                placeholder='Enter your address'
+                                                caption={errors.vat && touched.vat ? () => <ErrorLabel text={errors.vat} /> : undefined}
+                                            />
+                                        </>
+                                    )}
+
                                     <Button
                                         accessoryRight={loading ? LoadingSpinner : undefined}
                                         disabled={loading}
                                         onPress={(e) => {
                                             if (hasFullProfile && !hasAllFiles) {
                                                 navigation.navigate("SingleUpload", {
-                                                    fileType: FileTypeEnum.driving_license
+                                                    fileType: FileTypeEnum.passport
                                                 });
                                             } else {
                                                 handleSubmit()

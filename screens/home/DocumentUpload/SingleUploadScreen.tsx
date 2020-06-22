@@ -15,6 +15,7 @@ import { useGlobalState, dispatchGlobalState } from '../../../state';
 import { StackScreenProps } from '@react-navigation/stack';
 import { LoginScreenProps } from '../../../types';
 import UploadIconComponent from '../../../image/UploadIconComponent';
+import { components } from '@eva-design/eva/mapping';
 
 const DATE_FORMAT = 'MMM DD,YYYY'
 const formatDateService = new NativeDateService('en', { format: DATE_FORMAT });
@@ -43,14 +44,9 @@ type Props = StackScreenProps<LoginScreenProps, 'SingleUpload'>;
 
 const DocumentScreen = ({ route, navigation }: Props) => {
     const [change, triggerChange] = useState(true);
+    const [currentFileType, setCurrentFileType] = useState(FileTypeEnum.passport);
     const [dictionary] = useDocumentState("dictionary")
     const [profile] = useGlobalState('profile')
-
-    let currentFileType = FileTypeEnum.passport
-    if (!profile?.passimage) currentFileType = FileTypeEnum.passport
-    if (!profile?.drimage) currentFileType = FileTypeEnum.driving_license
-    if (!profile?.selfiurl) currentFileType = FileTypeEnum.selfi
-    if (route.params && route.params.fileType) currentFileType = route.params.fileType
 
     const [getFilesReq, sendFile] = useAxios({
         url: `${GRCGDS_BACKEND}`,
@@ -62,6 +58,15 @@ const DocumentScreen = ({ route, navigation }: Props) => {
         expDate: moment()
     }
 
+    useEffect(() => {
+        if (route.params && route.params.fileType) {
+            console.log('params',route.params.fileType )
+            setCurrentFileType(route.params.fileType)
+        } else {
+            setCurrentFileType(FileTypeEnum.passport)
+        }
+    }, [route.params])
+
     const currenButtonState = () => {
         if (profile?.passimage != "" && profile?.passimage != "" && profile?.selfiurl != "" ) {
             return { btnTxt: 'Done',disabled: false,canGoNext: true, goTo: 'CompletedUpload' }
@@ -72,7 +77,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
         }
 
         if (profile?.drimage != "" && currentFileType == FileTypeEnum.driving_license){
-            return { btnTxt: 'Next',disabled: false,canGoNext: true, goTo: 'SingleUpload', with: { fileType: FileTypeEnum.selfi } }
+            return { btnTxt: 'Done',disabled: false,canGoNext: true, goTo: 'CompletedUpload' }
         }
 
         if (profile?.selfiurl != "" && currentFileType == FileTypeEnum.selfi){
@@ -120,8 +125,6 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                 }}
             >
                 {({ handleChange, setFieldValue, handleSubmit, values, errors, touched }) => {
-
-                    console.log(currenButtonState())
 
                     return (
                         <>
@@ -227,6 +230,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                     disabled={currenButtonState().disabled || getFilesReq.loading}
                                     onPress={() => {
                                         const currentState = currenButtonState()
+                                        console.log(currentState)
                                         if (currentState.canGoNext) {
                                             navigation.navigate(currentState.goTo, currentState.with)
                                             return

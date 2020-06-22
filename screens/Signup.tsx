@@ -74,8 +74,8 @@ export default () => {
                             tele: '',
                             countryCode: '',
                             confirmPassword: '',
-                            companyName: '',
-                            companyVatNumber: ''
+                            company: '',
+                            vat: ''
                         }}
                         validate={(values) => {
                             const errors: { emailaddress?: string, password?: string, tele?: string } = {};
@@ -102,6 +102,7 @@ export default () => {
 
                             doRegister({ data: { ...data, asCompany } })
                                 .then((res) => {
+                                    console.log(res.data)
                                     const data = {
                                         username: values.emailaddress,
                                         password: values.password,
@@ -172,24 +173,24 @@ export default () => {
                                     {asCompany && (
                                         <Layout>
                                             <Input
-                                                status={errors.companyName && touched.companyName ? 'danger' : undefined}
+                                                status={errors.company && touched.company ? 'danger' : undefined}
                                                 style={{ backgroundColor: '#ffffff', borderRadius: 10, marginTop: '3%', marginBottom: '3%' }}
                                                 size="large"
                                                 label={() => <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>Company Name</Text>}
                                                 placeholder='Enter your company name'
-                                                value={values.companyName}
-                                                onChangeText={handleChange('companyName')}
-                                                caption={errors.companyName && touched.companyName ? () => <ErrorLabel text={errors.companyName} /> : undefined}
+                                                value={values.company}
+                                                onChangeText={handleChange('company')}
+                                                caption={errors.company && touched.company ? () => <ErrorLabel text={errors.company} /> : undefined}
                                             />
                                             <Input
-                                                status={errors.companyVatNumber && touched.companyVatNumber ? 'danger' : undefined}
+                                                status={errors.vat && touched.vat ? 'danger' : undefined}
                                                 style={{ backgroundColor: '#ffffff', borderRadius: 10 }}
                                                 size="large"
                                                 label={() => <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>Company VAT Number</Text>}
                                                 placeholder='Enter your company VAT number'
-                                                value={values.companyVatNumber}
-                                                onChangeText={handleChange('companyVatNumber')}
-                                                caption={errors.companyVatNumber && touched.companyVatNumber ? () => <ErrorLabel text={errors.companyVatNumber} /> : undefined}
+                                                value={values.vat}
+                                                onChangeText={handleChange('vat')}
+                                                caption={errors.vat && touched.vat ? () => <ErrorLabel text={errors.vat} /> : undefined}
                                             />
                                         </Layout>
                                     )}
