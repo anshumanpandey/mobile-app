@@ -77,7 +77,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
         }
 
         if (profile?.drimage != "" && currentFileType == FileTypeEnum.driving_license){
-            return { btnTxt: 'Done',disabled: false,canGoNext: true, goTo: 'CompletedUpload' }
+            return { btnTxt: 'Next',disabled: false,canGoNext: true, goTo: 'SingleUpload', with: { fileType: FileTypeEnum.selfi } }
         }
 
         if (profile?.selfiurl != "" && currentFileType == FileTypeEnum.selfi){
