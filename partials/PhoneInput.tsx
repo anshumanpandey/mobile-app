@@ -78,6 +78,7 @@ const PhoneInput: React.FC<Props> = ({ mobilecode, mobileNumber = "", onCodeChan
             />
             {showFlagModal && <CountryPicker
                 countryCode="US"
+                withFilter={true}
                 visible={true}
                 withFlagButton={false}
                 onSelect={(country) => {

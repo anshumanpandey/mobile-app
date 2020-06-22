@@ -73,10 +73,6 @@ const DocumentScreen = ({ route, navigation }: Props) => {
     );
 
     useEffect(() => {
-        console.log(currentFileType)
-        console.log("passimage", profile?.passimage)
-        console.log("selfiurl", profile?.selfiurl)
-        console.log("drimage", profile?.drimage)
         if (profile?.passimage == "") navigation.navigate("SingleUpload", { fileType: FileTypeEnum.passport });
         if (profile?.drimage == "") navigation.navigate("SingleUpload", { fileType: FileTypeEnum.driving_license });
         if (profile?.selfiurl == "") navigation.navigate("SingleUpload", { fileType: FileTypeEnum.selfi });
