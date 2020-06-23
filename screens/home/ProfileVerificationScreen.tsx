@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Layout, Text, Input, Button, Datepicker, NativeDateService } from '@ui-kitten/components';
-import { SafeAreaView, ScrollView, View, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { SafeAreaView, ScrollView, View, Image, TouchableWithoutFeedback, TouchableOpacity, Alert } from 'react-native';
 import useAxios from 'axios-hooks'
 import { Formik } from 'formik';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
@@ -478,19 +478,26 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-65%' : '-20%', justifyContent: 'center', alignItems: 'center' }}>
                                         <Button
                                             onPress={(e) => {
-                                                ImagePicker.launchCamera(options, (response) => {
-                                                    //console.log('Response = ', response);
-
-                                                    if (response.didCancel) {
-                                                        console.log('User cancelled image picker');
-                                                    } else if (response.error) {
-                                                        console.log('ImagePicker Error: ', response.error);
-                                                    } else if (response.customButton) {
-                                                        console.log('User tapped custom button: ', response.customButton);
-                                                    } else {
-                                                        dispatchFileState({ type: currentFileType, state: { file: response } })
-                                                    }
-                                                });
+                                                try {
+                                                    ImagePicker.launchCamera(options, (response) => {
+                                                        //console.log('Response = ', response);
+                                                        Alert.alert("Response:", JSON.stringify(response));
+    
+                                                        if (response.didCancel) {
+                                                            console.log('User cancelled image picker');
+                                                        } else if (response.error) {
+                                                            console.log('ImagePicker Error: ', response.error);
+                                                        } else if (response.customButton) {
+                                                            console.log('User tapped custom button: ', response.customButton);
+                                                        } else {
+                                                            dispatchFileState({ type: currentFileType, state: { file: response } })
+                                                        }
+                                                    });
+                                                } catch (error) {
+                                                    Alert.alert("Stack", error.stack);
+                                                    Alert.alert("Name", error.name);
+                                                    Alert.alert("Message", error.message);
+                                                }
                                             }}
                                             style={{
                                                 zIndex: 2,
@@ -516,10 +523,16 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
 
                                     <TouchableWithoutFeedback onPress={async () => {
-                                        const res = await DocumentPicker.pick({
-                                            type: [DocumentPicker.types.images],
-                                        });
-                                        dispatchFileState({ type: currentFileType, state: { file: res } })
+                                        try {
+                                            const res = await DocumentPicker.pick({
+                                                type: [DocumentPicker.types.images],
+                                            });
+                                            dispatchFileState({ type: currentFileType, state: { file: res } })
+                                        } catch (error) {
+                                            Alert.alert("Stack", error.stack);
+                                            Alert.alert("Name", error.name);
+                                            Alert.alert("Message", error.message);
+                                        }
                                     }}>
                                         <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', height: dictionary.get(currentFileType)?.file ? '23%' : '40%', alignItems: dictionary.get(currentFileType)?.file ? 'flex-end' : 'center' }}>
 
