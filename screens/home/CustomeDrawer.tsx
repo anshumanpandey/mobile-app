@@ -17,7 +17,6 @@ import userHasAllFiles from "../../utils/userHasAllFiles";
 import { useIsDrawerOpen } from "@react-navigation/drawer";
 
 const menuData = [
-    { name: "Document", screenName: "Documents", key: 'xvs' },
 ];
 
 const DrawerMenu = ({ navigation }: { navigation: any }) => {

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Layout, Text, Input, Button, Datepicker, NativeDateService } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView, View, Image, TouchableWithoutFeedback } from 'react-native';
 import useAxios from 'axios-hooks'
@@ -58,9 +58,42 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     const hasFullProfile = userHasFullProfile(profile || {})
     const hasAllFiles = userHasAllFiles(profile || {})
 
+    useEffect(() => {
+        if (hasFullProfile) {
+            setCurrentPosition(1)
+            setCurrentFileType(FileTypeEnum.passport)
+        }
+        if (profile?.passimage != "") {
+            setCurrentPosition(2)
+            setCurrentFileType(FileTypeEnum.driving_license)
+        }
+        if (profile?.drimage != "") {
+            setCurrentPosition(3)
+            setCurrentFileType(FileTypeEnum.selfi)
+        }
+
+    }, [])
+
     const resolveFormState = () => {
+        if (currentPosition == 4) {
+            return { btnTxt: 'Ok', disable: false, cb: () => dispatchGlobalState({ type: 'logout' }) }
+        }
         if (currentPosition == 0 && hasFullProfile) {
             return { btnTxt: 'Next', disable: false }
+        }
+
+        if (currentPosition == 0 && !hasFullProfile) {
+            return { btnTxt: 'Save', disable: false }
+        }
+
+        if (currentPosition == 1 && profile?.passimage != "") {
+            return { btnTxt: 'Done', disable: false, cb: () => setCurrentFileType(FileTypeEnum.driving_license) }
+        }
+        if (currentPosition == 2 && profile?.drimage != "") {
+            return { btnTxt: 'Done', disable: false, cb: () => setCurrentFileType(FileTypeEnum.selfi) }
+        }
+        if (currentPosition == 3 && profile?.selfiurl != "") {
+            return { btnTxt: 'Done', disable: false, cb: () => setCurrentPosition(4) }
         }
 
         if (currentPosition == 1 && !dictionary.get(FileTypeEnum.passport)?.file) {
@@ -69,9 +102,15 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
         if (currentPosition == 1 && dictionary.get(FileTypeEnum.passport)?.file) {
             return { btnTxt: 'Save', disable: false }
         }
-        if (currentPosition == 1 && profile?.passimage != "") {
+
+        if (currentPosition == 2 && dictionary.get(FileTypeEnum.driving_license)?.file) {
             return { btnTxt: 'Save', disable: false }
         }
+
+        if (currentPosition == 3 && dictionary.get(FileTypeEnum.selfi)?.file) {
+            return { btnTxt: 'Save', disable: false }
+        }
+
 
         return { btnTxt: 'Save', disable: true };
     }
@@ -100,25 +139,27 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                 }}
                 validate={(values) => {
                     const errors: { [k: string]: string } = {};
-                    if (!values.mobilenumber) errors.mobilenumber = 'Required';
-                    if (!values.mobilecode) errors.mobilecode = 'Required';
+                    if (currentPosition == 0) {
+                        if (!values.mobilenumber) errors.mobilenumber = 'Required';
+                        if (!values.mobilecode) errors.mobilecode = 'Required';
 
-                    if (currentPosition != 0) {
+                        if (userIsCompany(profile || {})) {
+                            if (!values.company) errors.company = 'Required';
+                            if (!values.vat) errors.vat = 'Required';
+                        }
+                    }
+
+                    if (currentPosition == 1 && profile?.passimage == "") {
                         if (!values.expDate) errors.expDate = 'Required';
                         if (!values.docNumber) errors.docNumber = 'Required';
                         if (!values.fileCountry) errors.fileCountry = 'Required';
-                    }
-
-                    if (userIsCompany(profile || {})) {
-                        if (!values.company) errors.company = 'Required';
-                        if (!values.vat) errors.vat = 'Required';
                     }
 
                     return errors
 
                 }}
                 onSubmit={(values, { resetForm }) => {
-                    if (currentPosition == 0 && !userHasFullProfile) {
+                    if (currentPosition == 0 && !hasFullProfile) {
                         doLogin({ data: { ...values, module_name: "EDIT_PROFILE" } })
                             .then((res) => {
                                 dispatchGlobalState({ type: 'token', state: res.data.token })
@@ -127,7 +168,10 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             .catch(err => console.log(err))
                         return
                     }
-                    if (currentPosition == 1 && dictionary.get(currentFileType)?.file) {
+                    if ((currentPosition == 1 || currentPosition == 2 || currentPosition == 3) && dictionary.get(currentFileType)?.file) {
+                        if (currentPosition == 1 && profile?.passimage != "") return
+                        if (currentPosition == 2 && profile?.drimage != "") return
+                        if (currentPosition == 3 && profile?.selfiurl != "") return
                         const data = new FormData();
                         const file = dictionary.get(currentFileType)?.file;
                         const currentFile = dictionary.get(currentFileType)?.file
@@ -140,7 +184,9 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         data.append("module_name", "FILE_UPLOAD");
                         data.append("file", file);
                         data.append("fileType", currentFileType);
-                        data.append("expDate", values.expDate.format('YYYY-MM-DD'));
+                        if (values.expDate) {
+                            data.append("expDate", values.expDate.format('YYYY-MM-DD'));
+                        }
                         data.append("filecountry", values.fileCountry.cca2?.toLowerCase());
                         data.append("docNumber", values.docNumber);
 
@@ -157,18 +203,28 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
                     setCurrentPosition(p => {
                         resetForm({ touched: {} })
+                        console.log(`to step ${p + 1}`)
                         return p + 1
                     })
                 }}
             >
                 {({ setFieldTouched, handleChange, setFieldValue, handleSubmit, values, errors, touched }) => {
-                    console.log(errors.fileCountry)
-                    console.log(touched.fileCountry)
                     return (
                         <>
                             <StepIndicator
                                 currentPosition={currentPosition}
                                 labels={labels}
+                                customStyles={{
+                                    stepStrokeCurrentColor: '#41d5fb',
+                                    stepStrokeFinishedColor: '#41d5fb',
+                                    stepStrokeUnFinishedColor: '#41d5fb',
+                                    stepIndicatorUnFinishedColor: '#41d5fb',
+                                    separatorFinishedColor: '#7eaec4',
+                                    separatorUnFinishedColor: '#dedede',
+                                    stepIndicatorFinishedColor: '#41d5fb',
+                                    labelColor: '#999999',
+                                    currentStepLabelColor: '#7eaec4',
+                                }}
                             />
                             {currentPosition == 0 && (
                                 <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1 }}>
@@ -308,7 +364,15 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 </ScrollView>
                             )}
 
-                            {currentPosition == 1 && (
+                            {currentPosition == 4 && (
+                                <View style={{ flexGrow: 1}}>
+                                    <Text style={{ textAlign: 'center', marginTop: '30%' }} category="h5">
+                                        Thank You for completing your verification process, we shall let you know once your documents are verified
+                                    </Text>
+                                </View>
+                            )}
+
+                            {(currentPosition == 1 || currentPosition == 2 || currentPosition == 3) && (
                                 <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1, backgroundColor: 'red' }}>
                                     {!dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         <UploadIconComponent />
@@ -363,12 +427,12 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                                     </Text>
                                                                 )}
                                                                 {!errors.fileCountry && values.fileCountry.name && (
-                                                                    <Text style={{ color: '#8F9BB3' , padding: '3.5%', marginLeft: '3.5%' }}>
+                                                                    <Text style={{ color: '#8F9BB3', padding: '3.5%', marginLeft: '3.5%' }}>
                                                                         {values.fileCountry.name}
                                                                     </Text>
                                                                 )}
                                                                 {(!errors.fileCountry || !touched.fileCountry) && !values.fileCountry.name && (
-                                                                    <Text style={{ color: '#8F9BB3' , padding: '3.5%', marginLeft: '3.5%' }}>
+                                                                    <Text style={{ color: '#8F9BB3', padding: '3.5%', marginLeft: '3.5%' }}>
                                                                         Select Country
                                                                     </Text>
                                                                 )}
@@ -402,7 +466,6 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                             )}
                                         </>
                                     </View>}
-
 
                                     <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-65%' : '-20%', justifyContent: 'center', alignItems: 'center' }}>
                                         <Button
@@ -465,14 +528,16 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
                             <Button
                                 accessoryRight={loading ? LoadingSpinner : undefined}
-                                disabled={loading || resolveFormState().disable}
+                                disabled={loading || getFilesReq.loading || resolveFormState().disable}
                                 onPress={(e) => {
                                     handleSubmit()
+                                    const cb = resolveFormState().cb
+                                    cb && cb()
                                 }}
                                 size="giant"
                                 style={{
-                                    backgroundColor: resolveFormState().disable || loading ? '#e4e9f2' : '#41d5fb',
-                                    borderColor: resolveFormState().disable || loading ? '#e4e9f2' : '#41d5fb',
+                                    backgroundColor: resolveFormState().disable || loading || getFilesReq.loading ? '#e4e9f2' : '#41d5fb',
+                                    borderColor: resolveFormState().disable || loading || getFilesReq.loading ? '#e4e9f2' : '#41d5fb',
                                     borderRadius: 10,
                                     shadowColor: '#41d5fb',
                                     shadowOffset: {
