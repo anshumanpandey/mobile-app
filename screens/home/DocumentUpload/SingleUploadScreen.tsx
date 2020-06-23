@@ -21,17 +21,6 @@ import ErrorLabel from '../../../partials/ErrorLabel';
 const DATE_FORMAT = 'MMM DD,YYYY'
 const formatDateService = new NativeDateService('en', { format: DATE_FORMAT });
 
-type ParamList = {
-    DocumentMetadata: {
-        fileType: FileTypeEnum,
-        metadata: boolean,
-        year: string,
-        month: string,
-        day: string,
-        image: string
-    }
-}
-
 const options = {
     title: 'Select picture',
     chooseFromLibraryButtonTitle: '',

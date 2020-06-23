@@ -29,16 +29,13 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
     const [profile] = useGlobalState('profile')
 
     const screens = [
-        <Drawer.Screen name="SingleUpload" component={SingleUploadScreen} />,
-        <Drawer.Screen name="DocumentMetadata" component={DocumentMetadataScreen} />,
         <Drawer.Screen name="CompletedUpload" component={CompletedUploadScreen} />,
     ]
 
     const hasAllFiles = userHasAllFiles(profile || {})
 
     const hasFullProfile = userHasFullProfile(profile || {})
-    if (!hasFullProfile) screens.unshift(<Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} />);
-    if (hasFullProfile) screens.push(<Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} />);
+    if (!hasFullProfile || !hasAllFiles) screens.unshift(<Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} />);
 
 
     if (hasFullProfile && hasAllFiles) {

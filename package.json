@@ -60,6 +60,7 @@
     "react-native-safe-area-context": "^1.0.0",
     "react-native-screens": "^2.7.0",
     "react-native-splash-screen": "^3.2.0",
+    "react-native-step-indicator": "^1.0.3",
     "react-native-svg": "^12.1.0",
     "react-native-system-setting": "^1.7.4",
     "react-native-uploader": "0.0.10",
