@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Layout, Text, Input, Button, Datepicker, NativeDateService } from '@ui-kitten/components';
-import { SafeAreaView, ScrollView, View, Image, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView, ScrollView, View, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import useAxios from 'axios-hooks'
 import { Formik } from 'formik';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
@@ -419,7 +419,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                         placeholder={errors.docNumber && touched.docNumber ? errors.docNumber : 'Document Number'}
                                                     />
                                                     <Layout style={{ marginBottom: '1%', width: '90%' }}>
-                                                        <TouchableHighlight onPress={() => setShowCountryModal(true)}>
+                                                        <TouchableOpacity onPress={() => setShowCountryModal(true)}>
                                                             <View style={{ width: '100%', borderWidth: 1, borderColor: errors.fileCountry && touched.fileCountry ? '#ffa5bc' : '#E4E9F2', borderRadius: 10 }}>
                                                                 {errors.fileCountry && touched.fileCountry && (
                                                                     <Text style={{ color: '#ffa5bc', padding: '3.5%', marginLeft: '3.5%' }}>
@@ -437,7 +437,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                                     </Text>
                                                                 )}
                                                             </View>
-                                                        </TouchableHighlight>
+                                                        </TouchableOpacity>
                                                         {showCountryModal && (
                                                             <CountryPicker
                                                                 containerButtonStyle={{
@@ -455,6 +455,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                                 renderFlagButton={() => {
                                                                     return
                                                                 }}
+                                                                onClose={() => setTimeout(() => setShowCountryModal(false), 0)}
                                                                 onSelect={(country) => {
                                                                     console.log(country.flag)
                                                                     setFieldValue('fileCountry', country)

@@ -9,11 +9,14 @@ export type TimeCheckboxProps = {
     style?: ViewStyle
     defaultChecked?: boolean
     checked?: boolean
+    nonEditable?: boolean
     onChange: (v: boolean) => void
+    onClick?: () => void
     accessoryRight?: (props: { style: TextStyle}) => React.ReactNode;
+    replaceCheckbox?: (props?: { style: TextStyle}) => React.ReactNode;
 }
 
-const TimeCheckbox: React.FC<TimeCheckboxProps> = ({ title, subTitle, style, onChange, defaultChecked, checked: forceChecked, accessoryRight: AccessoryRight }) => {
+const TimeCheckbox: React.FC<TimeCheckboxProps> = ({ title, nonEditable, replaceCheckbox, onClick,subTitle, style, onChange, defaultChecked, checked: forceChecked, accessoryRight: AccessoryRight }) => {
     const [checked, setChecked] = useState(false);
     const styles = {
         color: '#EEF1F5',
@@ -35,8 +38,11 @@ const TimeCheckbox: React.FC<TimeCheckboxProps> = ({ title, subTitle, style, onC
         if (defaultChecked !== undefined) setChecked(defaultChecked)
     }, [])
     const Node = AccessoryRight ? AccessoryRight({ style: { color: styles.textColor} }): null
+    const Replace = replaceCheckbox ? replaceCheckbox() : null
     return (
         <TouchableWithoutFeedback onPress={() => {
+            onClick && onClick()
+            if (nonEditable === true) return
             setChecked(p => {
                 onChange && onChange(!p)
                 return !p
@@ -49,7 +55,7 @@ const TimeCheckbox: React.FC<TimeCheckboxProps> = ({ title, subTitle, style, onC
                     {subTitle && <Text style={{ color: styles.textColor }}>{subTitle}</Text>}
                 </Layout>
             </View>
-            <CheckBox checked={checked} />
+            {Replace ? Replace: <CheckBox checked={checked} />}
         </TouchableWithoutFeedback>
     )
 };

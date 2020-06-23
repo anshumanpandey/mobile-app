@@ -270,26 +270,28 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                             <>
                                                 {profile?.passimage != "" ? (
                                                     <TimeCheckbox
+                                                    replaceCheckbox={() => {
+                                                        return <MaterialCommunityIcon size={24} name="file-document-edit" />
+                                                    }}
+                                                        onClick={() => {
+                                                            if (profile?.vpass == 0){
+                                                                navigation.navigate("SingleUpload", {
+                                                                    fileType: FileTypeEnum.passport,
+                                                                    fileToShow: `https://www.right-cars.com/uploads/pass/${profile?.passimage}`,
+                                                                    day: profile?.passday,
+                                                                    month: profile?.passmonth,
+                                                                    year: profile?.passyear,
+                                                                    docNumber: profile?.passport,
+                                                                    docCountry: profile?.passcountry,
+                                                                })
+                                                            }  
+                                                        }}
+                                                        nonEditable={true}
                                                         accessoryRight={(style) => {
                                                             return <MaterialCommunityIcon style={{ color: style.style.color }} size={24} name="file-document" />
                                                         }}
                                                         subTitle={profile?.passimage ? `Format: ${profile?.passimage.split('.').pop()}` : undefined}
                                                         defaultChecked={profile?.vself == 1}
-                                                        style={{ marginBottom: '5%' }}
-                                                        title={"Selfie"}
-                                                        onChange={() => {
-
-                                                        }}
-                                                    />
-                                                ) : null}
-
-                                                {profile?.selfiurl != "" ? (
-                                                    <TimeCheckbox
-                                                        accessoryRight={(style) => {
-                                                            return <MaterialCommunityIcon style={{ color: style.style.color }} size={24} name="file-document" />
-                                                        }}
-                                                        subTitle={profile?.selfiurl ? `Format: ${profile?.selfiurl.split('.').pop()}` : undefined}
-                                                        defaultChecked={profile?.vpass == 1}
                                                         style={{ marginBottom: '5%' }}
                                                         title={"Passport"}
                                                         onChange={() => {
@@ -298,8 +300,50 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                     />
                                                 ) : null}
 
+                                                {profile?.selfiurl != "" ? (
+                                                    <TimeCheckbox
+                                                    replaceCheckbox={() => {
+                                                        return <MaterialCommunityIcon size={24} name="file-document-edit" />
+                                                    }}
+                                                        onClick={() => {
+                                                            navigation.navigate("SingleUpload", {
+                                                                fileType: FileTypeEnum.selfi,
+                                                                fileToShow: `https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}`,
+                                                            })
+                                                        }}
+                                                        nonEditable={true}
+                                                        accessoryRight={(style) => {
+                                                            return <MaterialCommunityIcon style={{ color: style.style.color }} size={24} name="file-document" />
+                                                        }}
+                                                        subTitle={profile?.selfiurl ? `Format: ${profile?.selfiurl.split('.').pop()}` : undefined}
+                                                        defaultChecked={profile?.vpass == 1}
+                                                        style={{ marginBottom: '5%' }}
+                                                        title={"Selfi"}
+                                                        onChange={() => {
+
+                                                        }}
+                                                    />
+                                                ) : null}
+
                                                 {profile?.drimage != "" ? (
                                                     <TimeCheckbox
+                                                    replaceCheckbox={() => {
+                                                        return <MaterialCommunityIcon size={24} name="file-document-edit" />
+                                                    }}
+                                                        onClick={() => {
+                                                            if (profile?.vdr == 0){
+                                                                navigation.navigate("SingleUpload", {
+                                                                    fileType: FileTypeEnum.driving_license,
+                                                                    fileToShow: `https://www.right-cars.com/uploads/drlic/${profile?.drimage}`,
+                                                                    day: profile?.drday,
+                                                                    month: profile?.drmonth,
+                                                                    year: profile?.dryear,
+                                                                    docNumber: profile?.drlic,
+                                                                    docCountry: profile?.drcountry,
+                                                                })
+                                                            }
+                                                        }}
+                                                        nonEditable={true}
                                                         accessoryRight={(style) => {
                                                             return <MaterialCommunityIcon style={{ color: style.style.color }} size={24} name="file-document" />
                                                         }}

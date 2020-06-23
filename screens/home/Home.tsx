@@ -51,6 +51,7 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
             <Drawer.Screen name="KeyedCarReservation" component={KeyedReservation} />,
             <Drawer.Screen name="EditProfile" component={EditProfile} />,
             <Drawer.Screen name="Documents" component={DocumentScreen} />,
+            <Drawer.Screen name="SingleUpload" component={SingleUploadScreen} />,
             <Drawer.Screen name="EndRental" component={EndRentalScreen} />,
         )
         screens.unshift(<Drawer.Screen name="MyBookings" component={MyTripsScreens} />)

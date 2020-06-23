@@ -17,6 +17,12 @@ export type LoginScreenProps = {
     DocumentMetadata: undefined,
     SingleUpload: {
         fileType: FileTypeEnum,
+        fileToShow?: string,
+        day?: string,
+        month?: string,
+        year?: string,
+        docNumber?: string,
+        docCountry?: string,
     }
     CompletedUpload: undefined
 }

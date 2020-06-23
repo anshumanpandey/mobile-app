@@ -81,6 +81,7 @@ const PhoneInput: React.FC<Props> = ({ mobilecode, mobileNumber = "", onCodeChan
                 withFilter={true}
                 visible={true}
                 withFlagButton={false}
+                onClose={() => setTimeout(() => setShowFlagModal(false), 0)}
                 onSelect={(country) => {
                     phoneInput.current?.selectCountry(country.cca2.toLowerCase())
                     setTimeout(() => {
