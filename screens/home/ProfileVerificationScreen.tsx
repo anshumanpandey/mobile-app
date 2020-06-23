@@ -149,7 +149,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         }
                     }
 
-                    if (currentPosition == 1 && profile?.passimage == "") {
+                    if (currentPosition == 1 && profile?.passimage == "" || currentPosition == 2 && profile?.drimage == "") {
                         if (!values.expDate) errors.expDate = 'Required';
                         if (!values.docNumber) errors.docNumber = 'Required';
                         if (!values.fileCountry) errors.fileCountry = 'Required';
@@ -364,7 +364,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 </ScrollView>
                             )}
 
-                            {currentPosition == 4 && (
+                            {currentPosition >= 4 && (
                                 <View style={{ flexGrow: 1}}>
                                     <Text style={{ textAlign: 'center', marginTop: '30%' }} category="h5">
                                         Thank You for completing your verification process, we shall let you know once your documents are verified
