@@ -11,7 +11,7 @@ import { NonLoginScreenProps, LoginScreenProps } from '../../types';
 import LoadingSpinner from '../../partials/LoadingSpinner';
 import ErrorLabel from '../../partials/ErrorLabel';
 import PhoneInputComponent from '../../partials/PhoneInput';
-import CountryPicker, { FlagButton } from 'react-native-country-picker-modal'
+import CountryPicker from 'react-native-country-picker-modal'
 import userHasFullProfile from '../../utils/userHasFullProfile';
 import userHasAllFiles from '../../utils/userHasAllFiles';
 import { FileTypeEnum, useDocumentState, dispatchFileState } from './DocumentUpload/DocumentState';
@@ -22,6 +22,7 @@ import ImagePicker, { ImagePickerResponse } from 'react-native-image-picker';
 import UploadIconComponent from '../../image/UploadIconComponent';
 import moment from 'moment';
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
 
 const options = {
@@ -49,6 +50,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
         method: 'POST',
     })
 
+    const [showCountryModal, setShowCountryModal] = useState(false);
     const [currentPosition, setCurrentPosition] = useState(0);
     const [currentFileType, setCurrentFileType] = useState(FileTypeEnum.passport);
     const [dictionary] = useDocumentState("dictionary");
@@ -73,9 +75,6 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
         return { btnTxt: 'Save', disable: true };
     }
-
-    console.log(resolveFormState())
-
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white', display: 'flex', padding: '3%' }}>
@@ -118,7 +117,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     return errors
 
                 }}
-                onSubmit={(values, {resetForm}) => {
+                onSubmit={(values, { resetForm }) => {
                     if (currentPosition == 0 && !userHasFullProfile) {
                         doLogin({ data: { ...values, module_name: "EDIT_PROFILE" } })
                             .then((res) => {
@@ -142,6 +141,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         data.append("file", file);
                         data.append("fileType", currentFileType);
                         data.append("expDate", values.expDate.format('YYYY-MM-DD'));
+                        data.append("filecountry", values.fileCountry.cca2?.toLowerCase());
+                        data.append("docNumber", values.docNumber);
 
 
                         sendFile({ data })
@@ -155,13 +156,14 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     }
 
                     setCurrentPosition(p => {
-                        resetForm({ touched: {}})
+                        resetForm({ touched: {} })
                         return p + 1
                     })
                 }}
             >
                 {({ setFieldTouched, handleChange, setFieldValue, handleSubmit, values, errors, touched }) => {
-                    console.log(touched)
+                    console.log(errors.fileCountry)
+                    console.log(touched.fileCountry)
                     return (
                         <>
                             <StepIndicator
@@ -332,51 +334,69 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                         controlStyle={{
                                                             backgroundColor: 'white',
                                                             borderRadius: 10,
-                                                            borderColor: errors.expDate && errors.expDate ? '#ffa5bc' : '#E4E9F2'
+                                                            borderColor: errors.expDate && touched.expDate ? '#ffa5bc' : '#E4E9F2'
                                                         }}
-                                                        placeholder={() => <Text style={{ padding: '1.5%',paddingLeft: '4%', color: errors.expDate && errors.expDate ? '#ffa5bc' : '#8F9BB3' }}>{errors.expDate && errors.expDate ? errors.expDate : 'Expire Date'}</Text>}
+                                                        placeholder={() => <Text style={{ padding: '1.5%', paddingLeft: '4%', color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3' }}>{errors.expDate && touched.expDate ? errors.expDate : 'Expire Date'}</Text>}
                                                         date={values?.expDate?.toDate()}
                                                         title={(d) => moment(d)?.format(DATE_FORMAT)}
                                                         dateService={formatDateService}
                                                         onSelect={nextDate => setFieldValue("expDate", moment(nextDate))}
-                                                        accessoryRight={() => <EntypoIcon style={{ color: errors.docNumber && touched.docNumber ? '#ffa5bc':'#8F9BB3', textAlign: 'left' }} name="calendar" size={22} />}
+                                                        accessoryRight={() => <EntypoIcon style={{ color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3', textAlign: 'left' }} name="calendar" size={22} />}
                                                     />
 
                                                     <Input
                                                         status={errors.docNumber && touched.docNumber ? 'danger' : undefined}
                                                         value={values.docNumber}
                                                         onChangeText={handleChange('docNumber')}
-                                                        placeholderTextColor={errors.docNumber && touched.docNumber ? '#ffa5bc':'#8F9BB3'}
+                                                        placeholderTextColor={errors.docNumber && touched.docNumber ? '#ffa5bc' : '#8F9BB3'}
                                                         style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '1%', width: "90%" }}
                                                         size="large"
                                                         onBlur={() => setFieldTouched('docNumber')}
                                                         placeholder={errors.docNumber && touched.docNumber ? errors.docNumber : 'Document Number'}
                                                     />
                                                     <Layout style={{ marginBottom: '1%', width: '90%' }}>
-                                                        <View style={{ width: '100%', borderWidth: 1, borderColor: errors.fileCountry && errors.fileCountry ? '#ffa5bc' : '#E4E9F2', borderRadius: 10 }}>
-                                                            <Text style={{ color: errors.fileCountry && errors.fileCountry ? '#ffa5bc':'#8F9BB3', padding: '3.5%', marginLeft: '3.5%' }}>
-                                                                {errors.fileCountry && errors.fileCountry ? errors.fileCountry: 'Select Country'}
-                                                            </Text>
-                                                        </View>
-                                                        <CountryPicker
-                                                            containerButtonStyle={{
-                                                                borderWidth: 1,
-                                                                borderColor: errors.expDate && errors.expDate ? '#ffa5bc' : '#E4E9F2',
-                                                                padding: '3%',
-                                                                borderRadius: 10,
-                                                                width: 350,
-                                                            }}
-                                                            countryCode={values.fileCountry.toUpperCase()}
-                                                            withFilter={true}
-                                                            withFlagButton={true}
-                                                            withCountryNameButton={true}
-                                                            renderFlagButton={() => {
-                                                                return
-                                                            }}
-                                                            onSelect={(country) => {
-                                                                setFieldValue('country', country.cca2.toLowerCase())
-                                                            }}
-                                                        />
+                                                        <TouchableHighlight onPress={() => setShowCountryModal(true)}>
+                                                            <View style={{ width: '100%', borderWidth: 1, borderColor: errors.fileCountry && touched.fileCountry ? '#ffa5bc' : '#E4E9F2', borderRadius: 10 }}>
+                                                                {errors.fileCountry && touched.fileCountry && (
+                                                                    <Text style={{ color: '#ffa5bc', padding: '3.5%', marginLeft: '3.5%' }}>
+                                                                        {errors.fileCountry}
+                                                                    </Text>
+                                                                )}
+                                                                {!errors.fileCountry && values.fileCountry.name && (
+                                                                    <Text style={{ color: '#8F9BB3' , padding: '3.5%', marginLeft: '3.5%' }}>
+                                                                        {values.fileCountry.name}
+                                                                    </Text>
+                                                                )}
+                                                                {(!errors.fileCountry || !touched.fileCountry) && !values.fileCountry.name && (
+                                                                    <Text style={{ color: '#8F9BB3' , padding: '3.5%', marginLeft: '3.5%' }}>
+                                                                        Select Country
+                                                                    </Text>
+                                                                )}
+                                                            </View>
+                                                        </TouchableHighlight>
+                                                        {showCountryModal && (
+                                                            <CountryPicker
+                                                                containerButtonStyle={{
+                                                                    borderWidth: 1,
+                                                                    borderColor: errors.expDate && errors.expDate ? '#ffa5bc' : '#E4E9F2',
+                                                                    padding: '3%',
+                                                                    borderRadius: 10,
+                                                                    width: 350,
+                                                                }}
+                                                                countryCode={values.fileCountry?.cca2?.toUpperCase()}
+                                                                visible={true}
+                                                                withFilter={true}
+                                                                withFlagButton={true}
+                                                                withCountryNameButton={true}
+                                                                renderFlagButton={() => {
+                                                                    return
+                                                                }}
+                                                                onSelect={(country) => {
+                                                                    console.log(country.flag)
+                                                                    setFieldValue('fileCountry', country)
+                                                                }}
+                                                            />
+                                                        )}
                                                     </Layout>
                                                 </>
                                             )}
