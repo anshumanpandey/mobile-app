@@ -16,11 +16,14 @@ const WebViewScreen = () => {
             const json = JSON.parse(event.nativeEvent.data);
             dispatchGlobalState({ type: 'token', state: json.token })
             dispatchGlobalState({ type: 'profile', state: json })
-            navigation.navigate('Home')
+            if (json.vemail != 1) navigation.navigate('VerifyEmail')
+            if (json.vphone == 1 && json.vemail == 1) navigation.navigate('Home')
         }}
         onNavigationStateChange={(e) => {
             const { url } = e;
             if (!url) return;
+
+            console.log(url)
 
             if (url.includes('https://right-cars-club.com/')) {
                 const params = url.split("/?")[1];
