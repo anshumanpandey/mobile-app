@@ -6,7 +6,7 @@ import { axiosInstance } from "./AxiosBootstrap"
 
 export const handlePermissionPromt = (result: LoginResult) => {
     //@ts-ignore
-    if (result.declinedPermissions.includes("email")) {
+    if (result.declinedPermissions && Array.isArray(result.declinedPermissions) && result.declinedPermissions.includes("email")) {
         dispatchGlobalState({ type: 'error', state: 'You must authorize the use of email' })
         throw new Error('You must authorize the use of email')
     }
@@ -24,5 +24,6 @@ export const handleUserData = async (response: LoginResult) => {
         .then((res) => {
             dispatchGlobalState({ type: 'token', state: res.data.token })
             dispatchGlobalState({ type: 'profile', state: res.data })
+            return res.data;
         })
 }
