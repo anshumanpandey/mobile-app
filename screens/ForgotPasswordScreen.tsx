@@ -45,7 +45,7 @@ const DocumentScreen = () => {
               username: email
             }})
             .then(r => {
-              navigation.navigate("Login")
+              navigation.navigate("SuccessForgotPassword")
             })
           }}
           size="large"

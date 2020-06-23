@@ -20,6 +20,7 @@ import Signup from './screens/Signup';
 import Home from './screens/home/Home';
 import TwitterLoginScreen from './screens/TwitterLoginWebview';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
+import SuccessForgotPasswordScreen from './screens/SuccessForgotPasswordScreen';
 import SuccessPhoneVerificationScreen from './screens/SuccessPhoneVerification';
 import VerifyPhoneScreen from './screens/VerifyPhoneScreen';
 import VerifyEmailScreen from './screens/VerifyEmailScreen';
@@ -92,6 +93,7 @@ export default () => {
                 <Stack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
                 <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
                 <Stack.Screen name="SuccessEmail" component={SuccessPhoneVerificationScreen} />
+                <Stack.Screen name="SuccessForgotPassword" component={SuccessForgotPasswordScreen} />
               </>
             )}
 
