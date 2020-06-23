@@ -17,7 +17,7 @@ const WebViewScreen = () => {
             dispatchGlobalState({ type: 'token', state: json.token })
             dispatchGlobalState({ type: 'profile', state: json })
             if (json.vemail != 1) navigation.navigate('VerifyEmail')
-            if (json.vphone == 1 && json.vemail == 1) navigation.navigate('Home')
+            if (json.vemail == 1) navigation.navigate('Home')
         }}
         onNavigationStateChange={(e) => {
             const { url } = e;
