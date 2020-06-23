@@ -51,7 +51,7 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
                         />
                     )}
                     <Layout style={{ marginLeft: '10%' }}>
-                        <Text category='h3'>{profile?.username || profile?.email}</Text>
+                        <Text category='h3'>{profile?.firstname || profile?.email}</Text>
                         <Text onPress={() => navigation.navigate("EditProfile")} style={{ color: '#52e6fe' }} category='s1'>Edit profile</Text>
                     </Layout>
 

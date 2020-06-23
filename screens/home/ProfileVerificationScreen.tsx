@@ -22,8 +22,6 @@ import ImagePicker, { ImagePickerResponse } from 'react-native-image-picker';
 import UploadIconComponent from '../../image/UploadIconComponent';
 import moment from 'moment';
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
-import { TouchableHighlight } from 'react-native-gesture-handler';
-
 
 const options = {
     title: 'Select picture',
@@ -34,7 +32,7 @@ const options = {
     },
 };
 
-const labels = ["Profile", "Passport", "Driving License", "Selfie", "Done"];
+const labels = ["Profile", "Passport", "Driving License", "Profile Picture", "Complete"];
 
 const DATE_FORMAT = 'MMM DD,YYYY'
 const formatDateService = new NativeDateService('en', { format: DATE_FORMAT });
@@ -48,7 +46,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     const [getFilesReq, sendFile] = useAxios({
         url: `${GRCGDS_BACKEND}`,
         method: 'POST',
-    })
+    }, { manual: true })
 
     const [showCountryModal, setShowCountryModal] = useState(false);
     const [currentPosition, setCurrentPosition] = useState(0);
@@ -59,60 +57,56 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     const hasAllFiles = userHasAllFiles(profile || {})
 
     useEffect(() => {
-        if (hasFullProfile) {
-            setCurrentPosition(1)
-            setCurrentFileType(FileTypeEnum.passport)
+        if (hasAllFiles) {
+            setCurrentPosition(4)
         }
-        if (profile?.passimage != "") {
-            setCurrentPosition(2)
-            setCurrentFileType(FileTypeEnum.driving_license)
-        }
-        if (profile?.drimage != "") {
+        if (profile?.selfiurl == "") {
             setCurrentPosition(3)
             setCurrentFileType(FileTypeEnum.selfi)
         }
+        
+        if (profile?.drimage == "") {
+            setCurrentPosition(2)
+            setCurrentFileType(FileTypeEnum.driving_license)
+        }
+        if (profile?.passimage == "") {
+            setCurrentPosition(1)
+            setCurrentFileType(FileTypeEnum.passport)
+        }
 
-    }, [])
+        if (!hasFullProfile) {
+            setCurrentPosition(0)
+        }
+
+    }, [currentPosition])
+
 
     const resolveFormState = () => {
         if (currentPosition == 4) {
-            return { btnTxt: 'Ok', disable: false, cb: () => dispatchGlobalState({ type: 'logout' }) }
+            return { btnTxt: 'Ok', disable: false, cb: () => navigation.navigate("MyBookings") }
         }
         if (currentPosition == 0 && hasFullProfile) {
             return { btnTxt: 'Next', disable: false }
         }
 
         if (currentPosition == 0 && !hasFullProfile) {
-            return { btnTxt: 'Save', disable: false }
+            return { btnTxt: 'Save & Next', disable: false }
         }
 
-        if (currentPosition == 1 && profile?.passimage != "") {
-            return { btnTxt: 'Done', disable: false, cb: () => setCurrentFileType(FileTypeEnum.driving_license) }
-        }
-        if (currentPosition == 2 && profile?.drimage != "") {
-            return { btnTxt: 'Done', disable: false, cb: () => setCurrentFileType(FileTypeEnum.selfi) }
-        }
-        if (currentPosition == 3 && profile?.selfiurl != "") {
-            return { btnTxt: 'Done', disable: false, cb: () => setCurrentPosition(4) }
-        }
-
-        if (currentPosition == 1 && !dictionary.get(FileTypeEnum.passport)?.file) {
-            return { btnTxt: 'Save', disable: true }
-        }
         if (currentPosition == 1 && dictionary.get(FileTypeEnum.passport)?.file) {
-            return { btnTxt: 'Save', disable: false }
+            return { btnTxt: 'Save & Next', disable: false}
         }
 
         if (currentPosition == 2 && dictionary.get(FileTypeEnum.driving_license)?.file) {
-            return { btnTxt: 'Save', disable: false }
+            return { btnTxt: 'Save & Next', disable: false}
         }
 
         if (currentPosition == 3 && dictionary.get(FileTypeEnum.selfi)?.file) {
-            return { btnTxt: 'Save', disable: false }
+            return { btnTxt: 'Save & Next', disable: false  }
         }
 
 
-        return { btnTxt: 'Save', disable: true };
+        return { btnTxt: 'Save & Next', disable: true };
     }
 
     return (
@@ -164,14 +158,26 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             .then((res) => {
                                 dispatchGlobalState({ type: 'token', state: res.data.token })
                                 dispatchGlobalState({ type: 'profile', state: res.data })
+                                setCurrentPosition(1)
                             })
                             .catch(err => console.log(err))
                         return
                     }
+
                     if ((currentPosition == 1 || currentPosition == 2 || currentPosition == 3) && dictionary.get(currentFileType)?.file) {
-                        if (currentPosition == 1 && profile?.passimage != "") return
-                        if (currentPosition == 2 && profile?.drimage != "") return
-                        if (currentPosition == 3 && profile?.selfiurl != "") return
+                        console.log('currentPosition',currentPosition)
+                        if (currentPosition == 1 && profile?.passimage != "") {
+                            setCurrentPosition(2)
+                            return
+                        }
+                        if (currentPosition == 2 && profile?.drimage != "") {
+                            setCurrentPosition(3)
+                            return
+                        }
+                        if (currentPosition == 3 && profile?.selfiurl != "") {
+                            setCurrentPosition(4)
+                            return
+                        }
                         const data = new FormData();
                         const file = dictionary.get(currentFileType)?.file;
                         const currentFile = dictionary.get(currentFileType)?.file
@@ -195,17 +201,16 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             .then(r => {
                                 console.log(r.data)
                                 dispatchGlobalState({ type: 'profile', state: r.data })
+                                setCurrentPosition(p => {
+                                    resetForm({ touched: {} })
+                                    console.log(`to step ${p + 1}`)
+                                    return p + 1
+                                })
                             })
                             .catch(r => console.log(r))
 
                         return
                     }
-
-                    setCurrentPosition(p => {
-                        resetForm({ touched: {} })
-                        console.log(`to step ${p + 1}`)
-                        return p + 1
-                    })
                 }}
             >
                 {({ setFieldTouched, handleChange, setFieldValue, handleSubmit, values, errors, touched }) => {
@@ -400,6 +405,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                             borderRadius: 10,
                                                             borderColor: errors.expDate && touched.expDate ? '#ffa5bc' : '#E4E9F2'
                                                         }}
+                                                        min={new Date()}
+                                                        max={moment().startOf('year').add(100, 'y').toDate()}
                                                         placeholder={() => <Text style={{ padding: '1.5%', paddingLeft: '4%', color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3' }}>{errors.expDate && touched.expDate ? errors.expDate : 'Expire Date'}</Text>}
                                                         date={values?.expDate?.toDate()}
                                                         title={(d) => moment(d)?.format(DATE_FORMAT)}
@@ -471,7 +478,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-65%' : '-20%', justifyContent: 'center', alignItems: 'center' }}>
                                         <Button
                                             onPress={(e) => {
-                                                ImagePicker.showImagePicker(options, (response) => {
+                                                ImagePicker.launchCamera(options, (response) => {
                                                     //console.log('Response = ', response);
 
                                                     if (response.didCancel) {
@@ -528,7 +535,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             )}
 
                             <Button
-                                accessoryRight={loading ? LoadingSpinner : undefined}
+                                accessoryRight={loading || getFilesReq.loading ? LoadingSpinner : undefined}
                                 disabled={loading || getFilesReq.loading || resolveFormState().disable}
                                 onPress={(e) => {
                                     handleSubmit()

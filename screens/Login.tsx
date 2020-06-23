@@ -145,7 +145,10 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             LoginManager.logInWithPermissions(["public_profile", "email"])
                                 .then(handlePermissionPromt)
                                 .then(handleUserData)
-                                .then(() => navigation.navigate('Home'))
+                                .then((userData) => {
+                                    if (userData.vemail != 1) navigation.navigate('VerifyEmail')
+                                    if (userData.vphone == 1 && userData.vemail == 1) navigation.navigate('Home')
+                                })
                                 .catch((error) => console.log("Login fail with error: " + error))
                         }} />
 
