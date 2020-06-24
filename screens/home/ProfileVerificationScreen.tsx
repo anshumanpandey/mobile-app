@@ -22,6 +22,7 @@ import ImagePicker, { ImagePickerResponse } from 'react-native-image-picker';
 import UploadIconComponent from '../../image/UploadIconComponent';
 import moment from 'moment';
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
+import { axiosInstance } from '../../utils/AxiosBootstrap';
 
 const options = {
     title: 'Select picture',
@@ -481,7 +482,6 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                 try {
                                                     ImagePicker.launchCamera(options, (response) => {
                                                         //console.log('Response = ', response);
-                                                        Alert.alert("Response:", JSON.stringify(response));
     
                                                         if (response.didCancel) {
                                                             console.log('User cancelled image picker');
@@ -494,9 +494,14 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                         }
                                                     });
                                                 } catch (error) {
-                                                    Alert.alert("Stack", error.stack);
-                                                    Alert.alert("Name", error.name);
-                                                    Alert.alert("Message", error.message);
+                                                    axiosInstance({
+                                                        url: GRCGDS_BACKEND,
+                                                        method: 'POST',
+                                                        data: {
+                                                            module_name: 'ERROR_TRACK',
+                                                            errorMessage: `${error.message}\n${error.stack}`,
+                                                        }
+                                                    })
                                                 }
                                             }}
                                             style={{
@@ -529,9 +534,14 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                             });
                                             dispatchFileState({ type: currentFileType, state: { file: res } })
                                         } catch (error) {
-                                            Alert.alert("Stack", error.stack);
-                                            Alert.alert("Name", error.name);
-                                            Alert.alert("Message", error.message);
+                                            axiosInstance({
+                                                url: GRCGDS_BACKEND,
+                                                method: 'POST',
+                                                data: {
+                                                    module_name: 'ERROR_TRACK',
+                                                    errorMessage: `${error.message}\n${error.stack}`,
+                                                }
+                                            })
                                         }
                                     }}>
                                         <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', height: dictionary.get(currentFileType)?.file ? '23%' : '40%', alignItems: dictionary.get(currentFileType)?.file ? 'flex-end' : 'center' }}>
