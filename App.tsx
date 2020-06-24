@@ -7,7 +7,7 @@
  */
 import 'react-native-gesture-handler';
 import React, {useEffect} from 'react'
-
+import './utils/ErrorTrack';
 
 import * as eva from '@eva-design/eva';
 import EvaMapping from '@eva-design/eva/mapping';
