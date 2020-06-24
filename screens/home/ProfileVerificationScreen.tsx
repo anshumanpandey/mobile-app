@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react'
-import { Layout, Text, Input, Button, Datepicker, NativeDateService, Avatar } from '@ui-kitten/components';
+import { Layout, Text, Input, Button, Datepicker, NativeDateService, Avatar, Toggle } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView, View, Image, TouchableWithoutFeedback, TouchableOpacity, Alert } from 'react-native';
 import useAxios from 'axios-hooks'
 import { Formik } from 'formik';
@@ -64,6 +64,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     const [profile] = useGlobalState('profile')
     const hasFullProfile = userHasFullProfile(profile || {})
     const hasAllFiles = userHasAllFiles(profile || {})
+    const [asCompany, setAsCompany] = useState(false);
 
     useEffect(() => {
         if (hasAllFiles) {
@@ -126,6 +127,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     docNumber: '',
                     expDate: null,
 
+                    twoauth: false,
                     emailaddress: '',
                     mobilenumber: '',
                     firstname: '',
@@ -136,9 +138,9 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     city: '',
                     postcode: '',
                     countryCode: profile?.country ? profile.country : '',
+                    ...profile,
                     company: '',
                     vat: '',
-                    ...profile
                 }}
                 validate={(values) => {
                     const errors: { [k: string]: string } = {};
@@ -271,6 +273,10 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         {errors.mobilenumber && touched.mobilenumber && <ErrorLabel text={errors.mobilenumber} />}
                                     </Layout>
 
+                                    <Toggle checked={values.twoauth} style={{ marginBottom: '0%' }} onChange={() => setFieldValue("twoauth", !values.twoauth)}>
+                                        Enable Opt
+                                    </Toggle>
+
                                     <Layout style={{ marginBottom: '3%' }}>
                                         <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>Country</Text>
                                         <CountryPicker
@@ -351,7 +357,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         caption={errors.postcode && touched.postcode ? () => <ErrorLabel text={errors.postcode} /> : undefined}
                                     />
 
-                                    {userIsCompany(profile || {}) && (
+                                    <Toggle checked={asCompany} style={{ marginBottom: '5%' }} onChange={() => setAsCompany(p => !p)}>
+                                        Company Account
+                                    </Toggle>
+
+                                    {asCompany && (
                                         <>
                                             <Input
                                                 status={errors.company && touched.company ? 'danger' : undefined}

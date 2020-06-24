@@ -168,7 +168,7 @@ export default () => {
 
                                     <Toggle checked={asCompany} onChange={() => setAsCompany(p => !p)}>
                                         Register as Company
-                            </Toggle>
+                                    </Toggle>
 
                                     {asCompany && (
                                         <Layout>
