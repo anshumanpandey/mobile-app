@@ -32,6 +32,7 @@ const Stack = createStackNavigator();
 
 
 export default () => {
+  const [token] = useGlobalState('token');
   const [profile] = useGlobalState('profile');
   const [error] = useGlobalState('error');
 
@@ -78,13 +79,13 @@ export default () => {
     <ApplicationProvider mapping={EvaMapping} theme={eva.light} customMapping={j}>
       <NavigationContainer>
         <Stack.Navigator headerMode='none'>
-          {(profile && profile.vemail == 1) && (
+          {(token && profile && profile.vemail == 1) && (
             <>
               <Stack.Screen name="Home" component={Home} />
             </>
           )}
 
-          {(!profile || profile.vphone != 1 || profile.vemail != 1) && (
+          {(!profile || profile.vphone != 1 || profile.vemail != 1 || !token) && (
               <>
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Signup" component={Signup} />

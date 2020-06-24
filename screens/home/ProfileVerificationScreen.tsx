@@ -405,7 +405,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                 color={"#41d5fb"}
                                                 size={100}
                                                 progress={uploadPercent / 100}
-                                                indeterminate={uploadPercent == 0}
+                                                indeterminate={uploadPercent == 0 || uploadPercent == 100}
                                                 formatText={() => {
                                                     return `${uploadPercent}%`
                                                 }}

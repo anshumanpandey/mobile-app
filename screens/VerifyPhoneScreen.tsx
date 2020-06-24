@@ -74,17 +74,39 @@ const DocumentScreen = () => {
 
         <Button
           onPress={() => {
-            doVerify({
-              url: GRCGDS_BACKEND,
-              data: {
-                "module_name": "VERIFY",
-                "code": parseInt(pin.join(""))
-              }
-            })
-            .then(() => {
-              dispatchGlobalState({ type: 'profile', state: profile })
-              navigation.navigate('SuccessEmail')
-            })
+            console.log(profile.vphone)
+            if (profile && profile.vphone == 0) {
+              doVerify({
+                url: GRCGDS_BACKEND,
+                data: {
+                  "module_name": "VERIFY",
+                  "code": parseInt(pin.join(""))
+                }
+              })
+              .then(() => {
+                dispatchGlobalState({ type: 'profile', state: profile })
+                navigation.navigate('SuccessEmail')
+              })
+              return
+            }
+
+            if (profile && profile.twoauth != 0) {
+              doVerify({
+                url: GRCGDS_BACKEND,
+                data: {
+                  "module_name": "VERIFY_OPT",
+                  "code": parseInt(pin.join(""))
+                }
+              })
+              .then((res) => {
+                dispatchGlobalState({ type: 'token', state: res.data.token })
+                dispatchGlobalState({ type: 'profile', state: res.data })
+                if (res.data.vphone != 1) navigation.navigate('Opt')
+                if (res.data.vemail != 1) navigation.navigate('VerifyEmail')
+                if (res.data.vphone == 1 && res.data.vemail == 1) navigation.navigate('Home')
+              })
+            }
+            
               
           }}
           size="giant"

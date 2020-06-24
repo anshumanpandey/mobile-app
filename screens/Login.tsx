@@ -72,12 +72,17 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             }
                             doLogin({ data, method: 'POST' })
                                 .then((res) => {
-                                    dispatchGlobalState({ type: 'token', state: res.data.token })
-                                    dispatchGlobalState({ type: 'profile', state: res.data })
-                                    if (res.data.vphone != 1) navigation.navigate('Opt')
-                                    if (res.data.vemail != 1) navigation.navigate('VerifyEmail')
-                                    if (res.data.vphone == 1 && res.data.vemail == 1) navigation.navigate('Home')
-                                    
+                                    console.log(res.data)
+                                    if (res.data.twoauth != 0) {
+                                        dispatchGlobalState({ type: 'profile', state: res.data })
+                                        navigation.navigate('Opt')
+                                    } else {
+                                        dispatchGlobalState({ type: 'token', state: res.data.token })
+                                        dispatchGlobalState({ type: 'profile', state: res.data })
+                                        if (res.data.vphone != 1) navigation.navigate('Opt')
+                                        if (res.data.vemail != 1) navigation.navigate('VerifyEmail')
+                                        if (res.data.vphone == 1 && res.data.vemail == 1) navigation.navigate('Home')
+                                    }
                                 })
                         }}
                     >
