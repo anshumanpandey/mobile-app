@@ -15,6 +15,7 @@ import { useGlobalState, dispatchGlobalState } from "../../state";
 import userHasFullProfile from "../../utils/userHasFullProfile";
 import userHasAllFiles from "../../utils/userHasAllFiles";
 import { useIsDrawerOpen } from "@react-navigation/drawer";
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const menuData = [
 ];
@@ -37,25 +38,29 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
     return (
         <>
             <View style={styles.container}>
-                <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
-                    <Layout style={{ width: '75%', display: 'flex', flexDirection: 'row', paddingBottom: '20%' }}>
+                <TouchableOpacity style={{ paddingBottom: '5%'}} onPress={() => navigation.navigate("EditProfile")}>
+                    <Layout style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', position: 'relative' }}>
                         {profile?.selfiurl == "" && (
                             <Avatar
-                                style={{ width: 80, height: 80, }}
+                                style={{ width: 100, height: 100, }}
                                 source={require('../../image/rightcars.png')}
                             />
                         )}
                         {profile?.selfiurl != "" && (
                             <Avatar
-                                style={{ width: 80, height: 80, }}
+                                style={{ width: 100, height: 100, }}
                                 source={{ uri: `https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}` }}
                             />
                         )}
                     </Layout>
+                    <Text style={{ textAlign: 'center', width: '100%' }} category="h5">
+                        {profile && profile.firstname}{' '}
+                        {profile && profile.lastname}
+                    </Text>
                 </TouchableOpacity>
-                <Divider />
 
                 <FlatList
+                    style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}
                     data={menuData}
                     renderItem={({ item }) => (
                         // @ts-ignore
@@ -82,7 +87,7 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
                     ],
                     { cancelable: false }
                 );
-            }} size="giant" style={{ borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', marginRight: '10%', marginLeft: '10%', marginBottom: '5%' }}>
+            }} size="giant" style={{ borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', marginRight: '10%', marginLeft: '10%', marginBottom: '5%', marginTop: '5%' }}>
                 {() => <Text style={{ color: 'white' }}>Logout</Text>}
             </Button>
         </>
@@ -96,6 +101,7 @@ const DrawerItem = ({ navigation, name, screenName }: StackScreenProps<LoginScre
             navigation.navigate(screenName)
         }
     >
+        <MaterialCommunityIcon style={{ marginRight: '2%', color: '#41d5fb'}} size={40} name="car-sports" />
         <Text style={styles.menuItemText}>{name}</Text>
     </TouchableOpacity>
 );
@@ -105,15 +111,20 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "rgba(255,255,255,0.43)",
         paddingTop: '20%',
-        paddingLeft: '10%'
+        display: 'flex',
+        justifyContent: 'center'
     },
     menuItem: {
-        flexDirection: "row"
+        flexDirection: "row",
+        alignItems: 'center',
+        marginBottom: '15%',
+        marginTop: '5%',
+        marginLeft: '10%'
     },
     menuItemText: {
         fontSize: 20,
         fontWeight: "300",
-        marginBottom: '15%'
+        color: "white"
     },
 });
 
