@@ -71,7 +71,7 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
             </View>
             <Button onPress={() => {
                 Alert.alert(
-                    "Do you want to logout?",
+                    "Are you sure you want to logout?",
                     "You will be send the Sign in",
                     [
                         {

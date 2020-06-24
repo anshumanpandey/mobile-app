@@ -142,6 +142,9 @@ const DocumentScreen = () => {
                   "module_name": "RESEND_VERIFY",
                   "id": profile.id
                 }})
+                .then(() => {
+                  setPin([-1, -1, -1, -1])
+                })
                 return
               }
 
@@ -152,6 +155,9 @@ const DocumentScreen = () => {
                     "module_name": "RESEND_VERIFY_OPT",
                     "id": profile.id
                   }
+                })
+                .then(() => {
+                  setPin([-1, -1, -1, -1])
                 })
               }
 
