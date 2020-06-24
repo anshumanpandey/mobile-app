@@ -6,7 +6,7 @@ import { LoginScreenProps } from '../../types';
 import DrawerMenu from './CustomeDrawer';
 import NotificationScreen from './NotificationScreen';
 import DocumentScreen from './DocumentUpload/DocumentScreen';
-import DocumentMetadataScreen from './DocumentUpload/DocumentMetadataScreen';
+import VerifyPhoneScreen from '../VerifyPhoneScreen';
 import SingleUploadScreen from './DocumentUpload/SingleUploadScreen';
 import CompletedUploadScreen from './DocumentUpload/CompletedUploadScreen';
 import MyTripsScreens from './MyTripsScreen';
@@ -37,6 +37,9 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
 
     //if (!hasFullProfile || !hasAllFiles) screens.unshift(<Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} />);
     screens.unshift(<Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} />);
+
+    if (profile && profile.vphone == 0) screens.unshift(<Drawer.Screen name="Opt" component={VerifyPhoneScreen} />);
+    if (profile && profile.vemail == 0) screens.unshift(<Drawer.Screen name="Opt" component={VerifyPhoneScreen} />);
 
 
     if (hasFullProfile && hasAllFiles) {

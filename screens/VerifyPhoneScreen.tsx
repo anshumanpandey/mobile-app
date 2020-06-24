@@ -74,7 +74,6 @@ const DocumentScreen = () => {
 
         <Button
           onPress={() => {
-            console.log(profile.vphone)
             if (profile && profile.vphone == 0) {
               doVerify({
                 url: GRCGDS_BACKEND,
@@ -85,7 +84,11 @@ const DocumentScreen = () => {
               })
               .then(() => {
                 dispatchGlobalState({ type: 'profile', state: profile })
-                navigation.navigate('SuccessEmail')
+                if (profile.vemail == 0) {
+                  navigation.navigate('SuccessEmail')
+                } else {
+                  dispatchGlobalState({ type: 'logout' })
+                }
               })
               return
             }
@@ -133,10 +136,25 @@ const DocumentScreen = () => {
           <Text
             onPress={() => {
               if (!profile) return
-              doVerify({ data: {
-                "module_name": "RESEND_VERIFY",
-                "id": profile.id
-              }})
+              
+              if (profile && profile.vphone == 0) {
+                doVerify({ data: {
+                  "module_name": "RESEND_VERIFY",
+                  "id": profile.id
+                }})
+                return
+              }
+
+              if (profile && profile.twoauth != 0) {
+                doVerify({
+                  url: GRCGDS_BACKEND,
+                  data: {
+                    "module_name": "RESEND_VERIFY_OPT",
+                    "id": profile.id
+                  }
+                })
+              }
+
             }}
             style={{ color: '#41d5fb' }}>Resend Code</Text>
         </Layout>

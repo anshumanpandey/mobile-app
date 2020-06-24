@@ -151,8 +151,16 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 .then(handlePermissionPromt)
                                 .then(handleUserData)
                                 .then((userData) => {
-                                    if (userData.vemail != 1) navigation.navigate('VerifyEmail')
-                                    if (userData.vemail == 1) navigation.navigate('Home')
+                                    if (userData.twoauth != 0) {
+                                        dispatchGlobalState({ type: 'profile', state: userData })
+                                        navigation.navigate('Opt')
+                                    } else {
+                                        dispatchGlobalState({ type: 'token', state: userData.token })
+                                        dispatchGlobalState({ type: 'profile', state: userData })
+                                        if (userData.vphone != 1) navigation.navigate('Opt')
+                                        if (userData.vemail != 1) navigation.navigate('VerifyEmail')
+                                        if (userData.vphone == 1 && userData.vemail == 1) navigation.navigate('Home')
+                                    }
                                 })
                                 .catch((error) => console.log("Login fail with error: " + error))
                         }} />

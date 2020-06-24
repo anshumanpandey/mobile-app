@@ -390,7 +390,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             {currentPosition >= 4 && (
                                 <View style={{ flexGrow: 1 }}>
                                     <Text style={{ textAlign: 'center', marginTop: '30%' }} category="h5">
-                                        Thank You for completing your verification process, we shall let you know once your documents are verified
+                                        Thank You for completing your profile, we shall let you know once your documents are verified
                                     </Text>
                                 </View>
                             )}

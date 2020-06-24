@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Layout, Text, Input, Button, TabView, Tab, Toggle } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView } from 'react-native';
 import useAxios from 'axios-hooks'
@@ -19,6 +19,7 @@ import userHasAllFiles from '../../utils/userHasAllFiles';
 import { FileTypeEnum } from './DocumentUpload/DocumentState';
 import userIsCompany from '../../utils/userIsCompany';
 import TimeCheckbox from '../../partials/TimeCheckbox';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
@@ -32,6 +33,14 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     const hasAllFiles = userHasAllFiles(profile || {})
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [asCompany, setAsCompany] = useState(false);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            console.log(profile.company)
+            console.log(profile.vat)
+          if (profile && profile.company != 'NONE' && profile.vat != 'NONE') setAsCompany(true)
+        }, [])
+      );
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -130,7 +139,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                 </Layout>
 
                                                 <Toggle checked={values.twoauth} style={{ marginBottom: '0%' }} onChange={() => setFieldValue("twoauth", !values.twoauth)}>
-                                                    Enable Opt
+                                                    Enable 2-factor authentication
                                                 </Toggle>
 
                                                 <Layout style={{ marginBottom: '3%' }}>

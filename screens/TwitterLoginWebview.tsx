@@ -10,14 +10,21 @@ const WebViewScreen = () => {
     return <WebView
         source={{ uri: route.params.url }}
         originWhitelist={['*']}
-        onError={(e)=>console.log("WebView error: "+e)}
+        onError={(e) => console.log("WebView error: " + e)}
         javaScriptEnabled={true}
         onMessage={event => {
             const json = JSON.parse(event.nativeEvent.data);
-            dispatchGlobalState({ type: 'token', state: json.token })
-            dispatchGlobalState({ type: 'profile', state: json })
-            if (json.vemail != 1) navigation.navigate('VerifyEmail')
-            if (json.vemail == 1) navigation.navigate('Home')
+            console.log(json)
+            if (json.twoauth != 0) {
+                dispatchGlobalState({ type: 'profile', state: json })
+                navigation.navigate('Opt')
+            } else {
+                dispatchGlobalState({ type: 'token', state: json.token })
+                dispatchGlobalState({ type: 'profile', state: json })
+                if (json.vphone != 1) navigation.navigate('Opt')
+                if (json.vemail != 1) navigation.navigate('VerifyEmail')
+                if (json.vphone == 1 && json.vemail == 1) navigation.navigate('Home')
+            }
         }}
         onNavigationStateChange={(e) => {
             const { url } = e;
