@@ -370,7 +370,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                 style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                                 size="large"
                                                 label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Company Name</Text>}
-                                                placeholder='Enter your address'
+                                                placeholder='Enter your Company Name'
                                                 caption={errors.company && touched.company ? () => <ErrorLabel text={errors.company} /> : undefined}
                                             /><Input
                                                 status={errors.vat && touched.vat ? 'danger' : undefined}
@@ -379,7 +379,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                 style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                                 size="large"
                                                 label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Company VAT Number</Text>}
-                                                placeholder='Enter your address'
+                                                placeholder='Enter your Company VAT number'
                                                 caption={errors.vat && touched.vat ? () => <ErrorLabel text={errors.vat} /> : undefined}
                                             />
                                         </>

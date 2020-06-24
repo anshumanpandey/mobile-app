@@ -1,6 +1,6 @@
 
-import React from 'react'
-import { Layout, Text, Input, Button, TabView, Tab } from '@ui-kitten/components';
+import React, { useState } from 'react'
+import { Layout, Text, Input, Button, TabView, Tab, Toggle } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView } from 'react-native';
 import useAxios from 'axios-hooks'
 import { Formik } from 'formik';
@@ -30,7 +30,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     const [profile] = useGlobalState('profile')
     const hasFullProfile = userHasFullProfile(profile || {})
     const hasAllFiles = userHasAllFiles(profile || {})
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [asCompany, setAsCompany] = useState(false);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -61,9 +62,10 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             city: '',
                             postcode: '',
                             countryCode: profile?.country ? profile.country : '',
-                            company: '',
-                            vat: '',
-                            ...profile
+                            twoauth: false,
+                            ...profile,
+                            company: profile && profile.company != 'NONE' ? profile.company : '',
+                            vat: profile && profile.vat != 'NONE' ? profile.vat : ''
                         }}
                         enableReinitialize
                         validate={(values) => {
@@ -126,6 +128,10 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                     />
                                                     {errors.mobilenumber && touched.mobilenumber && <ErrorLabel text={errors.mobilenumber} />}
                                                 </Layout>
+
+                                                <Toggle checked={values.twoauth} style={{ marginBottom: '0%' }} onChange={() => setFieldValue("twoauth", !values.twoauth)}>
+                                                    Enable Opt
+                                                </Toggle>
 
                                                 <Layout style={{ marginBottom: '3%' }}>
                                                     <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>Country</Text>
@@ -207,7 +213,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                     caption={errors.postcode && touched.postcode ? () => <ErrorLabel text={errors.postcode} /> : undefined}
                                                 />
 
-                                                {userIsCompany(profile || {}) && (
+                                                <Toggle checked={asCompany} style={{ marginBottom: '5%' }} onChange={() => setAsCompany(p => !p)}>
+                                                    Company Account
+                                                </Toggle>
+
+                                                {asCompany && (
                                                     <>
                                                         <Input
                                                             status={errors.company && touched.company ? 'danger' : undefined}
@@ -216,7 +226,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                             style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                                             size="large"
                                                             label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Company Name</Text>}
-                                                            placeholder='Enter your address'
+                                                            placeholder='Enter your Company Name'
                                                             caption={errors.company && touched.company ? () => <ErrorLabel text={errors.company} /> : undefined}
                                                         /><Input
                                                             status={errors.vat && touched.vat ? 'danger' : undefined}
@@ -225,7 +235,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                             style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                                             size="large"
                                                             label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Company VAT Number</Text>}
-                                                            placeholder='Enter your address'
+                                                            placeholder='Enter your Company VAT number'
                                                             caption={errors.vat && touched.vat ? () => <ErrorLabel text={errors.vat} /> : undefined}
                                                         />
                                                     </>
@@ -247,7 +257,6 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                     style={{
                                                         backgroundColor: loading == false ? '#41d5fb' : '#e4e9f2',
                                                         borderColor: loading == false ? '#41d5fb' : '#e4e9f2',
-                                                        marginBottom: '15%',
                                                         borderRadius: 10,
                                                         shadowColor: '#41d5fb',
                                                         shadowOffset: {
@@ -270,11 +279,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                             <>
                                                 {profile?.passimage != "" ? (
                                                     <TimeCheckbox
-                                                    replaceCheckbox={() => {
-                                                        return <MaterialCommunityIcon size={24} name="file-document-edit" />
-                                                    }}
+                                                        replaceCheckbox={() => {
+                                                            return <MaterialCommunityIcon size={24} name="file-document-edit" />
+                                                        }}
                                                         onClick={() => {
-                                                            if (profile?.vpass == 0){
+                                                            if (profile?.vpass == 0) {
                                                                 navigation.navigate("SingleUpload", {
                                                                     fileType: FileTypeEnum.passport,
                                                                     fileToShow: `https://www.right-cars.com/uploads/pass/${profile?.passimage}`,
@@ -284,7 +293,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                                     docNumber: profile?.passport,
                                                                     docCountry: profile?.passcountry,
                                                                 })
-                                                            }  
+                                                            }
                                                         }}
                                                         nonEditable={true}
                                                         accessoryRight={(style) => {
@@ -302,9 +311,9 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
                                                 {profile?.selfiurl != "" ? (
                                                     <TimeCheckbox
-                                                    replaceCheckbox={() => {
-                                                        return <MaterialCommunityIcon size={24} name="file-document-edit" />
-                                                    }}
+                                                        replaceCheckbox={() => {
+                                                            return <MaterialCommunityIcon size={24} name="file-document-edit" />
+                                                        }}
                                                         onClick={() => {
                                                             navigation.navigate("SingleUpload", {
                                                                 fileType: FileTypeEnum.selfi,
@@ -327,11 +336,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
                                                 {profile?.drimage != "" ? (
                                                     <TimeCheckbox
-                                                    replaceCheckbox={() => {
-                                                        return <MaterialCommunityIcon size={24} name="file-document-edit" />
-                                                    }}
+                                                        replaceCheckbox={() => {
+                                                            return <MaterialCommunityIcon size={24} name="file-document-edit" />
+                                                        }}
                                                         onClick={() => {
-                                                            if (profile?.vdr == 0){
+                                                            if (profile?.vdr == 0) {
                                                                 navigation.navigate("SingleUpload", {
                                                                     fileType: FileTypeEnum.driving_license,
                                                                     fileToShow: `https://www.right-cars.com/uploads/drlic/${profile?.drimage}`,
@@ -355,9 +364,9 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
                                                         }}
                                                     />
-                                                ): null}
+                                                ) : null}
 
-                                                {profile?.passimage == "" && profile?.selfiurl == "" && profile?.drimage == "" && <Text style={{ textAlign: 'center', fontSize: 18, marginTop: '10%'}}>No files uploaded</Text>}
+                                                {profile?.passimage == "" && profile?.selfiurl == "" && profile?.drimage == "" && <Text style={{ textAlign: 'center', fontSize: 18, marginTop: '10%' }}>No files uploaded</Text>}
 
                                             </>
                                         </Tab>
