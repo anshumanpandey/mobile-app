@@ -53,16 +53,17 @@ export default () => {
   j.components.Input.appearances.default.variantGroups.status.basic.state.focused.borderColor = '#41D5FB'
   j.components.Input.appearances.default.variantGroups.status.basic.backgroundColor = "white"
 
-  j.components.CheckBox.appearances.default.variantGroups.status.basic.backgroundColor = "white"
-  j.components.CheckBox.appearances.default.variantGroups.status.basic.borderColor = "#E4E9F2"
-  j.components.CheckBox.appearances.default.variantGroups.status.basic.state.checked.backgroundColor = "#41D5FB"
-  j.components.CheckBox.appearances.default.variantGroups.status.basic.state.checked.borderColor = "#41D5FB"
-  j.components.CheckBox.appearances.default.variantGroups.status.basic.state.focused.borderColor = "#41D5FB"
-  j.components.CheckBox.appearances.default.variantGroups.status.basic.state.focused.backgroundColor = "#41D5FB"
-  j.components.CheckBox.appearances.default.variantGroups.status.basic.state.active.backgroundColor = "#41D5FB"
-  j.components.CheckBox.appearances.default.variantGroups.status.basic.state.active.borderColor = "#41D5FB"
-  j.components.CheckBox.appearances.default.variantGroups.status.basic.state["checked.active"].backgroundColor = "#41D5FB"
-  j.components.CheckBox.appearances.default.variantGroups.status.basic.state["checked.active"].borderColor = "#41D5FB"
+  j.components.Toggle.appearances.default.variantGroups.status.basic.backgroundColor = "white"
+  j.components.Toggle.appearances.default.variantGroups.status.basic.borderColor = "#E4E9F2"
+  j.components.Toggle.appearances.default.variantGroups.status.basic.state.checked.backgroundColor = "#41D5FB"
+  j.components.Toggle.appearances.default.variantGroups.status.basic.state.checked.borderColor = "#41D5FB"
+  j.components.Toggle.appearances.default.variantGroups.status.basic.state.checked.iconTintColor = "#41D5FB"
+  j.components.Toggle.appearances.default.variantGroups.status.basic.state.focused.borderColor = "#41D5FB"
+  j.components.Toggle.appearances.default.variantGroups.status.basic.state.focused.backgroundColor = "#41D5FB"
+  j.components.Toggle.appearances.default.variantGroups.status.basic.state.active.backgroundColor = "#41D5FB"
+  j.components.Toggle.appearances.default.variantGroups.status.basic.state.active.borderColor = "#41D5FB"
+  j.components.Toggle.appearances.default.variantGroups.status.basic.state["checked.active"].backgroundColor = "#41D5FB"
+  j.components.Toggle.appearances.default.variantGroups.status.basic.state["checked.active"].borderColor = "#41D5FB"
 
   if (error) {
     Alert.alert(

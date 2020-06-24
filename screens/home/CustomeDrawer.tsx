@@ -53,10 +53,6 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
                             />
                         )}
                     </Layout>
-                    <Text style={{ textAlign: 'center', width: '100%' }} category="h5">
-                        {profile && profile.firstname}{' '}
-                        {profile && profile.lastname}
-                    </Text>
                 </TouchableOpacity>
 
                 <FlatList
