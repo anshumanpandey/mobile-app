@@ -40,14 +40,14 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
                 <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
                     <Layout style={{ width: '75%', display: 'flex', flexDirection: 'row', paddingBottom: '20%' }}>
                         {profile?.selfiurl == "" && (
-                            <Image
-                                style={{ width: 80, height: 80, resizeMode: 'contain' }}
+                            <Avatar
+                                style={{ width: 80, height: 80, }}
                                 source={require('../../image/rightcars.png')}
                             />
                         )}
                         {profile?.selfiurl != "" && (
-                            <Image
-                                style={{ width: 80, height: 80, resizeMode: 'contain' }}
+                            <Avatar
+                                style={{ width: 80, height: 80, }}
                                 source={{ uri: `https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}` }}
                             />
                         )}

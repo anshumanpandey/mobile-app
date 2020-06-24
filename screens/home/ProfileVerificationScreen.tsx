@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react'
-import { Layout, Text, Input, Button, Datepicker, NativeDateService } from '@ui-kitten/components';
+import { Layout, Text, Input, Button, Datepicker, NativeDateService, Avatar } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView, View, Image, TouchableWithoutFeedback, TouchableOpacity, Alert } from 'react-native';
 import useAxios from 'axios-hooks'
 import { Formik } from 'formik';
@@ -23,6 +23,7 @@ import UploadIconComponent from '../../image/UploadIconComponent';
 import moment from 'moment';
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
 import { axiosInstance } from '../../utils/AxiosBootstrap';
+import * as Progress from 'react-native-progress';
 
 const options = {
     title: 'Select picture',
@@ -44,11 +45,18 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
         method: 'POST'
     }, { manual: true })
 
-    const [getFilesReq, sendFile] = useAxios({
+    const [sendFileReq, sendFile] = useAxios({
         url: `${GRCGDS_BACKEND}`,
         method: 'POST',
+        onUploadProgress: (e) => {
+            console.log(e)
+            var percentCompleted = Math.round((e.loaded * 100) / e.total)
+            console.log("percentCompleted", percentCompleted)
+            setUploadPercent(percentCompleted);
+        }
     }, { manual: true })
 
+    const [uploadPercent, setUploadPercent] = useState(0);
     const [showCountryModal, setShowCountryModal] = useState(false);
     const [currentPosition, setCurrentPosition] = useState(0);
     const [currentFileType, setCurrentFileType] = useState(FileTypeEnum.passport);
@@ -65,7 +73,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
             setCurrentPosition(3)
             setCurrentFileType(FileTypeEnum.selfi)
         }
-        
+
         if (profile?.drimage == "") {
             setCurrentPosition(2)
             setCurrentFileType(FileTypeEnum.driving_license)
@@ -95,15 +103,15 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
         }
 
         if (currentPosition == 1 && dictionary.get(FileTypeEnum.passport)?.file) {
-            return { btnTxt: 'Save & Next', disable: false}
+            return { btnTxt: 'Save & Next', disable: false }
         }
 
         if (currentPosition == 2 && dictionary.get(FileTypeEnum.driving_license)?.file) {
-            return { btnTxt: 'Save & Next', disable: false}
+            return { btnTxt: 'Save & Next', disable: false }
         }
 
         if (currentPosition == 3 && dictionary.get(FileTypeEnum.selfi)?.file) {
-            return { btnTxt: 'Save & Next', disable: false  }
+            return { btnTxt: 'Save & Next', disable: false }
         }
 
 
@@ -166,7 +174,6 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     }
 
                     if ((currentPosition == 1 || currentPosition == 2 || currentPosition == 3) && dictionary.get(currentFileType)?.file) {
-                        console.log('currentPosition',currentPosition)
                         if (currentPosition == 1 && profile?.passimage != "") {
                             setCurrentPosition(2)
                             return
@@ -371,7 +378,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             )}
 
                             {currentPosition >= 4 && (
-                                <View style={{ flexGrow: 1}}>
+                                <View style={{ flexGrow: 1 }}>
                                     <Text style={{ textAlign: 'center', marginTop: '30%' }} category="h5">
                                         Thank You for completing your verification process, we shall let you know once your documents are verified
                                     </Text>
@@ -380,7 +387,23 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
                             {(currentPosition == 1 || currentPosition == 2 || currentPosition == 3) && (
                                 <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1, backgroundColor: 'red' }}>
-                                    {!dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    {sendFileReq.loading && (
+                                        <View style={{ backgroundColor: 'white', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                            <Progress.Circle
+                                                showsText={true}
+                                                textStyle={{ color: "#41d5fb" }}
+                                                color={"#41d5fb"}
+                                                size={100}
+                                                progress={uploadPercent / 100}
+                                                indeterminate={uploadPercent == 0}
+                                                formatText={() => {
+                                                    return `${uploadPercent}%`
+                                                }}
+                                            />
+                                        </View>
+                                    )}
+
+                                    {!sendFileReq.loading && !dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         <UploadIconComponent />
                                         <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, fontFamily: 'SF-UI-Display' }} category='s2'>
                                             We need you to upload your
@@ -390,11 +413,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         </Text>
                                     </View>}
 
-                                    {dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '77%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    {!sendFileReq.loading && dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '77%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         <>
-                                            <Image
+                                            <Avatar
                                                 key={dictionary.get(currentFileType)?.file?.uri}
-                                                style={{ width: 150, height: 200, resizeMode: 'cover', marginBottom: '3%', zIndex: -2 }}
+                                                style={{ width: 200, height: 200, resizeMode: 'cover', marginBottom: '3%', zIndex: -2 }}
                                                 source={{ uri: dictionary.get(currentFileType)?.file?.uri, cache: 'reload' }}
                                             />
                                             {currentFileType != FileTypeEnum.selfi && (
@@ -476,90 +499,94 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         </>
                                     </View>}
 
-                                    <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-65%' : '-20%', justifyContent: 'center', alignItems: 'center' }}>
-                                        <Button
-                                            onPress={(e) => {
-                                                try {
-                                                    ImagePicker.launchCamera(options, (response) => {
-                                                        //console.log('Response = ', response);
-    
-                                                        if (response.didCancel) {
-                                                            console.log('User cancelled image picker');
-                                                        } else if (response.error) {
-                                                            console.log('ImagePicker Error: ', response.error);
-                                                        } else if (response.customButton) {
-                                                            console.log('User tapped custom button: ', response.customButton);
-                                                        } else {
-                                                            dispatchFileState({ type: currentFileType, state: { file: response } })
-                                                        }
-                                                    });
-                                                } catch (error) {
-                                                    axiosInstance({
-                                                        url: GRCGDS_BACKEND,
-                                                        method: 'POST',
-                                                        data: {
-                                                            module_name: 'ERROR_TRACK',
-                                                            errorMessage: `${error.message}\n${error.stack}`,
-                                                        }
-                                                    })
-                                                }
-                                            }}
-                                            style={{
-                                                zIndex: 2,
-                                                backgroundColor: '#41d5fb',
-                                                borderColor: '#41d5fb',
-                                                borderRadius: 30,
-                                                width: '50%',
-                                                marginLeft: 'auto',
-                                                marginRight: 'auto'
-                                            }}>
-                                            {() => {
-                                                return (
-                                                    <>
-                                                        <EntypoIcon style={{ marginRight: '5%', color: 'white' }} size={24} name="camera" />
-                                                        <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>
-                                                            Use Camera
+                                    {!sendFileReq.loading && (
+                                        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-65%' : '-20%', justifyContent: 'center', alignItems: 'center' }}>
+                                            <Button
+                                                onPress={(e) => {
+                                                    try {
+                                                        ImagePicker.launchCamera(options, (response) => {
+                                                            //console.log('Response = ', response);
+
+                                                            if (response.didCancel) {
+                                                                console.log('User cancelled image picker');
+                                                            } else if (response.error) {
+                                                                console.log('ImagePicker Error: ', response.error);
+                                                            } else if (response.customButton) {
+                                                                console.log('User tapped custom button: ', response.customButton);
+                                                            } else {
+                                                                dispatchFileState({ type: currentFileType, state: { file: response } })
+                                                            }
+                                                        });
+                                                    } catch (error) {
+                                                        axiosInstance({
+                                                            url: GRCGDS_BACKEND,
+                                                            method: 'POST',
+                                                            data: {
+                                                                module_name: 'ERROR_TRACK',
+                                                                errorMessage: `${error.message}\n${error.stack}`,
+                                                            }
+                                                        })
+                                                    }
+                                                }}
+                                                style={{
+                                                    zIndex: 2,
+                                                    backgroundColor: '#41d5fb',
+                                                    borderColor: '#41d5fb',
+                                                    borderRadius: 30,
+                                                    width: '50%',
+                                                    marginLeft: 'auto',
+                                                    marginRight: 'auto'
+                                                }}>
+                                                {() => {
+                                                    return (
+                                                        <>
+                                                            <EntypoIcon style={{ marginRight: '5%', color: 'white' }} size={24} name="camera" />
+                                                            <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>
+                                                                Use Camera
                                                             </Text>
-                                                    </>
-                                                );
-                                            }}
-                                        </Button>
-                                    </View>
+                                                        </>
+                                                    );
+                                                }}
+                                            </Button>
+                                        </View>
 
+                                    )}
 
-                                    <TouchableWithoutFeedback onPress={async () => {
-                                        try {
-                                            const res = await DocumentPicker.pick({
-                                                type: [DocumentPicker.types.images],
-                                            });
-                                            dispatchFileState({ type: currentFileType, state: { file: res } })
-                                        } catch (error) {
-                                            axiosInstance({
-                                                url: GRCGDS_BACKEND,
-                                                method: 'POST',
-                                                data: {
-                                                    module_name: 'ERROR_TRACK',
-                                                    errorMessage: `${error.message}\n${error.stack}`,
-                                                }
-                                            })
-                                        }
-                                    }}>
-                                        <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', height: dictionary.get(currentFileType)?.file ? '23%' : '40%', alignItems: dictionary.get(currentFileType)?.file ? 'flex-end' : 'center' }}>
+                                    {!sendFileReq.loading && (
+                                        <TouchableWithoutFeedback onPress={async () => {
+                                            try {
+                                                const res = await DocumentPicker.pick({
+                                                    type: [DocumentPicker.types.images],
+                                                });
+                                                dispatchFileState({ type: currentFileType, state: { file: res } })
+                                            } catch (error) {
+                                                axiosInstance({
+                                                    url: GRCGDS_BACKEND,
+                                                    method: 'POST',
+                                                    data: {
+                                                        module_name: 'ERROR_TRACK',
+                                                        errorMessage: `${error.message}\n${error.stack}`,
+                                                    }
+                                                })
+                                            }
+                                        }}>
+                                            <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', height: dictionary.get(currentFileType)?.file ? '23%' : '40%', alignItems: dictionary.get(currentFileType)?.file ? 'flex-end' : 'center' }}>
 
-                                            <EntypoIcon style={{ marginRight: '5%', color: 'black', textAlign: 'center', }} size={24} name="images" />
-                                            <Text style={{ color: 'black', textAlign: 'center', fontSize: 16, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
-                                                Select the document from gallery
-                                                    </Text>
-                                        </Layout>
+                                                <EntypoIcon style={{ marginRight: '5%', color: 'black', textAlign: 'center', }} size={24} name="images" />
+                                                <Text style={{ color: 'black', textAlign: 'center', fontSize: 16, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
+                                                    Select the document from gallery
+                                                        </Text>
+                                            </Layout>
 
-                                    </TouchableWithoutFeedback>
+                                        </TouchableWithoutFeedback>
+                                    )}
 
                                 </ScrollView>
                             )}
 
                             <Button
-                                accessoryRight={loading || getFilesReq.loading ? LoadingSpinner : undefined}
-                                disabled={loading || getFilesReq.loading || resolveFormState().disable}
+                                accessoryRight={loading ? LoadingSpinner : undefined}
+                                disabled={loading || sendFileReq.loading || resolveFormState().disable}
                                 onPress={(e) => {
                                     handleSubmit()
                                     const cb = resolveFormState().cb
@@ -567,8 +594,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 }}
                                 size="giant"
                                 style={{
-                                    backgroundColor: resolveFormState().disable || loading || getFilesReq.loading ? '#e4e9f2' : '#41d5fb',
-                                    borderColor: resolveFormState().disable || loading || getFilesReq.loading ? '#e4e9f2' : '#41d5fb',
+                                    backgroundColor: resolveFormState().disable || loading || sendFileReq.loading ? '#e4e9f2' : '#41d5fb',
+                                    borderColor: resolveFormState().disable || loading || sendFileReq.loading ? '#e4e9f2' : '#41d5fb',
                                     borderRadius: 10,
                                     shadowColor: '#41d5fb',
                                     shadowOffset: {
