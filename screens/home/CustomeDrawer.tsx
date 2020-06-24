@@ -42,13 +42,13 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
                     <Layout style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', position: 'relative' }}>
                         {profile?.selfiurl == "" && (
                             <Avatar
-                                style={{ width: 100, height: 100, }}
+                                style={{ width: 125, height: 125, }}
                                 source={require('../../image/rightcars.png')}
                             />
                         )}
                         {profile?.selfiurl != "" && (
                             <Avatar
-                                style={{ width: 100, height: 100, }}
+                                style={{ width: 125, height: 125, }}
                                 source={{ uri: `https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}` }}
                             />
                         )}
