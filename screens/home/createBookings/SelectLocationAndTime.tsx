@@ -39,10 +39,11 @@ export default () => {
                     <LocationSearchInput
                         pickupLocation={originLocation}
                         returnLocation={returnLocation}
-                        onResultChange={(results, type) => {
-                            setResults(results)
-                            setSearchingFor(type)
+                        onOriginLocationSelected={(l) => {
+                            setOriginLocation(l)
+                            setReturnLocation(l)
                         }}
+                        onReturnLocationSelected={(l) => setReturnLocation(l)}
                     />
                     
                     <TimeCheckbox
@@ -133,43 +134,6 @@ export default () => {
                         {() => <Text style={{ color: loading ? "#ACB1C0" : 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>Search</Text>}
                     </Button>
                 </Layout>
-                <Modal
-                    coverScreen={false}
-                    hasBackdrop={false}
-                    isVisible={result != null}
-                    style={{
-                        margin: 0,
-                        justifyContent: 'flex-end',
-                        flexGrow: 3,
-                    }}>
-
-                    <List
-                        keyboardShouldPersistTaps={"handled"}
-                        data={result}
-                        style={{ maxHeight: '30%' }}
-                        renderItem={(data: any) => {
-                            let extraStyles = {}
-                            if (data.index == 0) {
-                                extraStyles = {
-                                    borderTopRightRadius: 30, borderTopLeftRadius: 30
-                                }
-                            }
-                            return (
-                                <TouchableHighlight onPress={(el) => {
-                                    console.log(searchingFor)
-                                    if (searchingFor == "ORIGIN") setOriginLocation(data.item)
-                                    if (searchingFor == "RETURN") setReturnLocation(data.item)
-                                    setResults(null)
-                                }} >
-                                    <Layout style={{ display: 'flex', flexDirection: 'row', borderBottomColor: '#E4E9F2', borderBottomWidth: 1, paddingBottom: '5%', paddingTop: '5%' }}>
-                                        <EvilIcon style={{ color: '#41D5FB' }} name="location" size={32} />
-                                        <Text style={{ fontSize: 18 }}>{data.item.locationname}</Text>
-                                    </Layout>
-                                </TouchableHighlight>
-                            );
-                        }}
-                    />
-                </Modal>
             </ScrollView >
         </SafeAreaView>
     )

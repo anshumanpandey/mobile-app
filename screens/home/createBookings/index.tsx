@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import SelectTime from "./SelectTime"
+import SelectTime from "./SelectLocationAndTime"
 import CarsListScreen from "./CarsListScreen"
 import CarExtras from "./CarExtras"
 import PaymentScreen from "./PaymentScreen"

@@ -3,8 +3,9 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EvilIcon from 'react-native-vector-icons/EvilIcons';
 import { Layout, List, Text, Toggle } from '@ui-kitten/components';
-import { TextInput, TouchableHighlight, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
-import Modal from 'react-native-modal';
+import { TextInput, TouchableHighlight, TouchableWithoutFeedback, AsyncStorage, TouchableOpacity } from 'react-native';
+//@ts-ignore
+import Autocomplete from 'react-native-autocomplete-input';
 import FuzzySearch from 'fuzzy-search';
 import { GrcgdsLocation } from '../types';
 
@@ -12,14 +13,19 @@ export type LocationSearchInputProps = {
   pickupLocation?: { [k: string]: any } | null
   returnLocation?: { [k: string]: any } | null
 
-  onResultChange: (location: any, type: "ORIGIN" | "RETURN") => void
+  onOriginLocationSelected: (location: any) => void
+  onReturnLocationSelected: (location: any) => void
 }
 const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
   const [searchingFor, setSearchingFor] = useState<"ORIGIN" | "RETURN">("ORIGIN");
   const [locations, setLocations] = useState<GrcgdsLocation[]>([]);
+  const [results, setResults] = useState<GrcgdsLocation[] | null>(null);
   const [returnSameLocation, setReturnSameLocation] = useState<boolean>(true);
+  const [value, setValue] = useState(null);
 
-  console.log(props.pickupLocation)
+  const [originLocation, setOrigin] = useState<GrcgdsLocation | null>(null);
+  const [returnLocation, setReturn] = useState<GrcgdsLocation | null>(null);
+
 
   useEffect(() => {
     AsyncStorage.getItem('locationsData')
@@ -49,30 +55,70 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
             <FontAwesomeIcon size={15} name="square" />
           </Layout>
         )}
-        <Layout style={{ display: 'flex', flexDirection: 'column' }}>
-          <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <TextInput defaultValue={props.pickupLocation ? props.pickupLocation.locationname : undefined} onChangeText={(e) => {
+        <Layout style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+          <Autocomplete
+            style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 18, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }}
+            containerStyle={{ width: '100%' }}
+            inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
+            listStyle={{ borderColor: 'white' }}
+            data={!results ? [] : results}
+            defaultValue={originLocation?.locationname}
+            onChangeText={text => {
               const searcher = new FuzzySearch(locations, ['internalcode', 'locationname', "locationvariation"]);
-              const result = searcher.search(e)
-              props.onResultChange(result, "ORIGIN")
+              const result = searcher.search(text)
+              setResults(result)
+              // props.onResultChange(result, "ORIGIN")
               setSearchingFor("ORIGIN")
-            }} style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 18, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }} placeholder="Enter Origin"></TextInput>
-          </Layout>
+            }}
+            renderItem={({ item, i }) => (
+              <TouchableOpacity onPress={() => {
+                props.onOriginLocationSelected(item)
+                setOrigin(item)
+                setResults(null)
+              }}>
+                <Layout style={{ display: 'flex', flexDirection: 'row', borderBottomColor: '#E4E9F2', borderBottomWidth: 1, paddingBottom: '3%', paddingTop: '3%' }}>
+                  <EvilIcon style={{ color: '#41D5FB' }} name="location" size={32} />
+                  <Text style={{ fontSize: 18 }}>{item.locationname}</Text>
+                </Layout>
+              </TouchableOpacity>
+            )}
+          />
           {!returnSameLocation && (
-            <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-              <TextInput defaultValue={props.returnLocation ? props.returnLocation.locationname : undefined} onChangeText={(e) => {
-                const searcher = new FuzzySearch(locations, ['internalcode', 'locationname', "locationvariation"]);
-                const result = searcher.search(e)
-                props.onResultChange(result, "RETURN")
-                setSearchingFor("RETURN")
-              }} style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 18, width: '100%', borderColor: 'white' }} placeholder="Enter Destionation"></TextInput>
+            <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingLeft: '2%' }}>
+              <Autocomplete
+                style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 18, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }}
+                containerStyle={{ width: '100%' }}
+                inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
+                listStyle={{ borderColor: 'white' }}
+                data={!results ? [] : results}
+                defaultValue={returnLocation?.locationname}
+                onChangeText={text => {
+                  const searcher = new FuzzySearch(locations, ['internalcode', 'locationname', "locationvariation"]);
+                  const result = searcher.search(text)
+                  setResults(result)
+                  // props.onResultChange(result, "ORIGIN")
+                  setSearchingFor("ORIGIN")
+                }}
+                renderItem={({ item, i }) => (
+                  <TouchableOpacity onPress={() => {
+                    props.onReturnLocationSelected(item)
+                    setReturn(item)
+                    setResults(null)
+                  }}>
+                    <Layout style={{ display: 'flex', flexDirection: 'row', borderBottomColor: '#E4E9F2', borderBottomWidth: 1, paddingBottom: '3%', paddingTop: '3%' }}>
+                      <EvilIcon style={{ color: '#41D5FB' }} name="location" size={32} />
+                      <Text style={{ fontSize: 18 }}>{item.locationname}</Text>
+                    </Layout>
+                  </TouchableOpacity>
+                )}
+              />
             </Layout>
           )}
         </Layout>
       </Layout>
-      <Toggle checked={returnSameLocation} style={{ marginBottom: '3%' }} onChange={() => setReturnSameLocation(p => !p)}>
+      <Toggle checked={returnSameLocation} style={{ alignSelf: 'flex-start', marginTop: '3%', marginBottom: '3%' }} onChange={() => setReturnSameLocation(p => !p)}>
         Return car on same location
-                    </Toggle>
+      </Toggle>
     </>
   );
 }
