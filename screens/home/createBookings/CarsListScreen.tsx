@@ -7,7 +7,9 @@ import { RecyclerListView, DataProvider, LayoutProvider } from "recyclerlistview
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import CarItem from '../../../partials/CarItem';
 import { useCreateBookingState } from './CreateBookingState';
-import { VehVendorAvail, VehRentalCore } from '../../../types/SearchVehicleResponse';
+import { VehVendorAvail, VehRentalCore } from '../../../type/SearchVehicleResponse';
+import { ScrollView } from 'react-native-gesture-handler';
+import GetCategoryByAcrissCode from '../../../utils/GetCategoryByAcrissCode';
 
 const _dataProvider = new DataProvider((r1, r2) => r1.VehID !== r2.VehID)
 
@@ -28,6 +30,8 @@ const DocumentScreen = () => {
   const [carTransmissionOptions, setCarTransmissionOptions] = useState([])
   const [carTypeOptions, setCarTypeOptions] = useState([])
   const [carClassOptions, setCarClassOptions] = useState([])
+  const [transmissionFilters, setTransmissionFilter] = useState<string[]>([])
+  const [typesFiter, setTypesFilter] = useState<string[]>([])
 
   const cars = route.params.cars
 
@@ -50,13 +54,8 @@ const DocumentScreen = () => {
 
     const categories = cars
       .filter(c => c.VehID)
-      .map(c => c.Vehicle.VehType.VehicleCategory);
+      .map(c => GetCategoryByAcrissCode(c.Vehicle.VehType.VehicleCategory));
     setCarTypeOptions(Array.from((new Set(categories)).values()))
-
-    const classes = cars
-      .filter(c => c.VehID)
-      .map(c => c.Vehicle.VehClass.Size);
-    setCarClassOptions(Array.from((new Set(classes)).values()))
   }, [])
 
   useEffect(() => {
@@ -69,6 +68,29 @@ const DocumentScreen = () => {
       });
     setDataToUse(_dataProvider.cloneWithRows(sortedCars))
   }, [sortState])
+
+  useEffect(() => {
+    if (transmissionFilters.length == 0) return
+    const filteredCars = cars
+      .filter((a) => {
+        if (!a.TotalCharge) return true
+        return transmissionFilters.includes(a.Vehicle.TransmissionType);
+      })
+    setDataToUse(_dataProvider.cloneWithRows(filteredCars))
+  }, [transmissionFilters.length])
+
+  useEffect(() => {
+    if (transmissionFilters.length == 0) return
+    console.log("nonFiltered", cars.length);
+    const filteredCars = cars
+      .filter((a) => {
+        if (!a.TotalCharge) return true
+        return typesFiter.includes(GetCategoryByAcrissCode(a.Vehicle.VehType.VehicleCategory));
+      })
+    console.log("filtered", filteredCars.length);
+
+    setDataToUse(_dataProvider.cloneWithRows(filteredCars))
+  }, [typesFiter.length])
 
   return (
     <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: 'white' }}>
@@ -244,56 +266,112 @@ const DocumentScreen = () => {
         <Layout style={{ height: '100%', padding: '3%' }}>
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={{ marginBottom: '6%' }} category="h3">Filter By</Text>
-            <Text onPress={() => setShowSortModal(false)} style={{ fontFamily: 'SF-UI-Display_Bold' }} category="h3">X</Text>
+            <Text onPress={() => setShowFilterModal(false)} style={{ fontFamily: 'SF-UI-Display_Bold' }} category="h3">X</Text>
           </View>
-          {carTransmissionOptions.map(i => {
-            return (
-              <TouchableOpacity onPress={() => {
-                setShowSortModal(false)
-                setSortState("LowToHigh")
+          <ScrollView>
+            <Text style={{ fontSize: 24, color: '#41d5fb' }}>Transmission</Text>
+            {carTransmissionOptions.map(i => {
+              return (
+                <TouchableOpacity onPress={() => {
+                  setShowSortModal(false)
+                  setTransmissionFilter(p => {
+                    if (p.includes(i)) { 
+                      return p.filter(o => o != i)
+                    }
+
+                    return [...p, i]
+                  })
+                }}>
+
+                  <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={{ color: '#41d5fb', fontFamily: "SF-UI-Display_Bold", marginBottom: '4%' }} category="h5">
+                      {i}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+
+            <Text style={{ fontSize: 24, color: '#41d5fb' }}>Car Type</Text>
+            {carTypeOptions.map(i => {
+              return (
+                <TouchableOpacity onPress={() => {
+                  setShowSortModal(false)
+                  setTypesFilter(p => {
+                    if (p.includes(i)) { 
+                      return p.filter(o => o != i)
+                    }
+
+                    return [...p, i]
+                  })
+                }}>
+
+                  <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={{ color: '#41d5fb', fontFamily: "SF-UI-Display_Bold", marginBottom: '4%' }} category="h5">
+                      {i}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+
+            <Text style={{ fontSize: 24, color: '#41d5fb' }}>Car Class</Text>
+            {carClassOptions.map(i => {
+              return (
+                <TouchableOpacity onPress={() => {
+                  setShowSortModal(false)
+                  setSortState("LowToHigh")
+                }}>
+
+                  <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={{ color: '#41d5fb', fontFamily: "SF-UI-Display_Bold", marginBottom: '4%' }} category="h5">
+                      {i}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Button
+              onPress={(e) => { handleSubmit() }}
+              size="giant"
+              style={{
+                width: '48%',
+                backgroundColor: '#41d5fb',
+                borderColor: '#41d5fb',
+                borderRadius: 10,
+                shadowColor: '#41d5fb',
+                shadowOffset: {
+                  width: 0,
+                  height: 10,
+                },
+                shadowOpacity: 0.51,
+                shadowRadius: 13.16,
+                elevation: 10,
               }}>
-
-                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text style={{ marginBottom: '4%' }} category="h5">
-                    {i}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-
-          {carTypeOptions.map(i => {
-            return (
-              <TouchableOpacity onPress={() => {
-                setShowSortModal(false)
-                setSortState("LowToHigh")
+              {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Reset</Text>}
+            </Button>
+            <Button
+              onPress={(e) => { handleSubmit() }}
+              size="giant"
+              style={{
+                width: '48%',
+                backgroundColor: '#41d5fb',
+                borderColor: '#41d5fb',
+                borderRadius: 10,
+                shadowColor: '#41d5fb',
+                shadowOffset: {
+                  width: 0,
+                  height: 10,
+                },
+                shadowOpacity: 0.51,
+                shadowRadius: 13.16,
+                elevation: 10,
               }}>
-
-                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text style={{ marginBottom: '4%' }} category="h5">
-                    {i}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-
-          {carClassOptions.map(i => {
-            return (
-              <TouchableOpacity onPress={() => {
-                setShowSortModal(false)
-                setSortState("LowToHigh")
-              }}>
-
-                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text style={{ marginBottom: '4%' }} category="h5">
-                    {i}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-
+              {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Apply</Text>}
+            </Button>
+          </View>
 
         </Layout>
       </Modal>

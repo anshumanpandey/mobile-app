@@ -61,7 +61,7 @@ const CarItem: React.FC<Props> = ({ vehicle, isActive, onClick, style: customeSt
                             {ResolveTransmission(vehicle.Vehicle.VehType.VehicleCategory) && (
                                 <Layout style={{ display: 'flex', flexDirection: 'row', marginBottom: '4%', backgroundColor: 'rgba(0,0,0,0)' }}>
                                     <Image source={require('../image/manual.png')} style={{ width: 20, height: 20 }} />
-                                    <Text>Manual</Text>
+                                    <Text>{ResolveTransmission(vehicle.Vehicle.VehType.VehicleCategory)}</Text>
                                 </Layout>
                             )}
                         </Layout>
