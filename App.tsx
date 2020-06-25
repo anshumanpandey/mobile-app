@@ -38,12 +38,6 @@ export default () => {
 
   useEffect(() => {
     SplashScreen.hide()
-    if (profile && !profile.verifies) {
-      // TODO: we cannot pass null since async storage cannot handle it, we should delete this block since we don't need this check anymore
-      // as long as users has the most current version on their phone with not old data stored
-      dispatchGlobalState({ type: 'token', state: null })
-      dispatchGlobalState({ type: 'profile', state: null })
-    }
   }, []);
   const j = { ...EvaMapping }
   j.strict["text-font-family"] = "SF-UI-Display-Regular"
@@ -64,6 +58,17 @@ export default () => {
   j.components.Toggle.appearances.default.variantGroups.status.basic.state.active.borderColor = "#41D5FB"
   j.components.Toggle.appearances.default.variantGroups.status.basic.state["checked.active"].backgroundColor = "#41D5FB"
   j.components.Toggle.appearances.default.variantGroups.status.basic.state["checked.active"].borderColor = "#41D5FB"
+
+  j.components.CheckBox.appearances.default.variantGroups.status.basic.backgroundColor = "white"
+  j.components.CheckBox.appearances.default.variantGroups.status.basic.borderColor = "#E4E9F2"
+  j.components.CheckBox.appearances.default.variantGroups.status.basic.state.checked.backgroundColor = "#41D5FB"
+  j.components.CheckBox.appearances.default.variantGroups.status.basic.state.checked.borderColor = "#41D5FB"
+  j.components.CheckBox.appearances.default.variantGroups.status.basic.state.focused.borderColor = "#41D5FB"
+  j.components.CheckBox.appearances.default.variantGroups.status.basic.state.focused.backgroundColor = "#41D5FB"
+  j.components.CheckBox.appearances.default.variantGroups.status.basic.state.active.backgroundColor = "#41D5FB"
+  j.components.CheckBox.appearances.default.variantGroups.status.basic.state.active.borderColor = "#41D5FB"
+  j.components.CheckBox.appearances.default.variantGroups.status.basic.state["checked.active"].backgroundColor = "#41D5FB"
+  j.components.CheckBox.appearances.default.variantGroups.status.basic.state["checked.active"].borderColor = "#41D5FB"
 
   if (error) {
     Alert.alert(

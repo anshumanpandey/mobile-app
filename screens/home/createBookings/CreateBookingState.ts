@@ -1,5 +1,6 @@
 import { createGlobalState } from 'react-hooks-global-state';
 import { PricedEquip, VehVendorAvail } from '../../../types/SearchVehicleResponse';
+import moment from 'moment';
 
 export type LocationCode = {
     Branchid: string,
@@ -24,8 +25,8 @@ const initialState: InitialState = {
     originLocation: null,
     returnLocation: null,
     inmediatePickup: null,
-    departureTime: new Date(),
-    returnTime: new Date(),
+    departureTime: moment().minutes(30).hours(10).toDate(),
+    returnTime: moment().minutes(30).hours(10).toDate(),
     extras: [],
     vehicle: null,
     arrivalTime: '',
