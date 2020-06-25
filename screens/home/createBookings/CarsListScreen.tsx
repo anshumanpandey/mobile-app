@@ -33,6 +33,7 @@ const DocumentScreen = () => {
   const [carClassOptions, setCarClassOptions] = useState([])
   const [transmissionFilters, setTransmissionFilter] = useState<string[]>([])
   const [typesFiter, setTypesFilter] = useState<string[]>([])
+  const [applyFilter, setApplyFilter] = useState<boolean>(false)
 
   const cars = route.params.cars
 
@@ -71,27 +72,29 @@ const DocumentScreen = () => {
   }, [sortState])
 
   useEffect(() => {
-    if (transmissionFilters.length == 0) return
-    const filteredCars = cars
-      .filter((a) => {
-        if (!a.TotalCharge) return true
-        return transmissionFilters.includes(a.Vehicle.TransmissionType);
-      })
-    setDataToUse(_dataProvider.cloneWithRows(filteredCars))
-  }, [transmissionFilters.length])
+    if (applyFilter == false) return
+    let carsToFilter = cars
 
-  useEffect(() => {
-    if (transmissionFilters.length == 0) return
-    console.log("nonFiltered", cars.length);
-    const filteredCars = cars
-      .filter((a) => {
-        if (!a.TotalCharge) return true
-        return typesFiter.includes(GetCategoryByAcrissCode(a.Vehicle.VehType.VehicleCategory));
-      })
-    console.log("filtered", filteredCars.length);
+    if (transmissionFilters.length != 0) {
+      carsToFilter = carsToFilter
+        .filter((a) => {
+          if (!a.TotalCharge) return true
+          return transmissionFilters.includes(a.Vehicle.TransmissionType);
+        })
+    }
 
-    setDataToUse(_dataProvider.cloneWithRows(filteredCars))
-  }, [typesFiter.length])
+    if (typesFiter.length != 0) {
+      carsToFilter = carsToFilter
+        .filter((a) => {
+          if (!a.TotalCharge) return true
+          return typesFiter.includes(GetCategoryByAcrissCode(a.Vehicle.VehType.VehicleCategory));
+        })
+    }
+
+    setDataToUse(_dataProvider.cloneWithRows(carsToFilter))
+    setApplyFilter(false)
+  }, [applyFilter])
+
 
   return (
     <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: 'white' }}>
@@ -237,10 +240,10 @@ const DocumentScreen = () => {
             setSortState("LowToHigh")
           }}>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={{ marginBottom: '4%' }} category="h5">
-                Price low to high
-              </Text>
-              {sortState == "LowToHigh" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start' }} name={"check"} size={24} />}
+              <Text style={{ fontSize: 24, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '5%' }}>
+              Price low to high
+            </Text>
+              {sortState == "LowToHigh" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start',color: '#41d5fb' }} name={"check"} size={24} />}
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {
@@ -248,10 +251,10 @@ const DocumentScreen = () => {
             setSortState("HighToLow")
           }}>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={{ marginBottom: '4%' }} category="h5">
-                Price hight to low
+            <Text style={{ fontSize: 24, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '5%' }}>
+            Price hight to low
             </Text>
-              {sortState == "HighToLow" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start' }} name={"check"} size={24} />}
+              {sortState == "HighToLow" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start',color: '#41d5fb' }} name={"check"} size={24} />}
             </View>
           </TouchableOpacity>
         </Layout>
@@ -292,9 +295,12 @@ const DocumentScreen = () => {
                     shadowRadius: 3,
                     elevation: 2,
                   }}>
-                  <Text style={{ textAlign: 'left', color: '#41d5fb', fontFamily: "SF-UI-Display" }} category="h5">
-                    {i}
-                  </Text>
+                  <View style={{ display: 'flex', flexDirection: 'row' }}>
+                    <Text style={{ textAlign: 'left', color: '#41d5fb', fontFamily: "SF-UI-Display" }} category="h5">
+                      {i}
+                    </Text>
+                    {transmissionFilters.includes(i) && <MaterialCommunityIcons style={{ marginLeft: '2%',color: '#41d5fb' }} name={"check"} size={24} />}
+                  </View>
                 </Card>
               );
             })}
@@ -321,9 +327,12 @@ const DocumentScreen = () => {
                     shadowRadius: 3,
                     elevation: 2,
                   }}>
-                  <Text style={{ color: '#41d5fb', fontFamily: "SF-UI-Display" }} category="h5">
-                    {i}
-                  </Text>
+                  <View style={{ display: 'flex', flexDirection: 'row' }}>
+                    <Text style={{ textAlign: 'left', color: '#41d5fb', fontFamily: "SF-UI-Display" }} category="h5">
+                      {i}
+                    </Text>
+                    {typesFiter.includes(i) && <MaterialCommunityIcons style={{ marginLeft: '2%',color: '#41d5fb' }} name={"check"} size={24} />}
+                  </View>
                 </Card>
               );
             })}
@@ -345,16 +354,20 @@ const DocumentScreen = () => {
                     elevation: 2,
                   }}>
 
-                    <Text style={{ color: '#41d5fb', fontFamily: "SF-UI-Display" }} category="h5">
-                      {i}
-                    </Text>
+                  <Text style={{ color: '#41d5fb', fontFamily: "SF-UI-Display" }} category="h5">
+                    {i}
+                  </Text>
                 </Card>
               );
             })}
           </ScrollView>
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <Button
-              onPress={(e) => { handleSubmit() }}
+              onPress={(e) => {
+                setTransmissionFilter([])
+                setTypesFilter([])
+                setApplyFilter(true)
+              }}
               size="small"
               style={{
                 width: '48%',
@@ -373,14 +386,17 @@ const DocumentScreen = () => {
               {() => {
                 return (
                   <>
-                  <MaterialCommunityIcons style={{ color: 'white'}} size={26} name="close"/>
-                  <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Reset</Text>
+                    <MaterialCommunityIcons style={{ color: 'white' }} size={26} name="close" />
+                    <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Reset</Text>
                   </>
                 );
               }}
             </Button>
             <Button
-              onPress={(e) => { handleSubmit() }}
+              onPress={(e) => {
+                setApplyFilter(true)
+                setShowFilterModal(false)
+              }}
               size="small"
               style={{
                 width: '48%',
@@ -399,8 +415,8 @@ const DocumentScreen = () => {
               {() => {
                 return (
                   <>
-                  <MaterialCommunityIcons style={{ color: 'white'}} size={26} name="check"/>
-                  <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Apply</Text>
+                    <MaterialCommunityIcons style={{ color: 'white' }} size={26} name="check" />
+                    <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Apply</Text>
                   </>
                 );
               }}
