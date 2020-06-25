@@ -25,6 +25,10 @@ const DocumentScreen = () => {
   const [showSortModal, setShowSortModal] = useState(false)
   const [sortState, setSortState] = useState<"LowToHigh" | "HighToLow">("LowToHigh")
 
+  const [carTransmissionOptions, setCarTransmissionOptions] = useState([])
+  const [carTypeOptions, setCarTypeOptions] = useState([])
+  const [carClassOptions, setCarClassOptions] = useState([])
+
   const cars = route.params.cars
 
   const [dataToUse, setDataToUse] = useState(_dataProvider.cloneWithRows(cars));
@@ -39,6 +43,20 @@ const DocumentScreen = () => {
         if (sortState == "HighToLow") return parseFloat(b.TotalCharge.RateTotalAmount) - parseFloat(a.TotalCharge.RateTotalAmount)
       });
     setDataToUse(_dataProvider.cloneWithRows(sortedCars))
+    const transmissions = cars
+      .filter(c => c.VehID)
+      .map(c => c.Vehicle.TransmissionType);
+    setCarTransmissionOptions(Array.from((new Set(transmissions)).values()))
+
+    const categories = cars
+      .filter(c => c.VehID)
+      .map(c => c.Vehicle.VehType.VehicleCategory);
+    setCarTypeOptions(Array.from((new Set(categories)).values()))
+
+    const classes = cars
+      .filter(c => c.VehID)
+      .map(c => c.Vehicle.VehClass.Size);
+    setCarClassOptions(Array.from((new Set(classes)).values()))
   }, [])
 
   useEffect(() => {
@@ -223,7 +241,61 @@ const DocumentScreen = () => {
           margin: 0,
           justifyContent: 'flex-end',
         }}>
-        <Text>filter Modal</Text>
+        <Layout style={{ height: '100%', padding: '3%' }}>
+          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={{ marginBottom: '6%' }} category="h3">Filter By</Text>
+            <Text onPress={() => setShowSortModal(false)} style={{ fontFamily: 'SF-UI-Display_Bold' }} category="h3">X</Text>
+          </View>
+          {carTransmissionOptions.map(i => {
+            return (
+              <TouchableOpacity onPress={() => {
+                setShowSortModal(false)
+                setSortState("LowToHigh")
+              }}>
+
+                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={{ marginBottom: '4%' }} category="h5">
+                    {i}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+
+          {carTypeOptions.map(i => {
+            return (
+              <TouchableOpacity onPress={() => {
+                setShowSortModal(false)
+                setSortState("LowToHigh")
+              }}>
+
+                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={{ marginBottom: '4%' }} category="h5">
+                    {i}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+
+          {carClassOptions.map(i => {
+            return (
+              <TouchableOpacity onPress={() => {
+                setShowSortModal(false)
+                setSortState("LowToHigh")
+              }}>
+
+                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={{ marginBottom: '4%' }} category="h5">
+                    {i}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+
+
+        </Layout>
       </Modal>
     </SafeAreaView>
   );
