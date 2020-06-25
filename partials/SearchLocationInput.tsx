@@ -50,14 +50,16 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
             <Layout style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between' }}>
               <MaterialCommunityIcon style={{ marginBottom: '5%' }} size={4} name="rectangle" />
               <MaterialCommunityIcon style={{ marginBottom: '5%' }} size={4} name="rectangle" />
+              <MaterialCommunityIcon style={{ marginBottom: '5%' }} size={4} name="rectangle" />
+              <MaterialCommunityIcon style={{ marginBottom: '5%' }} size={4} name="rectangle" />
               <MaterialCommunityIcon size={4} name="rectangle" />
             </Layout>
             <FontAwesomeIcon size={15} name="square" />
           </Layout>
         )}
-        <Layout style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+        <Layout style={{ display: 'flex', flexDirection: 'column', width: '96%', marginLeft: '2%' }}>
           <Autocomplete
-            style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 18, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }}
+            style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 16, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }}
             containerStyle={{ width: '100%' }}
             inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
             listStyle={{ borderColor: 'white' }}
@@ -84,9 +86,8 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
             )}
           />
           {!returnSameLocation && (
-            <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingLeft: '2%' }}>
               <Autocomplete
-                style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 18, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }}
+                style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 16, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }}
                 containerStyle={{ width: '100%' }}
                 inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
                 listStyle={{ borderColor: 'white' }}
@@ -112,7 +113,6 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
                   </TouchableOpacity>
                 )}
               />
-            </Layout>
           )}
         </Layout>
       </Layout>

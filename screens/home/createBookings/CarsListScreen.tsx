@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Text, List, Button } from '@ui-kitten/components';
+import { Layout, Text, List, Button, Card } from '@ui-kitten/components';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modal from 'react-native-modal';
 import { SafeAreaView, Image, TouchableOpacity, Dimensions, View } from 'react-native';
@@ -10,6 +10,7 @@ import { useCreateBookingState } from './CreateBookingState';
 import { VehVendorAvail, VehRentalCore } from '../../../type/SearchVehicleResponse';
 import { ScrollView } from 'react-native-gesture-handler';
 import GetCategoryByAcrissCode from '../../../utils/GetCategoryByAcrissCode';
+import EvaMapping from '@eva-design/eva/mapping';
 
 const _dataProvider = new DataProvider((r1, r2) => r1.VehID !== r2.VehID)
 
@@ -269,73 +270,92 @@ const DocumentScreen = () => {
             <Text onPress={() => setShowFilterModal(false)} style={{ fontFamily: 'SF-UI-Display_Bold' }} category="h3">X</Text>
           </View>
           <ScrollView>
-            <Text style={{ fontSize: 24, color: '#41d5fb' }}>Transmission</Text>
+            <Text style={{ fontSize: 24, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '5%' }}>Transmission</Text>
             {carTransmissionOptions.map(i => {
               return (
-                <TouchableOpacity onPress={() => {
-                  setShowSortModal(false)
-                  setTransmissionFilter(p => {
-                    if (p.includes(i)) { 
-                      return p.filter(o => o != i)
-                    }
+                <Card
+                  onPress={() => {
+                    setShowSortModal(false)
+                    setTransmissionFilter(p => {
+                      if (p.includes(i)) {
+                        return p.filter(o => o != i)
+                      }
 
-                    return [...p, i]
-                  })
-                }}>
-
-                  <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={{ color: '#41d5fb', fontFamily: "SF-UI-Display_Bold", marginBottom: '4%' }} category="h5">
-                      {i}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+                      return [...p, i]
+                    })
+                  }}
+                  style={{
+                    marginBottom: '4%',
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 1 },
+                    shadowOpacity: 0.5,
+                    shadowRadius: 3,
+                    elevation: 2,
+                  }}>
+                  <Text style={{ textAlign: 'left', color: '#41d5fb', fontFamily: "SF-UI-Display" }} category="h5">
+                    {i}
+                  </Text>
+                </Card>
               );
             })}
 
-            <Text style={{ fontSize: 24, color: '#41d5fb' }}>Car Type</Text>
+            <Text style={{ fontSize: 24, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '5%' }}>Car Type</Text>
             {carTypeOptions.map(i => {
               return (
-                <TouchableOpacity onPress={() => {
-                  setShowSortModal(false)
-                  setTypesFilter(p => {
-                    if (p.includes(i)) { 
-                      return p.filter(o => o != i)
-                    }
+                <Card
+                  onPress={() => {
+                    setShowSortModal(false)
+                    setTypesFilter(p => {
+                      if (p.includes(i)) {
+                        return p.filter(o => o != i)
+                      }
 
-                    return [...p, i]
-                  })
-                }}>
-
-                  <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={{ color: '#41d5fb', fontFamily: "SF-UI-Display_Bold", marginBottom: '4%' }} category="h5">
-                      {i}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+                      return [...p, i]
+                    })
+                  }}
+                  style={{
+                    marginBottom: '4%',
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 1 },
+                    shadowOpacity: 0.5,
+                    shadowRadius: 3,
+                    elevation: 2,
+                  }}>
+                  <Text style={{ color: '#41d5fb', fontFamily: "SF-UI-Display" }} category="h5">
+                    {i}
+                  </Text>
+                </Card>
               );
             })}
 
-            <Text style={{ fontSize: 24, color: '#41d5fb' }}>Car Class</Text>
+            <Text style={{ fontSize: 24, color: '#41d5fb', fontFamily: "SF-UI-Display" }}>Car Class</Text>
             {carClassOptions.map(i => {
               return (
-                <TouchableOpacity onPress={() => {
-                  setShowSortModal(false)
-                  setSortState("LowToHigh")
-                }}>
+                <Card
+                  onPress={() => {
+                    setShowSortModal(false)
+                    setSortState("LowToHigh")
+                  }}
+                  style={{
+                    marginBottom: '4%',
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 1 },
+                    shadowOpacity: 0.5,
+                    shadowRadius: 3,
+                    elevation: 2,
+                  }}>
 
-                  <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={{ color: '#41d5fb', fontFamily: "SF-UI-Display_Bold", marginBottom: '4%' }} category="h5">
+                    <Text style={{ color: '#41d5fb', fontFamily: "SF-UI-Display" }} category="h5">
                       {i}
                     </Text>
-                  </View>
-                </TouchableOpacity>
+                </Card>
               );
             })}
           </ScrollView>
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <Button
               onPress={(e) => { handleSubmit() }}
-              size="giant"
+              size="small"
               style={{
                 width: '48%',
                 backgroundColor: '#41d5fb',
@@ -350,11 +370,18 @@ const DocumentScreen = () => {
                 shadowRadius: 13.16,
                 elevation: 10,
               }}>
-              {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Reset</Text>}
+              {() => {
+                return (
+                  <>
+                  <MaterialCommunityIcons style={{ color: 'white'}} size={26} name="close"/>
+                  <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Reset</Text>
+                  </>
+                );
+              }}
             </Button>
             <Button
               onPress={(e) => { handleSubmit() }}
-              size="giant"
+              size="small"
               style={{
                 width: '48%',
                 backgroundColor: '#41d5fb',
@@ -369,7 +396,14 @@ const DocumentScreen = () => {
                 shadowRadius: 13.16,
                 elevation: 10,
               }}>
-              {() => <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Apply</Text>}
+              {() => {
+                return (
+                  <>
+                  <MaterialCommunityIcons style={{ color: 'white'}} size={26} name="check"/>
+                  <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Apply</Text>
+                  </>
+                );
+              }}
             </Button>
           </View>
 

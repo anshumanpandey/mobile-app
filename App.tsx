@@ -70,6 +70,8 @@ export default () => {
   j.components.CheckBox.appearances.default.variantGroups.status.basic.state["checked.active"].backgroundColor = "#41D5FB"
   j.components.CheckBox.appearances.default.variantGroups.status.basic.state["checked.active"].borderColor = "#41D5FB"
 
+  j.components.Card.appearances.outline.mapping.bodyPaddingVertical = 8
+
   if (error) {
     Alert.alert(
       "Error",
