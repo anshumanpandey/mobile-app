@@ -26,7 +26,6 @@ export default () => {
     const [result, setResults] = useState(null);
     const [searchingFor, setSearchingFor] = useState("ORIGIN");
 
-
     const [{ data, loading, error }, doSearch] = useAxios<VehicleResponse>({
         url: `${GRCGDS_BACKEND}/SEARCH_VEHICLE`,
         method: 'GET'
@@ -70,11 +69,13 @@ export default () => {
                     {inmediatePickup === false && (
                         <>
                             <DatePicker
+                                minuteInterval={30}
                                 date={departureTime}
                                 onDateChange={(d) => setDepartureTime(d)}
                             />
                             <Text style={{ fontFamily: 'SF-UI-Display_Bold' }}>Return Time</Text>
                             <DatePicker
+                                minuteInterval={30}
                                 date={returnTime}
                                 onDateChange={(d) => setReturnTime(d)}
                             />
@@ -86,8 +87,6 @@ export default () => {
                         disabled={originLocation == null || inmediatePickup == null || loading == true}
                         accessoryRight={loading ? LoadingSpinner : undefined}
                         onPress={() => {
-                            console.log(originLocation)
-                            console.log(returnLocation)
                             if (!originLocation) return
 
                             doSearch({
