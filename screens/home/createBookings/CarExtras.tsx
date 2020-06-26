@@ -41,10 +41,10 @@ export default () => {
                                 title={equip.Equipment.Description}
                                 replaceCheckbox={() => {
                                     const found = selectedExtras.find(i => i.Equipment.Description == equip.Equipment.Description)
-                                    return <View style={{ backgroundColor: found ? '#41d5fb': 'white', borderColor: found ? 'white': '#41d5fb', borderWidth: 1,borderRadius: 20, height: 40, width: 40, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    return <View style={{ backgroundColor: found ? '#41d5fb' : 'white', borderColor: found ? 'white' : '#41d5fb', borderWidth: 1, borderRadius: 20, height: 40, width: 40, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         {found ?
-                                            <Text style={{ fontSize: 15, color: 'white'}}>{found.amount}</Text>
-                                            : <Text style={{ fontSize: 40, color: '#41d5fb'}} >+</Text>}
+                                            <Text style={{ fontSize: 15, color: 'white' }}>{found.amount}</Text>
+                                            : <Text style={{ fontSize: 40, color: '#41d5fb' }} >+</Text>}
                                     </View>
                                 }}
                                 onChange={() => {
@@ -80,22 +80,43 @@ export default () => {
                 }}>
                 <Layout style={{ height: '40%', padding: '3%' }}>
                     <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <View style={{ display: 'flex', flexDirection: 'row'}}>
-                            <AntDesignIcon size={28} name="down" />
-                            <AntDesignIcon size={28} name="up" />
+                        <View style={{ display: 'flex', flexDirection: 'row' }}>
+                            <AntDesignIcon
+                                onPress={() => {
+                                    setAmountSelected(p => {
+                                        const v = p + 1
+                                        if (v >= 16) return 16
+                                        return v;
+                                    })
+                                }}
+                                size={28}
+                                name="down"
+                            />
+                            <AntDesignIcon
+                                onPress={() => {
+                                    setAmountSelected(p => {
+                                        const v = p - 1
+                                        if (v <= 0) return 0
+                                        return v;
+                                    })
+                                }}
+                                size={28}
+                                name="up"
+                            />
                         </View>
-                        <Text style={{ color: '#41d5fb', fontSize: 18}} onPress={() => {
+                        <Text style={{ color: '#41d5fb', fontSize: 18 }} onPress={() => {
                             setAmountSelected(0)
                             setShowCounterModal(false)
-                            if(!selectedEquip) return
-                                setExtras(p => {
-                                    const found = p.find(i => i.Equipment.vendorEquipID == selectedEquip.Equipment.vendorEquipID)
-                                    if (found) return [
-                                        ...p.filter(i => i.Equipment.vendorEquipID !== selectedEquip.Equipment.vendorEquipID),
-                                        {...selectedEquip, amount: amountSelected}
-                                    ]
-                                    return [...p, {...selectedEquip, amount: amountSelected }]
-                                })
+                            if (amountSelected == 0) return
+                            if (!selectedEquip) return
+                            setExtras(p => {
+                                const found = p.find(i => i.Equipment.vendorEquipID == selectedEquip.Equipment.vendorEquipID)
+                                if (found) return [
+                                    ...p.filter(i => i.Equipment.vendorEquipID !== selectedEquip.Equipment.vendorEquipID),
+                                    { ...selectedEquip, amount: amountSelected }
+                                ]
+                                return [...p, { ...selectedEquip, amount: amountSelected }]
+                            })
                         }}>
                             Done
                         </Text>
