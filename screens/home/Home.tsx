@@ -45,7 +45,7 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
 
     screens.unshift(<Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} />);
 
-    if (profile && profile.vphone != 1) {
+    if (profile && profile.mobilenumber != "" && profile.mobilecode != "" && profile.vphone != 1) {
         screens.unshift(<Drawer.Screen name="Opt" component={VerifyPhoneScreen} />);
     }
 
@@ -68,13 +68,14 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
     }
 
     useEffect(() => {
-        if (profile && profile.vphone != 1) {
+        if (profile && profile.mobilenumber != "" && profile.mobilecode != "" && profile.vphone != 1) {
             doVerify({
                 data: {
                     "module_name": "RESEND_VERIFY",
                     "id": profile.id
                 }
             })
+            .then(r => console.log(r.data))
         }
     }, [])
 

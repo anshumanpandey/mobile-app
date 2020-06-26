@@ -10,8 +10,6 @@ export default (profile: {[k: string]: string}): boolean => {
     profile.add1 !== null && profile.add1 !== undefined && profile.add1 !== "" &&
     profile.city !== null && profile.city !== undefined && profile.city !== "" &&
     profile.postcode !== null && profile.postcode !== undefined && profile.postcode !== "" &&
-    profile.vphone == '1' &&
-    profile.vemail == '1' &&
     profile.country !== null && profile.country !== undefined && profile.country !== "";
 
     let hasCompanyData = true
