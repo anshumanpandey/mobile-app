@@ -80,7 +80,7 @@ const WebViewScreen = () => {
         
           <Source>
         
-           <RequestorID Type="5" ID="EXPEDIA02"  />
+           <RequestorID Type="5" ID="MOBILE001"  />
         
           </Source>
         
