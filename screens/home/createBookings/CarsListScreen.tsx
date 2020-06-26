@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Text, List, Button, Card } from '@ui-kitten/components';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIconsIcons from 'react-native-vector-icons/MaterialIcons';
 import Modal from 'react-native-modal';
-import { SafeAreaView, Image, TouchableOpacity, Dimensions, View } from 'react-native';
+import { SafeAreaView, Image, TouchableOpacity, Dimensions, View, TouchableWithoutFeedback } from 'react-native';
 import { RecyclerListView, DataProvider, LayoutProvider } from "recyclerlistview";
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import CarItem from '../../../partials/CarItem';
@@ -11,6 +12,7 @@ import { VehVendorAvail, VehRentalCore } from '../../../type/SearchVehicleRespon
 import { ScrollView } from 'react-native-gesture-handler';
 import GetCategoryByAcrissCode from '../../../utils/GetCategoryByAcrissCode';
 import EvaMapping from '@eva-design/eva/mapping';
+import { ceil } from 'react-native-reanimated';
 
 const _dataProvider = new DataProvider((r1, r2) => r1.VehID !== r2.VehID)
 
@@ -116,7 +118,7 @@ const DocumentScreen = () => {
               (type, dim) => {
                 if (type === 'HEADER') {
                   dim.width = Dimensions.get("window").width - ((Dimensions.get("window").width / 100) * 10);
-                  dim.height = (Dimensions.get("window").height / 100) * 11;
+                  dim.height = (Dimensions.get("window").height / 100) * 25;
                 } else {
                   dim.width = Dimensions.get("window").width - ((Dimensions.get("window").width / 100) * 10);
                   dim.height = (Dimensions.get("window").height / 100) * 42;
@@ -130,20 +132,31 @@ const DocumentScreen = () => {
               if (o.header) {
                 return (
                   <>
-                    <View>
-                      <View style={{ display: 'flex', flexDirection: 'row' }}>
-                        <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>From: {route.params.searchParams.pickUpLocation.Branchname}</Text>
-                        <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>To: {route.params.searchParams.dropOffLocation.Branchname}</Text>
-                      </View>
+                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '#41d5fb', marginBottom: '2%', borderRadius: 10 }}>
+                      <View style={{ padding: '3%' }}>
+                        <View style={{ width: '100%' }}>
+                          <Text style={{ fontSize: 18, textAlign: 'left', fontFamily: 'SF-UI-Display_Bold' }}>{route.params.searchParams.pickUpLocation.locationname}</Text>
+                          <Text style={{ fontSize: 15, textAlign: 'left' }}>{route.params.searchParams.pickUpDate.format('MMM DD, h:mm')}</Text>
+                        </View>
 
-                      <View style={{ display: 'flex', flexDirection: 'row' }}>
-                        <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>At: {route.params.searchParams.pickUpDate.format('MMM DD, h:mm')}</Text>
-                        <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>Until: {route.params.searchParams.dropOffDate.format('MMM DD, h:mm')}</Text>
+                        <View style={{ width: '100%' }}>
+                          <Text style={{ fontSize: 18, textAlign: 'left', fontFamily: 'SF-UI-Display_Bold' }}>{route.params.searchParams.dropOffLocation.locationname}</Text>
+                          <Text style={{ fontSize: 15, textAlign: 'left' }}>{route.params.searchParams.dropOffDate.format('MMM DD, h:mm')}</Text>
+                        </View>
                       </View>
+                      <TouchableWithoutFeedback onPress={() => {
+                        if (navigation.canGoBack()) {
+                          navigation.goBack()
+                        }
+                      }}>
+                        <View style={{ backgroundColor: '#2f9eba', width: '15%', display: 'flex', justifyContent: 'center', alignItems: 'center', borderTopRightRadius: 10, borderBottomRightRadius: 10 }}>
+                          <MaterialIconsIcons style={{ color: 'white' }} name={"edit"} size={24} />
+                        </View>
+                      </TouchableWithoutFeedback>
                     </View>
                     <View style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                       <TouchableOpacity style={{ width: '49%' }} onPress={() => setShowSortModal(true)} >
-                        <View style={{ alignItems: 'center',display: 'flex', flexDirection: 'row', justifyContent: 'center', borderWidth: 1, borderColor: '#00000050' }}>
+                        <View style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', justifyContent: 'center', borderWidth: 1, borderColor: '#00000050' }}>
                           <MaterialCommunityIcons style={{ alignSelf: 'flex-start', marginTop: 'auto', marginBottom: 'auto', color: 'gray' }} name={"sort-variant"} size={18} />
                           <Text style={{ fontSize: 16, textAlign: 'center', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>
                             Sort By
@@ -152,7 +165,7 @@ const DocumentScreen = () => {
                       </TouchableOpacity>
                       <TouchableOpacity style={{ width: '49%', marginLeft: '1%' }} onPress={() => setShowFilterModal(true)}>
                         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', borderWidth: 1, borderColor: '#00000050' }}>
-                          <MaterialCommunityIcons style={{ alignSelf: 'flex-start', marginTop: 'auto', marginBottom: 'auto', color: 'gray' }}  name={"filter"} size={18} />
+                          <MaterialCommunityIcons style={{ alignSelf: 'flex-start', marginTop: 'auto', marginBottom: 'auto', color: 'gray' }} name={"filter"} size={18} />
                           <Text style={{ fontSize: 16, textAlign: 'center', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>
                             Filter
                         </Text>
@@ -240,9 +253,9 @@ const DocumentScreen = () => {
           }}>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
               <Text style={{ fontSize: 24, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '5%' }}>
-              Price low to high
+                Price low to high
             </Text>
-              {sortState == "LowToHigh" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start',color: '#41d5fb' }} name={"check"} size={24} />}
+              {sortState == "LowToHigh" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start', color: '#41d5fb' }} name={"check"} size={24} />}
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {
@@ -250,10 +263,10 @@ const DocumentScreen = () => {
             setSortState("HighToLow")
           }}>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={{ fontSize: 24, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '5%' }}>
-            Price hight to low
+              <Text style={{ fontSize: 24, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '5%' }}>
+                Price hight to low
             </Text>
-              {sortState == "HighToLow" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start',color: '#41d5fb' }} name={"check"} size={24} />}
+              {sortState == "HighToLow" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start', color: '#41d5fb' }} name={"check"} size={24} />}
             </View>
           </TouchableOpacity>
         </Layout>
@@ -298,7 +311,7 @@ const DocumentScreen = () => {
                     <Text style={{ textAlign: 'left', color: '#41d5fb', fontFamily: "SF-UI-Display" }} category="h5">
                       {i}
                     </Text>
-                    {transmissionFilters.includes(i) && <MaterialCommunityIcons style={{ marginLeft: '2%',color: '#41d5fb' }} name={"check"} size={24} />}
+                    {transmissionFilters.includes(i) && <MaterialCommunityIcons style={{ marginLeft: '2%', color: '#41d5fb' }} name={"check"} size={24} />}
                   </View>
                 </Card>
               );
@@ -330,7 +343,7 @@ const DocumentScreen = () => {
                     <Text style={{ textAlign: 'left', color: '#41d5fb', fontFamily: "SF-UI-Display" }} category="h5">
                       {i}
                     </Text>
-                    {typesFiter.includes(i) && <MaterialCommunityIcons style={{ marginLeft: '2%',color: '#41d5fb' }} name={"check"} size={24} />}
+                    {typesFiter.includes(i) && <MaterialCommunityIcons style={{ marginLeft: '2%', color: '#41d5fb' }} name={"check"} size={24} />}
                   </View>
                 </Card>
               );
