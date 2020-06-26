@@ -156,6 +156,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 .then(handlePermissionPromt)
                                 .then(handleUserData)
                                 .then((userData) => {
+                                    console.log("userData",userData)
                                     if (userData.token && !userHasFullProfile(userData)) {
                                         navigation.navigate('Home')
                                     } else if (userData.twoauth != 0) {
@@ -169,7 +170,10 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         if (userData.vphone == 1 && userData.vemail == 1) navigation.navigate('Home')
                                     }
                                 })
-                                .catch((error) => console.log("Login fail with error: " + error))
+                                .catch((error) => {
+                                    console.log("Login fail with error: " + error)
+                                    navigation.navigate('Login')
+                                })
                         }} />
 
                         <TwitterButton onPress={() => {

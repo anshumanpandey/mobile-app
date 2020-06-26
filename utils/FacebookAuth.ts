@@ -5,6 +5,9 @@ import { GRCGDS_BACKEND } from "react-native-dotenv"
 import { axiosInstance } from "./AxiosBootstrap"
 
 export const handlePermissionPromt = (result: LoginResult) => {
+    if (result.isCancelled) {
+        throw new Error("Login cancelled");
+    }
     //@ts-ignore
     if (result.declinedPermissions && Array.isArray(result.declinedPermissions) && result.declinedPermissions.includes("email")) {
         dispatchGlobalState({ type: 'error', state: 'You must authorize the use of email' })
