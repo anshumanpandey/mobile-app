@@ -123,7 +123,7 @@ export default () => {
                                 indicatorStyle={{ backgroundColor: '#41d5fb' }}
                                 selectedIndex={selectedIndex}
                                 onSelect={index => setSelectedIndex(index)}>
-                                <Tab title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold', color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>Paypal</Text>} >
+                                <Tab style={{ paddingTop: '4%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontSize: 18,fontFamily: 'SF-UI-Display_Bold', color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>Paypal</Text>} >
                                     <View style={{ paddingTop: '10%', display: 'flex', alignItems: 'center' }}>
                                         <Image source={require('../../../image/paypal_logo.png')} />
                                         <Text style={{ fontSize: 20, textAlign: 'center', fontFamily: 'SF-UI-Display' }}>
@@ -185,7 +185,7 @@ export default () => {
                                 accessoryRight={loading ? LoadingSpinner : undefined}
                                 size="giant" style={{
                                     borderRadius: 10,
-                                    marginTop: '15%',
+                                    marginTop: '10%',
                                     backgroundColor: termsAcepted ? '#41d5fb' : '#e4e9f2',
                                     borderColor: termsAcepted ? '#41d5fb' : '#e4e9f2',
                                     paddingLeft: 20,
