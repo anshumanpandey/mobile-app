@@ -16,7 +16,7 @@ type InitialState = {
 
     arrivalTime: '',
 
-    extras: PricedEquip[]
+    extras: (PricedEquip & { amount: number }) []
 
     vehicle: VehVendorAvail | null
 };
