@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Text, Button, Datepicker, NativeDateService, Input } from '@ui-kitten/components';
+import { Layout, Text, Button, Datepicker, NativeDateService, Input, Avatar } from '@ui-kitten/components';
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
 import { TouchableWithoutFeedback, ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
@@ -15,7 +15,8 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { LoginScreenProps } from '../../../types';
 import UploadIconComponent from '../../../image/UploadIconComponent';
 import CountryPicker, { getAllCountries, FlagType } from 'react-native-country-picker-modal'
-
+import * as Progress from 'react-native-progress';
+import { useFocusEffect } from '@react-navigation/native';
 
 const DATE_FORMAT = 'MMM DD,YYYY'
 const formatDateService = new NativeDateService('en', { format: DATE_FORMAT });
@@ -39,11 +40,18 @@ const DocumentScreen = ({ route, navigation }: Props) => {
     const [currentFileType, setCurrentFileType] = useState(FileTypeEnum.passport);
     const [dictionary] = useDocumentState("dictionary")
     const [profile] = useGlobalState('profile')
+    const [uploadPercent, setUploadPercent] = useState(0);
 
     const [getFilesReq, sendFile] = useAxios({
         url: `${GRCGDS_BACKEND}`,
         method: 'POST',
-    })
+        onUploadProgress: (e) => {
+            console.log(e)
+            var percentCompleted = Math.round((e.loaded * 100) / e.total)
+            console.log("percentCompleted", percentCompleted)
+            setUploadPercent(percentCompleted);
+        }
+    }, { manual: true })
 
     const initialValues = {
         docNumber: route.params?.docNumber,
@@ -59,17 +67,22 @@ const DocumentScreen = ({ route, navigation }: Props) => {
             })
     }, [])
 
-    useEffect(() => {
-        if (route.params.fileType == FileTypeEnum.passport) {
-            setFileToShow(`https://www.right-cars.com/uploads/pass/${profile?.passimage}`)
-        }
-        if (route.params.fileType == FileTypeEnum.driving_license) {
-            setFileToShow(`https://www.right-cars.com/uploads/drlic/${profile?.drimage}`)
-        }
-        if (route.params.fileType == FileTypeEnum.selfi) {
-            setFileToShow(`https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}`)
-        }
-    }, [getFilesReq.loading])
+    useFocusEffect(
+        React.useCallback(() => {
+            if (route.params.fileType == FileTypeEnum.passport) {
+                setFileToShow(`https://www.right-cars.com/uploads/pass/${profile?.passimage}`)
+            }
+            if (route.params.fileType == FileTypeEnum.driving_license) {
+                setFileToShow(`https://www.right-cars.com/uploads/drlic/${profile?.drimage}`)
+            }
+            if (route.params.fileType == FileTypeEnum.selfi) {
+                setFileToShow(`https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}`)
+            }
+            triggerChange(p => !p)
+            console.log(`on focus: fileType=${route.params.fileType} fileToShow=${fileToShow}`)
+        }, [route.params])
+    );
+
 
     useEffect(() => {
         if (route.params && route.params.fileType) {
@@ -146,7 +159,22 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                         {currentFileType}
                                     </Text>
                                 </Layout>
-                                {!route.params.fileToShow && !dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                {getFilesReq.loading && (
+                                    <View style={{ backgroundColor: 'white', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                        <Progress.Circle
+                                            showsText={true}
+                                            textStyle={{ color: "#41d5fb" }}
+                                            color={"#41d5fb"}
+                                            size={100}
+                                            progress={uploadPercent / 100}
+                                            indeterminate={uploadPercent == 0 || uploadPercent == 100}
+                                            formatText={() => {
+                                                return `${uploadPercent}%`
+                                            }}
+                                        />
+                                    </View>
+                                )}
+                                {!getFilesReq.loading && !route.params.fileToShow && !dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     <UploadIconComponent />
                                     <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, fontFamily: 'SF-UI-Display' }} category='s2'>
                                         We need you to upload your
@@ -158,15 +186,15 @@ const DocumentScreen = ({ route, navigation }: Props) => {
 
                                 {fileToShow && !dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     {change ? (
-                                        <Image
+                                        <Avatar
                                             key={fileToShow}
-                                            style={{ width: 150, height: 200, resizeMode: 'cover', marginBottom: '3%', zIndex: -2 }}
+                                            style={{ width: 200, height: 200, resizeMode: 'cover', marginBottom: '3%', zIndex: -2 }}
                                             source={{ uri: fileToShow, cache: 'reload' }}
                                         />
                                     ) : (
-                                            <Image
+                                            <Avatar
                                                 key={fileToShow}
-                                                style={{ width: 150, height: 200, resizeMode: 'cover', marginBottom: '3%', zIndex: -2 }}
+                                                style={{ width: 200, height: 200, resizeMode: 'cover', marginBottom: '3%', zIndex: -2 }}
                                                 source={{ uri: fileToShow, cache: 'reload' }}
                                             />
                                         )}
@@ -175,9 +203,9 @@ const DocumentScreen = ({ route, navigation }: Props) => {
 
                                 {dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     <>
-                                        <Image
+                                        <Avatar
                                             key={dictionary.get(currentFileType)?.file?.uri}
-                                            style={{ width: 150, height: 200, resizeMode: 'cover', marginBottom: '3%', zIndex: -2 }}
+                                            style={{ width: 175, height: 175, resizeMode: 'cover', marginTop: '3%', marginBottom: '3%', zIndex: -2 }}
                                             source={{ uri: dictionary.get(currentFileType)?.file?.uri, cache: 'reload' }}
                                         />
                                         {currentFileType != FileTypeEnum.selfi && (
@@ -259,44 +287,47 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                     </>
                                 </View>}
 
-                                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-55%' : '-35%', justifyContent: 'center', alignItems: 'center' }}>
-                                    <Button
-                                        onPress={(e) => {
-                                            ImagePicker.showImagePicker(options, (response) => {
-                                                //console.log('Response = ', response);
+                                {!getFilesReq.loading && (
+                                    <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-55%' : '-35%', justifyContent: 'center', alignItems: 'center' }}>
+                                        <Button
+                                            onPress={(e) => {
+                                                ImagePicker.launchCamera(options, (response) => {
+                                                    //console.log('Response = ', response);
 
-                                                if (response.didCancel) {
-                                                    console.log('User cancelled image picker');
-                                                } else if (response.error) {
-                                                    console.log('ImagePicker Error: ', response.error);
-                                                } else if (response.customButton) {
-                                                    console.log('User tapped custom button: ', response.customButton);
-                                                } else {
-                                                    dispatchFileState({ type: currentFileType, state: { file: response } })
-                                                }
-                                            });
-                                        }}
-                                        style={{
-                                            zIndex: 2,
-                                            backgroundColor: '#41d5fb',
-                                            borderColor: '#41d5fb',
-                                            borderRadius: 30,
-                                            width: '50%',
-                                            marginLeft: 'auto',
-                                            marginRight: 'auto'
-                                        }}>
-                                        {() => {
-                                            return (
-                                                <>
-                                                    <EntypoIcon style={{ marginRight: '5%', color: 'white' }} size={24} name="camera" />
-                                                    <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>
-                                                        Use Camera
+                                                    if (response.didCancel) {
+                                                        console.log('User cancelled image picker');
+                                                    } else if (response.error) {
+                                                        console.log('ImagePicker Error: ', response.error);
+                                                    } else if (response.customButton) {
+                                                        console.log('User tapped custom button: ', response.customButton);
+                                                    } else {
+                                                        dispatchFileState({ type: currentFileType, state: { file: response } })
+                                                    }
+                                                });
+                                            }}
+                                            style={{
+                                                zIndex: 2,
+                                                backgroundColor: '#41d5fb',
+                                                borderColor: '#41d5fb',
+                                                borderRadius: 30,
+                                                width: '50%',
+                                                marginLeft: 'auto',
+                                                marginRight: 'auto'
+                                            }}>
+                                            {() => {
+                                                return (
+                                                    <>
+                                                        <EntypoIcon style={{ marginRight: '5%', color: 'white' }} size={24} name="camera" />
+                                                        <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>
+                                                            Use Camera
                                                     </Text>
-                                                </>
-                                            );
-                                        }}
-                                    </Button>
-                                </View>
+                                                    </>
+                                                );
+                                            }}
+                                        </Button>
+                                    </View>
+
+                                )}
 
                                 <TouchableWithoutFeedback
                                     style={{ backgroundColor: 'white', height: '55%', display: 'flex', justifyContent: 'center', alignItems: dictionary.get(currentFileType)?.file ? 'flex-end' : 'center', flexDirection: 'row' }}
