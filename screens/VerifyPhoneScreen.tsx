@@ -74,7 +74,7 @@ const DocumentScreen = () => {
 
         <Button
           onPress={() => {
-            if (profile && profile.vphone == 0) {
+            if (profile && profile.vphone != 1) {
               doVerify({
                 url: GRCGDS_BACKEND,
                 data: {
@@ -83,9 +83,12 @@ const DocumentScreen = () => {
                 }
               })
               .then(() => {
-                dispatchGlobalState({ type: 'profile', state: profile })
+                dispatchGlobalState({ type: 'profile', state: {...profile, vphone: 1 } })
                 if (profile.vemail == 0) {
                   navigation.navigate('SuccessEmail')
+                } else if (profile.vemail == 1){
+                  console.log('going home', profile.vphone)
+                  navigation.navigate('Home')
                 } else {
                   dispatchGlobalState({ type: 'logout' })
                 }
@@ -137,7 +140,7 @@ const DocumentScreen = () => {
             onPress={() => {
               if (!profile) return
               
-              if (profile && profile.vphone == 0) {
+              if (profile && profile.vphone != 1) {
                 doVerify({ data: {
                   "module_name": "RESEND_VERIFY",
                   "id": profile.id

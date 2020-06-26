@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { StackScreenProps } from '@react-navigation/stack';
 import { LoginScreenProps } from '../../types';
@@ -23,10 +23,16 @@ import ProfileVerificationScreen from './ProfileVerificationScreen';
 import { useGlobalState } from '../../state';
 import userHasFullProfile from '../../utils/userHasFullProfile';
 import userHasAllFiles from '../../utils/userHasAllFiles';
+import { GRCGDS_BACKEND } from 'react-native-dotenv';
+import useAxios from 'axios-hooks'
 
 const Drawer = createDrawerNavigator();
 export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
     const [profile] = useGlobalState('profile')
+    const [{ data, loading, error }, doVerify] = useAxios({
+        url: `${GRCGDS_BACKEND}`,
+        method: 'POST'
+      }, { manual: true })
 
     const screens = [
         <Drawer.Screen name="CompletedUpload" component={CompletedUploadScreen} />,
@@ -35,10 +41,14 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
     const hasAllFiles = userHasAllFiles(profile || {})
     const hasFullProfile = userHasFullProfile(profile || {})
 
-    if (profile && profile.vphone == 0) screens.unshift(<Drawer.Screen name="Opt" component={VerifyPhoneScreen} />);
     if (profile && profile.vemail == 0) screens.unshift(<Drawer.Screen name="Opt" component={VerifyPhoneScreen} />);
 
     screens.unshift(<Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} />);
+
+    if (profile && profile.vphone != 1) {
+        screens.unshift(<Drawer.Screen name="Opt" component={VerifyPhoneScreen} />);
+    }
+
 
     if (hasFullProfile && hasAllFiles) {
         screens.push(
@@ -57,6 +67,17 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
         )
         screens.unshift(<Drawer.Screen name="MyBookings" component={MyTripsScreens} />)
     }
+
+    useEffect(() => {
+        if (profile && profile.vphone != 1) {
+            doVerify({
+                data: {
+                    "module_name": "RESEND_VERIFY",
+                    "id": profile.id
+                }
+            })
+        }
+    }, [])
 
     return (
         <Drawer.Navigator drawerContent={(props) => <DrawerMenu navigation={props.navigation} />} initialRouteName="Home">
