@@ -48,7 +48,7 @@ const TimeCheckbox: React.FC<TimeCheckboxProps> = ({ title, nonEditable, replace
                 return !p
             })
         }} style={{ ...style, backgroundColor: styles.backgroundColor, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderWidth: 1, padding: '3%', borderRadius: 10, borderColor: styles.color }}>
-            <View style={{ display: 'flex', flexDirection: 'row'}}>
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                 {Node}
                 <Layout style={{ backgroundColor: '#00000000' }}>
                     <Text style={{ color: styles.textColor, fontFamily: 'SF-UI-Display_Bold' }}>{title}</Text>

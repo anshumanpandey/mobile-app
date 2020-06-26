@@ -141,20 +141,19 @@ const DocumentScreen = () => {
                         <Text style={{ fontSize: 16, textAlign: 'left', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>Until: {route.params.searchParams.dropOffDate.format('MMM DD, h:mm')}</Text>
                       </View>
                     </View>
-                    <View style={{ display: 'flex', flexDirection: 'row', }}>
-                      <TouchableOpacity onPress={() => setShowSortModal(true)} >
-                        <View style={{ width: '70%', display: 'flex', flexDirection: 'row', justifyContent: 'center', borderWidth: 1, borderColor: '#00000050' }}>
-                          <MaterialCommunityIcons style={{ alignSelf: 'flex-start' }} name={"sort-variant"} size={18} />
+                    <View style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                      <TouchableOpacity style={{ width: '49%' }} onPress={() => setShowSortModal(true)} >
+                        <View style={{ alignItems: 'center',display: 'flex', flexDirection: 'row', justifyContent: 'center', borderWidth: 1, borderColor: '#00000050' }}>
+                          <MaterialCommunityIcons style={{ alignSelf: 'flex-start', marginTop: 'auto', marginBottom: 'auto', color: 'gray' }} name={"sort-variant"} size={18} />
                           <Text style={{ fontSize: 16, textAlign: 'center', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>
                             Sort By
                         </Text>
                         </View>
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() => setShowFilterModal(true)}>
-                        <View style={{ width: '70%', display: 'flex', flexDirection: 'row', justifyContent: 'center', borderWidth: 1, borderColor: '#00000050' }}>
-                          <MaterialCommunityIcons name={"filter"} size={18} />
+                      <TouchableOpacity style={{ width: '49%', marginLeft: '1%' }} onPress={() => setShowFilterModal(true)}>
+                        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', borderWidth: 1, borderColor: '#00000050' }}>
+                          <MaterialCommunityIcons style={{ alignSelf: 'flex-start', marginTop: 'auto', marginBottom: 'auto', color: 'gray' }}  name={"filter"} size={18} />
                           <Text style={{ fontSize: 16, textAlign: 'center', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>
-
                             Filter
                         </Text>
                         </View>
