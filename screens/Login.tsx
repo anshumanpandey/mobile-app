@@ -17,6 +17,7 @@ import ErrorLabel from '../partials/ErrorLabel';
 import { LoginManager } from "react-native-fbsdk";
 import { handlePermissionPromt, handleUserData } from '../utils/FacebookAuth';
 import { axiosInstance } from '../utils/AxiosBootstrap';
+import userHasFullProfile from '../utils/userHasFullProfile';
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
     const [{ data, loading, error }, doLogin] = useAxios({
@@ -151,7 +152,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 .then(handlePermissionPromt)
                                 .then(handleUserData)
                                 .then((userData) => {
-                                    if (userData.twoauth != 0) {
+                                    console.log(userData.token && !userHasFullProfile(userData))
+                                    if (userData.token && !userHasFullProfile(userData)) {
+                                        console.log('navigating home')
+                                        navigation.navigate('Home')
+                                    } else if (userData.twoauth != 0) {
                                         dispatchGlobalState({ type: 'profile', state: userData })
                                         navigation.navigate('Opt')
                                     } else {

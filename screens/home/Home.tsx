@@ -35,12 +35,10 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
     const hasAllFiles = userHasAllFiles(profile || {})
     const hasFullProfile = userHasFullProfile(profile || {})
 
-    //if (!hasFullProfile || !hasAllFiles) screens.unshift(<Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} />);
-    screens.unshift(<Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} />);
-
     if (profile && profile.vphone == 0) screens.unshift(<Drawer.Screen name="Opt" component={VerifyPhoneScreen} />);
     if (profile && profile.vemail == 0) screens.unshift(<Drawer.Screen name="Opt" component={VerifyPhoneScreen} />);
 
+    screens.unshift(<Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} />);
 
     if (hasFullProfile && hasAllFiles) {
         screens.push(

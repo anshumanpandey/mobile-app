@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { WebView } from 'react-native-webview';
 import { useRoute, useNavigation, CommonActions } from '@react-navigation/native';
 import { dispatchGlobalState } from '../state';
+import userHasFullProfile from '../utils/userHasFullProfile';
 
 const WebViewScreen = () => {
     const route = useRoute()
@@ -15,7 +16,10 @@ const WebViewScreen = () => {
         onMessage={event => {
             const json = JSON.parse(event.nativeEvent.data);
             console.log(json)
-            if (json.twoauth != 0) {
+            if (json.token && !userHasFullProfile(json)) {
+                console.log('navigating home')
+                navigation.navigate('Home')
+            } else if (json.twoauth != 0) {
                 dispatchGlobalState({ type: 'profile', state: json })
                 navigation.navigate('Opt')
             } else {
