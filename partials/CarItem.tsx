@@ -83,12 +83,6 @@ const CarItem: React.FC<Props> = ({ vehicle, isActive, onClick, style: customeSt
                     </Layout>
 
                 </Layout>
-
-                <Layout style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '30%', backgroundColor: '#00000000' }}>
-                    <Image source={{ uri: vehicle.supplier_logo }} style={{ flex: 1, width: 50, height: 50, resizeMode: 'contain' }} />
-                    <Image source={require('../image/key.png')} style={{ flex: 1, width: 40, height: 40, resizeMode: 'contain' }} />
-                </Layout>
-
                 <Layout style={{ display: 'flex', flexDirection: 'row', backgroundColor: '#00000000', marginLeft: 'auto' }}>
                     <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: currentStyles.priceColor, fontSize: 18 }}>{ResolveCurrencySymbol(vehicle.TotalCharge.CurrencyCode || '')} </Text>
                     <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: currentStyles.priceColor, fontSize: 18 }}>{vehicle.TotalCharge.RateTotalAmount}</Text>

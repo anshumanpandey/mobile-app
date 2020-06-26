@@ -44,6 +44,12 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
     <>
       <Layout style={{ display: 'flex', flexDirection: 'row' }}>
 
+        {returnSameLocation && (
+          <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
+            <FontAwesomeIcon size={15} style={{ color: '#41d5fb' }} name="circle" />
+          </Layout>
+        )}
+
         {!returnSameLocation && (
           <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
             <FontAwesomeIcon size={15} style={{ color: '#41d5fb' }} name="circle" />
@@ -63,6 +69,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
             containerStyle={{ width: '100%' }}
             inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
             listStyle={{ borderColor: 'white' }}
+            placeholder="Enter Origin"
             data={!results ? [] : results}
             defaultValue={originLocation?.locationname}
             onChangeText={text => {
@@ -86,33 +93,34 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
             )}
           />
           {!returnSameLocation && (
-              <Autocomplete
-                style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 16, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }}
-                containerStyle={{ width: '100%' }}
-                inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
-                listStyle={{ borderColor: 'white' }}
-                data={!results ? [] : results}
-                defaultValue={returnLocation?.locationname}
-                onChangeText={text => {
-                  const searcher = new FuzzySearch(locations, ['internalcode', 'locationname', "locationvariation"]);
-                  const result = searcher.search(text)
-                  setResults(result)
-                  // props.onResultChange(result, "ORIGIN")
-                  setSearchingFor("ORIGIN")
-                }}
-                renderItem={({ item, i }) => (
-                  <TouchableOpacity onPress={() => {
-                    props.onReturnLocationSelected(item)
-                    setReturn(item)
-                    setResults(null)
-                  }}>
-                    <Layout style={{ display: 'flex', flexDirection: 'row', borderBottomColor: '#E4E9F2', borderBottomWidth: 1, paddingBottom: '3%', paddingTop: '3%' }}>
-                      <EvilIcon style={{ color: '#41D5FB' }} name="location" size={32} />
-                      <Text style={{ fontSize: 18 }}>{item.locationname}</Text>
-                    </Layout>
-                  </TouchableOpacity>
-                )}
-              />
+            <Autocomplete
+              style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 16, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }}
+              containerStyle={{ width: '100%' }}
+              inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
+              listStyle={{ borderColor: 'white' }}
+              placeholder="Enter Destination"
+              data={!results ? [] : results}
+              defaultValue={returnLocation?.locationname}
+              onChangeText={text => {
+                const searcher = new FuzzySearch(locations, ['internalcode', 'locationname', "locationvariation"]);
+                const result = searcher.search(text)
+                setResults(result)
+                // props.onResultChange(result, "ORIGIN")
+                setSearchingFor("ORIGIN")
+              }}
+              renderItem={({ item, i }) => (
+                <TouchableOpacity onPress={() => {
+                  props.onReturnLocationSelected(item)
+                  setReturn(item)
+                  setResults(null)
+                }}>
+                  <Layout style={{ display: 'flex', flexDirection: 'row', borderBottomColor: '#E4E9F2', borderBottomWidth: 1, paddingBottom: '3%', paddingTop: '3%' }}>
+                    <EvilIcon style={{ color: '#41D5FB' }} name="location" size={32} />
+                    <Text style={{ fontSize: 18 }}>{item.locationname}</Text>
+                  </Layout>
+                </TouchableOpacity>
+              )}
+            />
           )}
         </Layout>
       </Layout>
