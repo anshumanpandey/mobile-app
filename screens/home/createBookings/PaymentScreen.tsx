@@ -58,7 +58,7 @@ const GET_PAYPAL_JSON = (vehicle: VehVendorAvail, meta, extras: (PricedEquip & {
         }],
         "note_to_payer": "Contact us for any questions on your order.",
         "redirect_urls": {
-            "return_url": "https://right-cars-club.com/",
+            "return_url": "http://right-cars.com/mobileapp/index.php?module_name=PAYMENT_SUCCESS",
             "cancel_url": "https://example.com"
         }
     }
