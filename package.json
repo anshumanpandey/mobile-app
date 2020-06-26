@@ -72,6 +72,7 @@
     "react-native-uploader": "0.0.10",
     "react-native-vector-icons": "^6.6.0",
     "react-native-webview": "^9.4.0",
+    "react-native-xml2js": "^1.0.3",
     "recyclerlistview": "^3.0.0",
     "rn-fetch-blob": "^0.12.0"
   },

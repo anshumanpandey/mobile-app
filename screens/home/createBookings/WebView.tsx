@@ -2,10 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { WebView } from 'react-native-webview';
 import { useRoute, useNavigation, CommonActions } from '@react-navigation/native';
 import useAxios from 'axios-hooks'
-import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import { useCreateBookingState } from './CreateBookingState';
 import moment from 'moment';
 import { dispatchGlobalState, useGlobalState } from '../../../state';
+var parseString = require('react-native-xml2js').parseString;
 
 const WebViewScreen = () => {
     const navigation = useNavigation()
@@ -17,6 +17,7 @@ const WebViewScreen = () => {
     const [originLocation] = useCreateBookingState("originLocation");
     const [, setArrivalTime] = useCreateBookingState("arrivalTime");
     const [returnLocation] = useCreateBookingState("returnLocation");
+    const [, setReservationNumber] = useCreateBookingState("reservationNumber");
     const [profile] = useGlobalState('profile');
 
 
@@ -174,6 +175,9 @@ const WebViewScreen = () => {
         postCreation({ data: xml })
             .then((res) => {
                 console.log("postCreation", res.data);
+                parseString(res.data, function (err, result) {
+                    setReservationNumber(result.OTA_VehResRS.VehResRSCore[0].VehReservation[0].VehSegmentCore[0].ConfID[0].Resnumber[0])
+                })
                 navigation.navigate("Confirmation")
                 setPostDone(true)
             })

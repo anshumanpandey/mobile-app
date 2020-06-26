@@ -34,6 +34,7 @@ export type TripCardProps = {
 }
 const CarTripInfoCard: React.FC<TripCardProps> = (props) => {
   const navigation = useNavigation();
+  console.log(props)
 
   const [{ data, loading, error }] = useAxios({
     url: `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${props.pickupLocation} ${props.pickupCountry}&destinations=${props.dropOffLocation} ${props.dropoffCountry}&key=AIzaSyBJ8evu2aDcSyb2F2NIuNQ3L5TeLAGpino`
@@ -54,25 +55,25 @@ const CarTripInfoCard: React.FC<TripCardProps> = (props) => {
 
       <TouchableWithoutFeedback onPress={() => navigation.navigate('Activate', { ...props, leftImageUri: undefined })} style={{ display: 'flex', flexDirection: 'column', borderRadius: 16, borderWidth: 0 }}>
         <>
-          {(props.confirmation == true || props.confirmation == undefined) && (
-            <>
-              <Text style={{ textAlign: 'center' }} category="h6">
-                CONFIRMATION
-          </Text>
-              <Text style={{ textAlign: 'center', color: 'blue' }} category="h6">
-                PAYMENT HAS BEEN TAKEN FROM YOUR PAYPAL ACCOUNT
-          </Text>
-            </>
-          )}
           {props.reservationNumber && (
             <Layout style={{ marginBottom: '3%' }}>
               <Text style={{ textAlign: 'center' }} category="h6">
-                Reservation Number
+                CONFIRMATION
               </Text>
               <Text style={{ textAlign: 'center' }} category="h6">
+                Reservation Number
+              </Text>
+              <Text style={{ textAlign: 'center',fontFamily: 'SF-UI-Display_Bold' }} category="h6">
                 {props.reservationNumber}
               </Text>
             </Layout>
+          )}
+          {(props.confirmation == true || props.confirmation == undefined) && (
+            <>
+              <Text style={{ textAlign: 'center', color: 'blue' }} category="h6">
+                PAYMENT HAS BEEN TAKEN FROM YOUR ACCOUNT
+          </Text>
+            </>
           )}
           <Layout style={{ display: 'flex', flexDirection: 'row', paddingTop: '5%', paddingLeft: '5%', paddingRight: '5%', borderTopRightRadius: 16, borderTopLeftRadius: 16 }}>
             <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', marginRight: '5%' }}>
@@ -88,11 +89,11 @@ const CarTripInfoCard: React.FC<TripCardProps> = (props) => {
             <Layout style={{ display: 'flex', flexDirection: 'column', width: '90%' }}>
               <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '5%' }}>
                 <Text style={{ fontSize: 16, fontFamily: 'SF-UI-Display_Bold' }}>{props.pickupLocation}</Text>
-                <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.pickupTime.format('HH:mm A DD, MMM YYYY')}</Text>
+                <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.pickupTime.format('HH:mm')}</Text>
               </Layout>
               <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={{ fontSize: 16, fontFamily: 'SF-UI-Display_Bold' }}>{props.dropOffLocation}</Text>
-                <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.dropoffTime.format('HH:mm A DD, MMM YYYY')}</Text>
+                <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.dropoffTime.format('DD MMM, HH:mm')}</Text>
               </Layout>
             </Layout>
           </Layout>
@@ -100,26 +101,13 @@ const CarTripInfoCard: React.FC<TripCardProps> = (props) => {
             <Image source={{ uri: props.image_preview_url }} style={{ width: 180, height: 180, resizeMode: 'contain' }} />
           </Layout>
           <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingBottom: '5%', paddingLeft: '5%', paddingRight: '5%', borderBottomLeftRadius: (props.upcoming || props.completed) ? 0 : 16, borderBottomRightRadius: (props.upcoming || props.completed) ? 0 : 16 }}>
-            <Layout style={{ display: 'flex', flexDirection: 'row', width: '50%' }}>
-              <Layout style={{ marginRight: '3%' }}>
-                <Avatar style={{ borderRadius: 10 }} shape='square' source={props.keyLess ? require('../image/keyx.png') : require('../image/key.png')} />
-              </Layout>
-
-              <Layout>
+            <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end',width: '100%' }}>
+              <Layout style={{ display: 'flex'}}>
                 <Text style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 16 }} numberOfLines={1} textBreakStrategy="balanced" category='h6'>{props.carName}</Text>
-                <Text>{props.registratioNumber}</Text>
               </Layout>
-            </Layout>
-
-            <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '50%' }}>
               <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Text style={{ color: '#ACB1C0', fontSize: 13 }}>Final cost</Text>
                 <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{props.finalCost}{ResolveCurrencySymbol(props.currencyCode)}</Text>
-              </Layout>
-
-              <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Text style={{ color: '#ACB1C0', fontSize: 13 }}>Arrival time</Text>
-                {data && <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{data.rows[0].elements[0].duration.text}</Text>}
               </Layout>
             </Layout>
 

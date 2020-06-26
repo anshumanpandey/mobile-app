@@ -15,6 +15,7 @@ type InitialState = {
     returnTime: Date,
 
     arrivalTime: '',
+    reservationNumber: string | null,
 
     extras: (PricedEquip & { amount: number }) []
 
@@ -25,6 +26,7 @@ const initialState: InitialState = {
     originLocation: null,
     returnLocation: null,
     inmediatePickup: null,
+    reservationNumber: null,
     departureTime: moment().set({ hour: 10, minutes: 30, second: 0, millisecond: 0}).toDate(),
     returnTime: moment().set({ hour: 10, minutes: 30, second: 0, millisecond: 0}).toDate(),
     extras: [],
