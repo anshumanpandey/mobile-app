@@ -21,11 +21,11 @@ type Props = {
 }
 
 const CarItem: React.FC<Props> = ({ vehicle, isActive, onClick, style: customeStyles }) => {
-    const currentStyles = isActive ? hightLightStyles : { backgroundColor: '#f7f8fa', priceColor: 'black' }
+    const currentStyles = isActive ? hightLightStyles : { backgroundColor: 'white', priceColor: 'black' }
 
     return (
         <TouchableWithoutFeedback onPress={() => onClick && onClick()}>
-            <Layout style={{ padding: '2%', marginBottom: '1%', borderRadius: 16, display: 'flex', flexDirection: 'column', backgroundColor: currentStyles.backgroundColor, ...customeStyles }}>
+            <Layout style={{ paddingLeft: '3%',paddingRight: '3%',borderBottomColor: 'gray', borderBottomWidth: 1,display: 'flex', flexDirection: 'column', backgroundColor: currentStyles.backgroundColor, ...customeStyles }}>
                 <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '70%', backgroundColor: '#00000000' }}>
                     <View>
                         <Text style={{ fontSize: 14, fontFamily: 'SF-UI-Display_Bold', color: 'gray' }}>

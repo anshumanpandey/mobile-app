@@ -11,8 +11,6 @@ import { useCreateBookingState } from './CreateBookingState';
 import { VehVendorAvail, VehRentalCore } from '../../../type/SearchVehicleResponse';
 import { ScrollView } from 'react-native-gesture-handler';
 import GetCategoryByAcrissCode from '../../../utils/GetCategoryByAcrissCode';
-import EvaMapping from '@eva-design/eva/mapping';
-import { ceil } from 'react-native-reanimated';
 
 const _dataProvider = new DataProvider((r1, r2) => r1.VehID !== r2.VehID)
 
@@ -109,7 +107,7 @@ const DocumentScreen = () => {
         )}
         {route.params.cars.length != 0 && (
           <RecyclerListView
-            style={{ padding: '5%' }}
+            style={{ width: '100%', backgroundColor: '#f0f2f3' }}
             layoutProvider={new LayoutProvider(
               index => {
                 if (index == 0) return 'HEADER'
@@ -117,11 +115,11 @@ const DocumentScreen = () => {
               },
               (type, dim) => {
                 if (type === 'HEADER') {
-                  dim.width = Dimensions.get("window").width - ((Dimensions.get("window").width / 100) * 10);
+                  dim.width = Dimensions.get("window").width;
                   dim.height = (Dimensions.get("window").height / 100) * 25;
                 } else {
-                  dim.width = Dimensions.get("window").width - ((Dimensions.get("window").width / 100) * 10);
-                  dim.height = (Dimensions.get("window").height / 100) * 42;
+                  dim.width = Dimensions.get("window").width;
+                  dim.height = (Dimensions.get("window").height / 100) * 40;
                 }
               }
             )}
@@ -132,7 +130,7 @@ const DocumentScreen = () => {
               if (o.header) {
                 return (
                   <>
-                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '#41d5fb', marginBottom: '2%', borderRadius: 10 }}>
+                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '#41d5fb', marginBottom: '2%' }}>
                       <View style={{ padding: '3%' }}>
                         <View style={{ width: '100%' }}>
                           <Text style={{ fontSize: 18, textAlign: 'left', fontFamily: 'SF-UI-Display_Bold' }}>{route.params.searchParams.pickUpLocation.locationname}</Text>
@@ -149,12 +147,12 @@ const DocumentScreen = () => {
                           navigation.goBack()
                         }
                       }}>
-                        <View style={{ backgroundColor: '#2f9eba', width: '15%', display: 'flex', justifyContent: 'center', alignItems: 'center', borderTopRightRadius: 10, borderBottomRightRadius: 10 }}>
+                        <View style={{ backgroundColor: '#2f9eba', width: '15%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                           <MaterialIconsIcons style={{ color: 'white' }} name={"edit"} size={24} />
                         </View>
                       </TouchableWithoutFeedback>
                     </View>
-                    <View style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                    <View style={{ display: 'flex', flexDirection: 'row', width: '100%', paddingLeft: '3%', paddingRight: '3%' }}>
                       <TouchableOpacity style={{ width: '49%' }} onPress={() => setShowSortModal(true)} >
                         <View style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', justifyContent: 'center', borderWidth: 1, borderColor: '#00000050' }}>
                           <MaterialCommunityIcons style={{ alignSelf: 'flex-start', marginTop: 'auto', marginBottom: 'auto', color: 'gray' }} name={"sort-variant"} size={18} />

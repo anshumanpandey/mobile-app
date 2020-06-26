@@ -1,13 +1,14 @@
-import React from 'react'
-import { Layout, Text, Input, Button } from '@ui-kitten/components';
-import { SafeAreaView, ScrollView } from 'react-native';
+import React, { useState } from 'react'
+import { Layout, Text, Input, Button, CheckBox, Tab, TabView } from '@ui-kitten/components';
+import { SafeAreaView, ScrollView, View, Image } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import useAxios from 'axios-hooks'
 import { useCreateBookingState } from './CreateBookingState';
 import base64 from 'react-native-base64'
-import {Decimal} from 'decimal.js';
+import { Decimal } from 'decimal.js';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
 import { VehVendorAvail, PricedEquip } from '../../../types/SearchVehicleResponse';
+import ResolveCurrencySymbol from '../../../utils/ResolveCurrencySymbol';
 
 const GET_PAYPAL_JSON = (vehicle: VehVendorAvail, meta, extras: (PricedEquip & { amount: number })[]) => {
     const items = extras.map(i => {
@@ -75,6 +76,8 @@ export default () => {
 
     const [originLocation] = useCreateBookingState("originLocation");
     const [returnLocation] = useCreateBookingState("returnLocation");
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [termsAcepted, setTermsAcepted] = useState(false);
 
     const [extras] = useCreateBookingState("extras");
 
@@ -96,55 +99,102 @@ export default () => {
         method: 'POST'
     }, { manual: true })
 
+    const paypalJson = GET_PAYPAL_JSON(
+        route.params.vehicle,
+        { originLocation, returnLocation },
+        extras
+    )
+
     return (
         <SafeAreaView style={{ flex: 1 }} >
-            <ScrollView contentContainerStyle={{ flexGrow: 1, padding: '5%', justifyContent: 'space-between', display: 'flex' }} keyboardShouldPersistTaps={"handled"} style={{ backgroundColor: 'white' }}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between', display: 'flex' }} keyboardShouldPersistTaps={"handled"} style={{ backgroundColor: 'white' }}>
 
                 <Layout>
                     <Layout style={{ marginTop: '5%' }}>
-                        <Layout>
-                            <Text style={{ fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }}>Payment</Text>
-                            <Text>Choose desired vehicle type. We offer cars suitable for most every day needs.</Text>
+                        <Layout style={{ backgroundColor: '#f0f2f3', padding: '5%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Text style={{ fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }}>Pay now</Text>
+                            <Text style={{ fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }}>
+                                {ResolveCurrencySymbol(paypalJson.transactions[0].amount.currency)}{' '}
+                                {paypalJson.transactions[0].amount.total}
+                            </Text>
                         </Layout>
-                        <Button
-                            onPress={async () => {
-                                const paypalJson = GET_PAYPAL_JSON(
-                                    route.params.vehicle,
-                                    { originLocation, returnLocation },
-                                    extras
-                                )
-                                getAccessToken()
-                                    .then(res => {
+                        <Layout style={{ padding: '5%' }}>
+                            <TabView
+                                indicatorStyle={{ backgroundColor: '#41d5fb' }}
+                                selectedIndex={selectedIndex}
+                                onSelect={index => setSelectedIndex(index)}>
+                                <Tab title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold', color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>Paypal</Text>} >
+                                    <View style={{ paddingTop: '10%', display: 'flex', alignItems: 'center' }}>
+                                        <Image source={require('../../../image/paypal_logo.png')} />
+                                        <Text style={{ fontSize: 20, textAlign: 'center', fontFamily: 'SF-UI-Display' }}>
+                                            You will be redirected to PayPal's website to acess your account and submit your payment.
+                                            Then you will be return to Right Cars App to obtain your booking confirmation
+                                        </Text>
+                                        <CheckBox
+                                            style={{ width: '90%', marginTop: '5%', justifyContent: 'flex-start' }}
+                                            checked={termsAcepted}
+                                            onChange={nextChecked => setTermsAcepted(nextChecked)}>
+                                            {evaProps => {
+                                                return (
+                                                    <View style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row', marginLeft: '3%'}}>
+                                                        <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display', fontSize: 16 }}>
+                                                            I have read understood and accepted
+                                                        </Text>
+                                                        <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display', fontSize: 16 }}>
+                                                            Right Cars{' '}
+                                                        </Text>
+                                                        <Text {...evaProps} onPress={() => {/*navigation.navigate('Signup')*/}} style={{ color: '#41d5fb', fontSize: 16 }}>
+                                                            Terms & Conditions
+                                                        </Text>
+                                                        <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display', fontSize: 16 }}>
+                                                            {' '}and{' '}
+                                                        </Text>
+                                                        <Text {...evaProps} onPress={() => {/*navigation.navigate('Signup')*/}} style={{ color: '#41d5fb', fontSize: 16 }}>Privacy Policy.</Text>
+                                                    </View>
+                                                );
+                                            }}
+                                        </CheckBox>
+                                    </View>
+                                </Tab>
+                            </TabView>
+                        </Layout>
+                        <View style={{ padding: '5%' }}>
+                            <Button
+                                disabled={!termsAcepted}
+                                onPress={async () => {
+                                    getAccessToken()
+                                        .then(res => {
 
-                                        return doPayment({
-                                            headers: {
-                                                'Authorization': `Bearer ${res.data.access_token}`
-                                            },
-                                            data: paypalJson
+                                            return doPayment({
+                                                headers: {
+                                                    'Authorization': `Bearer ${res.data.access_token}`
+                                                },
+                                                data: paypalJson
+                                            })
                                         })
-                                    })
-                                    .then((res) => {
-                                        navigation.navigate('WebView', { url: res.data.links.find(i => i.method == 'REDIRECT').href, paypalPaymentId: res.data.id , ...paypalJson})
-                                    })
-                                    .catch(err => {
-                                        console.log(err)
-                                        if (err.response) {
-                                            console.log(err.response.data);
-                                        }
-                                    })
-                            }}
-                            accessoryRight={loading ? LoadingSpinner : undefined}
-                            size="giant" style={{
-                                marginTop: '90%',
-                                borderRadius: 10,
-                                backgroundColor: '#41d5fb',
-                                borderColor: '#41d5fb',
-                                paddingLeft: 20,
-                                paddingRight: 20,
-                                marginBottom: '2%'
-                            }}>
-                            {() => <Text style={{ color: loading ? "#ACB1C0" : 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>Pay with Paypal</Text>}
-                        </Button>
+                                        .then((res) => {
+                                            navigation.navigate('WebView', { url: res.data.links.find(i => i.method == 'REDIRECT').href, paypalPaymentId: res.data.id, ...paypalJson })
+                                        })
+                                        .catch(err => {
+                                            console.log(err)
+                                            if (err.response) {
+                                                console.log(err.response.data);
+                                            }
+                                        })
+                                }}
+                                accessoryRight={loading ? LoadingSpinner : undefined}
+                                size="giant" style={{
+                                    borderRadius: 10,
+                                    marginTop: '15%',
+                                    backgroundColor: termsAcepted ? '#41d5fb' : '#e4e9f2',
+                                    borderColor: termsAcepted ? '#41d5fb' : '#e4e9f2',
+                                    paddingLeft: 20,
+                                    paddingRight: 20,
+                                    marginBottom: '2%'
+                                }}>
+                                {() => <Text style={{ color: loading ? "#ACB1C0" : 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>Book Now</Text>}
+                            </Button>
+                        </View>
                     </Layout>
 
                 </Layout>

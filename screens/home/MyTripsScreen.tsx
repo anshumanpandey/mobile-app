@@ -176,7 +176,25 @@ const DocumentScreen = () => {
   const [date, setDate] = React.useState(new Date());
 
   const [{ data, loading, error }, refetch] = useAxios({
-    url: `${GRCGDS_BACKEND}?module_name=GET_BOOKINGS`,
+    url: `https://OTA.right-cars.com/`,
+    method: 'POST',
+    data: `<OTA_VehRetResRQ xmlns="http://www.opentravel.org/OTA/2003/05"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.opentravel.org/OTA/2003/05
+    VehRetResRQ.xsd">
+    <POS>
+    <Source>
+    <RequestorID Type="5" ID="1" ID_Name="RightCars" />
+    </Source>
+    </POS>
+    <VehRetResRQCore>
+    <ResNumber Number="RC0461318"/>
+    <PersonName>
+    <GivenName>Test</GivenName>
+    <Surname>Test</Surname>
+    </PersonName>
+    </VehRetResRQCore>    
+    </OTA_VehRetResRQ>`
   })
 
   useFocusEffect(
@@ -200,6 +218,9 @@ const DocumentScreen = () => {
       }
     }
   },[locationReq.loading]);
+
+  console.log(data)
+  console.log(error)
 
   const parsedData = data ? data.map((booking: any) => {
     return {
