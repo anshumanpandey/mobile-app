@@ -22,6 +22,7 @@ import TwitterLoginScreen from './screens/TwitterLoginWebview';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import SuccessForgotPasswordScreen from './screens/SuccessForgotPasswordScreen';
 import SuccessPhoneVerificationScreen from './screens/SuccessPhoneVerification';
+import EmptyLoadingScreen from './screens/EmptyLoadingScreen';
 import VerifyPhoneScreen from './screens/VerifyPhoneScreen';
 import VerifyEmailScreen from './screens/VerifyEmailScreen';
 import { useGlobalState, dispatchGlobalState } from './state';
@@ -103,6 +104,7 @@ export default () => {
                 <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
                 <Stack.Screen name="SuccessEmail" component={SuccessPhoneVerificationScreen} />
                 <Stack.Screen name="SuccessForgotPassword" component={SuccessForgotPasswordScreen} />
+                <Stack.Screen name="EmptyLoading" component={EmptyLoadingScreen} />
               </>
             )}
 

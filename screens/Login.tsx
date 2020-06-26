@@ -149,12 +149,14 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 LoginManager.setLoginBehavior("web_only")
                             }
                             LoginManager.logInWithPermissions(["public_profile", "email"])
+                                .then((r) => {
+                                    navigation.navigate('EmptyLoading')
+                                    return r
+                                })
                                 .then(handlePermissionPromt)
                                 .then(handleUserData)
                                 .then((userData) => {
-                                    console.log(userData.token && !userHasFullProfile(userData))
                                     if (userData.token && !userHasFullProfile(userData)) {
-                                        console.log('navigating home')
                                         navigation.navigate('Home')
                                     } else if (userData.twoauth != 0) {
                                         dispatchGlobalState({ type: 'profile', state: userData })

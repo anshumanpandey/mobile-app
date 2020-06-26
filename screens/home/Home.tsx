@@ -49,7 +49,6 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
         screens.unshift(<Drawer.Screen name="Opt" component={VerifyPhoneScreen} />);
     }
 
-
     if (hasFullProfile && hasAllFiles) {
         screens.push(
             <Drawer.Screen name="CreateBooking" component={SelectLocation} />,

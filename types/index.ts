@@ -15,6 +15,7 @@ export type LoginScreenProps = {
     Profile: undefined,
     Documents: undefined,    
     DocumentMetadata: undefined,
+    EmptyLoading: undefined,
     SingleUpload: {
         fileType: FileTypeEnum,
         fileToShow?: string,
