@@ -5,22 +5,22 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import useAxios from 'axios-hooks'
 import { useCreateBookingState } from './CreateBookingState';
 import base64 from 'react-native-base64'
+import {Decimal} from 'decimal.js';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
 import { VehVendorAvail, PricedEquip } from '../../../types/SearchVehicleResponse';
 
-const GET_PAYPAL_JSON = (vehicle: VehVendorAvail, meta, extras: PricedEquip[]) => {
+const GET_PAYPAL_JSON = (vehicle: VehVendorAvail, meta, extras: (PricedEquip & { amount: number })[]) => {
     const items = extras.map(i => {
         return {
-            "name": i.Equipment.EquipType,
+            "name": i.Equipment.Description,
             "description": i.Equipment.Description,
-            "quantity": "1",
-            "price": parseFloat(i.Charge.Amount),
+            "quantity": i.amount,
+            "price": new Decimal(i.Charge.Amount).toFixed(2),
             "tax": "0",
             "sku": "1",
             "currency": i.Charge.Taxamount.CurrencyCode || "USD"
         }
     });
-
 
     return {
         "intent": "sale",
@@ -29,10 +29,10 @@ const GET_PAYPAL_JSON = (vehicle: VehVendorAvail, meta, extras: PricedEquip[]) =
         },
         "transactions": [{
             "amount": {
-                "total": parseFloat(vehicle.TotalCharge.RateTotalAmount) + items.reduce((prev, next) => {
-                    prev = prev + next.price
+                "total": new Decimal(vehicle.TotalCharge.RateTotalAmount).add(items.reduce((prev, next) => {
+                    prev = new Decimal(next.price).times(next.quantity).add(prev).toNumber()
                     return prev
-                }, 0),
+                }, 0)).toString(),
                 "currency": vehicle.VehicleCharge.CurrencyCode || "USD",
             },
             "description": "This is the payment transaction description.",
