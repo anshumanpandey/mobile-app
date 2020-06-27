@@ -34,7 +34,6 @@ export type TripCardProps = {
 }
 const CarTripInfoCard: React.FC<TripCardProps> = (props) => {
   const navigation = useNavigation();
-  console.log(props)
 
   const [{ data, loading, error }] = useAxios({
     url: `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${props.pickupLocation} ${props.pickupCountry}&destinations=${props.dropOffLocation} ${props.dropoffCountry}&key=AIzaSyBJ8evu2aDcSyb2F2NIuNQ3L5TeLAGpino`
