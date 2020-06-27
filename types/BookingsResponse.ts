@@ -59,6 +59,7 @@ export interface ConfID {
     Type:      string[];
     ID:        string[];
     Resnumber: string[];
+    ReservationStatus: string[];
 }
 
 export interface LocationDetail {

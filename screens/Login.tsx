@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Text, Input, Button } from '@ui-kitten/components';
-import { TouchableWithoutFeedback, ImageProps, SafeAreaView, ScrollView, NativeModules, Alert, Platform } from 'react-native';
+import { TouchableWithoutFeedback, ImageProps, SafeAreaView, ScrollView, NativeModules, Alert, Platform, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { RenderProp } from '@ui-kitten/components/devsupport';
 import useAxios from 'axios-hooks'
@@ -18,6 +18,7 @@ import { LoginManager } from "react-native-fbsdk";
 import { handlePermissionPromt, handleUserData } from '../utils/FacebookAuth';
 import { axiosInstance } from '../utils/AxiosBootstrap';
 import userHasFullProfile from '../utils/userHasFullProfile';
+import * as Progress from 'react-native-progress';
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
     const [{ data, loading, error }, doLogin] = useAxios({
@@ -26,6 +27,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     }, { manual: true })
 
     const [secureTextEntry, setSecureTextEntry] = useState(true);
+    const [loadingLogin, setLoadingLogin] = useState(false);
 
     const toggleSecureEntry = () => {
         setSecureTextEntry(!secureTextEntry);
@@ -39,6 +41,18 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+            {loadingLogin && (
+                <View style={{ backgroundColor: 'rgba(255,255,255,0.85)',display: 'flex',justifyContent: 'center', alignItems: 'center',position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, zIndex: 4}}>
+                <Progress.Circle
+                    showsText={true}
+                    textStyle={{ color: "#41d5fb" }}
+                    color={"#41d5fb"}
+                    borderWidth={4}
+                    size={150}
+                    indeterminate={true}
+                />
+            </View>
+            )}
             <ScrollView keyboardShouldPersistTaps={"handled"} >
 
                 <Layout style={{ flex: 1, padding: '3%' }}>
@@ -150,13 +164,13 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             }
                             LoginManager.logInWithPermissions(["public_profile", "email"])
                                 .then((r) => {
-                                    navigation.navigate('EmptyLoading')
+                                    setLoadingLogin(true)
                                     return r
                                 })
                                 .then(handlePermissionPromt)
                                 .then(handleUserData)
                                 .then((userData) => {
-                                    console.log("userData",userData)
+                                    console.log("userData", userData)
                                     if (userData.token && !userHasFullProfile(userData)) {
                                         navigation.navigate('Home')
                                     } else if (userData.twoauth != 0) {
@@ -169,6 +183,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         if (userData.vemail != 1) navigation.navigate('VerifyEmail')
                                         if (userData.vphone == 1 && userData.vemail == 1) navigation.navigate('Home')
                                     }
+                                    setLoadingLogin(false)
                                 })
                                 .catch((error) => {
                                     console.log("Login fail with error: " + error)

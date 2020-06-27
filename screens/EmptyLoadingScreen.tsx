@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import { Layout, Text, Button } from '@ui-kitten/components';
 import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native';
 import * as Progress from 'react-native-progress';
-import BackButton from '../partials/BackButton';
 
 const DocumentScreen = () => {
 
@@ -14,8 +13,9 @@ const DocumentScreen = () => {
           <Progress.Circle
             showsText={true}
             textStyle={{ color: "#41d5fb" }}
-            color={"#41d5fb"}
-            size={280}
+            color={"#41d5fb50"}
+            borderWidth={4}
+            size={180}
             indeterminate={true}
           />
         </Layout>

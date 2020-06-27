@@ -6,6 +6,7 @@ import { Layout, Text, Card, Avatar, Button, Divider } from '@ui-kitten/componen
 import { useNavigation } from '@react-navigation/native';
 import ResolveCurrencySymbol from '../utils/ResolveCurrencySymbol';
 import useAxios from 'axios-hooks'
+import Decimal from 'decimal.js';
 
 export type TripCardProps = {
   pickupLocation: string
@@ -106,7 +107,7 @@ const CarTripInfoCard: React.FC<TripCardProps> = (props) => {
               </Layout>
               <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Text style={{ color: '#ACB1C0', fontSize: 13 }}>Final cost</Text>
-                <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{props.finalCost}{ResolveCurrencySymbol(props.currencyCode)}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{new Decimal(props.finalCost).toFixed(2)}{ResolveCurrencySymbol(props.currencyCode)}</Text>
               </Layout>
             </Layout>
 

@@ -115,7 +115,7 @@ export default () => {
                             <Text style={{ fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }}>Pay now</Text>
                             <Text style={{ fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }}>
                                 {ResolveCurrencySymbol(paypalJson.transactions[0].amount.currency)}{' '}
-                                {paypalJson.transactions[0].amount.total}
+                                {new Decimal(paypalJson.transactions[0].amount.total).toFixed(2)}
                             </Text>
                         </Layout>
                         <Layout style={{ padding: '5%' }}>

@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 import 'react-native-gesture-handler';
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import './utils/ErrorTrack';
 
 import * as eva from '@eva-design/eva';
@@ -95,18 +95,18 @@ export default () => {
           )}
 
           {(!profile || profile.vphone != 1 || profile.vemail != 1 || !token) && (
-              <>
-                <Stack.Screen name="Login" component={Login} />
-                <Stack.Screen name="Signup" component={Signup} />
-                <Stack.Screen name="TwitterLogin" component={TwitterLoginScreen} />
-                <Stack.Screen name="Opt" component={VerifyPhoneScreen} />
-                <Stack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
-                <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-                <Stack.Screen name="SuccessEmail" component={SuccessPhoneVerificationScreen} />
-                <Stack.Screen name="SuccessForgotPassword" component={SuccessForgotPasswordScreen} />
-                <Stack.Screen name="EmptyLoading" component={EmptyLoadingScreen} />
-              </>
-            )}
+            <>
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="Signup" component={Signup} />
+              <Stack.Screen name="TwitterLogin" component={TwitterLoginScreen} />
+              <Stack.Screen name="Opt" component={VerifyPhoneScreen} />
+              <Stack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
+              <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+              <Stack.Screen name="SuccessEmail" component={SuccessPhoneVerificationScreen} />
+              <Stack.Screen name="SuccessForgotPassword" component={SuccessForgotPasswordScreen} />
+              <Stack.Screen name="EmptyLoading" component={EmptyLoadingScreen} />
+            </>
+          )}
 
 
         </Stack.Navigator>

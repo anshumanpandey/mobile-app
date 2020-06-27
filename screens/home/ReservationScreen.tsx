@@ -23,7 +23,7 @@ const DocumentScreen = () => {
     </Source>
     </POS>
     <VehCancelRQCore>
-    <UniqueID Type="14" ID="${route.params.registratioNumber}"/>
+    <ResNumber Number="${route.params.registratioNumber}"/>
     </VehCancelCore>
     <VehCancelRQInfo>
     </VehCancelRQInfo>
@@ -45,11 +45,8 @@ const DocumentScreen = () => {
 
           <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#00000000' }}>
             <Text style={{ textAlign: "center" }} category="h5">
-              Pickup Instructions
-              When you arrive at the airport head for
-              the arrivals hall, and go outside,
-              Walk across the road and you will see the
-              sign for Alamo
+              Pickup Instructions{'\n'}
+              {route.params.pickUpInstructions}
               </Text>
           </Layout>
 

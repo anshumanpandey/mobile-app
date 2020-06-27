@@ -11,7 +11,7 @@ import useAxios from 'axios-hooks'
 import LoadingSpinner from '../../partials/LoadingSpinner';
 import { useGlobalState } from '../../state';
 import { BookingResponse } from '../../types/BookingsResponse';
-import ResolveCurrencySymbol from '../../utils/ResolveCurrencySymbol';
+import Decimal from 'decimal.js';
 var parseString = require('react-native-xml2js').parseString;
 
 const DATE_FORMAT = 'MMM DD,YYYY'
@@ -53,14 +53,18 @@ const DocumentScreen = () => {
       refetch()
         .then(r => {
           parseString(r.data, function (err, result: BookingResponse) {
+            console.log(JSON.stringify(result))
+
               const dataParsed = result.OTA_VehListRS.VehResRSCore.map(i => {
               const Resnumber = i.VehReservation[0].VehSegmentCore[0].ConfID[0].Resnumber[0]
               const pLocation = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Name[0]
+              const pickUpInstructions = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Pickupinst[0]
               const unixPTime = i.VehReservation[0].VehSegmentCore[0].VehRentalCore[0].PickUpDateTime[0]
               const rLocation = i.VehReservation[0].VehSegmentCore[0].LocationDetails[1].Name[0]
               const unixRTime = i.VehReservation[0].VehSegmentCore[0].VehRentalCore[0].ReturnDateTime[0]
 
               const storedData = storedBookings.find(i => i.reservationNumber == Resnumber)
+
 
               return {
                 currencyCode: storedData?.currency_code,
@@ -72,10 +76,11 @@ const DocumentScreen = () => {
                 "dropOffLocation": rLocation,
                 "pickupTime": moment.utc(moment.unix(unixPTime)),
                 "dropoffTime": moment.utc(moment.unix(unixRTime)),
-                carName: storedData?.veh_name,
+                carName: `${storedData?.veh_name} Or Similar` ,
                 registratioNumber: Resnumber,
-                "finalCost": storedData?.total_price || '',
-                "arrivalTime": moment.utc(moment.unix(unixRTime))
+                "finalCost": storedData?.total_price ? new Decimal(storedData?.total_price).toFixed(2) : '',
+                "arrivalTime": moment.utc(moment.unix(unixRTime)),
+                pickUpInstructions
               }
 
             })
