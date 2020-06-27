@@ -72,6 +72,7 @@ const DocumentScreen = () => {
               onPress={() => {
                 cancelBooking()
                   .then((r) => {
+                    console.log(r.data)
                     if (r.data.includes('Errors')) {
                       Alert.alert('Error', 'Reservation Not Found')
                       return;

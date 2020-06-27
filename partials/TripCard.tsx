@@ -112,7 +112,7 @@ const TripCard: React.FC<TripCardProps> = (props) => {
                 <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Text style={{ color: '#ACB1C0', fontSize: 13 }}>Arrival time</Text>
                   {props.arrivalTime && <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>
-                    {props.arrivalTime.format("LLLL")}
+                    {props.arrivalTime.format("HH:mm DD, MMM")}
                   </Text>}
                 </Layout>
               </Layout>

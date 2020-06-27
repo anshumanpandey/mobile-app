@@ -11,6 +11,7 @@ import useAxios from 'axios-hooks'
 import LoadingSpinner from '../../partials/LoadingSpinner';
 import { useGlobalState } from '../../state';
 import { BookingResponse } from '../../types/BookingsResponse';
+import ResolveCurrencySymbol from '../../utils/ResolveCurrencySymbol';
 var parseString = require('react-native-xml2js').parseString;
 
 const DATE_FORMAT = 'MMM DD,YYYY'
@@ -25,6 +26,7 @@ const DocumentScreen = () => {
   const [date, setDate] = useState(new Date());
   const [parsedResponse, setParsedResponse] = useState([]);
   const [profile] = useGlobalState('profile');
+  const [storedBookings] = useGlobalState('storedBookings');
 
   const [{ loading, error }, refetch] = useAxios<BookingResponse>({
     url: `https://OTA.right-cars.com/`,
@@ -51,16 +53,18 @@ const DocumentScreen = () => {
       refetch()
         .then(r => {
           parseString(r.data, function (err, result: BookingResponse) {
-            const dataParsed = result.OTA_VehListRS.VehResRSCore.map(i => {
-              const Resnumber = i.VehReservation[0].VehSegmentCore[0].ConfID[0].Resnumber
+              const dataParsed = result.OTA_VehListRS.VehResRSCore.map(i => {
+              const Resnumber = i.VehReservation[0].VehSegmentCore[0].ConfID[0].Resnumber[0]
               const pLocation = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Name[0]
               const unixPTime = i.VehReservation[0].VehSegmentCore[0].VehRentalCore[0].PickUpDateTime[0]
               const rLocation = i.VehReservation[0].VehSegmentCore[0].LocationDetails[1].Name[0]
               const unixRTime = i.VehReservation[0].VehSegmentCore[0].VehRentalCore[0].ReturnDateTime[0]
 
+              const storedData = storedBookings.find(i => i.reservationNumber == Resnumber)
+
               return {
-                currencyCode: 'EUR',
-                image_preview_url: 'https://carimages.rent.it/EN/1539285845928.png',
+                currencyCode: storedData?.currency_code,
+                image_preview_url: storedData?.veh_picture ? storedData?.veh_picture : 'https://carimages.rent.it/EN/1539285845928.png',
                 leftImageUri: '../image/rightcars.png',
                 keyLess: false,
                 "tripDate": moment.utc(moment.unix(unixPTime)),
@@ -68,9 +72,9 @@ const DocumentScreen = () => {
                 "dropOffLocation": rLocation,
                 "pickupTime": moment.utc(moment.unix(unixPTime)),
                 "dropoffTime": moment.utc(moment.unix(unixRTime)),
-                carName: "Nissan",
+                carName: storedData?.veh_name,
                 registratioNumber: Resnumber,
-                "finalCost": "32.15",
+                "finalCost": storedData?.total_price || '',
                 "arrivalTime": moment.utc(moment.unix(unixRTime))
               }
 

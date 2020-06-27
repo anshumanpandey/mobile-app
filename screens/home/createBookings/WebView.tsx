@@ -62,6 +62,8 @@ const WebViewScreen = () => {
             pickupCountry: originLocation.CountryCode,
             dropoffCountry: returnLocation.CountryCode,*/
             veh_id: vehicle?.VehID,
+            veh_name: vehicle?.Vehicle.VehMakeModel.Name,
+            veh_picture: vehicle?.Vehicle.VehMakeModel.PictureURL,
             currency_code: route.params.transactions[0].amount.currency,
             paypalPaymentId: route.params.paypalPaymentId,
             total_price: route.params.transactions[0].amount.total,
@@ -176,7 +178,9 @@ const WebViewScreen = () => {
             .then((res) => {
                 console.log("postCreation", res.data);
                 parseString(res.data, function (err, result) {
-                    setReservationNumber(result.OTA_VehResRS.VehResRSCore[0].VehReservation[0].VehSegmentCore[0].ConfID[0].Resnumber[0])
+                    const reservationNumber = result.OTA_VehResRS.VehResRSCore[0].VehReservation[0].VehSegmentCore[0].ConfID[0].Resnumber[0]
+                    setReservationNumber(reservationNumber)
+                    dispatchGlobalState({ type: 'saveBooking', state: { ...data, reservationNumber }})
                 })
                 navigation.navigate("Confirmation")
                 setPostDone(true)
