@@ -275,7 +275,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     </Layout>
 
                                     <Toggle checked={values.twoauth} style={{ marginBottom: '0%' }} onChange={() => setFieldValue("twoauth", !values.twoauth)}>
-                                        Enable Opt
+                                        Enable 2-factor authentication
                                     </Toggle>
 
                                     <Layout style={{ marginBottom: '3%' }}>
