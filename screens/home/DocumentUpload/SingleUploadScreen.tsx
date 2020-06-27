@@ -79,7 +79,6 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                 setFileToShow(`https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}`)
             }
             triggerChange(p => !p)
-            console.log(`on focus: fileType=${route.params.fileType} fileToShow=${fileToShow}`)
         }, [route.params])
     );
 
@@ -122,12 +121,14 @@ const DocumentScreen = ({ route, navigation }: Props) => {
 
                     data.append("module_name", "FILE_UPLOAD");
                     data.append("file", file);
+                    console.log(currentFileType)
                     data.append("fileType", currentFileType);
-                    if (values.expDate) {
+                    console.log(values)
+                    if (currentFileType != FileTypeEnum.selfi) {
                         data.append("expDate", values.expDate.format('YYYY-MM-DD'));
+                        data.append("filecountry", currentCountryObj.cca2?.toLowerCase());
+                        data.append("docNumber", values.docNumber);
                     }
-                    data.append("filecountry", currentCountryObj.cca2?.toLowerCase());
-                    data.append("docNumber", values.docNumber);
 
                     sendFile({ data })
                         .then(r => {
@@ -143,6 +144,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                             dispatchGlobalState({ type: 'profile', state: r.data })
                             dispatchFileState({ type: Actions.RESET, state: {} })
                             triggerChange(p => !p)
+                            setUploadPercent(0)
                         })
                         .catch(r => console.log(r))
 
@@ -165,9 +167,9 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                             showsText={true}
                                             textStyle={{ color: "#41d5fb" }}
                                             color={"#41d5fb"}
-                                            size={100}
+                                            size={250}
                                             progress={uploadPercent / 100}
-                                            indeterminate={uploadPercent == 0 || uploadPercent == 100}
+                                            indeterminate={uploadPercent == 0}
                                             formatText={() => {
                                                 return `${uploadPercent}%`
                                             }}

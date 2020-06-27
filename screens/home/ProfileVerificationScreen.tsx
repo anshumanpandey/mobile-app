@@ -216,6 +216,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     console.log(`to step ${p + 1}`)
                                     return p + 1
                                 })
+                                setUploadPercent(0)
                             })
                             .catch(r => console.log(r))
 
@@ -405,7 +406,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                 color={"#41d5fb"}
                                                 size={100}
                                                 progress={uploadPercent / 100}
-                                                indeterminate={uploadPercent == 0 || uploadPercent == 100}
+                                                indeterminate={uploadPercent == 0}
                                                 formatText={() => {
                                                     return `${uploadPercent}%`
                                                 }}

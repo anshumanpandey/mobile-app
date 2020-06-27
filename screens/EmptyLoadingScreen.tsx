@@ -9,18 +9,13 @@ const DocumentScreen = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
 
-      <Layout style={{ flex: 1, padding: '5%', backgroundColor: 'white' }}>
-
-        <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '15%', marginBottom: '10%' }}>
-          <Text style={{ fontFamily: 'SF-UI-Display_Bold', textAlign: 'center' }} category="h3">Wait...</Text>
-        </Layout>
-
-        <Layout style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <Layout style={{ flex: 1, padding: '5%', backgroundColor: 'white', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Layout>
           <Progress.Circle
             showsText={true}
             textStyle={{ color: "#41d5fb" }}
             color={"#41d5fb"}
-            size={250}
+            size={280}
             indeterminate={true}
           />
         </Layout>
