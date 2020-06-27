@@ -31,6 +31,8 @@ export type TripCardProps = {
   displayPreview?: boolean
 
   arrivalTime: string
+
+  reservationStatus: string
 }
 
 const TripCard: React.FC<TripCardProps> = (props) => {
@@ -64,7 +66,13 @@ const TripCard: React.FC<TripCardProps> = (props) => {
                 </Text>
               </Layout>
             )}
-            <Layout style={{ display: 'flex', flexDirection: 'row', paddingTop: '5%', paddingLeft: '5%', paddingRight: '5%', borderTopRightRadius: 16, borderTopLeftRadius: 16 }}>
+            <View style={{ backgroundColor: 'white', paddingLeft: '5%', paddingTop: '2%',paddingRight: '5%', borderTopRightRadius: 16, borderTopLeftRadius: 16}}>
+            {props.reservationStatus == 'Cancelled' && (
+              <Layout style={{ alignSelf: 'flex-end' }}>
+                <Text style={{ textAlign: 'right', color: 'red' }}>CANCELLED</Text>
+              </Layout>
+            )}
+            <Layout style={{ display: 'flex', flexDirection: 'row' }}>
               <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', marginRight: '5%' }}>
                 <FontAwesomeIcon size={15} style={{ color: '#41d5fb' }} name="circle" />
                 <Layout style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around' }}>
@@ -86,13 +94,14 @@ const TripCard: React.FC<TripCardProps> = (props) => {
                 </Layout>
               </Layout>
             </Layout>
-            { props.displayPreview == true && props.image_preview_url && (
-              <Layout style={{ display: 'flex', alignItems: 'center'}}>
+            </View>
+            {props.displayPreview == true && props.image_preview_url && (
+              <Layout style={{ display: 'flex', alignItems: 'center' }}>
                 <Image source={{ uri: props.image_preview_url }} style={{ width: 150, height: 150, resizeMode: 'contain' }} />
               </Layout>
             )}
             <Divider />
-            <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingTop: props.displayPreview == true && props.image_preview_url ? 0 :'5%', paddingBottom: '5%', paddingLeft: '5%', paddingRight: '5%', borderBottomLeftRadius: (props.upcoming || props.completed) ? 0 : 16, borderBottomRightRadius: (props.upcoming || props.completed) ? 0 : 16 }}>
+            <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingTop: props.displayPreview == true && props.image_preview_url ? 0 : '5%', paddingBottom: '5%', paddingLeft: '5%', paddingRight: '5%', borderBottomLeftRadius: (props.upcoming || props.completed) ? 0 : 16, borderBottomRightRadius: (props.upcoming || props.completed) ? 0 : 16 }}>
               <Layout style={{ display: 'flex', flexDirection: 'row', width: '50%', alignSelf: 'flex-end' }}>
                 <Layout>
                   <Text style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 16 }} numberOfLines={1} textBreakStrategy="balanced" category='h6'>{props.carName}</Text>
@@ -103,7 +112,7 @@ const TripCard: React.FC<TripCardProps> = (props) => {
               <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '50%' }}>
                 <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Text style={{ color: '#ACB1C0', fontSize: 13 }}>Final cost</Text>
-                  <View style={{ display: 'flex', flexDirection: 'row'}}>
+                  <View style={{ display: 'flex', flexDirection: 'row' }}>
                     <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{props.finalCost}</Text>
                     {props.currencyCode && <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{ResolveCurrencySymbol(props.currencyCode)}</Text>}
                   </View>

@@ -62,6 +62,7 @@ const DocumentScreen = () => {
               const unixPTime = i.VehReservation[0].VehSegmentCore[0].VehRentalCore[0].PickUpDateTime[0]
               const rLocation = i.VehReservation[0].VehSegmentCore[0].LocationDetails[1].Name[0]
               const unixRTime = i.VehReservation[0].VehSegmentCore[0].VehRentalCore[0].ReturnDateTime[0]
+              const reservationStatus = i.VehReservation[0].VehSegmentCore[0].ConfID[0].ReservationStatus[0]
 
               const storedData = storedBookings.find(i => i.reservationNumber == Resnumber)
 
@@ -80,7 +81,8 @@ const DocumentScreen = () => {
                 registratioNumber: Resnumber,
                 "finalCost": storedData?.total_price ? new Decimal(storedData?.total_price).toFixed(2) : '',
                 "arrivalTime": moment.utc(moment.unix(unixRTime)),
-                pickUpInstructions
+                pickUpInstructions,
+                reservationStatus
               }
 
             })
