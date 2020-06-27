@@ -113,7 +113,7 @@ const WebViewScreen = () => {
         
                 <Telephone PhoneNumber="${profile.mobilecode}" MobileNumber="${profile.mobilenumber}"/>
         
-                <Email>admin@right-cars.com</Email>
+                <Email>${profile.emailaddress}</Email>
         
                 <Driverage>22</Driverage>
         

@@ -94,9 +94,6 @@ const TripCard: React.FC<TripCardProps> = (props) => {
             <Divider />
             <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingTop: props.displayPreview == true && props.image_preview_url ? 0 :'5%', paddingBottom: '5%', paddingLeft: '5%', paddingRight: '5%', borderBottomLeftRadius: (props.upcoming || props.completed) ? 0 : 16, borderBottomRightRadius: (props.upcoming || props.completed) ? 0 : 16 }}>
               <Layout style={{ display: 'flex', flexDirection: 'row', width: '50%' }}>
-                <Layout style={{ marginRight: '3%' }}>
-                  <Avatar style={{ borderRadius: 10 }} shape='square' source={props.keyLess ? require('../image/keyx.png') : require('../image/key.png')} />
-                </Layout>
 
                 <Layout>
                   <Text style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 16 }} numberOfLines={1} textBreakStrategy="balanced" category='h6'>{props.carName}</Text>
@@ -116,7 +113,7 @@ const TripCard: React.FC<TripCardProps> = (props) => {
                 <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Text style={{ color: '#ACB1C0', fontSize: 13 }}>Arrival time</Text>
                   {props.arrivalTime && <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>
-                    {props.arrivalTime}
+                    {props.arrivalTime.format("LLLL")}
                   </Text>}
                 </Layout>
               </Layout>

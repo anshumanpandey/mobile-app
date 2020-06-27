@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { Layout, Text, Tab, Datepicker, NativeDateService, TabView, Card, Avatar, List, Button } from '@ui-kitten/components';
 import { SafeAreaView, View, AsyncStorage } from 'react-native';
@@ -9,203 +9,81 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import useAxios from 'axios-hooks'
 import LoadingSpinner from '../../partials/LoadingSpinner';
+import { useGlobalState } from '../../state';
+import { BookingResponse } from '../../types/BookingsResponse';
+var parseString = require('react-native-xml2js').parseString;
 
 const DATE_FORMAT = 'MMM DD,YYYY'
 
 const formatDateService = new NativeDateService('en', { format: DATE_FORMAT });
 
-const LIST_DATA: TripCardProps[] = [
-  {
-    currencyCode: 'EUR',
-    image_preview_url: 'https://carimages.rent.it/EN/1539285845928.png',
-    leftImageUri: '../image/rightcars.png',
-    keyLess: false,
-    "tripDate": moment(),
-    "pickupLocation": "448 Louise Terrace",
-    "dropOffLocation": "593 Jackson Court",
-    "pickupTime": moment(),
-    "dropoffTime": moment(),
-    carName: "Nissan",
-    registratioNumber: "V45646EUU",
-    "finalCost": "32.15",
-    "arrivalTime": moment()
-  },
-  {
-    currencyCode: 'EUR',
-    image_preview_url: 'https://carimages.rent.it/EN/1539285845928.png',
-    leftImageUri: '../image/rightcars.png',
-    keyLess: true,
-    "tripDate": moment(),
-    "pickupLocation": "362 Lancaster Avenue",
-    "dropOffLocation": "200 Revere Place",
-    "pickupTime": moment(),
-    "dropoffTime": moment(),
-    carName: "Toyota",
-    registratioNumber: "V45646EUU",
-    "finalCost": "80.24",
-    "arrivalTime": moment()
-  },
-  {
-    currencyCode: 'EUR',
-    image_preview_url: 'https://carimages.rent.it/EN/1539285845928.png',
-    leftImageUri: '../image/rightcars.png',
-    keyLess: true,
-    "tripDate": moment(),
-    "pickupLocation": "277 Brighton Court",
-    "dropOffLocation": "907 Eaton Court",
-    "pickupTime": moment(),
-    "dropoffTime": moment(),
-    carName: "Mazda",
-    registratioNumber: "V45646EUU",
-    "finalCost": "18.21",
-    "arrivalTime": moment()
-  },
-  {
-    currencyCode: 'EUR',
-    image_preview_url: 'https://carimages.rent.it/EN/1539285845928.png',
-    leftImageUri: '../image/rightcars.png',
-    keyLess: true,
-    "tripDate": moment(),
-    "pickupLocation": "258 Clinton Street",
-    "dropOffLocation": "869 Montague Terrace",
-    "pickupTime": moment(),
-    "dropoffTime": moment(),
-    carName: "Aston Martin",
-    registratioNumber: "V45646EUU",
-    "finalCost": "20.65",
-    "arrivalTime": moment()
-  },
-  {
-    currencyCode: 'EUR',
-    image_preview_url: 'https://carimages.rent.it/EN/1539285845928.png',
-    leftImageUri: '../image/rightcars.png',
-    keyLess: true,
-    "tripDate": moment(),
-    "pickupLocation": "503 Onderdonk Avenue",
-    "dropOffLocation": "813 Oriental Court",
-    "pickupTime": moment(),
-    "dropoffTime": moment(),
-    carName: "Suzuki",
-    registratioNumber: "V45646EUU",
-    "finalCost": "19.01",
-    "arrivalTime": moment(),
-    completed: true
-  },
-  {
-    currencyCode: 'EUR',
-    image_preview_url: 'https://carimages.rent.it/EN/1539285845928.png',
-    leftImageUri: '../image/rightcars.png',
-    keyLess: true,
-    "tripDate": moment(),
-    "pickupLocation": "902 Suydam Place",
-    "dropOffLocation": "224 Engert Avenue",
-    "pickupTime": moment(),
-    "dropoffTime": moment(),
-    carName: "Porche",
-    registratioNumber: "V45646EUU",
-    "finalCost": "82.77",
-    "arrivalTime": moment(),
-    upcoming: true
-  },
-  {
-    currencyCode: 'EUR',
-    image_preview_url: 'https://carimages.rent.it/EN/1539285845928.png',
-    leftImageUri: '../image/rightcars.png',
-    keyLess: false,
-    "tripDate": moment(),
-    "pickupLocation": "309 Langham Street",
-    "dropOffLocation": "753 Prospect Street",
-    "pickupTime": moment(),
-    "dropoffTime": moment(),
-    carName: "Cherokee",
-    registratioNumber: "V45646EUU",
-    "finalCost": "23.22",
-    "arrivalTime": moment(),
-  },
-  {
-    currencyCode: 'EUR',
-    image_preview_url: 'https://carimages.rent.it/EN/1539285845928.png',
-    leftImageUri: '../image/rightcars.png',
-    keyLess: false,
-    "tripDate": moment().startOf('month'),
-    "pickupLocation": "101 Thames Street",
-    "dropOffLocation": "929 Scott Avenue",
-    "pickupTime": moment(),
-    "dropoffTime": moment(),
-    carName: "Ferrari",
-    registratioNumber: "V45646EUU",
-    "finalCost": "48.57",
-    "arrivalTime": moment()
-  },
-  {
-    currencyCode: 'EUR',
-    image_preview_url: 'https://carimages.rent.it/EN/1539285845928.png',
-    leftImageUri: '../image/rightcars.png',
-    keyLess: false,
-    "tripDate": moment().endOf('month'),
-    "pickupLocation": "205 Nixon Court",
-    "dropOffLocation": "577 Java Street",
-    "pickupTime": moment(),
-    "dropoffTime": moment(),
-    carName: "Lange Rover",
-    registratioNumber: "V45646EUU",
-    "finalCost": "28.50",
-    "arrivalTime": moment()
-  },
-  {
-    currencyCode: 'EUR',
-    image_preview_url: 'https://carimages.rent.it/EN/1539285845928.png',
-    leftImageUri: '../image/rightcars.png',
-    keyLess: false,
-    "tripDate": moment().startOf('week'),
-    "pickupLocation": "208 Thornton Street",
-    "dropOffLocation": "649 Elmwood Avenue",
-    "pickupTime": moment(),
-    "dropoffTime": moment(),
-    carName: "Nissan",
-    registratioNumber: "V45646EUU",
-    "finalCost": "88.04",
-    "arrivalTime": moment()
-  }
-]
 
 const DocumentScreen = () => {
   const navigation = useNavigation();
 
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [date, setDate] = React.useState(new Date());
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [date, setDate] = useState(new Date());
+  const [parsedResponse, setParsedResponse] = useState([]);
+  const [profile] = useGlobalState('profile');
 
-  const [{ data, loading, error }, refetch] = useAxios({
+  const [{ loading, error }, refetch] = useAxios<BookingResponse>({
     url: `https://OTA.right-cars.com/`,
     method: 'POST',
-    data: `<OTA_VehRetResRQ xmlns="http://www.opentravel.org/OTA/2003/05"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.opentravel.org/OTA/2003/05
-    VehRetResRQ.xsd">
+    data: `<OTA_VehListRQ xmlns="http://www.opentravel.org/OTA/2003/05" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation = "http://www.opentravel.org/OTA/2003/05 VehResRQ.xsd" >
     <POS>
     <Source>
-    <RequestorID Type="5" ID="1" ID_Name="RightCars" />
+    <RequestorID Type="5" ID="MOBILE001" />
     </Source>
     </POS>
-    <VehRetResRQCore>
-    <ResNumber Number="RC0461318"/>
-    <PersonName>
-    <GivenName>Test</GivenName>
-    <Surname>Test</Surname>
-    </PersonName>
-    </VehRetResRQCore>    
-    </OTA_VehRetResRQ>`
-  })
+    <Customer>
+    <Primary>
+    <Email>${profile.emailaddress}</Email>
+    </Primary>
+    </Customer>
+    </OTA_OTA_VehListRQ>`,
+    headers: {
+      "Content-Type": "application/soap+xml;charset=utf-8"
+    }
+  }, { manual: true })
 
   useFocusEffect(
     React.useCallback(() => {
-      refetch();
+      refetch()
+        .then(r => {
+          parseString(r.data, function (err, result: BookingResponse) {
+            const dataParsed = result.OTA_VehListRS.VehResRSCore.map(i => {
+              const Resnumber = i.VehReservation[0].VehSegmentCore[0].ConfID[0].Resnumber
+              const pLocation = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Name[0]
+              const unixPTime = i.VehReservation[0].VehSegmentCore[0].VehRentalCore[0].PickUpDateTime[0]
+              const rLocation = i.VehReservation[0].VehSegmentCore[0].LocationDetails[1].Name[0]
+              const unixRTime = i.VehReservation[0].VehSegmentCore[0].VehRentalCore[0].ReturnDateTime[0]
+
+              return {
+                currencyCode: 'EUR',
+                image_preview_url: 'https://carimages.rent.it/EN/1539285845928.png',
+                leftImageUri: '../image/rightcars.png',
+                keyLess: false,
+                "tripDate": moment.utc(moment.unix(unixPTime)),
+                "pickupLocation": pLocation,
+                "dropOffLocation": rLocation,
+                "pickupTime": moment.utc(moment.unix(unixPTime)),
+                "dropoffTime": moment.utc(moment.unix(unixRTime)),
+                carName: "Nissan",
+                registratioNumber: Resnumber,
+                "finalCost": "32.15",
+                "arrivalTime": moment.utc(moment.unix(unixRTime))
+              }
+
+            })
+            setParsedResponse(dataParsed)
+          })
+        })
     }, [])
   );
 
   const [locationReq, doSearch] = useAxios({
     url: `${GRCGDS_BACKEND}`,
-    params: { module_name: 'LOCATION_SEARCH'  }
+    params: { module_name: 'LOCATION_SEARCH' }
   })
 
   useEffect(() => {
@@ -217,28 +95,17 @@ const DocumentScreen = () => {
         console.log('We fail to save location data: ' + error.toString())
       }
     }
-  },[locationReq.loading]);
+  }, [locationReq.loading]);
 
-  console.log(data)
-  console.log(error)
-
-  const parsedData = data ? data.map((booking: any) => {
-    return {
-      ...booking,
-      pickupTime: moment.unix(booking.pickupTime),
-      dropoffTime: moment.unix(booking.dropoffTime)
-    }
-  }) : null
-
-  const activeTrips = parsedData ? parsedData.filter(booking => {
+  const activeTrips = parsedResponse ? parsedResponse.filter(booking => {
     return booking.pickupTime.isSame(moment(), 'day')
   }) : null
 
-  const upcommingTrips = parsedData ? parsedData.filter(booking => {
+  const upcommingTrips = parsedResponse ? parsedResponse.filter(booking => {
     return booking.pickupTime.isAfter(moment())
   }) : null
 
-  const completedTrips = parsedData ? parsedData.filter(booking => {
+  const completedTrips = parsedResponse ? parsedResponse.filter(booking => {
     return booking.dropoffTime.isBefore(moment())
   }) : null
 
@@ -329,7 +196,7 @@ const DocumentScreen = () => {
             <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold', color: selectedIndex == 2 ? '#41d5fb' : '#aeb1c3' }}>COMPLETED</Text>} >
               <Layout style={{ height: '96%' }}>
 
-              {!loading && completedTrips && completedTrips.length !== 0 && <List
+                {!loading && completedTrips && completedTrips.length !== 0 && <List
                   style={{ backgroundColor: '#f7f9fc', padding: '5%', display: 'flex', flexDirection: 'column' }}
                   data={completedTrips}
                   renderItem={(data: any) => {
