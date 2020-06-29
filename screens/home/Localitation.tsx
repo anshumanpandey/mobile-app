@@ -45,7 +45,6 @@ const DocumentScreen = () => {
     })
 
     GPSState.addListener((status: any) => {
-      console.log(e)
       switch (status) {
         case GPSState.NOT_DETERMINED:
           setIsLocationGprsAuthorized(false)

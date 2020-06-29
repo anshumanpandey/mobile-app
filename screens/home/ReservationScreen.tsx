@@ -121,7 +121,10 @@ const DocumentScreen = () => {
         <View style={{ height: '10%',justifyContent: 'flex-end',alignSelf: 'flex-start',width: '100%', display: 'flex', flexDirection: 'row' }}>
           <View style={{ width: '25%'}}>
             <TouchableOpacity style={{ height: '100%' }} onPress={() => {
-              navigation.navigate('KeyedCarReservation', { ...route.params })
+              navigation.navigate('Location', {
+                passTo: 'KeyedCarReservation',
+                parentProps: route.params
+              })
               return
               /*
               if (GPSState.isAuthorized()) {

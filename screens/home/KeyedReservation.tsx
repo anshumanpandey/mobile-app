@@ -13,13 +13,14 @@ import LoadingSpinner from '../../partials/LoadingSpinner';
 export default () => {
     const navigation = useNavigation();
     const route = useRoute();
+    const returnAddressString = `${route.params.pLocationAddress._.replace(/ /g, '+')}${route.params.pLocationAddress.CountryName[0].Name[0]}`
 
     const [originLocationReq, refecthOrigin] = useAxios({
         url: `https://maps.googleapis.com/maps/api/geocode/json?address=${route.params.pickupLocation.replace(` `, '+')}&key=AIzaSyBJ8evu2aDcSyb2F2NIuNQ3L5TeLAGpino`,
     })
 
     const [returnLocationReq, refetchReturn] = useAxios({
-        url: `https://maps.googleapis.com/maps/api/geocode/json?address=${route.params.dropOffLocation.replace(` `, '+')}&key=AIzaSyBJ8evu2aDcSyb2F2NIuNQ3L5TeLAGpino`,
+        url: `https://maps.googleapis.com/maps/api/geocode/json?address=${returnAddressString}&key=AIzaSyBJ8evu2aDcSyb2F2NIuNQ3L5TeLAGpino`,
     })
 
     useFocusEffect(

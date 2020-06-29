@@ -64,6 +64,7 @@ const DocumentScreen = () => {
               const dataParsed = result.OTA_VehListRS.VehResRSCore.map(i => {
                 const Resnumber = i.VehReservation[0].VehSegmentCore[0].ConfID[0].Resnumber[0]
                 const pLocation = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Name[0]
+                const pLocationAddress = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Address[0].AddressLine[0]
                 const pPhoneNumber = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Name[0]
                 const pickUpInstructions = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Telephone[0].PhoneNumber[0]
                 const unixPTime = i.VehReservation[0].VehSegmentCore[0].VehRentalCore[0].PickUpDateTime[0]
@@ -90,7 +91,8 @@ const DocumentScreen = () => {
                   "finalCost": storedData?.total_price ? new Decimal(storedData?.total_price).toFixed(2) : '',
                   "arrivalTime": moment.utc(moment.unix(unixRTime)),
                   pickUpInstructions,
-                  reservationStatus
+                  reservationStatus,
+                  pLocationAddress
                 }
 
               })
