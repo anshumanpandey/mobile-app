@@ -211,8 +211,19 @@ const WebViewScreen = () => {
 
             // handle certain doctypes
             console.log('webview', url)
+            console.log('includes', url.includes('PAYMENT_CANCELLED'))
             if (url.includes('PAYMENT_SUCCESS')) {
                 setNavigatedToSuccess(p => p + 1)
+            }
+            if (url.includes('PAYMENT_CANCELLED')) {
+                navigation.dispatch(
+                    CommonActions.reset({
+                        index: 0,
+                        routes: [
+                            { name: 'MyBookings' },
+                        ],
+                    })
+                );
             }
         }}
     />;
