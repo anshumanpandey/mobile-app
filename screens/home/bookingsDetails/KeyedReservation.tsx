@@ -7,9 +7,11 @@ import MapView from "react-native-maps";
 import MapViewDirections from 'react-native-maps-directions';
 //@ts-ignore
 import GetLocation from 'react-native-get-location'
+// @ts-ignore
+import GPSState from 'react-native-gps-state'
 import useAxios from 'axios-hooks'
-import TripCard from '../../partials/TripCard';
-import LoadingSpinner from '../../partials/LoadingSpinner';
+import TripCard from '../../../partials/TripCard';
+import LoadingSpinner from '../../../partials/LoadingSpinner';
 
 
 export default () => {
@@ -24,6 +26,9 @@ export default () => {
 
     useFocusEffect(
         React.useCallback(() => {
+            if (!GPSState.isAuthorized()){
+                GPSState.requestAuthorization(GPSState.AUTHORIZED_WHENINUSE)
+            }
             refetchReturn();
 
             GetLocation.getCurrentPosition({
@@ -42,14 +47,8 @@ export default () => {
     );
 
     return (
-        <SafeAreaView style={{ flex: 1 }} >
-            <Layout style={{ paddingLeft: '5%', paddingRight: '5%', paddingTop: '5%' }}>
-                <TripCard
-                    displayPreview={true}
-                    {...route.params}
-                />
-            </Layout>
-            <View style={{ display: 'flex', height: '50%' }}>
+        <SafeAreaView style={{ flex: 1, justifyContent: 'flex-start' }} >
+            <View style={{ display: 'flex', height: '90%' }}>
                 {(returnLocationReq.data && !returnLocationReq.loading && currentLocation) && <MapView
                     style={{ flex: 1 }}
                     initialRegion={{

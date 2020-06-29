@@ -16,7 +16,7 @@ import DamageScreen from './DamageScreen';
 import NoPictureDamageScreen from './NoPictureDamageScreen';
 import ReservationScreen from './bookingsDetails/ReservationScreen';
 import SelectLocation from './createBookings/index';
-import KeyedReservation from './KeyedReservation';
+import KeyedReservation from './bookingsDetails/KeyedReservation';
 import EndRentalScreen from './EndRentalScreen';
 import SignScreen from './bookingsDetails/SignScreen';
 import EditProfile from './EditProfile';
@@ -59,7 +59,6 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
             <Drawer.Screen name="NoPicturDamage" component={NoPictureDamageScreen} />,
             <Drawer.Screen name="Activate" component={ActivateScreen} />,
             <Drawer.Screen name="Notifications" component={NotificationScreen} />,
-            <Drawer.Screen name="KeyedCarReservation" component={KeyedReservation} />,
             <Drawer.Screen name="EditProfile" component={EditProfile} />,
             <Drawer.Screen name="Documents" component={DocumentScreen} />,
             <Drawer.Screen name="SingleUpload" component={SingleUploadScreen} />,

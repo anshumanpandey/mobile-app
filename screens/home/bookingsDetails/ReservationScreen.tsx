@@ -9,6 +9,7 @@ import { Linking } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ResolveCurrencySymbol from '../../../utils/ResolveCurrencySymbol';
 import ReportScreen from './ReportScreen';
+import KeyedReservationScreen from './KeyedReservation';
 import CompletedReportScreen from './CompletedReportScreen';
 import AgreementScreen from './AgreementScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -17,7 +18,6 @@ import { createGlobalState } from 'react-hooks-global-state';
 const DocumentScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  console.log(route)
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#f6f7f9', }}>
@@ -159,6 +159,15 @@ export default function App({ navigation, route }) {
           tabBarButton: () => <></>,
         }}
       />
+
+      <Tab.Screen
+        name="KeyedReservation"
+        component={KeyedReservationScreen}
+        options={{
+          tabBarButton: () => <></>,
+        }}
+      />
+
       <Tab.Screen
         name="Directions"
         component={() => <></>}
@@ -167,16 +176,34 @@ export default function App({ navigation, route }) {
             return (
               <View style={{ width: '25%' }}>
                 <TouchableOpacity style={{ height: '100%' }} onPress={() => {
-                  navigation.navigate('Location', {
-                    passTo: 'KeyedCarReservation',
-                    parentProps: route.params.params
-                  })
+                  navigation.navigate('KeyedReservation', route.params.params)
                   return
 
                 }}>
                   <View style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', borderColor: 'rgba(0,0,0,0.2)', borderRightWidth: 0 }}>
                     <MaterialIcons name="location-on" style={{ color: '#41d5fb' }} size={24} />
                     <Text style={{ marginLeft: '5%', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>DIRECTIONS</Text>
+                  </View>
+
+                </TouchableOpacity>
+              </View>
+            );
+          }
+        }}
+      />
+      <Tab.Screen
+        name="Cancel"
+        component={() => <></>}
+        options={{
+          tabBarButton: () => {
+            return (
+              <View style={{ width: '25%' }}>
+                <TouchableOpacity style={{ height: '100%' }} onPress={() => {
+                  Linking.openURL(`tel:${route.params.params.pickupLocationPhoneNumber}`)
+                }}>
+                  <View style={{ height: '100%', borderColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
+                    <MaterialIcons name="phone" style={{ color: '#41d5fb' }} size={24} />
+                    <Text style={{ textAlign: 'center', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>HELP</Text>
                   </View>
 
                 </TouchableOpacity>
@@ -233,28 +260,6 @@ export default function App({ navigation, route }) {
                     <MaterialIcons name="cancel" style={{ color: '#cf1830' }} size={24} />
                     <Text style={{ marginLeft: '5%', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>CANCEL </Text>
                     {cancelReq.loading ? <LoadingSpinner /> : undefined}
-                  </View>
-
-                </TouchableOpacity>
-              </View>
-            );
-          }
-        }}
-      />
-
-      <Tab.Screen
-        name="Cancel"
-        component={() => <></>}
-        options={{
-          tabBarButton: () => {
-            return (
-              <View style={{ width: '25%' }}>
-                <TouchableOpacity style={{ height: '100%' }} onPress={() => {
-                  Linking.openURL(`tel:${route.params.params.pickupLocationPhoneNumber}`)
-                }}>
-                  <View style={{ height: '100%', borderColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
-                    <MaterialIcons name="phone" style={{ color: '#41d5fb' }} size={24} />
-                    <Text style={{ textAlign: 'center', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>HELP</Text>
                   </View>
 
                 </TouchableOpacity>

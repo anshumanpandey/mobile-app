@@ -59,7 +59,11 @@ const DocumentScreen = () => {
         .then(r => {
           parseString(r.data, function (err, result: BookingResponse) {
             setTimeout(() => {
-              console.log(JSON.stringify(result))
+
+              if (!result.OTA_VehListRS.VehResRSCore) {
+                setParsedResponse([])
+                return
+              }
 
               const dataParsed = result.OTA_VehListRS.VehResRSCore.map(i => {
                 const Resnumber = i.VehReservation[0].VehSegmentCore[0].ConfID[0].Resnumber[0]
