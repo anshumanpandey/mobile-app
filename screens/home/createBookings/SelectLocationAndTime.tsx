@@ -72,7 +72,10 @@ export default () => {
                             <DatePicker
                                 minuteInterval={30}
                                 date={departureTime}
-                                onDateChange={(d) => setDepartureTime(d)}
+                                onDateChange={(d) => {
+                                    setDepartureTime(d)
+                                    setReturnTime(moment(d).add('days', 1).toDate())
+                                }}
                             />
                             <Text style={{ fontFamily: 'SF-UI-Display_Bold' }}>Return Time</Text>
                             <DatePicker
