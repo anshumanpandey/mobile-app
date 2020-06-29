@@ -44,7 +44,7 @@ export default () => {
                                     return <View style={{ backgroundColor: found ? '#41d5fb' : 'white', borderColor: found ? 'white' : '#41d5fb', borderWidth: 1, borderRadius: 20, height: 40, width: 40, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         {found ?
                                             <Text style={{ fontSize: 15, color: 'white' }}>{found.amount}</Text>
-                                            : <Text style={{ fontSize: 40, color: '#41d5fb' }} >+</Text>}
+                                            : <Text style={{ fontSize: 30, color: '#41d5fb' }} >+</Text>}
                                     </View>
                                 }}
                                 onChange={() => {
