@@ -175,8 +175,8 @@ export default function App({ navigation, route }) {
 
                 }}>
                   <View style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', borderColor: 'rgba(0,0,0,0.2)', borderRightWidth: 0 }}>
-                    <MaterialIcons name="directions" style={{ color: '#41d5fb' }} size={24} />
-                    <Text style={{ marginLeft: '5%', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>GET DIRECTIONS </Text>
+                    <MaterialIcons name="location-on" style={{ color: '#41d5fb' }} size={24} />
+                    <Text style={{ marginLeft: '5%', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>DIRECTIONS</Text>
                   </View>
 
                 </TouchableOpacity>
@@ -196,8 +196,8 @@ export default function App({ navigation, route }) {
                   navigation.navigate('Report', { ...route.params })
                 }}>
                   <View style={{ height: '100%', borderColor: 'rgba(0,0,0,0.2)', borderRightWidth: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
-                    <MaterialIcons name="report-problem" style={{ color: '#41d5fb' }} size={24} />
-                    <Text style={{ textAlign: 'center', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>REPORT A PROBLEM</Text>
+                    <MaterialIcons name="directions-car" style={{ color: '#41d5fb' }} size={24} />
+                    <Text style={{ textAlign: 'center', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>COLLECT</Text>
                   </View>
 
                 </TouchableOpacity>
