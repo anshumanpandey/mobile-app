@@ -64,7 +64,8 @@ const DocumentScreen = () => {
               const dataParsed = result.OTA_VehListRS.VehResRSCore.map(i => {
                 const Resnumber = i.VehReservation[0].VehSegmentCore[0].ConfID[0].Resnumber[0]
                 const pLocation = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Name[0]
-                const pickUpInstructions = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Pickupinst[0]
+                const pPhoneNumber = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Name[0]
+                const pickUpInstructions = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Telephone[0].PhoneNumber[0]
                 const unixPTime = i.VehReservation[0].VehSegmentCore[0].VehRentalCore[0].PickUpDateTime[0]
                 const rLocation = i.VehReservation[0].VehSegmentCore[0].LocationDetails[1].Name[0]
                 const unixRTime = i.VehReservation[0].VehSegmentCore[0].VehRentalCore[0].ReturnDateTime[0]
@@ -81,6 +82,7 @@ const DocumentScreen = () => {
                   "tripDate": moment.utc(moment.unix(unixPTime)),
                   "pickupLocation": pLocation,
                   "dropOffLocation": rLocation,
+                  pickupLocationPhoneNumber: pPhoneNumber,
                   "pickupTime": moment.utc(moment.unix(unixPTime)),
                   "dropoffTime": moment.utc(moment.unix(unixRTime)),
                   carName: `${storedData?.veh_name} Or Similar`,

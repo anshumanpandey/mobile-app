@@ -5,7 +5,7 @@ import { SafeAreaView, ScrollView, Image, Alert, View } from 'react-native';
 import LoadingSpinner from '../../partials/LoadingSpinner';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import useAxios from 'axios-hooks'
-import StepIndicator from 'react-native-step-indicator';
+import {Linking} from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ResolveCurrencySymbol from '../../utils/ResolveCurrencySymbol';
 
@@ -130,7 +130,7 @@ const DocumentScreen = () => {
                 navigation.navigate('Location', { parentProps: route.params, passTo: "KeyedCarReservation"})
               }*/
             }}>
-              <View style={{ height: '100%',display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column',borderColor: 'rgba(0,0,0,0.2)', borderWidth: 1, borderRightWidth: 0 }}>
+              <View style={{ height: '100%',display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column',borderColor: 'rgba(0,0,0,0.2)',  borderRightWidth: 0 }}>
                 <MaterialIcons name="directions" style={{ color:'#41d5fb'}} size={24} />
                 <Text style={{ marginLeft: '5%',color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>GET DIRECTIONS </Text>
               </View>
@@ -153,7 +153,7 @@ const DocumentScreen = () => {
                   }
                 })
             }}>
-              <View style={{ height: '100%',display: 'flex', justifyContent: 'center',alignItems: 'center',borderColor: 'rgba(0,0,0,0.2)', borderWidth: 1, borderRightWidth: 0,flexDirection: 'column' }}>
+              <View style={{ height: '100%',display: 'flex', justifyContent: 'center',alignItems: 'center',borderColor: 'rgba(0,0,0,0.2)',  borderRightWidth: 0,flexDirection: 'column' }}>
                 <MaterialIcons name="cancel" style={{ color:'#cf1830'}} size={24} />
                 <Text style={{ marginLeft: '5%',color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>CANCEL </Text>
                 {cancelReq.loading ? <LoadingSpinner /> : undefined}
@@ -166,7 +166,7 @@ const DocumentScreen = () => {
             <TouchableOpacity style={{ height: '100%' }} onPress={() => {
               navigation.navigate('NoPicturDamage', { ...route.params })
             }}>
-              <View style={{ height: '100%',borderColor: 'rgba(0,0,0,0.2)', borderWidth: 1, borderRightWidth: 0,display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
+              <View style={{ height: '100%',borderColor: 'rgba(0,0,0,0.2)',  borderRightWidth: 0,display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
                 <MaterialIcons name="report-problem" style={{ color:'#41d5fb'}} size={24} />
                 <Text style={{ textAlign: 'center', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>REPORT A PROBLEM</Text>
               </View>
@@ -176,11 +176,11 @@ const DocumentScreen = () => {
 
           <View style={{ width: '25%' }}>
             <TouchableOpacity style={{ height: '100%' }} onPress={() => {
-              navigation.navigate('NoPicturDamage', { ...route.params })
+              Linking.openURL(`tel:${route.params.pickupLocationPhoneNumber}`)
             }}>
-              <View style={{ height: '100%',borderColor: 'rgba(0,0,0,0.2)', borderWidth: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
-                <MaterialIcons name="report-problem" style={{ color:'#41d5fb'}} size={24} />
-                <Text style={{ textAlign: 'center',color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>REPORT A PROBLEM</Text>
+              <View style={{ height: '100%',borderColor: 'rgba(0,0,0,0.2)',  display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
+                <MaterialIcons name="phone" style={{ color:'#41d5fb'}} size={24} />
+                <Text style={{ textAlign: 'center',color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>HELP</Text>
               </View>
 
             </TouchableOpacity>
