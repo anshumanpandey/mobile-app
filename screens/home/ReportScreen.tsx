@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Layout, Text, Button, Input } from '@ui-kitten/components';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { SafeAreaView, ScrollView, Image, TextInput, View } from 'react-native';
 import ImagePicker, { ImagePickerResponse } from 'react-native-image-picker';
 import TripCard from '../../partials/TripCard';
 import { useRoute } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const imageArr = []
 
@@ -18,7 +20,8 @@ imageArr[7] = require('../../image/car-8.jpg')
 
 const DocumentScreen = () => {
   const route = useRoute();
-  const [pictures, setPictures] = useState<ImagePickerResponse[]>([]);
+  const maxPhotosAmount = 8
+  const [pictures, setPictures] = useState<{ [k: number]: ImagePickerResponse }>({});
   const [currentPicktureIndex, setCurrentPicktureIndex] = useState(0);
 
   const options = {
@@ -31,50 +34,73 @@ const DocumentScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ paddingBottom: '20%', flexGrow: 1,display: 'flex' ,backgroundColor: '#f7f9fc' }}>
-        <View style={{ padding: '5%', backgroundColor: '#f7f9fc' }}>
-          <TripCard
-            {...route.params}
-          />
-
-          <Layout style={{ height: '30%',display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#00000000' }}>
-            <Text style={{ color: '#d0021b', textAlign: 'center' }} category="h2">
-              PLEASE TAKE PICTURES OF ANY DAMAGE TO THE VEHICLE
-            </Text>
-            <Button onPress={() => {
-              ImagePicker.launchCamera(options, (response) => {
-                console.log('Response = ', response);
-
-                if (response.didCancel) {
-                  console.log('User cancelled image picker');
-                } else if (response.error) {
-                  console.log('ImagePicker Error: ', response.error);
-                } else if (response.customButton) {
-                  console.log('User tapped custom button: ', response.customButton);
-                } else {
-                  setPictures(p => {
-                    p[currentPicktureIndex] = response
-                    return p
-                  })
-                }
-              });
-            }} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '25%', backgroundColor: 'gray', borderColor: 'gray' }}>
-              {() => <Text style={{ color: 'white' }}>TAKE PICTURE</Text>}
-            </Button>
-          </Layout>
-
-          <View style={{ display: 'flex', alignItems: 'center'}}>
-            {picture && <Image source={{ uri: picture }} style={{ width: 200, height: 200 }} />}
+      <ScrollView contentContainerStyle={{ paddingBottom: '20%', flexGrow: 1, display: 'flex', backgroundColor: '#f7f9fc' }}>
+        <View style={{ backgroundColor: '#f7f9fc' }}>
+          <View style={{ display: 'flex', alignItems: 'center', backgroundColor: 'red' }}>
+            {imageArr[currentPicktureIndex] && <Image source={imageArr[currentPicktureIndex]} style={{ height: 250, margin: 0, padding: 0, resizeMode: 'contain' }} />}
           </View>
 
-          <Layout style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: '#00000000' }}>
-            <Text category="h4"> DESCRIPTION OF DAMAGE</Text>
-            <Input
-              multiline={true}
-              numberOfLines = {10}
-            />
-          </Layout>
+          <Layout style={{ marginTop: '20%', padding: '5%', height: '30%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#00000000' }}>
+            <View style={{ display: 'flex', flexDirection: 'row', marginTop: '10%', }}>
+              {Array(maxPhotosAmount).fill(1).map((_, idx) => {
+                return (
+                  <View style={{ marginLeft: '2%', borderWidth: 1, borderColor: pictures[idx] ? '#41d5fb' : 'white', backgroundColor: pictures[idx] ? 'white' : '#41d5fb', width: 40, height: 40, borderRadius: 40 / 2, display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                    <Text style={{ color: 'white', textAlign: 'center', fontFamily: 'SF-UI-Display_Bold', fontSize: 20 }}>
+                      {!pictures[idx] ? idx + 1 : <MaterialIcons style={{ color: pictures[idx] ? '#41d5fb' : "white" }} size={24} name="check" />}
+                    </Text>
+                  </View>
+                );
+              })}
+            </View>
+            <Text style={{ textAlign: 'center', marginTop: '15%', }} category="h5">
+              Please move to position {currentPicktureIndex + 1} as shown in the picture and take a picture of the car
+            </Text>
+            <View style={{ display: 'flex', flexDirection: 'row', width: '100%',justifyContent: 'space-around'}}>
+              <TouchableOpacity onPress={() => {
+                ImagePicker.launchCamera(options, (response) => {
+                  console.log('Response = ', response);
 
+                  if (response.didCancel) {
+                    console.log('User cancelled image picker');
+                  } else if (response.error) {
+                    console.log('ImagePicker Error: ', response.error);
+                  } else if (response.customButton) {
+                    console.log('User tapped custom button: ', response.customButton);
+                  } else {
+                    const j = { [currentPicktureIndex]: response }
+                    setPictures({ ...pictures, ...j })
+                    setCurrentPicktureIndex(p => p + 1)
+                  }
+                });
+              }}>
+                <View style={{ marginTop: '10%', backgroundColor: '#41d5fb', width: 100, height: 100, borderRadius: 100 / 2, display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                  <MaterialIcons style={{ color: 'white', alignSelf: 'center' }} size={50} name="camera-alt" />
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => {
+                ImagePicker.launchCamera(options, (response) => {
+                  console.log('Response = ', response);
+
+                  if (response.didCancel) {
+                    console.log('User cancelled image picker');
+                  } else if (response.error) {
+                    console.log('ImagePicker Error: ', response.error);
+                  } else if (response.customButton) {
+                    console.log('User tapped custom button: ', response.customButton);
+                  } else {
+                    const j = { [currentPicktureIndex]: response }
+                    setPictures({ ...pictures, ...j })
+                    setCurrentPicktureIndex(p => p + 1)
+                  }
+                });
+              }}>
+                <View style={{ marginTop: '10%', backgroundColor: '#41d5fb', width: 100, height: 100, borderRadius: 100 / 2, display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                  <MaterialIcons style={{ color: 'white', alignSelf: 'center' }} size={50} name="arrow-forward" />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </Layout>
         </View>
 
       </ScrollView>

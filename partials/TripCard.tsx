@@ -41,7 +41,7 @@ const TripCard: React.FC<TripCardProps> = (props) => {
   return (
     <TouchableWithoutFeedback onPress={() => {
       if (props.keyLess) navigation.navigate('Activate', { ...props, leftImageUri: undefined })
-      if (!props.keyLess) navigation.navigate('Reservation', { ...props, leftImageUri: undefined })
+      if (!props.keyLess) navigation.navigate('Reservation', {  screen: 'Home', params: {...props, leftImageUri: undefined}} )
     }}>
       <Layout style={{ backgroundColor: '#00000000', marginBottom: '5%' }}>
         <Layout style={{ backgroundColor: '#00000000', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
