@@ -156,7 +156,7 @@ const DocumentScreen = () => {
                       <TouchableOpacity style={{ width: '49%' }} onPress={() => setShowSortModal(true)} >
                         <View style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', justifyContent: 'center', borderWidth: 1, borderColor: '#00000050' }}>
                           <MaterialCommunityIcons style={{ alignSelf: 'flex-start', marginTop: 'auto', marginBottom: 'auto', color: 'gray' }} name={"sort-variant"} size={18} />
-                          <Text style={{ fontSize: 16, textAlign: 'center', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>
+                          <Text style={{ fontSize: 20, textAlign: 'center', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>
                             Sort By
                         </Text>
                         </View>
@@ -164,7 +164,7 @@ const DocumentScreen = () => {
                       <TouchableOpacity style={{ width: '49%', marginLeft: '1%' }} onPress={() => setShowFilterModal(true)}>
                         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', borderWidth: 1, borderColor: '#00000050' }}>
                           <MaterialCommunityIcons style={{ alignSelf: 'flex-start', marginTop: 'auto', marginBottom: 'auto', color: 'gray' }} name={"filter"} size={18} />
-                          <Text style={{ fontSize: 16, textAlign: 'center', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>
+                          <Text style={{ fontSize: 20, textAlign: 'center', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>
                             Filter
                         </Text>
                         </View>
