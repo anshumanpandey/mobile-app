@@ -36,8 +36,6 @@ const DocumentScreen = () => {
     },
   }, { manual: true })
 
-  console.log(route.params.pickupLocation)
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#f6f7f9', }}>
       <ScrollView contentContainerStyle={{ backgroundColor: 'white', flexGrow: 1 }}>
@@ -167,7 +165,7 @@ const DocumentScreen = () => {
 
           <View style={{ width: '25%' }}>
             <TouchableOpacity style={{ height: '100%' }} onPress={() => {
-              navigation.navigate('NoPicturDamage', { ...route.params })
+              navigation.navigate('Report', { ...route.params })
             }}>
               <View style={{ height: '100%',borderColor: 'rgba(0,0,0,0.2)',  borderRightWidth: 0,display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
                 <MaterialIcons name="report-problem" style={{ color:'#41d5fb'}} size={24} />

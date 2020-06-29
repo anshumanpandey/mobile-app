@@ -3,12 +3,12 @@ import React, { useEffect } from 'react';
 import GPSState from 'react-native-gps-state'
 // @ts-ignore
 import SystemSetting from 'react-native-system-setting'
-import { Image } from 'react-native';
+import { Image, Alert } from 'react-native';
 import { Layout, Text, Button } from '@ui-kitten/components';
 import Geolocation from '@react-native-community/geolocation';
 import MenuButton from '../../partials/MenuButton';
 import LocationIconComponent from '../../image/LocationIconComponent';
-import { useNavigation, useRoute, StackActions, CommonActions } from '@react-navigation/native';
+import { useNavigation, useRoute, StackActions, CommonActions, useFocusEffect } from '@react-navigation/native';
 
 const DocumentScreen = () => {
   const navigation = useNavigation();
@@ -17,96 +17,97 @@ const DocumentScreen = () => {
   const [isLocationEnabled, setIsLocationEnabled] = React.useState<boolean>(false);
   const [isLocationGprsAuthorized, setIsLocationGprsAuthorized] = React.useState<boolean>(GPSState.isAuthorized());
 
-  useEffect(() => {
-    if (GPSState.isAuthorized()) {
-      navigation.dispatch((state) => {
-        // Add the home route to the start of the stack
-        const routes = [...state.routes];
-        routes.pop()
-        routes.push({
-          name: route.params.passTo,
-          params: route.params.parentProps,
-        })
+  useFocusEffect(
+    React.useCallback(() => {
+      SystemSetting.isLocationEnabled().then((enable: boolean) => {
+        setIsLocationEnabled(enable)
+        const state = enable ? 'On' : 'Off';
+        console.log('Current location is ' + state);
+      })
 
-        return CommonActions.reset({
-          ...state,
-          routes,
-          index: routes.length - 1,
+      if (GPSState.isAuthorized()) {
+        navigation.dispatch((state) => {
+          // Add the home route to the start of the stack
+          const routes = [...state.routes];
+          routes.pop()
+          routes.push({
+            name: route.params.passTo,
+            params: route.params.parentProps,
+          })
+  
+          return CommonActions.reset({
+            ...state,
+            routes,
+            index: routes.length - 1,
+          });
         });
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    SystemSetting.isLocationEnabled().then((enable: boolean) => {
-      setIsLocationEnabled(enable)
-      const state = enable ? 'On' : 'Off';
-      console.log('Current location is ' + state);
-    })
-
-    GPSState.addListener((status: any) => {
-      switch (status) {
-        case GPSState.NOT_DETERMINED:
-          setIsLocationGprsAuthorized(false)
-          //TODO: handle case when user does not authorize login
-          alert('Please, allow the location, for us to do amazing things for you!')
-          break;
-
-        case GPSState.RESTRICTED:
-          setIsLocationGprsAuthorized(false)
-          GPSState.openLocationSettings()
-          navigation.goBack()
-          break;
-
-        case GPSState.DENIED:
-          setIsLocationGprsAuthorized(false)
-          //TODO: handle case when user does not authorize login
-          alert('It`s a shame that you do not allowed us to use location :(')
-          navigation.goBack()
-          break;
-
-        case GPSState.AUTHORIZED_ALWAYS:
-          console.log('GPSState.AUTHORIZED_ALWAYS')
-          setIsLocationGprsAuthorized(true)
-          navigation.dispatch((state) => {
-            // Add the home route to the start of the stack
-            const routes = [...state.routes];
-            routes.pop()
-            routes.push({
-              name: route.params.passTo,
-              params: route.params.parentProps,
-            })
-
-            return CommonActions.reset({
-              ...state,
-              routes,
-              index: routes.length - 1,
-            });
-          });
-          break;
-
-        case GPSState.AUTHORIZED_WHENINUSE:
-          console.log('GPSState.AUTHORIZED_WHENINUSE')
-          setIsLocationGprsAuthorized(true)
-          navigation.dispatch((state) => {
-            // Add the home route to the start of the stack
-            const routes = [...state.routes];
-            routes.pop()
-            routes.push({
-              name: route.params.passTo,
-              params: route.params.parentProps,
-            })
-
-            return CommonActions.reset({
-              ...state,
-              routes,
-              index: routes.length - 1,
-            });
-          });
-          break;
       }
-    })
-  }, []);
+  
+      GPSState.addListener((status: any) => {
+        switch (status) {
+          case GPSState.NOT_DETERMINED:
+            setIsLocationGprsAuthorized(false)
+            //TODO: handle case when user does not authorize login
+            Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
+            break;
+  
+          case GPSState.RESTRICTED:
+            setIsLocationGprsAuthorized(false)
+            GPSState.openLocationSettings()
+            navigation.goBack()
+            break;
+  
+          case GPSState.DENIED:
+            setIsLocationGprsAuthorized(false)
+            //TODO: handle case when user does not authorize login
+            Alert.alert(':(','It`s a shame that you do not allowed us to use location :(')
+            navigation.goBack()
+            break;
+  
+          case GPSState.AUTHORIZED_ALWAYS:
+            console.log('GPSState.AUTHORIZED_ALWAYS')
+            setIsLocationGprsAuthorized(true)
+            navigation.dispatch((state) => {
+              // Add the home route to the start of the stack
+              const routes = [...state.routes];
+              routes.pop()
+              routes.push({
+                name: route.params.passTo,
+                params: route.params.parentProps,
+              })
+  
+              return CommonActions.reset({
+                ...state,
+                routes,
+                index: routes.length - 1,
+              });
+            });
+            break;
+  
+          case GPSState.AUTHORIZED_WHENINUSE:
+            console.log('GPSState.AUTHORIZED_WHENINUSE')
+            setIsLocationGprsAuthorized(true)
+            navigation.dispatch((state) => {
+              // Add the home route to the start of the stack
+              const routes = [...state.routes];
+              routes.pop()
+              routes.push({
+                name: route.params.passTo,
+                params: route.params.parentProps,
+              })
+  
+              return CommonActions.reset({
+                ...state,
+                routes,
+                index: routes.length - 1,
+              });
+            });
+            break;
+        }
+      })
+    }, [])
+  );
+
 
   return (
     <Layout style={{ padding: '5%', display: 'flex', flexDirection: 'column', flex: 1 }}>

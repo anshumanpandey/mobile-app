@@ -52,6 +52,7 @@
     "react-native-fbsdk": "^2.0.0",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.6.1",
+    "react-native-get-location": "^1.4.2",
     "react-native-gps-state": "^2.0.3",
     "react-native-image-picker": "^2.3.1",
     "react-native-keyevent": "^0.2.8",
