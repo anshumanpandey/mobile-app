@@ -156,7 +156,7 @@ const DocumentScreen = () => {
                       <TouchableOpacity style={{ width: '49%' }} onPress={() => setShowSortModal(true)} >
                         <View style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', justifyContent: 'center', borderWidth: 1, borderColor: '#00000050' }}>
                           <MaterialCommunityIcons style={{ alignSelf: 'flex-start', marginTop: 'auto', marginBottom: 'auto', color: 'gray' }} name={"sort-variant"} size={18} />
-                          <Text style={{ fontSize: 20, textAlign: 'center', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>
+                          <Text style={{ fontSize: 18, textAlign: 'center', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>
                             Sort By
                         </Text>
                         </View>
@@ -164,7 +164,7 @@ const DocumentScreen = () => {
                       <TouchableOpacity style={{ width: '49%', marginLeft: '1%' }} onPress={() => setShowFilterModal(true)}>
                         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', borderWidth: 1, borderColor: '#00000050' }}>
                           <MaterialCommunityIcons style={{ alignSelf: 'flex-start', marginTop: 'auto', marginBottom: 'auto', color: 'gray' }} name={"filter"} size={18} />
-                          <Text style={{ fontSize: 20, textAlign: 'center', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>
+                          <Text style={{ fontSize: 18, textAlign: 'center', width: '50%', fontFamily: 'SF-UI-Display_Bold' }}>
                             Filter
                         </Text>
                         </View>
@@ -250,7 +250,7 @@ const DocumentScreen = () => {
             setSortState("LowToHigh")
           }}>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={{ fontSize: 24, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '5%' }}>
+              <Text style={{ fontSize: 22, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '5%' }}>
                 Price low to high
             </Text>
               {sortState == "LowToHigh" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start', color: '#41d5fb' }} name={"check"} size={24} />}
@@ -261,7 +261,7 @@ const DocumentScreen = () => {
             setSortState("HighToLow")
           }}>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={{ fontSize: 24, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '5%' }}>
+              <Text style={{ fontSize: 22, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '5%' }}>
                 Price hight to low
             </Text>
               {sortState == "HighToLow" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start', color: '#41d5fb' }} name={"check"} size={24} />}
@@ -306,7 +306,7 @@ const DocumentScreen = () => {
                     elevation: 2,
                   }}>
                   <View style={{ display: 'flex', flexDirection: 'row' }}>
-                    <Text style={{ textAlign: 'left', color: '#41d5fb', fontFamily: "SF-UI-Display" }} category="h5">
+                    <Text style={{ textAlign: 'left', color: '#41d5fb', fontFamily: "SF-UI-Display" }} category="h6">
                       {i}
                     </Text>
                     {transmissionFilters.includes(i) && <MaterialCommunityIcons style={{ marginLeft: '2%', color: '#41d5fb' }} name={"check"} size={24} />}
@@ -338,7 +338,7 @@ const DocumentScreen = () => {
                     elevation: 2,
                   }}>
                   <View style={{ display: 'flex', flexDirection: 'row' }}>
-                    <Text style={{ textAlign: 'left', color: '#41d5fb', fontFamily: "SF-UI-Display" }} category="h5">
+                    <Text style={{ textAlign: 'left', color: '#41d5fb', fontFamily: "SF-UI-Display" }} category="h6">
                       {i}
                     </Text>
                     {typesFiter.includes(i) && <MaterialCommunityIcons style={{ marginLeft: '2%', color: '#41d5fb' }} name={"check"} size={24} />}
@@ -374,9 +374,7 @@ const DocumentScreen = () => {
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <Button
               onPress={(e) => {
-                setTransmissionFilter([])
-                setTypesFilter([])
-                setApplyFilter(true)
+                setShowFilterModal(false)
               }}
               size="small"
               style={{
@@ -397,7 +395,7 @@ const DocumentScreen = () => {
                 return (
                   <>
                     <MaterialCommunityIcons style={{ color: 'white' }} size={26} name="close" />
-                    <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Reset</Text>
+                    <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: 'white', fontSize: 18 }}>Close</Text>
                   </>
                 );
               }}
