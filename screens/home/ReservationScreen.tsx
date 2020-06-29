@@ -1,10 +1,13 @@
 import React from 'react';
-import { Layout, Text, Button, Datepicker, NativeDateService, TabView, Card, Avatar } from '@ui-kitten/components';
-import { SafeAreaView, ScrollView, Image, Alert } from 'react-native';
+import { Layout, Text, Card} from '@ui-kitten/components';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { SafeAreaView, ScrollView, Image, Alert, View } from 'react-native';
 import LoadingSpinner from '../../partials/LoadingSpinner';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import useAxios from 'axios-hooks'
-import CarTripInfoCard from '../../partials/CarTripInfoCard';
+import StepIndicator from 'react-native-step-indicator';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import ResolveCurrencySymbol from '../../utils/ResolveCurrencySymbol';
 
 const DocumentScreen = () => {
   const route = useRoute();
@@ -33,25 +36,91 @@ const DocumentScreen = () => {
     },
   }, { manual: true })
 
+  console.log(route.params.pickupLocation)
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'red', }}>
-      <ScrollView>
-        <Layout style={{ padding: '5%', backgroundColor: '#f7f9fc', flex: 1 }}>
-          <CarTripInfoCard
-            confirmation={false}
-            {...route.params}
-            reservationNumber={route.params.registratioNumber}
-          />
-
-          <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#00000000' }}>
-            <Text style={{ textAlign: "center" }} category="h5">
-              Pickup Instructions{'\n'}
-              {route.params.pickUpInstructions}
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#f6f7f9', }}>
+      <ScrollView contentContainerStyle={{ backgroundColor: 'white', flexGrow: 1 }}>
+        <View style={{ height: '90%',paddingLeft: '5%', paddingRight: '5%', display: 'flex', flexDirection: 'column' }}>
+          <View style={{ width: '100%' }}>
+            <Layout style={{  display: 'flex',alignItems: 'center' }}>
+              <Text style={{ textAlign: 'center' }} category="h6">
+                CONFIRMATION
               </Text>
-          </Layout>
+                <Text style={{ lineHeight: 20, textAlign: 'center', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }} >
+                  {route.params.registratioNumber}{' '}
+                </Text>
+              <Image
+                style={{ width: 200, height: 200, resizeMode: 'contain' }}
+                source={{ uri: route.params.image_preview_url }}
+              />
+            </Layout>
 
-          <Layout style={{ backgroundColor: '#00000000' }}>
-            <Button onPress={() => {
+            <View style={{ flexDirection: 'row', display: 'flex',justifyContent: 'space-around' }}>
+              <Layout style={{ marginBottom: '3%' }}>
+                <Text style={{ textAlign: 'center', color: 'grey' }} category="c2">
+                  Pickup Location
+                  </Text>
+                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 14 }}>
+                  {route.params.pickupLocation}
+                </Text>
+              </Layout>
+
+              <Layout style={{ marginBottom: '3%' }}>
+                <Text style={{ textAlign: 'center', color: 'grey' }} category="c2">
+                  Dropout Location
+              </Text>
+                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 14 }}>
+                  {route.params.dropOffLocation}
+                </Text>
+              </Layout>
+            </View>
+
+            <View style={{ flexDirection: 'row', display: 'flex',justifyContent: 'space-around' }}>
+              <Layout style={{ marginBottom: '3%' }}>
+                <Text style={{ textAlign: 'center', color: 'grey' }} category="c2">
+                  Pickup Time
+                  </Text>
+                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 14 }}>
+                  {route.params.pickupTime.format('HH:mm')}
+                </Text>
+              </Layout>
+
+              <Layout style={{ marginBottom: '3%' }}>
+                <Text style={{ textAlign: 'center', color: 'grey' }} category="c2">
+                  Dropout Time
+              </Text>
+                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 14 }}>
+                  {route.params.dropoffTime.format('HH:mm')}
+                </Text>
+              </Layout>
+            </View>
+
+
+            <Layout style={{ marginBottom: '3%' }}>
+              <Text style={{ textAlign: 'center', color: 'grey' }} category="c2">
+                Final Cost
+              </Text>
+              <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 14 }}>
+                {route.params.finalCost}
+                {ResolveCurrencySymbol(route.params.currencyCode)}
+              </Text>
+            </Layout>
+
+            <Layout style={{ width: '75%', marginLeft: 'auto', marginRight: 'auto' }}>
+              <Text style={{ textAlign: 'center', color: 'grey' }} category="c2">
+                Pickup Instructions
+              </Text>
+              <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 16 }}>
+                {route.params.pickUpInstructions}
+              </Text>
+            </Layout>
+          </View>
+
+        </View>
+        <View style={{ height: '10%',justifyContent: 'flex-end',alignSelf: 'flex-start',width: '100%', display: 'flex', flexDirection: 'row' }}>
+          <View style={{ width: '25%'}}>
+            <TouchableOpacity style={{ height: '100%' }} onPress={() => {
               navigation.navigate('KeyedCarReservation', { ...route.params })
               return
               /*
@@ -60,36 +129,65 @@ const DocumentScreen = () => {
               } else {
                 navigation.navigate('Location', { parentProps: route.params, passTo: "KeyedCarReservation"})
               }*/
-            }} size="giant" style={{ borderRadius: 10, backgroundColor: '#5ac8fa', borderColor: '#5ac8fa', paddingLeft: 20, paddingRight: 20, marginBottom: '2%' }}>
-              {() => <Text style={{ color: 'white', fontFamily: 'SF-UI-Display' }}>GET DIRECTIONS </Text>}
-            </Button>
-            <Button
-              disabled={cancelReq.loading}
-              accessoryRight={cancelReq.loading ? LoadingSpinner : undefined}
-              onPress={() => {
-                cancelBooking()
-                  .then((r) => {
-                    console.log(r.data)
-                    if (r.data.includes('Errors')) {
-                      Alert.alert('Error', 'Reservation Not Found')
-                      return;
-                    }
+            }}>
+              <View style={{ height: '100%',display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column',borderColor: 'rgba(0,0,0,0.2)', borderWidth: 1, borderRightWidth: 0 }}>
+                <MaterialIcons name="directions" style={{ color:'#41d5fb'}} size={24} />
+                <Text style={{ marginLeft: '5%',color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>GET DIRECTIONS </Text>
+              </View>
 
-                    if (navigation.canGoBack()) {
-                      navigation.goBack()
-                    }
-                  })
-              }}
-              size="giant"
-              style={{ borderRadius: 10, marginBottom: '2%', backgroundColor: cancelReq.loading ? '#8f1122':'#cf1830', borderColor: '#cf1830', paddingLeft: 20, paddingRight: 20 }}>
-              {() => <Text style={{ color: 'white', fontFamily: 'SF-UI-Display' }}>CANCEL</Text>}
-            </Button>
-            <Button onPress={() => navigation.navigate('NoPicturDamage', { ...route.params })} size="giant" style={{ borderRadius: 10, backgroundColor: '#0c66ff', borderColor: '#0c66ff', paddingLeft: 20, paddingRight: 20 }}>
-              {() => <Text style={{ color: 'white', fontFamily: 'SF-UI-Display' }}>REPORT A PROBLEM</Text>}
-            </Button>
-          </Layout>
+            </TouchableOpacity>
+          </View>
+          <View style={{ width: '25%' }}>
+            <TouchableOpacity style={{ height: '100%' }} onPress={() => {
+              if (cancelReq.loading) return
+              cancelBooking()
+                .then((r) => {
+                  console.log(r.data)
+                  if (r.data.includes('Errors')) {
+                    Alert.alert('Error', 'Reservation Not Found')
+                    return;
+                  }
 
-        </Layout>
+                  if (navigation.canGoBack()) {
+                    navigation.goBack()
+                  }
+                })
+            }}>
+              <View style={{ height: '100%',display: 'flex', justifyContent: 'center',alignItems: 'center',borderColor: 'rgba(0,0,0,0.2)', borderWidth: 1, borderRightWidth: 0,flexDirection: 'column' }}>
+                <MaterialIcons name="cancel" style={{ color:'#cf1830'}} size={24} />
+                <Text style={{ marginLeft: '5%',color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>CANCEL </Text>
+                {cancelReq.loading ? <LoadingSpinner /> : undefined}
+              </View>
+
+            </TouchableOpacity>
+          </View>
+
+          <View style={{ width: '25%' }}>
+            <TouchableOpacity style={{ height: '100%' }} onPress={() => {
+              navigation.navigate('NoPicturDamage', { ...route.params })
+            }}>
+              <View style={{ height: '100%',borderColor: 'rgba(0,0,0,0.2)', borderWidth: 1, borderRightWidth: 0,display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
+                <MaterialIcons name="report-problem" style={{ color:'#41d5fb'}} size={24} />
+                <Text style={{ textAlign: 'center', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>REPORT A PROBLEM</Text>
+              </View>
+
+            </TouchableOpacity>
+          </View>
+
+          <View style={{ width: '25%' }}>
+            <TouchableOpacity style={{ height: '100%' }} onPress={() => {
+              navigation.navigate('NoPicturDamage', { ...route.params })
+            }}>
+              <View style={{ height: '100%',borderColor: 'rgba(0,0,0,0.2)', borderWidth: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
+                <MaterialIcons name="report-problem" style={{ color:'#41d5fb'}} size={24} />
+                <Text style={{ textAlign: 'center',color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>REPORT A PROBLEM</Text>
+              </View>
+
+            </TouchableOpacity>
+          </View>
+
+        </View>
+
       </ScrollView>
     </SafeAreaView>
   );

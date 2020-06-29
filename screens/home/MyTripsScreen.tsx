@@ -28,6 +28,11 @@ const DocumentScreen = () => {
   const [profile] = useGlobalState('profile');
   const [storedBookings] = useGlobalState('storedBookings');
 
+  const [activeTrips, setActiveTrips] = useState(null);
+  const [upcommingTrips, setUpcommingTrips] = useState(null);
+  const [completedTrips, setCompletedTrips] = useState(null);
+
+
   const [{ loading, error }, refetch] = useAxios<BookingResponse>({
     url: `https://OTA.right-cars.com/`,
     method: 'POST',
@@ -52,42 +57,44 @@ const DocumentScreen = () => {
     React.useCallback(() => {
       refetch()
         .then(r => {
-          parseString(r.data, function (err, result: BookingResponse) {
-            console.log(JSON.stringify(result))
+          setTimeout(() => {
+            parseString(r.data, function (err, result: BookingResponse) {
+              console.log(JSON.stringify(result))
 
               const dataParsed = result.OTA_VehListRS.VehResRSCore.map(i => {
-              const Resnumber = i.VehReservation[0].VehSegmentCore[0].ConfID[0].Resnumber[0]
-              const pLocation = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Name[0]
-              const pickUpInstructions = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Pickupinst[0]
-              const unixPTime = i.VehReservation[0].VehSegmentCore[0].VehRentalCore[0].PickUpDateTime[0]
-              const rLocation = i.VehReservation[0].VehSegmentCore[0].LocationDetails[1].Name[0]
-              const unixRTime = i.VehReservation[0].VehSegmentCore[0].VehRentalCore[0].ReturnDateTime[0]
-              const reservationStatus = i.VehReservation[0].VehSegmentCore[0].ConfID[0].ReservationStatus[0]
+                const Resnumber = i.VehReservation[0].VehSegmentCore[0].ConfID[0].Resnumber[0]
+                const pLocation = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Name[0]
+                const pickUpInstructions = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Pickupinst[0]
+                const unixPTime = i.VehReservation[0].VehSegmentCore[0].VehRentalCore[0].PickUpDateTime[0]
+                const rLocation = i.VehReservation[0].VehSegmentCore[0].LocationDetails[1].Name[0]
+                const unixRTime = i.VehReservation[0].VehSegmentCore[0].VehRentalCore[0].ReturnDateTime[0]
+                const reservationStatus = i.VehReservation[0].VehSegmentCore[0].ConfID[0].ReservationStatus[0]
 
-              const storedData = storedBookings.find(i => i.reservationNumber == Resnumber)
+                const storedData = storedBookings.find(i => i.reservationNumber == Resnumber)
 
 
-              return {
-                currencyCode: storedData?.currency_code,
-                image_preview_url: storedData?.veh_picture ? storedData?.veh_picture : 'https://carimages.rent.it/EN/1539285845928.png',
-                leftImageUri: '../image/rightcars.png',
-                keyLess: false,
-                "tripDate": moment.utc(moment.unix(unixPTime)),
-                "pickupLocation": pLocation,
-                "dropOffLocation": rLocation,
-                "pickupTime": moment.utc(moment.unix(unixPTime)),
-                "dropoffTime": moment.utc(moment.unix(unixRTime)),
-                carName: `${storedData?.veh_name} Or Similar` ,
-                registratioNumber: Resnumber,
-                "finalCost": storedData?.total_price ? new Decimal(storedData?.total_price).toFixed(2) : '',
-                "arrivalTime": moment.utc(moment.unix(unixRTime)),
-                pickUpInstructions,
-                reservationStatus
-              }
+                return {
+                  currencyCode: storedData?.currency_code,
+                  image_preview_url: storedData?.veh_picture ? storedData?.veh_picture : 'https://carimages.rent.it/EN/1539285845928.png',
+                  leftImageUri: '../image/rightcars.png',
+                  keyLess: false,
+                  "tripDate": moment.utc(moment.unix(unixPTime)),
+                  "pickupLocation": pLocation,
+                  "dropOffLocation": rLocation,
+                  "pickupTime": moment.utc(moment.unix(unixPTime)),
+                  "dropoffTime": moment.utc(moment.unix(unixRTime)),
+                  carName: `${storedData?.veh_name} Or Similar`,
+                  registratioNumber: Resnumber,
+                  "finalCost": storedData?.total_price ? new Decimal(storedData?.total_price).toFixed(2) : '',
+                  "arrivalTime": moment.utc(moment.unix(unixRTime)),
+                  pickUpInstructions,
+                  reservationStatus
+                }
 
+              })
+              setParsedResponse(dataParsed)
             })
-            setParsedResponse(dataParsed)
-          })
+          }, 0)
         })
     }, [])
   );
@@ -108,17 +115,26 @@ const DocumentScreen = () => {
     }
   }, [locationReq.loading]);
 
-  const activeTrips = parsedResponse ? parsedResponse.filter(booking => {
-    return booking.pickupTime.isSame(moment(), 'day')
-  }) : null
-
-  const upcommingTrips = parsedResponse ? parsedResponse.filter(booking => {
-    return booking.pickupTime.isAfter(moment())
-  }) : null
-
-  const completedTrips = parsedResponse ? parsedResponse.filter(booking => {
-    return booking.dropoffTime.isBefore(moment())
-  }) : null
+  useEffect(() => {
+    setTimeout(() => {
+      const activeTrips = parsedResponse ? parsedResponse.filter(booking => {
+        return booking.pickupTime.isSame(moment(), 'day')
+      }) : null
+      setActiveTrips(activeTrips)
+    
+      const upcomming = parsedResponse ? parsedResponse.filter(booking => {
+        return booking.pickupTime.isAfter(moment())
+      }) : null
+  
+      setUpcommingTrips(upcomming)
+    
+      const completed = parsedResponse ? parsedResponse.filter(booking => {
+        return booking.dropoffTime.isBefore(moment())
+      }) : null
+  
+      setCompletedTrips(completed)
+    }, 0)
+  }, [parsedResponse])
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

@@ -107,7 +107,7 @@ const CarTripInfoCard: React.FC<TripCardProps> = (props) => {
               </Layout>
               <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Text style={{ color: '#ACB1C0', fontSize: 13 }}>Final cost</Text>
-                <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{new Decimal(props.finalCost).toFixed(2)}{ResolveCurrencySymbol(props.currencyCode)}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{new Decimal(props.finalCost || 0).toFixed(2)}{ResolveCurrencySymbol(props.currencyCode)}</Text>
               </Layout>
             </Layout>
 
