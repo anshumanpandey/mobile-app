@@ -2,13 +2,15 @@ import React, { useEffect } from 'react';
 import { Layout, Text, Card } from '@ui-kitten/components';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { SafeAreaView, ScrollView, Image, Alert, View } from 'react-native';
-import LoadingSpinner from '../../partials/LoadingSpinner';
+import LoadingSpinner from '../../../partials/LoadingSpinner';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import useAxios from 'axios-hooks'
 import { Linking } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import ResolveCurrencySymbol from '../../utils/ResolveCurrencySymbol';
+import ResolveCurrencySymbol from '../../../utils/ResolveCurrencySymbol';
 import ReportScreen from './ReportScreen';
+import CompletedReportScreen from './CompletedReportScreen';
+import AgreementScreen from './AgreementScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createGlobalState } from 'react-hooks-global-state';
 
@@ -137,6 +139,22 @@ export default function App({ navigation, route }) {
       <Tab.Screen
         name="Home"
         component={DocumentScreen}
+        options={{
+          tabBarButton: () => <></>,
+        }}
+      />
+
+      <Tab.Screen
+        name="CompletedReport"
+        component={CompletedReportScreen}
+        options={{
+          tabBarButton: () => <></>,
+        }}
+      />
+
+      <Tab.Screen
+        name="Agreement"
+        component={AgreementScreen}
         options={{
           tabBarButton: () => <></>,
         }}

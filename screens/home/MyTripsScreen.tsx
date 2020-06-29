@@ -57,8 +57,8 @@ const DocumentScreen = () => {
     React.useCallback(() => {
       refetch()
         .then(r => {
-          setTimeout(() => {
-            parseString(r.data, function (err, result: BookingResponse) {
+          parseString(r.data, function (err, result: BookingResponse) {
+            setTimeout(() => {
               console.log(JSON.stringify(result))
 
               const dataParsed = result.OTA_VehListRS.VehResRSCore.map(i => {
@@ -97,8 +97,8 @@ const DocumentScreen = () => {
 
               })
               setParsedResponse(dataParsed)
-            })
-          }, 0)
+            }, 0)
+          })
         })
     }, [])
   );
@@ -125,17 +125,17 @@ const DocumentScreen = () => {
         return booking.pickupTime.isSame(moment(), 'day')
       }) : null
       setActiveTrips(activeTrips)
-    
+
       const upcomming = parsedResponse ? parsedResponse.filter(booking => {
         return booking.pickupTime.isAfter(moment())
       }) : null
-  
+
       setUpcommingTrips(upcomming)
-    
+
       const completed = parsedResponse ? parsedResponse.filter(booking => {
         return booking.dropoffTime.isBefore(moment())
       }) : null
-  
+
       setCompletedTrips(completed)
     }, 0)
   }, [parsedResponse])

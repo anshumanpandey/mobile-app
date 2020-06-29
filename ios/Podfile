@@ -85,6 +85,8 @@ target 'AnotherApp' do
 
   pod 'react-native-login-twitter', :path => '../node_modules/react-native-login-twitter'
 
+  pod 'react-native-signature-capture', :path => '../node_modules/react-native-signature-capture'
+
   target 'AnotherAppTests' do
     inherit! :complete
     # Pods for testing

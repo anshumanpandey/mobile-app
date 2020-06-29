@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.rssignaturecapture.RSSignatureCapturePackage;
 import com.goldenowl.twittersignin.TwitterSigninPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;

@@ -3,23 +3,22 @@ import { Layout, Text, Button, Input } from '@ui-kitten/components';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { SafeAreaView, ScrollView, Image, TextInput, View } from 'react-native';
 import ImagePicker, { ImagePickerResponse } from 'react-native-image-picker';
-import TripCard from '../../partials/TripCard';
+import LoadingSpinner from '../../../partials/LoadingSpinner';
 import { useRoute } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const imageArr = []
 
-imageArr[0] = require('../../image/car-1.jpg')
-imageArr[1] = require('../../image/car-2.jpg')
-imageArr[2] = require('../../image/car-3.jpg')
-imageArr[3] = require('../../image/car-4.jpg')
-imageArr[4] = require('../../image/car-5.jpg')
-imageArr[5] = require('../../image/car-6.jpg')
-imageArr[6] = require('../../image/car-7.jpg')
-imageArr[7] = require('../../image/car-8.jpg')
+imageArr[0] = require('../../../image/car-1.jpg')
+imageArr[1] = require('../../../image/car-2.jpg')
+imageArr[2] = require('../../../image/car-3.jpg')
+imageArr[3] = require('../../../image/car-4.jpg')
+imageArr[4] = require('../../../image/car-5.jpg')
+imageArr[5] = require('../../../image/car-6.jpg')
+imageArr[6] = require('../../../image/car-7.jpg')
+imageArr[7] = require('../../../image/car-8.jpg')
 
-const DocumentScreen = () => {
-  const route = useRoute();
+const DocumentScreen = ({ navigation }) => {
   const maxPhotosAmount = 8
   const [pictures, setPictures] = useState<{ [k: number]: ImagePickerResponse }>({});
   const [currentPicktureIndex, setCurrentPicktureIndex] = useState(0);
@@ -34,13 +33,13 @@ const DocumentScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ paddingBottom: '20%', flexGrow: 1, display: 'flex', backgroundColor: '#f7f9fc' }}>
+      <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1, display: 'flex', backgroundColor: '#f7f9fc' }}>
         <View style={{ backgroundColor: '#f7f9fc' }}>
-          <View style={{ display: 'flex', alignItems: 'center', backgroundColor: 'red' }}>
+          <View style={{ display: 'flex', alignItems: 'center'}}>
             {imageArr[currentPicktureIndex] && <Image source={imageArr[currentPicktureIndex]} style={{ height: 250, margin: 0, padding: 0, resizeMode: 'contain' }} />}
           </View>
 
-          <Layout style={{ marginTop: '20%', padding: '5%', height: '30%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#00000000' }}>
+          <Layout style={{ marginTop: '-10%', padding: '5%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#00000000' }}>
             <View style={{ display: 'flex', flexDirection: 'row', marginTop: '10%', }}>
               {Array(maxPhotosAmount).fill(1).map((_, idx) => {
                 return (
@@ -55,7 +54,7 @@ const DocumentScreen = () => {
             <Text style={{ textAlign: 'center', marginTop: '15%', }} category="h5">
               Please move to position {currentPicktureIndex + 1} as shown in the picture and take a picture of the car
             </Text>
-            <View style={{ display: 'flex', flexDirection: 'row', width: '100%',justifyContent: 'space-around'}}>
+            <View style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
               <TouchableOpacity onPress={() => {
                 ImagePicker.launchCamera(options, (response) => {
                   console.log('Response = ', response);
@@ -69,7 +68,6 @@ const DocumentScreen = () => {
                   } else {
                     const j = { [currentPicktureIndex]: response }
                     setPictures({ ...pictures, ...j })
-                    setCurrentPicktureIndex(p => p + 1)
                   }
                 });
               }}>
@@ -77,29 +75,40 @@ const DocumentScreen = () => {
                   <MaterialIcons style={{ color: 'white', alignSelf: 'center' }} size={50} name="camera-alt" />
                 </View>
               </TouchableOpacity>
-
-              <TouchableOpacity onPress={() => {
-                ImagePicker.launchCamera(options, (response) => {
-                  console.log('Response = ', response);
-
-                  if (response.didCancel) {
-                    console.log('User cancelled image picker');
-                  } else if (response.error) {
-                    console.log('ImagePicker Error: ', response.error);
-                  } else if (response.customButton) {
-                    console.log('User tapped custom button: ', response.customButton);
-                  } else {
-                    const j = { [currentPicktureIndex]: response }
-                    setPictures({ ...pictures, ...j })
-                    setCurrentPicktureIndex(p => p + 1)
-                  }
-                });
-              }}>
-                <View style={{ marginTop: '10%', backgroundColor: '#41d5fb', width: 100, height: 100, borderRadius: 100 / 2, display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
-                  <MaterialIcons style={{ color: 'white', alignSelf: 'center' }} size={50} name="arrow-forward" />
-                </View>
-              </TouchableOpacity>
             </View>
+            <Button
+              disabled={!pictures[currentPicktureIndex]}
+              onPress={(e) => {
+                setCurrentPicktureIndex(p => {
+                  const total = p + 1
+                  if (total == maxPhotosAmount) {
+                    navigation.navigate("Sign")
+                  }
+                  return total
+                })
+              }}
+              size="giant"
+              style={{
+                width: '90%',
+                backgroundColor: !pictures[currentPicktureIndex] ? '#e4e9f2' : '#41d5fb',
+                borderColor: !pictures[currentPicktureIndex] ? '#e4e9f2' : '#41d5fb',
+                borderRadius: 10,
+                shadowColor: '#41d5fb',
+                shadowOffset: {
+                  width: 0,
+                  height: 10,
+                },
+                zIndex: 4,
+                shadowOpacity: 0.51,
+                shadowRadius: 13.16,
+                elevation: 10,
+              }}>
+              {() => {
+                return <Text style={{ fontFamily: 'SF-UI-Display_Bold', color: !pictures[currentPicktureIndex] ? "#ACB1C0" : 'white', fontSize: 18 }}>
+                  Save & Next
+                </Text>
+              }}
+            </Button>
           </Layout>
         </View>
 
