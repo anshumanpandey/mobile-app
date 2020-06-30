@@ -18,20 +18,21 @@ type Props = {
     isActive?: boolean,
     vehicle: VehVendorAvail
     style?: ViewStyle
+    centerCarName?: boolean
 }
 
-const CarItem: React.FC<Props> = ({ vehicle, isActive, onClick, style: customeStyles }) => {
+const CarItem: React.FC<Props> = ({ vehicle, isActive, onClick, style: customeStyles, centerCarName = false }) => {
     const currentStyles = isActive ? hightLightStyles : { backgroundColor: 'white', priceColor: 'black' }
 
     return (
         <TouchableWithoutFeedback onPress={() => onClick && onClick()}>
             <Layout style={{ paddingLeft: '3%', paddingRight: '3%', borderBottomColor: 'gray', borderBottomWidth: 1, display: 'flex', flexDirection: 'column', backgroundColor: currentStyles.backgroundColor, ...customeStyles }}>
                 <View>
-                    <Text style={{ textAlign: 'center', fontSize: 14, fontFamily: 'SF-UI-Display_Bold', color: 'gray' }}>
+                    <Text style={{ textAlign: centerCarName ? 'center': 'left', fontSize: 14, fontFamily: 'SF-UI-Display_Bold', color: 'gray' }}>
                         {GetCategoryByAcrissCode(vehicle.Vehicle.VehType.VehicleCategory)}
                     </Text>
-                    <Text style={{ textAlign: 'center', fontSize: 16, fontFamily: 'SF-UI-Display_Bold', }}>{vehicle.Vehicle.VehMakeModel.Name}</Text>
-                    <Text style={{ textAlign: 'center', fontSize: 12, color: 'gray' }}>or similar</Text>
+                    <Text style={{ textAlign: centerCarName ? 'center': 'left', fontSize: 16, fontFamily: 'SF-UI-Display_Bold', }}>{vehicle.Vehicle.VehMakeModel.Name}</Text>
+                    <Text style={{ textAlign: centerCarName ? 'center': 'left', fontSize: 12, color: 'gray' }}>or similar</Text>
                 </View>
                 <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '70%', backgroundColor: '#00000000' }}>
                     <Layout style={{ display: 'flex', flexDirection: 'row', backgroundColor: '#00000000' }}>

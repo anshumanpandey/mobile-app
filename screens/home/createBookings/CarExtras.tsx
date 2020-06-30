@@ -35,7 +35,7 @@ export default () => {
                     <MenuButton />
                 </View>
                 <Layout>
-                    <CarItem style={{ marginBottom: '5%' }} vehicle={{
+                    <CarItem style={{ marginBottom: '5%' }} centerCarName={true} vehicle={{
                         ...route.params.vehicle,
                         TotalCharge: {
                             ...route.params.vehicle.TotalCharge,
@@ -124,14 +124,15 @@ export default () => {
                         <Text style={{ color: '#41d5fb', fontSize: 18 }} onPress={() => {
                             setAmountSelected(0)
                             setShowCounterModal(false)
-                            if (amountSelected == 0) return
                             if (!selectedEquip) return
                             setExtras(p => {
                                 const found = p.find(i => i.Equipment.vendorEquipID == selectedEquip.Equipment.vendorEquipID)
-                                if (found) return [
-                                    ...p.filter(i => i.Equipment.vendorEquipID !== selectedEquip.Equipment.vendorEquipID),
-                                    { ...selectedEquip, amount: amountSelected }
-                                ]
+                                if (found) {
+                                    const toReturn = [ ...p.filter(i => i.Equipment.vendorEquipID !== selectedEquip.Equipment.vendorEquipID) ]
+                                    if (amountSelected != 0) toReturn.push({ ...selectedEquip, amount: amountSelected })
+                                    return toReturn
+                                    
+                                }
                                 return [...p, { ...selectedEquip, amount: amountSelected }]
                             })
                         }}>
