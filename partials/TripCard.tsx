@@ -45,7 +45,7 @@ const TripCard: React.FC<TripCardProps> = (props) => {
     }}>
       <Layout style={{ backgroundColor: '#00000000', marginBottom: '5%' }}>
         <Layout style={{ backgroundColor: '#00000000', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-          <Text style={{ marginBottom: '3%', color: '#ACB1C0' }}>{props.pickupTime.format('LLL')}</Text>
+          <Text style={{ marginBottom: '3%', color: '#ACB1C0' }}>{props.pickupTime.format('DD MMM, HH:mm')}</Text>
           {props.leftImageUri ? (
             <Image
               style={{ width: 50, height: 50 }}
@@ -86,11 +86,11 @@ const TripCard: React.FC<TripCardProps> = (props) => {
               <Layout style={{ display: 'flex', flexDirection: 'column', width: '90%' }}>
                 <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '5%' }}>
                   <Text style={{ fontSize: 16, fontFamily: 'SF-UI-Display_Bold' }}>{props.pickupLocation}</Text>
-                  <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.pickupTime.format('HH:mm A DD, MMM')}</Text>
+                  <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.pickupTime.format('HH:mm DD, MMM')}</Text>
                 </Layout>
                 <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text style={{ fontSize: 16, fontFamily: 'SF-UI-Display_Bold' }}>{props.dropOffLocation}</Text>
-                  <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.dropoffTime.format('HH:mm A DD, MMM')}</Text>
+                  <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.dropoffTime.format('HH:mm DD, MMM')}</Text>
                 </Layout>
               </Layout>
             </Layout>
