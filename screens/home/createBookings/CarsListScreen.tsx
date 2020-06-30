@@ -242,7 +242,7 @@ const DocumentScreen = () => {
         }}>
         <Layout style={{ height: '100%', padding: '3%' }}>
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={{ marginBottom: '6%' }} category="h4">Sort By</Text>
+            <Text style={{ marginBottom: '6%' }} category="h5">Sort By</Text>
             <Text onPress={() => setShowSortModal(false)} style={{ fontFamily: 'SF-UI-Display_Bold' }} category="h3">X</Text>
           </View>
           <TouchableOpacity onPress={() => {
@@ -251,7 +251,7 @@ const DocumentScreen = () => {
           }}>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
               <Text style={{ fontSize: 22, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '5%' }}>
-                Price Low To Hight
+                Price Low To High
             </Text>
               {sortState == "LowToHigh" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start', color: '#41d5fb' }} name={"check"} size={24} />}
             </View>
@@ -279,11 +279,11 @@ const DocumentScreen = () => {
         }}>
         <Layout style={{ height: '100%', padding: '3%' }}>
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={{ marginBottom: '4%' }} category="h4">Filter By</Text>
+            <Text style={{ marginBottom: '4%' }} category="h5">Filter By</Text>
             <Text onPress={() => setShowFilterModal(false)} style={{ fontFamily: 'SF-UI-Display_Bold' }} category="h3">X</Text>
           </View>
           <ScrollView>
-            <Text style={{ fontSize: 20, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '3%' }}>Transmission</Text>
+            <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '3%' }}>Transmission</Text>
             {carTransmissionOptions.map(i => {
               return (
                 <Card
@@ -315,7 +315,7 @@ const DocumentScreen = () => {
               );
             })}
 
-            <Text style={{ fontSize: 20, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '3%' }}>Car Type</Text>
+            <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '3%' }}>Car Type</Text>
             {carTypeOptions.map(i => {
               return (
                 <Card

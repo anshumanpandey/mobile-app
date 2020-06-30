@@ -41,7 +41,7 @@ export default () => {
                                 title={equip.Equipment.Description}
                                 replaceCheckbox={() => {
                                     const found = selectedExtras.find(i => i.Equipment.Description == equip.Equipment.Description)
-                                    return <View style={{ backgroundColor: found ? '#41d5fb' : 'white', borderColor: found ? 'white' : '#41d5fb', borderWidth: 1, borderRadius: 20, height: 40, width: 40, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    return <View style={{ backgroundColor: found ? '#41d5fb' : 'white', borderColor: found ? 'white' : '#41d5fb', borderWidth: 1, borderRadius: 20, height: 35, width: 35, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         {found ?
                                             <Text style={{ fontSize: 15, color: 'white' }}>{found.amount}</Text>
                                             : <Text style={{ fontSize: 30, color: '#41d5fb' }} >+</Text>}
