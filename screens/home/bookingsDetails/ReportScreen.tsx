@@ -6,6 +6,7 @@ import ImagePicker, { ImagePickerResponse } from 'react-native-image-picker';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
 import { useRoute } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import MenuButton from '../../../partials/MenuButton';
 
 const imageArr = []
 
@@ -35,6 +36,9 @@ const DocumentScreen = ({ navigation }) => {
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1, display: 'flex', backgroundColor: '#f7f9fc' }}>
         <View style={{ backgroundColor: '#f7f9fc' }}>
+          <View style={{ position: 'absolute', padding: '5%', zIndex: 2, justifyContent: 'center', alignItems: 'center' }}>
+            <MenuButton />
+          </View>
           <View style={{ display: 'flex', alignItems: 'center'}}>
             {imageArr[currentPicktureIndex] && <Image source={imageArr[currentPicktureIndex]} style={{ height: 250, margin: 0, padding: 0, resizeMode: 'contain' }} />}
           </View>

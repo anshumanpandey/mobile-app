@@ -31,7 +31,9 @@ export default () => {
     }, { manual: true })
 
     useEffect(() => {
-        setDepartureTime(moment().toDate())
+        if (inmediatePickup == true) {
+            setDepartureTime(moment().toDate())
+        }
     }, [inmediatePickup])
 
     return (
@@ -69,29 +71,33 @@ export default () => {
                             })
                         }}
                     />
-                    <DatePicker
-                        minuteInterval={30}
-                        date={departureTime}
-                        onDateChange={(d) => {
-                            if (inmediatePickup) {
-                                const nowPlus24Hours = moment().utc().add('h', 24).set({ minutes: 0, seconds: 0 })
-                                if (moment(d).isAfter(nowPlus24Hours)) {
-                                    setDepartureTime(nowPlus24Hours.toDate())
+                    {inmediatePickup !== null && (
+                        <>
+                        <DatePicker
+                            minuteInterval={30}
+                            date={departureTime}
+                            onDateChange={(d) => {
+                                if (inmediatePickup) {
+                                    const nowPlus24Hours = moment().utc().add('h', 24).set({ minutes: 0, seconds: 0 })
+                                    if (moment(d).isAfter(nowPlus24Hours)) {
+                                        setDepartureTime(nowPlus24Hours.toDate())
+                                    } else {
+                                        setDepartureTime(d)
+                                    }
                                 } else {
                                     setDepartureTime(d)
                                 }
-                            } else {
-                                setDepartureTime(d)
-                            }
-                            setReturnTime(moment(d).add('days', 1).toDate())
-                        }}
-                    />
-                    <Text style={{ fontFamily: 'SF-UI-Display_Bold' }}>Return Time</Text>
-                    <DatePicker
-                        minuteInterval={30}
-                        date={returnTime}
-                        onDateChange={(d) => setReturnTime(d)}
-                    />
+                                setReturnTime(moment(d).add('days', 1).toDate())
+                            }}
+                        />
+                        <Text style={{ fontFamily: 'SF-UI-Display_Bold' }}>Return Time</Text>
+                        <DatePicker
+                            minuteInterval={30}
+                            date={returnTime}
+                            onDateChange={(d) => setReturnTime(d)}
+                        />
+                        </>
+                    )}
                 </Layout>
                 <Layout style={{ marginTop: '5%' }}>
                     <Button

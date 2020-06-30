@@ -6,6 +6,7 @@ import { CommonActions } from '@react-navigation/native';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import useAxios from 'axios-hooks'
 import { useCarDetailState } from './detailsState';
+import MenuButton from '../../../partials/MenuButton';
 
 
 const DocumentScreen = ({ navigation, route }) => {
@@ -20,8 +21,9 @@ const DocumentScreen = ({ navigation, route }) => {
     <SafeAreaView style={{ flex: 1 }}>
 
       <Layout style={{ flex: 1, padding: '5%', backgroundColor: 'white' }}>
+        <MenuButton />
 
-        <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '15%', marginBottom: '10%' }}>
+        <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '10%', marginBottom: '10%' }}>
           <Text style={{ marginBottom: '10%', textAlign: 'center' }} category="h3">
             Sign our agreement
           </Text>
