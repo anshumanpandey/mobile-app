@@ -238,7 +238,7 @@ const DocumentScreen = () => {
                     );
                   }}
                 />}
-                {!loading && activeTrips && activeTrips.length == 0 && <Text style={{ textAlign: 'center', marginTop: '20%' }} category="h5">No active bookings!</Text>}
+                {!loading && activeTrips && activeTrips.length == 0 && <Text style={{ textAlign: 'center', marginTop: '20%' }} category="h5">No active bookings</Text>}
 
               </Layout>
             </Tab>
@@ -262,7 +262,7 @@ const DocumentScreen = () => {
                   }}
                 />}
 
-                {!loading && upcommingTrips && upcommingTrips.length == 0 && <Text style={{ textAlign: 'center', marginTop: '20%' }} category="h5">No upcomming bookings!</Text>}
+                {!loading && upcommingTrips && upcommingTrips.length == 0 && <Text style={{ textAlign: 'center', marginTop: '20%' }} category="h5">No upcoming bookings</Text>}
               </Layout>
             </Tab>
 
@@ -286,7 +286,7 @@ const DocumentScreen = () => {
                   }}
                 />}
 
-                {!loading && completedTrips && completedTrips.length == 0 && <Text style={{ textAlign: 'center', marginTop: '20%' }} category="h5">No completed bookings!</Text>}
+                {!loading && completedTrips && completedTrips.length == 0 && <Text style={{ textAlign: 'center', marginTop: '20%' }} category="h5">No completed bookings</Text>}
               </Layout>
             </Tab>
 

@@ -86,11 +86,11 @@ const TripCard: React.FC<TripCardProps> = (props) => {
               <Layout style={{ display: 'flex', flexDirection: 'column', width: '90%' }}>
                 <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '5%' }}>
                   <Text style={{ fontSize: 16, fontFamily: 'SF-UI-Display_Bold' }}>{props.pickupLocation}</Text>
-                  <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.pickupTime.format('HH:mm DD, MMM')}</Text>
+                  <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.pickupTime.format('DD MMM,HH:mm')}</Text>
                 </Layout>
                 <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text style={{ fontSize: 16, fontFamily: 'SF-UI-Display_Bold' }}>{props.dropOffLocation}</Text>
-                  <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.dropoffTime.format('HH:mm DD, MMM')}</Text>
+                  <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.dropoffTime.format('DD MMM,HH:mm')}</Text>
                 </Layout>
               </Layout>
             </Layout>
