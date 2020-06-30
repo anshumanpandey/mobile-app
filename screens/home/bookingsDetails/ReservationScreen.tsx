@@ -10,6 +10,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import ResolveCurrencySymbol from '../../../utils/ResolveCurrencySymbol';
 import ReportScreen from './ReportScreen';
 import KeyedReservationScreen from './KeyedReservation';
+import VerifyCancelCodeScreen from './VerifyCancelCodeScreen';
 import CompletedReportScreen from './CompletedReportScreen';
 import AgreementScreen from './AgreementScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -22,7 +23,7 @@ const DocumentScreen = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#f6f7f9', }}>
       <ScrollView contentContainerStyle={{ backgroundColor: 'white', flexGrow: 1 }}>
-        <View style={{ paddingTop: '5%',height: '90%', paddingLeft: '5%', paddingRight: '5%', display: 'flex', flexDirection: 'column' }}>
+        <View style={{ paddingTop: '5%', height: '90%', paddingLeft: '5%', paddingRight: '5%', display: 'flex', flexDirection: 'column' }}>
           <View style={{ width: '100%' }}>
             <Layout style={{ display: 'flex', alignItems: 'center' }}>
               <Text style={{ textAlign: 'center' }} category="h6">
@@ -111,29 +112,6 @@ export const { useGlobalState: useCarDetailState } = createGlobalState({ details
 const Tab = createBottomTabNavigator();
 export default function App({ navigation, route }) {
 
-  const [cancelReq, cancelBooking] = useAxios({
-    url: `https://OTA.right-cars.com/`,
-    method: 'POST',
-    data: `<OTA_VehCancelRQ xmlns="http://www.opentravel.org/OTA/2003/05"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.opentravel.org/OTA/2003/05
-    VehCancelRQ.xsd">
-    <POS>
-    <Source>
-    <RequestorID Type="5" ID="MOBILE001" />
-    </Source>
-    </POS>
-    <VehCancelRQCore>
-    <ResNumber Number="${route.params.registratioNumber}"/>
-    </VehCancelCore>
-    <VehCancelRQInfo>
-    </VehCancelRQInfo>
-    </OTA_VehCancelRQ>`,
-    headers: {
-      "Content-Type": "application/soap+xml;charset=utf-8"
-    },
-  }, { manual: true })
-
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -169,6 +147,14 @@ export default function App({ navigation, route }) {
       />
 
       <Tab.Screen
+        name="VerifyCancel"
+        component={VerifyCancelCodeScreen}
+        options={{
+          tabBarButton: () => <></>,
+        }}
+      />
+
+      <Tab.Screen
         name="Directions"
         component={() => <></>}
         options={{
@@ -192,7 +178,7 @@ export default function App({ navigation, route }) {
         }}
       />
       <Tab.Screen
-        name="Cancel"
+        name="Help"
         component={() => <></>}
         options={{
           tabBarButton: () => {
@@ -235,31 +221,18 @@ export default function App({ navigation, route }) {
       />
 
       <Tab.Screen
-        name="Help"
+        name="Cancel"
         component={() => <></>}
         options={{
           tabBarButton: () => {
             return (
               <View style={{ width: '25%' }}>
                 <TouchableOpacity style={{ height: '100%' }} onPress={() => {
-                  if (cancelReq.loading) return
-                  cancelBooking()
-                    .then((r) => {
-                      console.log(r.data)
-                      if (r.data.includes('Errors')) {
-                        Alert.alert('Error', 'Reservation Not Found')
-                        return;
-                      }
-
-                      if (navigation.canGoBack()) {
-                        navigation.goBack()
-                      }
-                    })
+                  navigation.navigate('VerifyCancel', { ...route.params.params })
                 }}>
                   <View style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', borderColor: 'rgba(0,0,0,0.2)', borderRightWidth: 0, flexDirection: 'column' }}>
                     <MaterialIcons name="cancel" style={{ color: '#cf1830' }} size={24} />
                     <Text style={{ marginLeft: '5%', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>CANCEL </Text>
-                    {cancelReq.loading ? <LoadingSpinner /> : undefined}
                   </View>
 
                 </TouchableOpacity>
