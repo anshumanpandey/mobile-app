@@ -19,7 +19,7 @@ imageArr[6] = require('../../../image/car-7.jpg')
 imageArr[7] = require('../../../image/car-8.jpg')
 
 const DocumentScreen = ({ navigation }) => {
-  const maxPhotosAmount = 2
+  const maxPhotosAmount = 8
   const [pictures, setPictures] = useState<{ [k: number]: ImagePickerResponse }>({});
   const [currentPicktureIndex, setCurrentPicktureIndex] = useState(0);
 
