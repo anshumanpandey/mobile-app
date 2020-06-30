@@ -12,6 +12,7 @@ import CarItem from '../../../partials/CarItem';
 import { VehVendorAvail, PricedEquip } from '../../../types/SearchVehicleResponse';
 import ResolveCurrencySymbol from '../../../utils/ResolveCurrencySymbol';
 import MenuButton from '../../../partials/MenuButton';
+import Decimal from 'decimal.js';
 
 type ParamList = {
     CarExtras: {
@@ -34,7 +35,17 @@ export default () => {
                     <MenuButton />
                 </View>
                 <Layout>
-                    <CarItem style={{ marginBottom: '5%' }} vehicle={route.params.vehicle} />
+                    <CarItem style={{ marginBottom: '5%' }} vehicle={{
+                        ...route.params.vehicle,
+                        TotalCharge: {
+                            ...route.params.vehicle.TotalCharge,
+                            RateTotalAmount: new Decimal(route.params.vehicle.TotalCharge.RateTotalAmount).add(selectedExtras.reduce((total, next) => {
+                                const extraTotal = new Decimal(next.Charge.Amount).times(next.amount);
+                                total = new Decimal(total).add(extraTotal).toNumber()
+                                return total
+                            },0)).toFixed(2)
+                        }
+                        }} />
 
                     <Text style={{ marginBottom: '5%' }}>EQUIPEMENT (OPTIONAL EXTRAS)</Text>
 
