@@ -48,15 +48,15 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
     useEffect(() => {
         if (hasFullProfile && hasAllFiles) {
             const found = menuData.find(i => i.key == "asd")
-            if (!found) menuData.unshift({ name: "My Trips", screenName: "MyBookings", iconName: "car-side",iconSize: 35,key: 'asd' });
+            if (!found) menuData.unshift({ name: "My Trips", screenName: "MyBookings", iconName: "car-side",iconSize: 30,key: 'asd' });
         }
     }, [wasDrawerOpen])
 
     return (
         <>
             <View style={styles.container}>
-                <TouchableOpacity style={{ paddingBottom: '5%'}} onPress={() => navigation.navigate("EditProfile")}>
-                    <Layout style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', position: 'relative', borderBottomWidth: 1, borderBottomColor: 'grey', paddingBottom: '3%' }}>
+                <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
+                    <Layout style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', position: 'relative', borderBottomWidth: 1, borderBottomColor: 'grey', paddingBottom: '8%' }}>
                         {profile?.selfiurl == "" && (
                             <Avatar
                                 style={{ width: 125, height: 125, }}
@@ -105,7 +105,7 @@ const DrawerItem = ({ navigation, name, iconName,screenName,iconSize,onPress }: 
                 }
             }}
         >
-            <MaterialCommunityIcon style={{ marginLeft: '8%',marginRight: '2%', color: '#41d5fb', fontSize: iconSize || 30}} size={30} name={iconName} />
+            <MaterialCommunityIcon style={{ marginLeft: '8%',marginRight: '4%', color: '#41d5fb', fontSize: iconSize || 25}} name={iconName} />
             <Text style={styles.menuItemText}>{name}</Text>
         </TouchableOpacity>
     );
@@ -115,21 +115,22 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "rgba(255,255,255,0.43)",
-        paddingTop: '20%',
+        paddingTop: '10%',
         display: 'flex',
         justifyContent: 'center'
     },
     menuItem: {
         flexDirection: "row",
         alignItems: 'center',
-        marginTop: '5%',
+        paddingTop: '3%',
+        paddingBottom: '3%',
         borderBottomColor: 'gray',
-        borderBottomWidth: 0.5,
+        borderBottomWidth: 0.6,
     },
     menuItemText: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: "300",
-        color: "#41d5fb"
+        color: "rgba(0,0,0,0.8)"
     },
 });
 
