@@ -28,7 +28,8 @@ export default () => {
 
     const [{ data, loading, error }, doSearch] = useAxios<VehicleResponse>({
         url: `${GRCGDS_BACKEND}/SEARCH_VEHICLE`,
-        method: 'GET'
+        method: 'GET',
+        validateStatus: () => true
     }, { manual: true })
 
     useEffect(() => {
@@ -62,8 +63,7 @@ export default () => {
                     />
                     <TimeCheckbox
                         checked={inmediatePickup == undefined ? undefined : !inmediatePickup}
-                        title="SCHEDULE RIDE"
-                        subTitle="Schedule a pickup in advance"
+                        title="SCHEDULE A PICKUP IN ADVANCE"
                         onChange={(v) => {
                             setInmediatePickup(p => {
                                 if (p === null) return false
@@ -138,6 +138,9 @@ export default () => {
                                             }
                                         );
                                     }
+                                })
+                                .catch(() => {
+                                    navigation.navigate("NoResult");
                                 })
                         }} size="giant" style={{
                             borderRadius: 10,
