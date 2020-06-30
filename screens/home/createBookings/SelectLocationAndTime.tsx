@@ -59,7 +59,7 @@ export default () => {
                     <TimeCheckbox
                         checked={inmediatePickup == undefined ? undefined : !inmediatePickup}
                         title="SCHEDULE RIDE"
-                        subTitle="Schedule pickup in advance"
+                        subTitle="Schedule a pickup in advance"
                         onChange={(v) => {
                             setInmediatePickup(p => {
                                 if (p === null) return false
