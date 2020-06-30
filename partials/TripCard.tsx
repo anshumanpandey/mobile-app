@@ -104,27 +104,18 @@ const TripCard: React.FC<TripCardProps> = (props) => {
             <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingTop: props.displayPreview == true && props.image_preview_url ? 0 : '5%', paddingBottom: '5%', paddingLeft: '5%', paddingRight: '5%', borderBottomLeftRadius: (props.upcoming || props.completed) ? 0 : 16, borderBottomRightRadius: (props.upcoming || props.completed) ? 0 : 16 }}>
               <Layout style={{ display: 'flex', flexDirection: 'row', width: '50%', alignSelf: 'flex-end' }}>
                 <Layout>
-                  <Text style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 16 }} numberOfLines={1} textBreakStrategy="balanced" category='h6'>{props.carName}</Text>
+                  <Text style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 15 }} category='h6'>{props.carName}</Text>
                   <Text>{props.registratioNumber}</Text>
                 </Layout>
               </Layout>
 
-              <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '50%' }}>
-                <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Text style={{ color: '#ACB1C0', fontSize: 13 }}>Final cost</Text>
                   <View style={{ display: 'flex', flexDirection: 'row' }}>
-                    <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{props.finalCost}</Text>
                     {props.currencyCode && <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{ResolveCurrencySymbol(props.currencyCode)}</Text>}
+                    <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>{props.finalCost}</Text>
                   </View>
                 </Layout>
-
-                <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Text style={{ color: '#ACB1C0', fontSize: 13 }}>Arrival time</Text>
-                  {props.arrivalTime && <Text style={{ fontSize: 15, fontFamily: 'SF-UI-Display_Bold' }}>
-                    {props.arrivalTime.format("HH:mm DD, MMM")}
-                  </Text>}
-                </Layout>
-              </Layout>
 
             </Layout>
             {(props.upcoming || props.completed) && (<Layout style={{ paddingBottom: '5%', paddingLeft: '5%', paddingRight: '5%', borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }}>

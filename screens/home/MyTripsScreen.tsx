@@ -78,7 +78,6 @@ const DocumentScreen = () => {
 
                 const storedData = storedBookings.find(i => i.reservationNumber == Resnumber)
 
-
                 return {
                   currencyCode: storedData?.currency_code,
                   image_preview_url: storedData?.veh_picture ? storedData?.veh_picture : 'https://carimages.rent.it/EN/1539285845928.png',
@@ -90,7 +89,7 @@ const DocumentScreen = () => {
                   pickupLocationPhoneNumber: pPhoneNumber,
                   "pickupTime": moment.utc(moment.unix(unixPTime)),
                   "dropoffTime": moment.utc(moment.unix(unixRTime)),
-                  carName: `${storedData?.veh_name} Or Similar`,
+                  carName: `${storedData?.veh_name}\nOr Similar`,
                   registratioNumber: Resnumber,
                   "finalCost": storedData?.total_price ? new Decimal(storedData?.total_price).toFixed(2) : '',
                   "arrivalTime": moment.utc(moment.unix(unixRTime)),
@@ -125,18 +124,21 @@ const DocumentScreen = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      const activeTrips = parsedResponse ? parsedResponse.filter(booking => {
-        return booking.pickupTime.isSame(moment(), 'day')
+      const sortedBookings = parsedResponse.sort(function (left, right) {
+        return moment.utc(left.pickupTime).diff(moment.utc(right.pickupTime))
+      });
+      const activeTrips = sortedBookings ? sortedBookings.filter(booking => {
+        return booking.pickupTime.isBetween(moment(),moment().add('h', 24))
       }) : null
       setActiveTrips(activeTrips)
 
-      const upcomming = parsedResponse ? parsedResponse.filter(booking => {
-        return booking.pickupTime.isAfter(moment())
+      const upcomming = sortedBookings ? sortedBookings.filter(booking => {
+        return booking.pickupTime.isAfter(moment().add('h', 24))
       }) : null
 
       setUpcommingTrips(upcomming)
 
-      const completed = parsedResponse ? parsedResponse.filter(booking => {
+      const completed = sortedBookings ? sortedBookings.filter(booking => {
         return booking.dropoffTime.isBefore(moment())
       }) : null
 

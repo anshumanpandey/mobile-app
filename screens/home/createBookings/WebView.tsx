@@ -174,13 +174,13 @@ const WebViewScreen = () => {
         </VehResRQInfo>
         
         </OTA_VehResRQ>`
+        console.log(xml)
         postCreation({ data: xml })
             .then((res) => {
                 console.log("postCreation", res.data);
                 parseString(res.data, function (err, result) {
                     const reservationNumber = result.OTA_VehResRS.VehResRSCore[0].VehReservation[0].VehSegmentCore[0].ConfID[0].Resnumber[0]
                     setReservationNumber(reservationNumber)
-                    dispatchGlobalState({ type: 'saveBooking', state: { ...data, reservationNumber }})
                 })
                 navigation.navigate("Confirmation")
                 setPostDone(true)
