@@ -242,7 +242,7 @@ const DocumentScreen = () => {
         }}>
         <Layout style={{ height: '100%', padding: '3%' }}>
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={{ marginBottom: '6%' }} category="h3">Sort By</Text>
+            <Text style={{ marginBottom: '6%' }} category="h4">Sort By</Text>
             <Text onPress={() => setShowSortModal(false)} style={{ fontFamily: 'SF-UI-Display_Bold' }} category="h3">X</Text>
           </View>
           <TouchableOpacity onPress={() => {
