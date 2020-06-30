@@ -31,6 +31,10 @@ export default () => {
         method: 'GET'
     }, { manual: true })
 
+    useEffect(() => {
+        setDepartureTime(moment().toDate())
+    }, [inmediatePickup])
+
     return (
         <SafeAreaView style={{ flex: 1 }} >
             <ScrollView contentContainerStyle={{ flexGrow: 1, padding: '5%', justifyContent: 'space-between', display: 'flex' }} keyboardShouldPersistTaps={"handled"} style={{ backgroundColor: 'white' }}>

@@ -29,7 +29,7 @@ const DocumentScreen = () => {
         <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '15%', marginBottom: '10%' }}>
           <Text style={{ fontFamily: 'SF-UI-Display_Bold', textAlign: 'center' }} category="h3">No result :(</Text>
           <Text style={{ color: '#8F9BB3', textAlign: 'center', marginBottom: '50%' }} category="h6">
-            We could not find any cars with you search params
+            Sorry there are no vehicles available in your area at the moment
           </Text>
         </Layout>
 
