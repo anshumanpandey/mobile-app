@@ -30,10 +30,10 @@ const DocumentScreen = () => {
                 <MenuButton />
               </View>
               <View style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-                <Text style={{ textAlign: 'center' }} category="h6">
+                <Text style={{ textAlign: 'center' }} category="h5">
                   CONFIRMATION
               </Text>
-                <Text style={{ lineHeight: 20, textAlign: 'center', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }} >
+                <Text style={{ lineHeight: 20, textAlign: 'center', fontFamily: 'SF-UI-Display_Bold', fontSize: 22 }} >
                   {route.params.registratioNumber}{' '}
                 </Text>
                 <Image
@@ -45,19 +45,19 @@ const DocumentScreen = () => {
 
             <View style={{ flexDirection: 'row', display: 'flex', justifyContent: 'space-around' }}>
               <Layout style={{ marginBottom: '3%' }}>
-                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="c2">
+                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
                   Pickup Location
                   </Text>
-                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 14 }}>
+                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 16 }}>
                   {route.params.pickupLocation}
                 </Text>
               </Layout>
 
               <Layout style={{ marginBottom: '3%' }}>
-                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="c2">
+                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
                   Dropout Location
               </Text>
-                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 14 }}>
+                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 16 }}>
                   {route.params.dropOffLocation}
                 </Text>
               </Layout>
@@ -65,19 +65,19 @@ const DocumentScreen = () => {
 
             <View style={{ flexDirection: 'row', display: 'flex', justifyContent: 'space-around' }}>
               <Layout style={{ marginBottom: '3%' }}>
-                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="c2">
+                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
                   Pickup Time
                   </Text>
-                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 14 }}>
+                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 16 }}>
                   {route.params.pickupTime.format('HH:mm')}
                 </Text>
               </Layout>
 
               <Layout style={{ marginBottom: '3%' }}>
-                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="c2">
+                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
                   Dropout Time
               </Text>
-                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 14 }}>
+                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 16 }}>
                   {route.params.dropoffTime.format('HH:mm')}
                 </Text>
               </Layout>
@@ -85,20 +85,20 @@ const DocumentScreen = () => {
 
 
             <Layout style={{ marginBottom: '3%' }}>
-              <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="c2">
+              <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
                 Final Cost
               </Text>
-              <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 14 }}>
+              <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 16 }}>
                 {route.params.finalCost}
                 {ResolveCurrencySymbol(route.params.currencyCode)}
               </Text>
             </Layout>
 
             <Layout style={{ width: '75%', marginLeft: 'auto', marginRight: 'auto' }}>
-              <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="c2">
+              <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
                 Pickup Instructions
               </Text>
-              <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 16 }}>
+              <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 18 }}>
                 {route.params.pickUpInstructions}
               </Text>
             </Layout>
