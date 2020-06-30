@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react'
-import { Layout, Text, Input, Button, Select, SelectItem, Popover, Toggle } from '@ui-kitten/components';
+import { Layout, Text, Input, Button, Select, SelectItem, Popover, Toggle, Menu } from '@ui-kitten/components';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import SmoothPicker from "react-native-smooth-picker";
 import Modal from 'react-native-modal';
@@ -10,6 +10,8 @@ import { useCreateBookingState } from './CreateBookingState';
 import TimeCheckbox from '../../../partials/TimeCheckbox';
 import CarItem from '../../../partials/CarItem';
 import { VehVendorAvail, PricedEquip } from '../../../types/SearchVehicleResponse';
+import ResolveCurrencySymbol from '../../../utils/ResolveCurrencySymbol';
+import MenuButton from '../../../partials/MenuButton';
 
 type ParamList = {
     CarExtras: {
@@ -28,23 +30,27 @@ export default () => {
     return (
         <SafeAreaView style={{ flex: 1 }} >
             <ScrollView contentContainerStyle={{ flexGrow: 1, padding: '5%', justifyContent: 'space-between', display: 'flex' }} keyboardShouldPersistTaps={"handled"} style={{ backgroundColor: 'white' }}>
-
+                <View style={{ position: 'absolute', zIndex: 2, padding: '5%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    <MenuButton />
+                </View>
                 <Layout>
                     <CarItem style={{ marginBottom: '5%' }} vehicle={route.params.vehicle} />
 
                     <Text style={{ marginBottom: '5%' }}>EQUIPEMENT (OPTIONAL EXTRAS)</Text>
 
                     {route.params.vehicle.PricedEquips.map(equip => {
+                        const found = selectedExtras.find(i =>i.Equipment.vendorEquipID == equip.Equipment.vendorEquipID)
+                        const currentPrice = found ? found.amount*equip.Charge.Amount: null;
                         return (
                             <TimeCheckbox
                                 style={{ marginBottom: '5%' }}
-                                title={equip.Equipment.Description}
+                                title={`${equip.Equipment.Description} ${currentPrice ? `(${ResolveCurrencySymbol(found?.Charge.Taxamount.CurrencyCode)}${currentPrice})` : ''}`}
                                 replaceCheckbox={() => {
                                     const found = selectedExtras.find(i => i.Equipment.Description == equip.Equipment.Description)
                                     return <View style={{ backgroundColor: found ? '#41d5fb' : 'white', borderColor: found ? 'white' : '#41d5fb', borderWidth: 1, borderRadius: 20, height: 35, width: 35, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         {found ?
                                             <Text style={{ fontSize: 15, color: 'white' }}>{found.amount}</Text>
-                                            : <Text style={{ fontSize: 30, color: '#41d5fb' }} >+</Text>}
+                                            : <Text style={{ fontSize: 25, color: '#41d5fb' }} >+</Text>}
                                     </View>
                                 }}
                                 onChange={() => {
