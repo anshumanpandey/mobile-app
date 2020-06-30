@@ -56,16 +56,7 @@ const DocumentScreen = ({ navigation, route }) => {
 
             post({ data })
             .then((r) => {
-              console.log(r.data)
-              return
-              navigation.dispatch(
-                CommonActions.reset({
-                  index: 0,
-                  routes: [
-                    { name: 'Home' },
-                  ],
-                })
-              );
+              navigation.navigate("Home");
             })
           }}
           size="giant"
