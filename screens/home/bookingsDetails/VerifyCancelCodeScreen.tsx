@@ -12,6 +12,9 @@ const DocumentScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
+  const [idxFocusInput, setIdxFocusInput] = React.useState<number>(-1);
+  const [pin, setPin] = React.useState<Array<number>>([-1, -1, -1, -1]);
+
   const [cancelReq, cancelBooking] = useAxios({
     url: `https://OTA.right-cars.com/`,
     method: 'POST',
@@ -45,6 +48,7 @@ const DocumentScreen = () => {
       callAPI({
         data: {module_name: 'SEND_CANCEL_CODE'}
       });
+      return () => setPin([-1, -1, -1, -1])
     }, [])
   );
 
@@ -55,9 +59,6 @@ const DocumentScreen = () => {
     useRef<TextInput | null>(null),
     useRef<TextInput | null>(null)
   ]
-
-  const [idxFocusInput, setIdxFocusInput] = React.useState<number>(-1);
-  const [pin, setPin] = React.useState<Array<number>>([-1, -1, -1, -1]);
 
   const onInput = ({ nativeEvent: { key }, ...e }: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
 
