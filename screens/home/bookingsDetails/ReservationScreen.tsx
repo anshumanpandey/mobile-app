@@ -15,6 +15,7 @@ import CompletedReportScreen from './CompletedReportScreen';
 import AgreementScreen from './AgreementScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useCarDetailState } from './detailsState';
+import MenuButton from '../../../partials/MenuButton';
 
 const DocumentScreen = () => {
   const route = useRoute();
@@ -24,17 +25,22 @@ const DocumentScreen = () => {
       <ScrollView contentContainerStyle={{ backgroundColor: 'white', flexGrow: 1 }}>
         <View style={{ paddingTop: '5%', height: '90%', paddingLeft: '5%', paddingRight: '5%', display: 'flex', flexDirection: 'column' }}>
           <View style={{ width: '100%' }}>
-            <Layout style={{ display: 'flex', alignItems: 'center' }}>
-              <Text style={{ textAlign: 'center' }} category="h6">
-                CONFIRMATION
+            <Layout style={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
+              <View style={{ position: 'absolute',height: '100%', display: 'flex', alignItems: 'center' }}>
+                <MenuButton />
+              </View>
+              <View style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+                <Text style={{ textAlign: 'center' }} category="h6">
+                  CONFIRMATION
               </Text>
-              <Text style={{ lineHeight: 20, textAlign: 'center', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }} >
-                {route.params.registratioNumber}{' '}
-              </Text>
-              <Image
-                style={{ width: 200, height: 200, resizeMode: 'contain' }}
-                source={{ uri: route.params.image_preview_url }}
-              />
+                <Text style={{ lineHeight: 20, textAlign: 'center', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }} >
+                  {route.params.registratioNumber}{' '}
+                </Text>
+                <Image
+                  style={{ width: 200, height: 200, resizeMode: 'contain' }}
+                  source={{ uri: route.params.image_preview_url }}
+                />
+              </View>
             </Layout>
 
             <View style={{ flexDirection: 'row', display: 'flex', justifyContent: 'space-around' }}>
