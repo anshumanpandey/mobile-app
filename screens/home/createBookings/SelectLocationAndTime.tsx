@@ -54,8 +54,8 @@ export default () => {
                     <TimeCheckbox
                         checked={inmediatePickup == undefined ? undefined : inmediatePickup}
                         style={{ marginBottom: '5%' }}
-                        title="IMMEDIATE PICK-UP"
-                        subTitle="Get a ride in a minute"
+                        title="IMMEDIATE PICKUP"
+                        subTitle="Collect A Car Near Me Immediately"
                         onChange={(v) => setInmediatePickup(p => {
                             if (p === null) return true
                             return !p

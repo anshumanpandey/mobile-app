@@ -73,7 +73,7 @@ const CarItem: React.FC<Props> = ({ vehicle, isActive, onClick, style: customeSt
                             <Text style={{ fontSize: 13, fontFamily: 'SF-UI-Display_Bold' }}>
                                 Fuel policy:{' '}
                             </Text>
-                            <Text style={{ fontSize: 13 }}>Same to Same</Text>
+                            <Text style={{ fontSize: 13 }}>Like to like</Text>
                         </View>
                         <View style={{ display: 'flex', flexDirection: 'row' }}>
                             <FontAwesome5 style={{ marginRight: '2%' }} name={"road"} size={16} />
