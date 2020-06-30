@@ -250,7 +250,7 @@ const DocumentScreen = () => {
             setSortState("LowToHigh")
           }}>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={{ fontSize: 22, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '5%' }}>
+              <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '5%' }}>
                 Price Low To High
             </Text>
               {sortState == "LowToHigh" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start', color: '#41d5fb' }} name={"check"} size={24} />}
@@ -261,7 +261,7 @@ const DocumentScreen = () => {
             setSortState("HighToLow")
           }}>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={{ fontSize: 22, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '5%' }}>
+              <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: "SF-UI-Display_Bold", marginBottom: '5%' }}>
                 Price High to Low
             </Text>
               {sortState == "HighToLow" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start', color: '#41d5fb' }} name={"check"} size={24} />}
