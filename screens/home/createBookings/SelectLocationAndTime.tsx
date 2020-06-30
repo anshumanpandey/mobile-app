@@ -108,23 +108,27 @@ export default () => {
                                 }
                             })
                                 .then(res => {
-                                    navigation.navigate(
-                                        'CarsList',
-                                        {
-                                            cars: res.data.VehAvailRSCore.VehVendorAvails,
-                                            metadata: res.data.VehAvailRSCore.VehRentalCore,
-                                            searchParams: {
-                                                pickUpDate: moment(departureTime),
-                                                pickUpTime: moment(departureTime),
-
-                                                dropOffDate: moment(returnTime),
-                                                dropOffTime: moment(returnTime),
-
-                                                pickUpLocation: originLocation,
-                                                dropOffLocation: returnLocation ? returnLocation : originLocation,
+                                    if (res.data.VehAvailRSCore.VehVendorAvails.length == 0) {
+                                        navigation.navigate("NoResult");
+                                    } else {
+                                        navigation.navigate(
+                                            'CarsList',
+                                            {
+                                                cars: res.data.VehAvailRSCore.VehVendorAvails,
+                                                metadata: res.data.VehAvailRSCore.VehRentalCore,
+                                                searchParams: {
+                                                    pickUpDate: moment(departureTime),
+                                                    pickUpTime: moment(departureTime),
+    
+                                                    dropOffDate: moment(returnTime),
+                                                    dropOffTime: moment(returnTime),
+    
+                                                    pickUpLocation: originLocation,
+                                                    dropOffLocation: returnLocation ? returnLocation : originLocation,
+                                                }
                                             }
-                                        }
-                                    );
+                                        );
+                                    }
                                 })
                         }} size="giant" style={{
                             borderRadius: 10,

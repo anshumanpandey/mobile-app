@@ -20,6 +20,7 @@ import KeyedReservation from './bookingsDetails/KeyedReservation';
 import EndRentalScreen from './EndRentalScreen';
 import SignScreen from './bookingsDetails/SignScreen';
 import EditProfile from './EditProfile';
+import NoResultScreen from './createBookings/NoResultScreen';
 import ProfileVerificationScreen from './ProfileVerificationScreen';
 import { useGlobalState } from '../../state';
 import userHasFullProfile from '../../utils/userHasFullProfile';
@@ -64,6 +65,7 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
             <Drawer.Screen name="SingleUpload" component={SingleUploadScreen} />,
             <Drawer.Screen name="Sign" component={SignScreen} />,
             <Drawer.Screen name="EndRental" component={EndRentalScreen} />,
+            <Drawer.Screen name="NoResult" component={NoResultScreen} />,
         )
         screens.unshift(<Drawer.Screen name="MyBookings" component={MyTripsScreens} />)
     }
