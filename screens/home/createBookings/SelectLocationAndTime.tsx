@@ -45,7 +45,7 @@ export default () => {
                         }}
                         onReturnLocationSelected={(l) => setReturnLocation(l)}
                     />
-                    
+
                     <TimeCheckbox
                         checked={inmediatePickup == undefined ? undefined : inmediatePickup}
                         style={{ marginBottom: '5%' }}
@@ -67,24 +67,29 @@ export default () => {
                             })
                         }}
                     />
-                    {inmediatePickup === false && (
-                        <>
-                            <DatePicker
-                                minuteInterval={30}
-                                date={departureTime}
-                                onDateChange={(d) => {
+                    <DatePicker
+                        minuteInterval={30}
+                        date={departureTime}
+                        onDateChange={(d) => {
+                            if (inmediatePickup) {
+                                const nowPlus24Hours = moment().utc().add('h', 24).set({ minutes: 0, seconds: 0 })
+                                if (moment(d).isAfter(nowPlus24Hours)) {
+                                    setDepartureTime(nowPlus24Hours.toDate())
+                                } else {
                                     setDepartureTime(d)
-                                    setReturnTime(moment(d).add('days', 1).toDate())
-                                }}
-                            />
-                            <Text style={{ fontFamily: 'SF-UI-Display_Bold' }}>Return Time</Text>
-                            <DatePicker
-                                minuteInterval={30}
-                                date={returnTime}
-                                onDateChange={(d) => setReturnTime(d)}
-                            />
-                        </>
-                    )}
+                                }
+                            } else {
+                                setDepartureTime(d)
+                            }
+                            setReturnTime(moment(d).add('days', 1).toDate())
+                        }}
+                    />
+                    <Text style={{ fontFamily: 'SF-UI-Display_Bold' }}>Return Time</Text>
+                    <DatePicker
+                        minuteInterval={30}
+                        date={returnTime}
+                        onDateChange={(d) => setReturnTime(d)}
+                    />
                 </Layout>
                 <Layout style={{ marginTop: '5%' }}>
                     <Button
@@ -119,10 +124,10 @@ export default () => {
                                                 searchParams: {
                                                     pickUpDate: moment(departureTime),
                                                     pickUpTime: moment(departureTime),
-    
+
                                                     dropOffDate: moment(returnTime),
                                                     dropOffTime: moment(returnTime),
-    
+
                                                     pickUpLocation: originLocation,
                                                     dropOffLocation: returnLocation ? returnLocation : originLocation,
                                                 }
