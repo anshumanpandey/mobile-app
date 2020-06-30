@@ -19,7 +19,7 @@ imageArr[6] = require('../../../image/car-7.jpg')
 imageArr[7] = require('../../../image/car-8.jpg')
 
 const DocumentScreen = ({ navigation }) => {
-  const maxPhotosAmount = 8
+  const maxPhotosAmount = 2
   const [pictures, setPictures] = useState<{ [k: number]: ImagePickerResponse }>({});
   const [currentPicktureIndex, setCurrentPicktureIndex] = useState(0);
 
@@ -82,8 +82,8 @@ const DocumentScreen = ({ navigation }) => {
                 setCurrentPicktureIndex(p => {
                   const total = p + 1
                   if (total == maxPhotosAmount) {
-                    navigation.navigate("Sign")
-                    return maxPhotosAmount;
+                    navigation.navigate("Sign", { pictures })
+                    return p;
                   }
                   return total
                 })

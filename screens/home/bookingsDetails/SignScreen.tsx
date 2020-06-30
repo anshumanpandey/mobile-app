@@ -5,12 +5,13 @@ import { SafeAreaView, ScrollView, Image, TextInput, View } from 'react-native';
 import Orientation from 'react-native-orientation-locker';
 import SignatureCapture from 'react-native-signature-capture';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useRoute } from '@react-navigation/native';
 import { useGlobalState } from '../../../state';
 
 
 const DocumentScreen = ({ navigation }) => {
     const signRef = useRef<TextInput | null>(null);
+    const route = useRoute();
     const [isClean, setIsClean] = useState(true);
     const [profile] = useGlobalState('profile');
 
@@ -20,6 +21,7 @@ const DocumentScreen = ({ navigation }) => {
             return () => {
                 Orientation.unlockAllOrientations()
                 signRef.current?.resetImage();
+                setIsClean(true)
             }
         }, [])
     );
@@ -40,7 +42,10 @@ const DocumentScreen = ({ navigation }) => {
                     }}
                     onSaveEvent={(res) => {
                         console.log(res)
-                        navigation.navigate('CompletedReport', { signImagePath: `data:image/png;base64,${res.encoded}` })
+                        navigation.navigate('CompletedReport', {
+                            signImagePath: `data:image/png;base64,${res.encoded}`,
+                            pictures: route.params.pictures
+                        })
                     }}
                 />
                 {isClean && <View style={{ position: 'absolute', width: '100%',top: '50%' }}>

@@ -14,11 +14,10 @@ import VerifyCancelCodeScreen from './VerifyCancelCodeScreen';
 import CompletedReportScreen from './CompletedReportScreen';
 import AgreementScreen from './AgreementScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createGlobalState } from 'react-hooks-global-state';
+import { useCarDetailState } from './detailsState';
 
 const DocumentScreen = () => {
   const route = useRoute();
-  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#f6f7f9', }}>
@@ -106,11 +105,15 @@ const DocumentScreen = () => {
   );
 };
 
-export const { useGlobalState: useCarDetailState } = createGlobalState({ details: {} })
 
 
 const Tab = createBottomTabNavigator();
 export default function App({ navigation, route }) {
+  const [, setDetails] = useCarDetailState("details");
+
+  useEffect(() => {
+    setDetails(route.params.params)
+  }, [])
 
   return (
     <Tab.Navigator>

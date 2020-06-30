@@ -1,11 +1,20 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Layout, Text, Button, Input } from '@ui-kitten/components';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { SafeAreaView, ScrollView, Image, TextInput, View } from 'react-native';
+import LoadingSpinner from '../../../partials/LoadingSpinner';
+import { SafeAreaView, ScrollView, Image, TextInput, View, Platform } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
+import { GRCGDS_BACKEND } from 'react-native-dotenv';
+import useAxios from 'axios-hooks'
+import { useCarDetailState } from './detailsState';
 
 
 const DocumentScreen = ({ navigation, route }) => {
+  const [details] = useCarDetailState("details");
+
+  const [postReq, post] = useAxios({
+    url: GRCGDS_BACKEND,
+    method: 'POST',
+  }, { manual: true })
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -29,20 +38,40 @@ const DocumentScreen = ({ navigation, route }) => {
 
 
         <Button
+          disabled={postReq.loading}
+          accessoryRight={postReq.loading ? LoadingSpinner : undefined}
           onPress={() => {
-            navigation.dispatch(
-              CommonActions.reset({
+            const data = new FormData();
+
+            data.append("module_name", "SAVE_DAMAGE_IMAGES");
+            data.append("resNumber", details.registratioNumber);
+
+            Object.keys(route.params.pictures).map(key => {
+              data.append("files[]", {
+                name: `${key}-${route.params.pictures[key].fileName}`,
+                uri: Platform.OS === 'android' ? route.params.pictures[key].uri : route.params.pictures[key].uri.replace('file://', ''),
+                type: route.params.pictures[key].type,
+              });
+            })
+
+            post({ data })
+            .then((r) => {
+              console.log(r.data)
+              return
+              navigation.dispatch(
+                CommonActions.reset({
                   index: 0,
                   routes: [
-                      { name: 'Home' },
+                    { name: 'Home' },
                   ],
-              })
-          );
+                })
+              );
+            })
           }}
           size="giant"
           style={{
-            backgroundColor: '#41d5fb',
-            borderColor: '#41d5fb',
+            backgroundColor: postReq.loading == false ? '#41d5fb' : '#e4e9f2',
+            borderColor: postReq.loading == false ? '#41d5fb' : '#e4e9f2',
             borderRadius: 10,
             shadowColor: '#41d5fb',
             shadowOffset: {
