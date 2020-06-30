@@ -82,7 +82,7 @@ const DocumentScreen = ({ navigation }) => {
                 setCurrentPicktureIndex(p => {
                   const total = p + 1
                   if (total == maxPhotosAmount) {
-                    navigation.navigate("Sign", { pictures })
+                    navigation.navigate("Agreement", { pictures })
                     return p;
                   }
                   return total

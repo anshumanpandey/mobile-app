@@ -48,7 +48,7 @@ const DocumentScreen = ({ navigation, route }) => {
 
             Object.keys(route.params.pictures).map(key => {
               data.append("files[]", {
-                name: `${key}-${route.params.pictures[key].fileName}`,
+                name: `${key+1}-${route.params.pictures[key].fileName}`,
                 uri: Platform.OS === 'android' ? route.params.pictures[key].uri : route.params.pictures[key].uri.replace('file://', ''),
                 type: route.params.pictures[key].type,
               });
