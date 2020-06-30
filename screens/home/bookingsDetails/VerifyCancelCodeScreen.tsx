@@ -1,11 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Layout, Text, Button } from '@ui-kitten/components';
 import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData, Alert } from 'react-native';
 import useAxios from 'axios-hooks'
 import { useGlobalState, dispatchGlobalState } from '../../../state';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 
 const DocumentScreen = () => {
   const [profile] = useGlobalState('profile');
@@ -34,6 +34,20 @@ const DocumentScreen = () => {
       "Content-Type": "application/soap+xml;charset=utf-8"
     },
   }, { manual: true })
+
+  const [codeReq, callAPI] = useAxios({
+    url: GRCGDS_BACKEND,
+    method: 'POST'
+  }, {manual: true})
+
+  useFocusEffect(
+    React.useCallback(() => {
+      callAPI({
+        data: {module_name: 'SEND_CANCEL_CODE'}
+      });
+    }, [])
+  );
+
 
   const inputs = [
     useRef<TextInput | null>(null),
@@ -92,9 +106,17 @@ const DocumentScreen = () => {
 
         <Button
           onPress={() => {
-            cancelBooking()
-              .then((r) => {
-                console.log(r.data)
+            callAPI({
+              data: {
+                module_name: 'VERIFY_CANCEL_CODE',
+                code: pin.join('')
+              }
+            })
+            .then((r) => {
+              return cancelBooking()
+            })
+            .then((r) => {
+              console.log(r.data)
                 if (r.data.includes('Errors')) {
                   Alert.alert('Error', 'Reservation Not Found')
                   return;
@@ -103,7 +125,7 @@ const DocumentScreen = () => {
                 if (navigation.canGoBack()) {
                   navigation.goBack()
                 }
-              })
+            })
 
           }}
           size="giant"
@@ -128,7 +150,11 @@ const DocumentScreen = () => {
         <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', backgroundColor: '#00000000' }}>
           <Text style={{ textAlign: 'center' }}>Didn't receive SMS </Text>
           <Text
-            onPress={() => {}}
+            onPress={() => {
+              callAPI({
+                data: {module_name: 'SEND_CANCEL_CODE'}
+              });
+            }}
             style={{ color: '#41d5fb' }}>Resend Code</Text>
         </Layout>
 
