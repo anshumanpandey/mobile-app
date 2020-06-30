@@ -44,7 +44,7 @@ const DocumentScreen = () => {
     </POS>
     <Customer>
     <Primary>
-    <Email>${profile.emailaddress}</Email>
+    <Email>${profile?.emailaddress}</Email>
     </Primary>
     </Customer>
     </OTA_OTA_VehListRQ>`,
