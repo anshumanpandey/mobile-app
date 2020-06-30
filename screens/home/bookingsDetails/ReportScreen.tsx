@@ -83,6 +83,7 @@ const DocumentScreen = ({ navigation }) => {
                   const total = p + 1
                   if (total == maxPhotosAmount) {
                     navigation.navigate("Sign")
+                    return maxPhotosAmount;
                   }
                   return total
                 })

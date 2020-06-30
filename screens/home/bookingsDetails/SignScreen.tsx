@@ -6,16 +6,21 @@ import Orientation from 'react-native-orientation-locker';
 import SignatureCapture from 'react-native-signature-capture';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useFocusEffect } from '@react-navigation/native';
+import { useGlobalState } from '../../../state';
 
 
 const DocumentScreen = ({ navigation }) => {
     const signRef = useRef<TextInput | null>(null);
     const [isClean, setIsClean] = useState(true);
+    const [profile] = useGlobalState('profile');
 
     useFocusEffect(
         React.useCallback(() => {
             Orientation.lockToLandscape();
-            return () => Orientation.unlockAllOrientations()
+            return () => {
+                Orientation.unlockAllOrientations()
+                signRef.current?.resetImage();
+            }
         }, [])
     );
 
@@ -53,7 +58,7 @@ const DocumentScreen = ({ navigation }) => {
                 </View>
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ marginLeft: '5%', fontSize: 18 }}>Signed by:</Text>
+                <Text style={{ marginLeft: '5%', fontSize: 18 }}>Signed by: {profile.firstname}{' '}{profile.lastname}</Text>
                 <Button
                     onPress={() => {
                         signRef.current?.saveImage()

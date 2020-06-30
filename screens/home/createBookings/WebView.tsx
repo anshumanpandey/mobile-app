@@ -35,18 +35,12 @@ const WebViewScreen = () => {
         }
     })
 
-    const [arrivalTimeReq] = useAxios({
-        url: `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${originLocation?.Branchname} ${originLocation?.CountryCode}&destinations=${returnLocation?.Branchname} ${returnLocation.CountryCode}&key=AIzaSyBJ8evu2aDcSyb2F2NIuNQ3L5TeLAGpino`
-    })
-
     useEffect(() => {
         console.log("postDone", postDone)
         console.log("navigatedToSuccess", navigatedToSuccess)
-        console.log("arrivalTimeReq", arrivalTimeReq.data)
         console.log(extras)
         if (navigatedToSuccess == 0) return
         if (postDone) return
-        if (!arrivalTimeReq.data || !arrivalTimeReq.data.rows[0] || !arrivalTimeReq.data.rows[0].elements[0] || !arrivalTimeReq.data.rows[0].elements[0].duration) return
 
         const data = {
             pickup_date: moment(departureTime).format("YYYY-MM-DD"),
@@ -67,10 +61,8 @@ const WebViewScreen = () => {
             currency_code: route.params.transactions[0].amount.currency,
             paypalPaymentId: route.params.paypalPaymentId,
             total_price: route.params.transactions[0].amount.total,
-            arrivalTime: arrivalTimeReq.data.rows[0].elements[0].duration.text,
             module_name: "CREATE_BOOKING"
         }
-        setArrivalTime(arrivalTimeReq.data.rows[0].elements[0].duration.text)
         const xml = `<OTA_VehResRQ xmlns="http://www.opentravel.org/OTA/2003/05"
 
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -181,6 +173,7 @@ const WebViewScreen = () => {
                 parseString(res.data, function (err, result) {
                     const reservationNumber = result.OTA_VehResRS.VehResRSCore[0].VehReservation[0].VehSegmentCore[0].ConfID[0].Resnumber[0]
                     setReservationNumber(reservationNumber)
+                    dispatchGlobalState({ type: 'saveBooking', state: { ...data, reservationNumber }})
                 })
                 navigation.navigate("Confirmation")
                 setPostDone(true)
@@ -200,7 +193,7 @@ const WebViewScreen = () => {
                 setPostDone(true)
             })
 
-    }, [navigatedToSuccess, arrivalTimeReq.loading]);
+    }, [navigatedToSuccess]);
 
     return <WebView
         ref={ref => (webview.current = ref)}

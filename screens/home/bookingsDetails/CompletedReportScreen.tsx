@@ -30,7 +30,14 @@ const DocumentScreen = ({ navigation, route }) => {
 
         <Button
           onPress={() => {
-            navigation.navigate("Home");
+            navigation.dispatch(
+              CommonActions.reset({
+                  index: 0,
+                  routes: [
+                      { name: 'Home' },
+                  ],
+              })
+          );
           }}
           size="giant"
           style={{

@@ -22,7 +22,7 @@ const DocumentScreen = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#f6f7f9', }}>
       <ScrollView contentContainerStyle={{ backgroundColor: 'white', flexGrow: 1 }}>
-        <View style={{ height: '90%', paddingLeft: '5%', paddingRight: '5%', display: 'flex', flexDirection: 'column' }}>
+        <View style={{ paddingTop: '5%',height: '90%', paddingLeft: '5%', paddingRight: '5%', display: 'flex', flexDirection: 'column' }}>
           <View style={{ width: '100%' }}>
             <Layout style={{ display: 'flex', alignItems: 'center' }}>
               <Text style={{ textAlign: 'center' }} category="h6">
@@ -39,7 +39,7 @@ const DocumentScreen = () => {
 
             <View style={{ flexDirection: 'row', display: 'flex', justifyContent: 'space-around' }}>
               <Layout style={{ marginBottom: '3%' }}>
-                <Text style={{ textAlign: 'center', color: 'grey' }} category="c2">
+                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="c2">
                   Pickup Location
                   </Text>
                 <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 14 }}>
@@ -48,7 +48,7 @@ const DocumentScreen = () => {
               </Layout>
 
               <Layout style={{ marginBottom: '3%' }}>
-                <Text style={{ textAlign: 'center', color: 'grey' }} category="c2">
+                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="c2">
                   Dropout Location
               </Text>
                 <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 14 }}>
@@ -59,7 +59,7 @@ const DocumentScreen = () => {
 
             <View style={{ flexDirection: 'row', display: 'flex', justifyContent: 'space-around' }}>
               <Layout style={{ marginBottom: '3%' }}>
-                <Text style={{ textAlign: 'center', color: 'grey' }} category="c2">
+                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="c2">
                   Pickup Time
                   </Text>
                 <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 14 }}>
@@ -68,7 +68,7 @@ const DocumentScreen = () => {
               </Layout>
 
               <Layout style={{ marginBottom: '3%' }}>
-                <Text style={{ textAlign: 'center', color: 'grey' }} category="c2">
+                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="c2">
                   Dropout Time
               </Text>
                 <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 14 }}>
@@ -79,7 +79,7 @@ const DocumentScreen = () => {
 
 
             <Layout style={{ marginBottom: '3%' }}>
-              <Text style={{ textAlign: 'center', color: 'grey' }} category="c2">
+              <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="c2">
                 Final Cost
               </Text>
               <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 14 }}>
@@ -89,7 +89,7 @@ const DocumentScreen = () => {
             </Layout>
 
             <Layout style={{ width: '75%', marginLeft: 'auto', marginRight: 'auto' }}>
-              <Text style={{ textAlign: 'center', color: 'grey' }} category="c2">
+              <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="c2">
                 Pickup Instructions
               </Text>
               <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 16 }}>
