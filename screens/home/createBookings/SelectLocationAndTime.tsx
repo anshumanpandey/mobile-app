@@ -23,8 +23,6 @@ export default () => {
     const [inmediatePickup, setInmediatePickup] = useCreateBookingState("inmediatePickup");
     const [departureTime, setDepartureTime] = useCreateBookingState("departureTime");
     const [returnTime, setReturnTime] = useCreateBookingState("returnTime");
-    const [result, setResults] = useState(null);
-    const [searchingFor, setSearchingFor] = useState("ORIGIN");
 
     const [{ data, loading, error }, doSearch] = useAxios<VehicleResponse>({
         url: `${GRCGDS_BACKEND}/SEARCH_VEHICLE`,
