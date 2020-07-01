@@ -110,10 +110,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display_Bold', color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>PROFILE</Text>} >
                                             <>
                                                 <Input
+                                                    disabled={profile?.socialmedia}
                                                     status={errors.emailaddress && touched.emailaddress ? 'danger' : undefined}
                                                     value={values.emailaddress}
                                                     onChangeText={handleChange('emailaddress')}
-                                                    style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
+                                                    style={{ backgroundColor: profile?.socialmedia ? 'rgba(0,0,0,0.2)':'#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                                     size="large"
                                                     label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Email</Text>}
                                                     placeholder='Enter your email'

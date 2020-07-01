@@ -245,10 +245,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             {currentPosition == 0 && (
                                 <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1 }}>
                                     <Input
+                                        disabled={profile?.socialmedia}
                                         status={errors.emailaddress && touched.emailaddress ? 'danger' : undefined}
                                         value={values.emailaddress}
                                         onChangeText={handleChange('emailaddress')}
-                                        style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
+                                        style={{ backgroundColor: profile?.socialmedia ? 'rgba(0,0,0,0.2)':'#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                         size="large"
                                         label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Email</Text>}
                                         placeholder='Enter your email'

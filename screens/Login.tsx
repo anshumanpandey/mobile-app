@@ -164,7 +164,6 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             }
                             LoginManager.logInWithPermissions(["public_profile", "email"])
                                 .then((r) => {
-                                    setLoadingLogin(true)
                                     return r
                                 })
                                 .then(handlePermissionPromt)
@@ -186,6 +185,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     setLoadingLogin(false)
                                 })
                                 .catch((error) => {
+                                    setLoadingLogin(false)
                                     console.log("Login fail with error: " + error)
                                     navigation.navigate('Login')
                                 })
