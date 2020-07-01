@@ -50,7 +50,7 @@ const DocumentScreen = () => {
             },
             heading: 0,
             pitch: 0,
-            zoom: 15,
+            zoom: 10,
             altitude: 0,
         }}
           initialRegion={{
