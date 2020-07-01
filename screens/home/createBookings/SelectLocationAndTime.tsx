@@ -141,6 +141,10 @@ export default () => {
                         onPress={() => {
                             if (!originLocation) return
 
+                            if (!returnLocation) {
+                                setReturnLocation(originLocation)
+                            }
+
                             doSearch({
                                 params: {
                                     module_name: "SEARCH_VEHICLE",

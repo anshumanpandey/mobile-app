@@ -47,7 +47,7 @@ const GET_PAYPAL_JSON = (vehicle: VehVendorAvail, meta, extras: (PricedEquip & {
             "item_list": {
                 "items": [{
                     "name": `Ride on ${vehicle.Vehicle.VehMakeModel.Name}`,
-                    "description": `A ride from ${meta.originLocation.Branchname} to ${meta.returnLocation.Branchname}`,
+                    "description": `A ride from ${meta.originLocation.locationname} to ${meta.returnLocation.locationname}`,
                     "quantity": "1",
                     "price": vehicle.TotalCharge.RateTotalAmount,
                     "tax": "0",

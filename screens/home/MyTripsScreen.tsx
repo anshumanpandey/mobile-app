@@ -135,7 +135,7 @@ const DocumentScreen = () => {
       setActiveTrips(activeTrips)
 
       const upcomming = sortedBookings ? sortedBookings.filter(booking => {
-        return booking.pickupTime.isAfter(moment().add('h', 24))
+        return booking.pickupTime.isAfter(moment().add('h', 24)) && booking.reservationStatus != 'Cancelled'
       }) : null
 
       setUpcommingTrips(upcomming)
