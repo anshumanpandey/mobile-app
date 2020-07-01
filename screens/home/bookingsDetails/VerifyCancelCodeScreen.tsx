@@ -154,7 +154,10 @@ const DocumentScreen = () => {
             onPress={() => {
               callAPI({
                 data: {module_name: 'SEND_CANCEL_CODE'}
-              });
+              })
+              .then((r) => {
+                Alert.alert('Code Sended', 'A cancel code has been sended to you')
+              })
             }}
             style={{ color: '#41d5fb' }}>Resend Code</Text>
         </Layout>

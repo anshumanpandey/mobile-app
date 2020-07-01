@@ -141,7 +141,7 @@ const DocumentScreen = () => {
       setUpcommingTrips(upcomming)
 
       const completed = sortedBookings ? sortedBookings.filter(booking => {
-        return booking.dropoffTime.isBefore(moment())
+        return booking.dropoffTime.isBefore(moment()) || booking.reservationStatus == 'Cancelled'
       }) : null
 
       setCompletedTrips(completed)

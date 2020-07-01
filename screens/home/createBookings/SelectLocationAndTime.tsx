@@ -4,16 +4,20 @@ import { Layout, Text, Input, Button, Select, SelectItem, Popover, List, Toggle 
 import { SafeAreaView, ScrollView, View, TouchableHighlight, TouchableWithoutFeedback, Dimensions } from 'react-native';
 import DatePicker from 'react-native-date-picker'
 import EvilIcon from 'react-native-vector-icons/EvilIcons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useCreateBookingState } from './CreateBookingState';
 import TimeCheckbox from '../../../partials/TimeCheckbox';
 import LocationSearchInput from '../../../partials/SearchLocationInput';
-import Modal from 'react-native-modal';
+// @ts-ignore
+import GPSState from 'react-native-gps-state'
+//@ts-ignore
+import GetLocation from 'react-native-get-location'
 import useAxios from 'axios-hooks'
 import moment from 'moment';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
 import { VehicleResponse } from '../../../types/SearchVehicleResponse';
+import MenuButton from '../../../partials/MenuButton';
 
 
 export default () => {
@@ -23,6 +27,7 @@ export default () => {
     const [inmediatePickup, setInmediatePickup] = useCreateBookingState("inmediatePickup");
     const [departureTime, setDepartureTime] = useCreateBookingState("departureTime");
     const [returnTime, setReturnTime] = useCreateBookingState("returnTime");
+    const [currentLocation, setCurrentLocation] = useState(null);
 
     const [{ data, loading, error }, doSearch] = useAxios<VehicleResponse>({
         url: `${GRCGDS_BACKEND}/SEARCH_VEHICLE`,
@@ -33,34 +38,56 @@ export default () => {
     useEffect(() => {
         if (inmediatePickup == true) {
             setDepartureTime(moment().toDate())
+            setOriginLocation({
+                internalcode: '32151',
+                locationname: 'Current Location',
+            })
+        } else {
+            setOriginLocation(null)
         }
     }, [inmediatePickup])
+
+    useFocusEffect(
+        React.useCallback(() => {
+          if (!GPSState.isAuthorized()) {
+            GPSState.requestAuthorization(GPSState.AUTHORIZED_WHENINUSE)
+          }
+    
+          GetLocation.getCurrentPosition({
+            enableHighAccuracy: true,
+            timeout: 15000,
+          })
+            .then(location => {
+              setCurrentLocation(location)
+            })
+            .catch(error => {
+              const { code, message } = error;
+              console.warn(code, message);
+            })
+    
+        }, [])
+      );
 
     return (
         <SafeAreaView style={{ flex: 1 }} >
             <ScrollView contentContainerStyle={{ flexGrow: 1, padding: '5%', justifyContent: 'space-between', display: 'flex' }} keyboardShouldPersistTaps={"handled"} style={{ backgroundColor: 'white' }}>
 
                 <Layout>
-                    <LocationSearchInput
-                        pickupLocation={originLocation}
-                        returnLocation={returnLocation}
-                        onOriginLocationSelected={(l) => {
-                            setOriginLocation(l)
-                            setReturnLocation(l)
-                        }}
-                        onReturnLocationSelected={(l) => setReturnLocation(l)}
-                    />
-
-                    <TimeCheckbox
-                        checked={inmediatePickup == undefined ? undefined : inmediatePickup}
-                        style={{ marginBottom: '5%' }}
-                        title="IMMEDIATE PICKUP"
-                        subTitle="Collect A Car Near Me Immediately"
-                        onChange={(v) => setInmediatePickup(p => {
-                            if (p === null) return true
-                            return !p
-                        })}
-                    />
+                    <View style={{ display: 'flex', flexDirection: 'row' }}>
+                        <MenuButton />
+                        <View style={{ marginLeft: '5%',width: '85%'}}>
+                            <TimeCheckbox
+                                checked={inmediatePickup == undefined ? undefined : inmediatePickup}
+                                style={{ marginBottom: '5%' }}
+                                title="IMMEDIATE PICKUP"
+                                subTitle="Collect A Car Near Me Immediately"
+                                onChange={(v) => setInmediatePickup(p => {
+                                    if (p === null) return true
+                                    return !p
+                                })}
+                            />
+                        </View>
+                    </View>
                     <TimeCheckbox
                         checked={inmediatePickup == undefined ? undefined : !inmediatePickup}
                         title="SCHEDULE A PICKUP IN ADVANCE"
@@ -71,31 +98,39 @@ export default () => {
                             })
                         }}
                     />
+                    <LocationSearchInput
+                        pickupLocation={originLocation}
+                        returnLocation={returnLocation}
+                        onOriginLocationSelected={(l) => {
+                            setOriginLocation(l)
+                        }}
+                        onReturnLocationSelected={(l) => setReturnLocation(l)}
+                    />
                     {inmediatePickup !== null && (
                         <>
-                        <DatePicker
-                            minuteInterval={30}
-                            date={departureTime}
-                            onDateChange={(d) => {
-                                if (inmediatePickup) {
-                                    const nowPlus24Hours = moment().utc().add('h', 24).set({ minutes: 0, seconds: 0 })
-                                    if (moment(d).isAfter(nowPlus24Hours)) {
-                                        setDepartureTime(nowPlus24Hours.toDate())
+                            <DatePicker
+                                minuteInterval={30}
+                                date={departureTime}
+                                onDateChange={(d) => {
+                                    if (inmediatePickup) {
+                                        const nowPlus24Hours = moment().utc().add('h', 24).set({ minutes: 0, seconds: 0 })
+                                        if (moment(d).isAfter(nowPlus24Hours)) {
+                                            setDepartureTime(nowPlus24Hours.toDate())
+                                        } else {
+                                            setDepartureTime(d)
+                                        }
                                     } else {
                                         setDepartureTime(d)
                                     }
-                                } else {
-                                    setDepartureTime(d)
-                                }
-                                setReturnTime(moment(d).add('days', 1).toDate())
-                            }}
-                        />
-                        <Text style={{ fontFamily: 'SF-UI-Display_Bold' }}>Return Time</Text>
-                        <DatePicker
-                            minuteInterval={30}
-                            date={returnTime}
-                            onDateChange={(d) => setReturnTime(d)}
-                        />
+                                    setReturnTime(moment(d).add('days', 1).toDate())
+                                }}
+                            />
+                            <Text style={{ fontFamily: 'SF-UI-Display_Bold' }}>Return Time</Text>
+                            <DatePicker
+                                minuteInterval={30}
+                                date={returnTime}
+                                onDateChange={(d) => setReturnTime(d)}
+                            />
                         </>
                     )}
                 </Layout>

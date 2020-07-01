@@ -8,7 +8,6 @@ import { TextInput, TouchableHighlight, TouchableWithoutFeedback, AsyncStorage, 
 import Autocomplete from 'react-native-autocomplete-input';
 import FuzzySearch from 'fuzzy-search';
 import { GrcgdsLocation } from '../types';
-import MenuButton from './MenuButton';
 
 export type LocationSearchInputProps = {
   pickupLocation?: { [k: string]: any } | null
@@ -22,11 +21,9 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
   const [locations, setLocations] = useState<GrcgdsLocation[]>([]);
   const [results, setResults] = useState<GrcgdsLocation[] | null>(null);
   const [returnSameLocation, setReturnSameLocation] = useState<boolean>(true);
-  const [value, setValue] = useState(null);
 
   const [originLocation, setOrigin] = useState<GrcgdsLocation | null>(null);
   const [returnLocation, setReturn] = useState<GrcgdsLocation | null>(null);
-
 
   useEffect(() => {
     AsyncStorage.getItem('locationsData')
@@ -39,13 +36,18 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
           console.log('We could not parse the string location data: ' + error.toString());
         }
       })
+      if (props.pickupLocation) setOrigin(props.pickupLocation)
+      if (props.returnLocation) setReturn(props.returnLocation)
   }, [])
+
+  useEffect(() => {
+    setOrigin(props.pickupLocation)
+    setReturn(props.returnLocation)
+  }, [props.pickupLocation,props.returnLocation])
 
   return (
     <>
       <Layout style={{ display: 'flex', flexDirection: 'row' }}>
-        <MenuButton />
-
         {returnSameLocation && (
           <Layout style={{ marginLeft: '2%',display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
             <FontAwesomeIcon size={15} style={{ color: '#41d5fb' }} name="circle" />
@@ -78,7 +80,6 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
               const searcher = new FuzzySearch(locations, ['internalcode', 'locationname', "locationvariation"]);
               const result = searcher.search(text)
               setResults(result)
-              // props.onResultChange(result, "ORIGIN")
               setSearchingFor("ORIGIN")
             }}
             renderItem={({ item, i }) => (
@@ -107,7 +108,6 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
                 const searcher = new FuzzySearch(locations, ['internalcode', 'locationname', "locationvariation"]);
                 const result = searcher.search(text)
                 setResults(result)
-                // props.onResultChange(result, "ORIGIN")
                 setSearchingFor("ORIGIN")
               }}
               renderItem={({ item, i }) => (
