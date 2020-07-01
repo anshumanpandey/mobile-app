@@ -48,9 +48,19 @@ export default () => {
 
     return (
         <SafeAreaView style={{ flex: 1, justifyContent: 'flex-start' }} >
-            <View style={{ display: 'flex', height: '90%' }}>
+            <View style={{ display: 'flex', height: '100%' }}>
                 {(returnLocationReq.data && !returnLocationReq.loading && currentLocation) && <MapView
                     style={{ flex: 1 }}
+                    initialCamera={{
+                        center: {
+                            latitude: currentLocation.latitude,
+                            longitude: currentLocation.longitude,
+                        },
+                        heading: 0,
+                        pitch: 0,
+                        zoom: 15,
+                        altitude: 0,
+                    }}
                     initialRegion={{
                         latitude: currentLocation.latitude,
                         longitude: currentLocation.longitude,

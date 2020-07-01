@@ -43,6 +43,16 @@ const DocumentScreen = () => {
       <View style={{ display: 'flex', height: '100%', zIndex: -2 }}>
         {currentLocation && <MapView
           style={{ flex: 1 }}
+          initialCamera={{
+            center: {
+                latitude: currentLocation.latitude,
+                longitude: currentLocation.longitude,
+            },
+            heading: 0,
+            pitch: 0,
+            zoom: 15,
+            altitude: 0,
+        }}
           initialRegion={{
             latitude: currentLocation.latitude,
             longitude: currentLocation.longitude,
