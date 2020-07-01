@@ -164,6 +164,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             }
                             LoginManager.logInWithPermissions(["public_profile", "email"])
                                 .then((r) => {
+                                    setLoadingLogin(true)
                                     return r
                                 })
                                 .then(handlePermissionPromt)

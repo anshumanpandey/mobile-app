@@ -94,6 +94,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             doLogin({ data: { ...values, module_name: "EDIT_PROFILE" } })
                                 .then((res) => {
                                     console.log(res.data)
+                                    if (res.data.vphone != 1 || res.data.vemail != 1) {
+                                        dispatchGlobalState({ type: 'logout'})
+                                        return
+                                    }
+                                    
                                     dispatchGlobalState({ type: 'token', state: res.data.token })
                                     dispatchGlobalState({ type: 'profile', state: res.data })
                                 })

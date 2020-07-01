@@ -243,7 +243,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 }}
                             />
                             {currentPosition == 0 && (
-                                <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1 }}>
+                                <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1, padding: '3%' }}>
                                     <Input
                                         disabled={profile?.socialmedia}
                                         status={errors.emailaddress && touched.emailaddress ? 'danger' : undefined}
@@ -512,7 +512,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     </View>}
 
                                     {!sendFileReq.loading && (
-                                        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-65%' : '-20%', justifyContent: 'center', alignItems: 'center' }}>
+                                        <View style={{ zIndex: 4,position: 'absolute', top: 0, left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-65%' : '-20%', justifyContent: 'center', alignItems: 'center' }}>
                                             <Button
                                                 onPress={(e) => {
                                                     try {
@@ -541,7 +541,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                     }
                                                 }}
                                                 style={{
-                                                    zIndex: 2,
+                                                    zIndex: 4,
                                                     backgroundColor: '#41d5fb',
                                                     borderColor: '#41d5fb',
                                                     borderRadius: 30,
@@ -583,7 +583,6 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                             }
                                         }}>
                                             <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', height: dictionary.get(currentFileType)?.file ? '23%' : '40%', alignItems: dictionary.get(currentFileType)?.file ? 'flex-end' : 'center' }}>
-
                                                 <EntypoIcon style={{ marginRight: '5%', color: 'black', textAlign: 'center', }} size={24} name="images" />
                                                 <Text style={{ color: 'black', textAlign: 'center', fontSize: 16, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
                                                     Select the document from gallery
