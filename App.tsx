@@ -88,7 +88,7 @@ export default () => {
     <ApplicationProvider mapping={EvaMapping} theme={eva.light} customMapping={j}>
       <NavigationContainer>
         <Stack.Navigator headerMode='none'>
-          {(token && profile && profile.vemail == 1) && (
+          {(token && profile && profile.vemail == 1 && (profile.vphone == 0 || profile.vphone == 1)) && (
             <>
               <Stack.Screen name="Home" component={Home} />
             </>

@@ -93,6 +93,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         onSubmit={values => {
                             doLogin({ data: { ...values, module_name: "EDIT_PROFILE" } })
                                 .then((res) => {
+                                    console.log(res.data)
                                     dispatchGlobalState({ type: 'token', state: res.data.token })
                                     dispatchGlobalState({ type: 'profile', state: res.data })
                                 })

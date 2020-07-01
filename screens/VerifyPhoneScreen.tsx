@@ -75,6 +75,7 @@ const DocumentScreen = () => {
         <Button
           onPress={() => {
             if (profile && profile.vphone != 1) {
+              console.log('calling VERIFY')
               doVerify({
                 url: GRCGDS_BACKEND,
                 data: {
@@ -97,6 +98,8 @@ const DocumentScreen = () => {
             }
 
             if (profile && profile.twoauth != 0) {
+              console.log('calling VERIFY_OPT')
+
               doVerify({
                 url: GRCGDS_BACKEND,
                 data: {
@@ -141,6 +144,7 @@ const DocumentScreen = () => {
               if (!profile) return
               
               if (profile && profile.vphone != 1) {
+                console.log('calling RESEND_VERIFY')
                 doVerify({ data: {
                   "module_name": "RESEND_VERIFY",
                   "id": profile.id
@@ -152,6 +156,8 @@ const DocumentScreen = () => {
               }
 
               if (profile && profile.twoauth != 0) {
+                console.log('calling RESEND_VERIFY_OPT')
+
                 doVerify({
                   url: GRCGDS_BACKEND,
                   data: {
