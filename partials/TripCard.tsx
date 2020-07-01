@@ -103,6 +103,9 @@ const TripCard: React.FC<TripCardProps> = (props) => {
             <Divider />
             <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingTop: props.displayPreview == true && props.image_preview_url ? 0 : '5%', paddingBottom: '5%', paddingLeft: '5%', paddingRight: '5%', borderBottomLeftRadius: (props.upcoming || props.completed) ? 0 : 16, borderBottomRightRadius: (props.upcoming || props.completed) ? 0 : 16 }}>
               <Layout style={{ display: 'flex', flexDirection: 'row', width: '50%', alignSelf: 'flex-end' }}>
+                <Layout style={{ marginRight: '3%' }}>
+                  <Avatar style={{ borderRadius: 10 }} shape='square' source={props.keyLess ? require('../image/keyx.png') : require('../image/key.png')} />
+                </Layout>
                 <Layout>
                   <Text style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 15 }} category='h6'>{props.carName}</Text>
                   <Text>{props.registratioNumber}</Text>
