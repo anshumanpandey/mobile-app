@@ -65,7 +65,7 @@ const DocumentScreen = () => {
 
         {!currentLocation && (
           <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <Text category="h2">Fetching your location...</Text>
+            <Text category="h4">Fetching your location...</Text>
             <LoadingSpinner />
           </View>
         )}
@@ -78,10 +78,10 @@ const DocumentScreen = () => {
 
 
       <Layout style={{ padding: '5%',position: 'absolute',display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '15%', marginBottom: '10%' }}>
-        <Text style={{ fontFamily: 'SF-UI-Display_Bold', textAlign: 'center' }} category="h3">No result :(</Text>
+        <Text style={{ fontFamily: 'SF-UI-Display_Bold', textAlign: 'center' }} category="h5">No result :(</Text>
         <Text style={{ color: '#8F9BB3', textAlign: 'center', marginBottom: '50%' }} category="h6">
-          Sorry there are no vehicles available in your area at the moment
-          </Text>
+          Sorry there are no vehicles available in your immediate area
+        </Text>
       </Layout>
 
       <Button
