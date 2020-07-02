@@ -20,6 +20,7 @@ import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
 import { VehicleResponse } from '../../../types/SearchVehicleResponse';
 import MenuButton from '../../../partials/MenuButton';
+import { components } from '@eva-design/eva/mapping';
 
 
 export default () => {

@@ -53,8 +53,8 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
   }, [isInmediatePickup])
 
   useEffect(() => {
-    setOrigin(props.pickupLocation)
-    setReturn(props.returnLocation)
+    setOriginInputText(props.pickupLocation?.locationname)
+    setReturnInputText(props.returnLocation?.locationname)
   }, [props.pickupLocation,props.returnLocation])
 
   return (
