@@ -55,7 +55,7 @@ const DocumentScreen = () => {
         }}
           initialRegion={{
             latitude: currentLocation ? currentLocation.latitude: 37.4308165178,
-              longitude: currentLocation ? currentLocation.longitude : -122.160886388,
+            longitude: currentLocation ? currentLocation.longitude : -122.160886388,
             latitudeDelta: 0.0,
             longitudeDelta: 0.0
           }}

@@ -53,8 +53,8 @@ export default () => {
                     style={{ flex: 1 }}
                     initialCamera={{
                         center: {
-                            latitude: currentLocation.latitude,
-                            longitude: currentLocation.longitude,
+                            latitude: currentLocation ? currentLocation.latitude: 37.4308165178,
+                            longitude: currentLocation ? currentLocation.longitude: -122.160886388,
                         },
                         heading: 0,
                         pitch: 0,
