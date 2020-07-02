@@ -28,6 +28,9 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
   const [originLocation, setOrigin] = useState<GrcgdsLocation | null>(null);
   const [returnLocation, setReturn] = useState<GrcgdsLocation | null>(null);
 
+  const [originInputText, setOriginInputText] = useState<string>('');
+  const [returnInputText, setReturnInputText] = useState<string>('');
+
   useEffect(() => {
     AsyncStorage.getItem('locationsData')
       .then(stringData => {
@@ -84,8 +87,9 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
             listStyle={{ borderColor: 'white' }}
             placeholder="Enter Origin"
             data={!pickupResults ? [] : pickupResults}
-            defaultValue={originLocation?.locationname}
+            value={originInputText}
             onChangeText={text => {
+              setOriginInputText(text)
               const searcher = new FuzzySearch(locations, ['internalcode', 'locationname', "locationvariation"]);
               const result = searcher.search(text)
               setPickupResults(result)
@@ -94,6 +98,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
             renderItem={({ item, i }) => (
               <TouchableOpacity onPress={() => {
                 props.onOriginLocationSelected(item)
+                setOriginInputText(item.locationname)
                 setOrigin(item)
                 setPickupResults(null)
               }}>
@@ -112,8 +117,9 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
               listStyle={{ borderColor: 'white' }}
               placeholder="Enter Destination"
               data={!returnResults ? [] : returnResults}
-              defaultValue={returnLocation?.locationname}
+              value={returnInputText}
               onChangeText={text => {
+                setReturnInputText(text)
                 const searcher = new FuzzySearch(locations, ['internalcode', 'locationname', "locationvariation"]);
                 const result = searcher.search(text)
                 setReturnResults(result)
@@ -121,6 +127,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
               }}
               renderItem={({ item, i }) => (
                 <TouchableOpacity onPress={() => {
+                  setReturnInputText(item.locationname)
                   props.onReturnLocationSelected(item)
                   setReturn(item)
                   setReturnResults(null)
