@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Text, Input, Button, Select, SelectItem, Popover, List, Toggle } from '@ui-kitten/components';
-import { SafeAreaView, ScrollView, View, TouchableHighlight, TouchableWithoutFeedback, Dimensions } from 'react-native';
+import { SafeAreaView, ScrollView, View, TouchableHighlight, TouchableWithoutFeedback, Dimensions, Alert } from 'react-native';
 import DatePicker from 'react-native-date-picker'
 import EvilIcon from 'react-native-vector-icons/EvilIcons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
@@ -66,6 +66,34 @@ export default () => {
             if (!GPSState.isAuthorized()) {
                 GPSState.requestAuthorization(GPSState.AUTHORIZED_WHENINUSE)
             }
+
+            GPSState.addListener((status: any) => {
+                switch (status) {
+                  case GPSState.NOT_DETERMINED:
+                    //TODO: handle case when user does not authorize login
+                    Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
+                    break;
+          
+                  case GPSState.RESTRICTED:
+                    GPSState.openLocationSettings()
+                    navigation.goBack()
+                    break;
+          
+                  case GPSState.DENIED:
+                    //TODO: handle case when user does not authorize login
+                    Alert.alert(':(','It`s a shame that you do not allowed us to use location :(')
+                    navigation.goBack()
+                    break;
+          
+                  case GPSState.AUTHORIZED_ALWAYS:
+                    console.log('GPSState.AUTHORIZED_ALWAYS')
+                    break;
+          
+                  case GPSState.AUTHORIZED_WHENINUSE:
+                    console.log('GPSState.AUTHORIZED_WHENINUSE')
+                    break;
+                }
+              })
 
             GetLocation.getCurrentPosition({
                 enableHighAccuracy: true,
