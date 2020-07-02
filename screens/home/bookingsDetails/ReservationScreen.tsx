@@ -16,6 +16,7 @@ import AgreementScreen from './AgreementScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useCarDetailState } from './detailsState';
 import MenuButton from '../../../partials/MenuButton';
+import moment from 'moment';
 
 const DocumentScreen = () => {
   const route = useRoute();
@@ -234,14 +235,15 @@ export default function App({ navigation, route }) {
         component={() => <></>}
         options={{
           tabBarButton: () => {
+            const cannotCancel = route.params.params.reservationStatus == 'Cancelled' || route.params.params.pickupTime.isBetween(moment(), moment().add('h', 24))
             return (
               <View style={{ width: '25%' }}>
-                <TouchableOpacity disabled={route.params.params.reservationStatus == 'Cancelled'} style={{ height: '100%' }} onPress={() => {
-                  if (route.params.params.reservationStatus == 'Cancelled') return
+                <TouchableOpacity disabled={cannotCancel} style={{ height: '100%' }} onPress={() => {
+                  if (cannotCancel) return
                   navigation.navigate('VerifyCancel', { ...route.params.params })
                 }}>
                   <View style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', borderColor: 'rgba(0,0,0,0.2)', borderRightWidth: 0, flexDirection: 'column' }}>
-                    <MaterialIcons name="cancel" style={{ color: route.params.params.reservationStatus == 'Cancelled'? '#cf183040':'#cf1830' }} size={24} />
+                    <MaterialIcons name="cancel" style={{ color: cannotCancel ? '#cf183040':'#cf1830' }} size={24} />
                     <Text style={{ marginLeft: '5%', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>CANCEL </Text>
                   </View>
 

@@ -41,6 +41,7 @@ const WebViewScreen = () => {
         console.log(extras)
         if (navigatedToSuccess == 0) return
         if (postDone) return
+        if (loading) return 
 
         const data = {
             pickup_date: moment(departureTime).format("YYYY-MM-DD"),
