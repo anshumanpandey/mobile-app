@@ -45,8 +45,8 @@ const DocumentScreen = () => {
           style={{ flex: 1 }}
           initialCamera={{
             center: {
-              latitude: currentLocation ? currentLocation.latitude: 37.4308165178,
-              longitude: currentLocation ? currentLocation.longitude : -122.160886388,
+              latitude: currentLocation?.latitude ? currentLocation.latitude: 37.4308165178,
+              longitude: currentLocation?.longitude ? currentLocation.longitude : -122.160886388,
             },
             heading: 0,
             pitch: 0,
@@ -54,8 +54,8 @@ const DocumentScreen = () => {
             altitude: 0,
         }}
           initialRegion={{
-            latitude: currentLocation ? currentLocation.latitude: 37.4308165178,
-            longitude: currentLocation ? currentLocation.longitude : -122.160886388,
+            latitude: currentLocation?.latitude ? currentLocation.latitude: 37.4308165178,
+            longitude: currentLocation?.longitude ? currentLocation.longitude : -122.160886388,
             latitudeDelta: 0.0,
             longitudeDelta: 0.0
           }}
