@@ -512,7 +512,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     </View>}
 
                                     {!sendFileReq.loading && (
-                                        <View style={{ zIndex: 4,position: 'absolute', top: 0, left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-65%' : '-20%', justifyContent: 'center', alignItems: 'center' }}>
+                                        <View style={{ zIndex: dictionary.get(currentFileType)?.file ? -1: 4,position: 'absolute', top: 0, left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-65%' : '-20%', justifyContent: 'center', alignItems: 'center' }}>
                                             <Button
                                                 onPress={(e) => {
                                                     try {
@@ -541,7 +541,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                     }
                                                 }}
                                                 style={{
-                                                    zIndex: 4,
+                                                    zIndex: dictionary.get(currentFileType)?.file ? -1 : 4,
                                                     backgroundColor: '#41d5fb',
                                                     borderColor: '#41d5fb',
                                                     borderRadius: 30,
