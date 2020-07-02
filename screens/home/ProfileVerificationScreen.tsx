@@ -14,7 +14,7 @@ import PhoneInputComponent from '../../partials/PhoneInput';
 import CountryPicker from 'react-native-country-picker-modal'
 import userHasFullProfile from '../../utils/userHasFullProfile';
 import userHasAllFiles from '../../utils/userHasAllFiles';
-import { FileTypeEnum, useDocumentState, dispatchFileState } from './DocumentUpload/DocumentState';
+import { FileTypeEnum, useDocumentState, dispatchFileState, Actions } from './DocumentUpload/DocumentState';
 import userIsCompany from '../../utils/userIsCompany';
 import StepIndicator from 'react-native-step-indicator';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
@@ -147,8 +147,15 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     if (currentPosition == 0) {
                         if (!values.mobilenumber) errors.mobilenumber = 'Required';
                         if (!values.mobilecode) errors.mobilecode = 'Required';
+                        if (!values.emailaddress) errors.emailaddress = 'Required';
+                        if (!values.firstname) errors.firstname = 'Required';
+                        if (!values.countryCode) errors.countryCode = 'Required';
+                        if (!values.lastname) errors.lastname = 'Required';
+                        if (!values.add1) errors.add1 = 'Required';
+                        if (!values.city) errors.city = 'Required';
+                        if (!values.postcode) errors.postcode = 'Required';
 
-                        if (userIsCompany(profile || {})) {
+                        if (userIsCompany(profile || {}) || asCompany) {
                             if (!values.company) errors.company = 'Required';
                             if (!values.vat) errors.vat = 'Required';
                         }
@@ -211,6 +218,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             .then(r => {
                                 console.log(r.data)
                                 dispatchGlobalState({ type: 'profile', state: r.data })
+                                dispatchFileState({ type: Actions.RESET, state: {}})
                                 setCurrentPosition(p => {
                                     resetForm({ touched: {} })
                                     console.log(`to step ${p + 1}`)
