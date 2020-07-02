@@ -12,11 +12,13 @@ import { GrcgdsLocation } from '../types';
 export type LocationSearchInputProps = {
   pickupLocation?: { [k: string]: any } | null
   returnLocation?: { [k: string]: any } | null
+  hideReturnToggle?: boolean
+  isInmediatePickup?: boolean
 
   onOriginLocationSelected: (location: any) => void
   onReturnLocationSelected: (location: any) => void
 }
-const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
+const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnToggle = false, isInmediatePickup = false,...props}) => {
   const [searchingFor, setSearchingFor] = useState<"ORIGIN" | "RETURN">("ORIGIN");
   const [locations, setLocations] = useState<GrcgdsLocation[]>([]);
   const [results, setResults] = useState<GrcgdsLocation[] | null>(null);
@@ -39,6 +41,12 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
       if (props.pickupLocation) setOrigin(props.pickupLocation)
       if (props.returnLocation) setReturn(props.returnLocation)
   }, [])
+
+  useEffect(() => {
+    if (isInmediatePickup != undefined) {
+      setReturnSameLocation(isInmediatePickup)
+    }
+  }, [isInmediatePickup])
 
   useEffect(() => {
     setOrigin(props.pickupLocation)
@@ -126,9 +134,11 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = (props) => {
           )}
         </Layout>
       </Layout>
-      <Toggle checked={returnSameLocation} style={{ alignSelf: 'flex-start', marginTop: '3%', marginBottom: '3%' }} onChange={() => setReturnSameLocation(p => !p)}>
+      {hideReturnToggle !== false && (
+        <Toggle checked={returnSameLocation} style={{ alignSelf: 'flex-start', marginTop: '3%', marginBottom: '3%' }} onChange={() => setReturnSameLocation(p => !p)}>
         Return car on same location
       </Toggle>
+      )}
     </>
   );
 }

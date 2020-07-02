@@ -33,7 +33,7 @@ const DocumentScreen = () => {
                 <Text style={{ textAlign: 'center' }} category="h5">
                   CONFIRMATION
               </Text>
-                <Text style={{ lineHeight: 20, textAlign: 'center', fontFamily: 'SF-UI-Display_Bold', fontSize: 22 }} >
+                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display_Bold', fontSize: 22 }} >
                   {route.params.registratioNumber}{' '}
                 </Text>
                 <Image

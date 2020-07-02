@@ -23,6 +23,7 @@ import EditProfile from './EditProfile';
 import NoResultScreen from './createBookings/NoResultScreen';
 import ProfileVerificationScreen from './ProfileVerificationScreen';
 import PolicyScreen from './PolicyScreen';
+import FaqScreen from './Faq';
 import TermsConditionsScreen from './TermsConditionsScreen';
 import { useGlobalState } from '../../state';
 import userHasFullProfile from '../../utils/userHasFullProfile';
@@ -70,6 +71,7 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
             <Drawer.Screen name="Policy" component={PolicyScreen} />,
             <Drawer.Screen name="TermsConditions" component={TermsConditionsScreen} />,
             <Drawer.Screen name="NoResult" component={NoResultScreen} />,
+            <Drawer.Screen name="Faq" component={FaqScreen} />,
         )
         screens.unshift(<Drawer.Screen name="MyBookings" component={MyTripsScreens} />)
     }

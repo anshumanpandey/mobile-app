@@ -49,24 +49,24 @@ export default () => {
 
     useFocusEffect(
         React.useCallback(() => {
-          if (!GPSState.isAuthorized()) {
-            GPSState.requestAuthorization(GPSState.AUTHORIZED_WHENINUSE)
-          }
-    
-          GetLocation.getCurrentPosition({
-            enableHighAccuracy: true,
-            timeout: 15000,
-          })
-            .then(location => {
-              setCurrentLocation(location)
+            if (!GPSState.isAuthorized()) {
+                GPSState.requestAuthorization(GPSState.AUTHORIZED_WHENINUSE)
+            }
+
+            GetLocation.getCurrentPosition({
+                enableHighAccuracy: true,
+                timeout: 15000,
             })
-            .catch(error => {
-              const { code, message } = error;
-              console.warn(code, message);
-            })
-    
+                .then(location => {
+                    setCurrentLocation(location)
+                })
+                .catch(error => {
+                    const { code, message } = error;
+                    console.warn(code, message);
+                })
+
         }, [])
-      );
+    );
 
     return (
         <SafeAreaView style={{ flex: 1 }} >
@@ -75,19 +75,20 @@ export default () => {
                 <Layout>
                     <View style={{ display: 'flex', flexDirection: 'row' }}>
                         <MenuButton />
-                        <View style={{ marginLeft: '5%',width: '85%'}}>
-                            <TimeCheckbox
-                                checked={inmediatePickup == undefined ? undefined : inmediatePickup}
-                                style={{ marginBottom: '5%' }}
-                                title="IMMEDIATE PICKUP"
-                                subTitle="Collect A Car Near Me Immediately"
-                                onChange={(v) => setInmediatePickup(p => {
-                                    if (p === null) return true
-                                    return !p
-                                })}
-                            />
-                        </View>
+                        <Text style={{ width: '80%',textAlign: 'center', fontSize: 22, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
+                            NEW BOOKING
+                        </Text>
                     </View>
+                    <TimeCheckbox
+                        checked={inmediatePickup == undefined ? undefined : inmediatePickup}
+                        style={{ marginBottom: '5%' }}
+                        title="IMMEDIATE PICKUP"
+                        subTitle="Collect A Car Near Me Immediately"
+                        onChange={(v) => setInmediatePickup(p => {
+                            if (p === null) return true
+                            return !p
+                        })}
+                    />
                     <TimeCheckbox
                         checked={inmediatePickup == undefined ? undefined : !inmediatePickup}
                         title="SCHEDULE A PICKUP IN ADVANCE"
@@ -99,8 +100,10 @@ export default () => {
                         }}
                     />
                     <LocationSearchInput
+                        hideReturnToggle={inmediatePickup == false}
                         pickupLocation={originLocation}
                         returnLocation={returnLocation}
+                        isInmediatePickup={inmediatePickup == null ? true : !inmediatePickup}
                         onOriginLocationSelected={(l) => {
                             setOriginLocation(l)
                         }}
