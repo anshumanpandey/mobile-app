@@ -21,7 +21,8 @@ export type LocationSearchInputProps = {
 const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnToggle = false, isInmediatePickup = false,...props}) => {
   const [searchingFor, setSearchingFor] = useState<"ORIGIN" | "RETURN">("ORIGIN");
   const [locations, setLocations] = useState<GrcgdsLocation[]>([]);
-  const [results, setResults] = useState<GrcgdsLocation[] | null>(null);
+  const [pickupResults, setPickupResults] = useState<GrcgdsLocation[] | null>(null);
+  const [returnResults, setReturnResults] = useState<GrcgdsLocation[] | null>(null);
   const [returnSameLocation, setReturnSameLocation] = useState<boolean>(true);
 
   const [originLocation, setOrigin] = useState<GrcgdsLocation | null>(null);
@@ -82,19 +83,19 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
             inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
             listStyle={{ borderColor: 'white' }}
             placeholder="Enter Origin"
-            data={!results ? [] : results}
+            data={!pickupResults ? [] : pickupResults}
             defaultValue={originLocation?.locationname}
             onChangeText={text => {
               const searcher = new FuzzySearch(locations, ['internalcode', 'locationname', "locationvariation"]);
               const result = searcher.search(text)
-              setResults(result)
+              setPickupResults(result)
               setSearchingFor("ORIGIN")
             }}
             renderItem={({ item, i }) => (
               <TouchableOpacity onPress={() => {
                 props.onOriginLocationSelected(item)
                 setOrigin(item)
-                setResults(null)
+                setPickupResults(null)
               }}>
                 <Layout style={{ display: 'flex', flexDirection: 'row', borderBottomColor: '#E4E9F2', borderBottomWidth: 1, paddingBottom: '3%', paddingTop: '3%' }}>
                   <EvilIcon style={{ color: '#41D5FB' }} name="location" size={32} />
@@ -110,19 +111,19 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
               inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
               listStyle={{ borderColor: 'white' }}
               placeholder="Enter Destination"
-              data={!results ? [] : results}
+              data={!returnResults ? [] : returnResults}
               defaultValue={returnLocation?.locationname}
               onChangeText={text => {
                 const searcher = new FuzzySearch(locations, ['internalcode', 'locationname', "locationvariation"]);
                 const result = searcher.search(text)
-                setResults(result)
+                setReturnResults(result)
                 setSearchingFor("ORIGIN")
               }}
               renderItem={({ item, i }) => (
                 <TouchableOpacity onPress={() => {
                   props.onReturnLocationSelected(item)
                   setReturn(item)
-                  setResults(null)
+                  setReturnResults(null)
                 }}>
                   <Layout style={{ display: 'flex', flexDirection: 'row', borderBottomColor: '#E4E9F2', borderBottomWidth: 1, paddingBottom: '3%', paddingTop: '3%' }}>
                     <EvilIcon style={{ color: '#41D5FB' }} name="location" size={32} />
