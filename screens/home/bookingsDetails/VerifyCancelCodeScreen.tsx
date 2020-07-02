@@ -43,11 +43,20 @@ const DocumentScreen = () => {
     method: 'POST'
   }, {manual: true})
 
+  console.log(route.params)
+
+  useEffect(() => {
+    if (route.params.reservationStatus == 'Cancelled') return
+    callAPI({
+      data: {module_name: 'SEND_CANCEL_CODE'}
+    })
+    .then(() => {
+      Alert.alert('A cancel code has been sent to you phone')
+    })
+  },[route.params.registratioNumber])
+
   useFocusEffect(
     React.useCallback(() => {
-      callAPI({
-        data: {module_name: 'SEND_CANCEL_CODE'}
-      });
       return () => setPin([-1, -1, -1, -1])
     }, [])
   );
