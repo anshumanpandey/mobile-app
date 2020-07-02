@@ -20,7 +20,7 @@ import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
 import { VehicleResponse } from '../../../types/SearchVehicleResponse';
 import MenuButton from '../../../partials/MenuButton';
-import { components } from '@eva-design/eva/mapping';
+import { checkMultiple, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 
 
 export default () => {
@@ -45,12 +45,12 @@ export default () => {
                 GPSState.requestAuthorization(GPSState.AUTHORIZED_WHENINUSE)
             }
             SystemSetting.isLocationEnabled()
-            .then((enable: boolean) => {
-                if (enable == false) {
-                    SystemSetting.switchLocation(() => {})
-                }
-            })
-            
+                .then((enable: boolean) => {
+                    if (enable == false) {
+                        SystemSetting.switchLocation(() => { })
+                    }
+                })
+
             setDepartureTime(moment().toDate())
             setOriginLocation({
                 internalcode: '32151',
@@ -63,49 +63,79 @@ export default () => {
 
     useFocusEffect(
         React.useCallback(() => {
-            if (!GPSState.isAuthorized()) {
-                GPSState.requestAuthorization(GPSState.AUTHORIZED_WHENINUSE)
-            }
+            checkMultiple([PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION, PERMISSIONS.IOS.LOCATION_WHEN_IN_USE])
+                .then((result) => {
+                    switch (result["android.permission.ACCESS_FINE_LOCATION"]) {
+                        case RESULTS.UNAVAILABLE:
+                            console.log('This feature is not available (on this device / in this context)');
+                            break;
+                        case RESULTS.DENIED:
+                            console.log('The permission has not been requested / is denied but requestable');
+                            request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {
+                                if (result == RESULTS.UNAVAILABLE) Alert.alert('This feature is not available (on this device / in this context)')
+                                if (result == RESULTS.DENIED) Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
+                                if (result == RESULTS.BLOCKED) Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
+                            });
+                            break;
+                        case RESULTS.GRANTED:
+                            console.log('The permission is granted');
+                            GetLocation.getCurrentPosition({
+                                enableHighAccuracy: true,
+                                timeout: 15000,
+                            })
+                                .then(location => {
+                                    setCurrentLocation(location)
+                                })
+                                .catch(error => {
+                                    const { code, message } = error;
+                                    console.warn(code, message);
+                                })
+                            break;
+                        case RESULTS.BLOCKED:
+                            console.log('The permission is denied and not requestable anymore');
+                            Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
+                            break;
+                    }
 
-            GPSState.addListener((status: any) => {
-                switch (status) {
-                  case GPSState.NOT_DETERMINED:
-                    //TODO: handle case when user does not authorize login
-                    Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
-                    break;
-          
-                  case GPSState.RESTRICTED:
-                    GPSState.openLocationSettings()
-                    navigation.goBack()
-                    break;
-          
-                  case GPSState.DENIED:
-                    //TODO: handle case when user does not authorize login
-                    Alert.alert(':(','It`s a shame that you do not allowed us to use location :(')
-                    navigation.goBack()
-                    break;
-          
-                  case GPSState.AUTHORIZED_ALWAYS:
-                    console.log('GPSState.AUTHORIZED_ALWAYS')
-                    break;
-          
-                  case GPSState.AUTHORIZED_WHENINUSE:
-                    console.log('GPSState.AUTHORIZED_WHENINUSE')
-                    break;
-                }
-              })
-
-            GetLocation.getCurrentPosition({
-                enableHighAccuracy: true,
-                timeout: 15000,
-            })
-                .then(location => {
-                    setCurrentLocation(location)
+                    switch (result["ios.permission.LOCATION_WHEN_IN_USE"]) {
+                        case RESULTS.UNAVAILABLE:
+                            console.log(
+                                'This feature is not available (on this device / in this context)',
+                            );
+                            break;
+                        case RESULTS.DENIED:
+                            console.log('The permission has not been requested / is denied but requestable');
+                            request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then((result) => {
+                                request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {
+                                    if (result == RESULTS.UNAVAILABLE) Alert.alert('This feature is not available (on this device / in this context)')
+                                    if (result == RESULTS.DENIED) Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
+                                    if (result == RESULTS.BLOCKED) Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
+                                });
+                            });
+                            break;
+                        case RESULTS.GRANTED:
+                            console.log('The permission is granted');
+                            GetLocation.getCurrentPosition({
+                                enableHighAccuracy: true,
+                                timeout: 15000,
+                            })
+                                .then(location => {
+                                    setCurrentLocation(location)
+                                })
+                                .catch(error => {
+                                    const { code, message } = error;
+                                    console.warn(code, message);
+                                })
+                            break;
+                        case RESULTS.BLOCKED:
+                            console.log('The permission is denied and not requestable anymore');
+                            Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
+                            break;
+                    }
                 })
-                .catch(error => {
-                    const { code, message } = error;
-                    console.warn(code, message);
-                })
+                .catch((error) => {
+                    // …
+                });
 
         }, [])
     );
