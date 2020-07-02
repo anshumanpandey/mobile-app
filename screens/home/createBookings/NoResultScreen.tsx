@@ -26,6 +26,7 @@ const DocumentScreen = () => {
         timeout: 15000,
       })
         .then(location => {
+          console.log(location)
           setCurrentLocation(location)
         })
         .catch(error => {
