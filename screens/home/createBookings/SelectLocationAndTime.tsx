@@ -12,6 +12,8 @@ import LocationSearchInput from '../../../partials/SearchLocationInput';
 import GPSState from 'react-native-gps-state'
 //@ts-ignore
 import GetLocation from 'react-native-get-location'
+// @ts-ignore
+import SystemSetting from 'react-native-system-setting'
 import useAxios from 'axios-hooks'
 import moment from 'moment';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
@@ -37,6 +39,17 @@ export default () => {
 
     useEffect(() => {
         if (inmediatePickup == true) {
+            console.log("GPSState.isAuthorized()", GPSState.isAuthorized())
+            if (!GPSState.isAuthorized()) {
+                GPSState.requestAuthorization(GPSState.AUTHORIZED_WHENINUSE)
+            }
+            SystemSetting.isLocationEnabled()
+            .then((enable: boolean) => {
+                if (enable == false) {
+                    SystemSetting.switchLocation(() => {})
+                }
+            })
+            
             setDepartureTime(moment().toDate())
             setOriginLocation({
                 internalcode: '32151',
@@ -75,7 +88,7 @@ export default () => {
                 <Layout>
                     <View style={{ display: 'flex', flexDirection: 'row' }}>
                         <MenuButton />
-                        <Text style={{ width: '80%',textAlign: 'center', fontSize: 22, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
+                        <Text style={{ width: '80%', textAlign: 'center', fontSize: 22, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
                             NEW BOOKING
                         </Text>
                     </View>
