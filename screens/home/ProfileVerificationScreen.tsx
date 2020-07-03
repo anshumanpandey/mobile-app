@@ -24,6 +24,7 @@ import moment from 'moment';
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
 import { axiosInstance } from '../../utils/AxiosBootstrap';
 import * as Progress from 'react-native-progress';
+import { CommonActions } from '@react-navigation/native';
 
 const options = {
     title: 'Select picture',
@@ -145,8 +146,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                 validate={(values) => {
                     const errors: { [k: string]: string } = {};
                     if (currentPosition == 0) {
-                        if (!values.mobilenumber) errors.mobilenumber = 'Required';
-                        if (!values.mobilecode) errors.mobilecode = 'Required';
+                        if (!values.mobilenumber) {
+                            errors.mobilenumber = 'Required'
+                        } else if (new RegExp(/^\d+$/).test(values.mobilenumber) == false) {
+                            errors.mobilenumber = 'Can be only number'
+                        }
                         if (!values.emailaddress) errors.emailaddress = 'Required';
                         if (!values.firstname) errors.firstname = 'Required';
                         if (!values.countryCode) errors.countryCode = 'Required';
@@ -172,10 +176,45 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                 }}
                 onSubmit={(values, { resetForm }) => {
                     if (currentPosition == 0 && !hasFullProfile) {
+                        if (!values.mobilecode) values.mobilecode = '+1';
+
                         doLogin({ data: { ...values, module_name: "EDIT_PROFILE" } })
                             .then((res) => {
                                 dispatchGlobalState({ type: 'token', state: res.data.token })
                                 dispatchGlobalState({ type: 'profile', state: res.data })
+                                if (res.data.socialmedia == 1) {
+                                    navigation.dispatch(
+                                        CommonActions.reset({
+                                            index: 0,
+                                            routes: [
+                                                {
+                                                    name: 'Opt',
+                                                    params: {
+                                                        onSuccess: () => navigation.navigate("ProfileVerification"),
+                                                        onLater: () => {
+                                                            dispatchGlobalState({ type: 'logout' })
+                                                            navigation.dispatch(
+                                                                CommonActions.reset({
+                                                                    index: 0,
+                                                                    routes: [{ name: 'Login' }],
+                                                                })
+                                                            )
+                                                        },
+                                                        onUnbackpress: () => {
+                                                            dispatchGlobalState({ type: 'logout' })
+                                                            navigation.dispatch(
+                                                                CommonActions.reset({
+                                                                    index: 0,
+                                                                    routes: [{ name: 'Login' }],
+                                                                })
+                                                            )
+                                                        }
+                                                    }
+                                                },
+                                            ],
+                                        })
+                                    );
+                                }
                                 setCurrentPosition(1)
                             })
                             .catch(err => console.log(err))
@@ -218,7 +257,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             .then(r => {
                                 console.log(r.data)
                                 dispatchGlobalState({ type: 'profile', state: r.data })
-                                dispatchFileState({ type: Actions.RESET, state: {}})
+                                dispatchFileState({ type: Actions.RESET, state: {} })
                                 setCurrentPosition(p => {
                                     resetForm({ touched: {} })
                                     console.log(`to step ${p + 1}`)
@@ -257,7 +296,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         status={errors.emailaddress && touched.emailaddress ? 'danger' : undefined}
                                         value={values.emailaddress}
                                         onChangeText={handleChange('emailaddress')}
-                                        style={{ backgroundColor: profile?.socialmedia ? 'rgba(0,0,0,0.2)':'#ffffff', borderRadius: 10, marginBottom: '3%' }}
+                                        style={{ backgroundColor: profile?.socialmedia ? 'rgba(0,0,0,0.2)' : '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                         size="large"
                                         label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Email</Text>}
                                         placeholder='Enter your email'
@@ -283,7 +322,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         {errors.mobilenumber && touched.mobilenumber && <ErrorLabel text={errors.mobilenumber} />}
                                     </Layout>
 
-                                    <Toggle checked={values.twoauth} style={{ marginBottom: '0%' }} onChange={() => setFieldValue("twoauth", !values.twoauth)}>
+                                    <Toggle disabled={profile == null || profile.vphone != 1} checked={values.twoauth} style={{ marginBottom: '0%' }} onChange={() => setFieldValue("twoauth", !values.twoauth)}>
                                         Enable 2-factor authentication
                                     </Toggle>
 
@@ -520,7 +559,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     </View>}
 
                                     {!sendFileReq.loading && (
-                                        <View style={{ zIndex: dictionary.get(currentFileType)?.file ? -1: 4,position: 'absolute', top: '50%', left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-5%' : '0%', height: '15%',justifyContent: 'center', alignItems: 'center' }}>
+                                        <View style={{ zIndex: dictionary.get(currentFileType)?.file ? -1 : 4, position: 'absolute', top: '50%', left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-5%' : '0%', height: '15%', justifyContent: 'center', alignItems: 'center' }}>
                                             <Button
                                                 onPress={(e) => {
                                                     try {
@@ -589,7 +628,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                 })
                                             }
                                         }}>
-                                            <Layout style={{ zIndex: 1,display: 'flex', flexDirection: 'row', justifyContent: 'center', height: dictionary.get(currentFileType)?.file ? '23%' : '40%', alignItems: dictionary.get(currentFileType)?.file ? 'flex-end' : 'center' }}>
+                                            <Layout style={{ zIndex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'center', height: dictionary.get(currentFileType)?.file ? '23%' : '40%', alignItems: dictionary.get(currentFileType)?.file ? 'flex-end' : 'center' }}>
                                                 <EntypoIcon style={{ marginRight: '5%', color: 'black', textAlign: 'center', }} size={24} name="images" />
                                                 <Text style={{ color: 'black', textAlign: 'center', fontSize: 16, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
                                                     Select the document from gallery

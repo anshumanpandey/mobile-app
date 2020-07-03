@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Layout, Text, Input, Button, TabView, Tab, Toggle } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView } from 'react-native';
 import useAxios from 'axios-hooks'
@@ -34,11 +34,15 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [asCompany, setAsCompany] = useState(false);
 
+    const formRef = useRef()
+
     useFocusEffect(
         React.useCallback(() => {
             console.log(profile.company)
             console.log(profile.vat)
           if (profile && profile.company != 'NONE' && profile.vat != 'NONE') setAsCompany(true)
+
+          return () => formRef?.current?.resetForm();
         }, [])
       );
 
@@ -145,7 +149,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                     {errors.mobilenumber && touched.mobilenumber && <ErrorLabel text={errors.mobilenumber} />}
                                                 </Layout>
 
-                                                <Toggle checked={values.twoauth == true || values.twoauth == 1} style={{ marginBottom: '0%' }} onChange={() => setFieldValue("twoauth", !values.twoauth)}>
+                                                <Toggle disabled={profile == null || profile.vphone != 1} checked={values.twoauth == true || values.twoauth == 1} style={{ marginBottom: '0%' }} onChange={() => setFieldValue("twoauth", !values.twoauth)}>
                                                     Enable 2-factor authentication
                                                 </Toggle>
 

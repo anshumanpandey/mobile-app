@@ -37,37 +37,38 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
     const [{ data, loading, error }, doVerify] = useAxios({
         url: `${GRCGDS_BACKEND}`,
         method: 'POST'
-      }, { manual: true })
+    }, { manual: true })
 
-    const screens = [
-        {name: "CompletedUpload", screen: <Drawer.Screen name="CompletedUpload" component={CompletedUploadScreen} />},
+    let screens = [
+        { name: "CompletedUpload", screen: <Drawer.Screen name="CompletedUpload" component={CompletedUploadScreen} /> },
     ]
 
     const hasAllFiles = userHasAllFiles(profile || {})
     const hasFullProfile = userHasFullProfile(profile || {})
 
-    screens.unshift({name: 'ProfileVerification', screen: <Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} />});
+    screens.unshift({ name: 'ProfileVerification', screen: <Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} /> });
 
     if (hasFullProfile && hasAllFiles) {
         screens.push(
-            {name: 'CreateBooking', screen: <Drawer.Screen name="CreateBooking" component={SelectLocation} />},
-            {name: 'Location', screen: <Drawer.Screen name="Location" component={LocalitationScreen} />},
-            {name: 'Reservation', screen: <Drawer.Screen name="Reservation" component={ReservationScreen} />},
-            {name: 'Damage', screen: <Drawer.Screen name="Damage" component={DamageScreen} />},
-            {name: 'NoPicturDamage', screen: <Drawer.Screen name="NoPicturDamage" component={NoPictureDamageScreen} />},
-            {name: 'Activate', screen: <Drawer.Screen name="Activate" component={ActivateScreen} />},
-            {name: 'Notifications', screen: <Drawer.Screen name="Notifications" component={NotificationScreen} />},
-            {name: 'EditProfile', screen: <Drawer.Screen name="EditProfile" component={EditProfile} />},
-            {name: 'Documents', screen: <Drawer.Screen name="Documents" component={DocumentScreen} />},
-            {name: 'SingleUpload', screen: <Drawer.Screen name="SingleUpload" component={SingleUploadScreen} />},
-            {name: 'Sign', screen: <Drawer.Screen name="Sign" component={SignScreen} />},
-            {name: 'EndRental', screen: <Drawer.Screen name="EndRental" component={EndRentalScreen} />},
-            {name: 'Policy', screen: <Drawer.Screen name="Policy" component={PolicyScreen} />},
-            {name: 'TermsConditions', screen: <Drawer.Screen name="TermsConditions" component={TermsConditionsScreen} />},
-            {name: 'NoResult', screen: <Drawer.Screen name="NoResult" component={NoResultScreen} />},
-            {name: 'Faq', screen: <Drawer.Screen name="Faq" component={FaqScreen} />},
+            { name: 'CreateBooking', screen: <Drawer.Screen name="CreateBooking" component={SelectLocation} /> },
+            { name: 'Location', screen: <Drawer.Screen name="Location" component={LocalitationScreen} /> },
+            { name: 'Reservation', screen: <Drawer.Screen name="Reservation" component={ReservationScreen} /> },
+            { name: 'Damage', screen: <Drawer.Screen name="Damage" component={DamageScreen} /> },
+            { name: 'NoPicturDamage', screen: <Drawer.Screen name="NoPicturDamage" component={NoPictureDamageScreen} /> },
+            { name: 'Activate', screen: <Drawer.Screen name="Activate" component={ActivateScreen} /> },
+            { name: 'Notifications', screen: <Drawer.Screen name="Notifications" component={NotificationScreen} /> },
+            { name: 'EditProfile', screen: <Drawer.Screen name="EditProfile" component={EditProfile} /> },
+            { name: 'Documents', screen: <Drawer.Screen name="Documents" component={DocumentScreen} /> },
+            { name: 'SingleUpload', screen: <Drawer.Screen name="SingleUpload" component={SingleUploadScreen} /> },
+            { name: 'Sign', screen: <Drawer.Screen name="Sign" component={SignScreen} /> },
+            { name: 'EndRental', screen: <Drawer.Screen name="EndRental" component={EndRentalScreen} /> },
+            { name: 'Policy', screen: <Drawer.Screen name="Policy" component={PolicyScreen} /> },
+            { name: 'TermsConditions', screen: <Drawer.Screen name="TermsConditions" component={TermsConditionsScreen} /> },
+            { name: 'NoResult', screen: <Drawer.Screen name="NoResult" component={NoResultScreen} /> },
+            { name: 'Faq', screen: <Drawer.Screen name="Faq" component={FaqScreen} /> },
+            { name: 'Home', screen: <Drawer.Screen name="Home" component={MyTripsScreens} /> },
         )
-        screens.unshift({ name: 'MyBookings', screen: <Drawer.Screen name="MyBookings" component={MyTripsScreens} />})
+        screens.unshift({ name: 'MyBookings', screen: <Drawer.Screen name="MyBookings" component={MyTripsScreens} /> })
     }
 
     useEffect(() => {
@@ -78,19 +79,28 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
                     "id": profile.id
                 }
             })
-            .then(r => console.log(r.data))
+                .then(r => console.log(r.data))
         }
     }, [])
 
     useEffect(() => {
         if (profile && profile.mobilenumber != "" && profile.mobilecode != "" && profile.vphone != 1) {
-            if (!screens.find(i => i.name == 'Opt')){
-                screens.unshift({ name: "Opt", screen: <Drawer.Screen name="Opt" component={VerifyPhoneScreen} />});
+            console.log("mobilenumber", profile.mobilenumber)
+            console.log("mobilecode", profile.mobilecode)
+            console.log("vphone", profile.vphone)
+
+            const found = screens.find(item => item.name === 'Opt')
+
+            if (found) {
+                screens = [found,...screens.filter(item => item.name !== 'Opt'),]
+            } else {
+                screens.unshift({ name: 'Opt', screen: <Drawer.Screen name="VerifyEmail" component={VerifyPhoneScreen} /> });
             }
+
         }
         if (profile && profile.vemail == 0) {
-            if (!screens.find(i => i.name == 'VerifyEmail')){
-                screens.unshift({ name: 'VerifyEmail', screen: <Drawer.Screen name="VerifyEmail" component={VerifyEmailScreen} />});
+            if (!screens.find(i => i.name == 'VerifyEmail')) {
+                screens.unshift({ name: 'VerifyEmail', screen: <Drawer.Screen name="VerifyEmail" component={VerifyEmailScreen} /> });
             }
         }
     }, [profile])

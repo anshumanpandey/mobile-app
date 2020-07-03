@@ -1,16 +1,17 @@
 import React, { useRef, useState } from 'react';
 import { Layout, Text, Button } from '@ui-kitten/components';
-import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData, Alert } from 'react-native';
+import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData, Alert, BackHandler } from 'react-native';
 import useAxios from 'axios-hooks'
 import { useGlobalState, dispatchGlobalState } from '../state';
 import { axiosInstance } from '../utils/AxiosBootstrap';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import LoadingSpinner from '../partials/LoadingSpinner';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 
 const DocumentScreen = () => {
   const [profile] = useGlobalState('profile');
   const navigation = useNavigation();
+  const route = useRoute();
 
   const [{ data, loading, error }, doVerify] = useAxios({
     url: `${GRCGDS_BACKEND}`,
@@ -54,6 +55,22 @@ const DocumentScreen = () => {
     })
   }
 
+  const backAction = () => {
+    route?.params?.onUnbackpress()
+    return true
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      BackHandler.addEventListener("hardwareBackPress", backAction);
+
+      return () =>
+        BackHandler.removeEventListener("hardwareBackPress", backAction);
+    }, [])
+  );
+
+
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
 
@@ -89,8 +106,13 @@ const DocumentScreen = () => {
                 if (profile.vemail == 0) {
                   navigation.navigate('SuccessEmail')
                 } else if (profile.vemail == 1){
-                  console.log('going home', profile.vphone)
-                  navigation.navigate('Home')
+                  if (route?.params?.onSuccess) {
+                    route.params.onSuccess(navigation)
+                  } else {
+                    console.log('going home', profile.vphone)
+                    console.log('routes', navigation.dangerouslyGetState().routes)
+                    navigation.navigate('Home')
+                  }
                 } else {
                   dispatchGlobalState({ type: 'logout' })
                 }
@@ -194,7 +216,11 @@ const DocumentScreen = () => {
         <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', backgroundColor: '#00000000', marginTop: '5%' }}>
           <Text
             onPress={() => {
-              navigation.navigate('Login')
+              if (route?.params?.onLater) {
+                route.params.onLater()
+              } else {
+                navigation.navigate('Login')
+              }
             }}
             style={{ color: '#41d5fb' }}>Verify later</Text>
         </Layout>

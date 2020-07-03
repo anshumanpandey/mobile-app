@@ -18,7 +18,16 @@ const WebViewScreen = () => {
             console.log(json)
             if (json.token && !userHasFullProfile(json)) {
                 console.log('navigating home')
-                navigation.navigate('Home')
+                dispatchGlobalState({ type: 'token', state: json.token })
+                dispatchGlobalState({ type: 'profile', state: json })
+                navigation.dispatch(
+                    CommonActions.reset({
+                        index: 0,
+                        routes: [
+                            { name: 'Home' },
+                        ],
+                    })
+                );
             } else if (json.twoauth != 0) {
                 dispatchGlobalState({ type: 'profile', state: json })
                 navigation.navigate('Opt')
