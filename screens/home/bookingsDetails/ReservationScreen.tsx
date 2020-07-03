@@ -213,13 +213,16 @@ export default function App({ navigation, route }) {
         component={ReportScreen}
         options={{
           tabBarButton: () => {
+            const cannotCollect = route.params.params.reservationStatus == 'Cancelled'
+
             return (
               <View style={{ width: '25%' }}>
-                <TouchableOpacity style={{ height: '100%' }} onPress={() => {
+                <TouchableOpacity disabled={cannotCollect} style={{ height: '100%' }} onPress={() => {
+                  if (cannotCollect) return
                   navigation.navigate('Report', { ...route.params })
                 }}>
                   <View style={{ height: '100%', borderColor: 'rgba(0,0,0,0.2)', borderRightWidth: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
-                    <MaterialIcons name="directions-car" style={{ color: '#41d5fb' }} size={24} />
+                    <MaterialIcons name="directions-car" style={{ color: cannotCollect? '#41d5fb40':'#41d5fb' }} size={24} />
                     <Text style={{ textAlign: 'center', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>COLLECT</Text>
                   </View>
 

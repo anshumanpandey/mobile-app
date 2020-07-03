@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Layout, Text, Button } from '@ui-kitten/components';
 import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData, Alert } from 'react-native';
 import useAxios from 'axios-hooks'
@@ -24,8 +24,9 @@ const DocumentScreen = () => {
     useRef<TextInput | null>(null)
   ]
 
-  const [idxFocusInput, setIdxFocusInput] = React.useState<number>(-1);
-  const [pin, setPin] = React.useState<Array<number>>([-1, -1, -1, -1]);
+  const [idxFocusInput, setIdxFocusInput] = useState<number>(-1);
+  const [pin, setPin] = useState<Array<number>>([-1, -1, -1, -1]);
+  const [counter, setCounter] = useState(30);
 
   const onInput = ({ nativeEvent: { key }, ...e }: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
 
@@ -142,6 +143,18 @@ const DocumentScreen = () => {
           <Text
             onPress={() => {
               if (!profile) return
+              if (counter != 30) return
+
+              const timer = setInterval(() => {
+                setCounter(p => {
+                  const v = p-1
+                  if (v == 0){
+                    clearInterval(timer)
+                    return 30
+                  }
+                  return v
+                })
+              }, 1000);
               
               if (profile && profile.vphone != 1) {
                 console.log('calling RESEND_VERIFY')
@@ -171,8 +184,12 @@ const DocumentScreen = () => {
               }
 
             }}
-            style={{ color: '#41d5fb' }}>Resend Code</Text>
+            style={{ color: counter == 30 ? '#41d5fb':'#41d5fb80' }}>Resend Code</Text>
         </Layout>
+
+        {counter != 30 && (<Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', backgroundColor: '#00000000', marginTop: '5%' }}>
+          <Text >Wait {counter} sec before sending resending the SMS </Text>
+        </Layout>)}
 
         <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', backgroundColor: '#00000000', marginTop: '5%' }}>
           <Text

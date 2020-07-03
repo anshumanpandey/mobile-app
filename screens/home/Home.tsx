@@ -7,6 +7,7 @@ import DrawerMenu from './CustomeDrawer';
 import NotificationScreen from './NotificationScreen';
 import DocumentScreen from './DocumentUpload/DocumentScreen';
 import VerifyPhoneScreen from '../VerifyPhoneScreen';
+import VerifyEmailScreen from '../VerifyEmailScreen';
 import SingleUploadScreen from './DocumentUpload/SingleUploadScreen';
 import CompletedUploadScreen from './DocumentUpload/CompletedUploadScreen';
 import MyTripsScreens from './MyTripsScreen';
@@ -16,7 +17,6 @@ import DamageScreen from './DamageScreen';
 import NoPictureDamageScreen from './NoPictureDamageScreen';
 import ReservationScreen from './bookingsDetails/ReservationScreen';
 import SelectLocation from './createBookings/index';
-import KeyedReservation from './bookingsDetails/KeyedReservation';
 import EndRentalScreen from './EndRentalScreen';
 import SignScreen from './bookingsDetails/SignScreen';
 import EditProfile from './EditProfile';
@@ -40,40 +40,34 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
       }, { manual: true })
 
     const screens = [
-        <Drawer.Screen name="CompletedUpload" component={CompletedUploadScreen} />,
+        {name: "CompletedUpload", screen: <Drawer.Screen name="CompletedUpload" component={CompletedUploadScreen} />},
     ]
 
     const hasAllFiles = userHasAllFiles(profile || {})
     const hasFullProfile = userHasFullProfile(profile || {})
 
-    if (profile && profile.vemail == 0) screens.unshift(<Drawer.Screen name="Opt" component={VerifyPhoneScreen} />);
-
-    screens.unshift(<Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} />);
-
-    if (profile && profile.mobilenumber != "" && profile.mobilecode != "" && profile.vphone != 1) {
-        screens.unshift(<Drawer.Screen name="Opt" component={VerifyPhoneScreen} />);
-    }
+    screens.unshift({name: 'ProfileVerification', screen: <Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} />});
 
     if (hasFullProfile && hasAllFiles) {
         screens.push(
-            <Drawer.Screen name="CreateBooking" component={SelectLocation} />,
-            <Drawer.Screen name="Location" component={LocalitationScreen} />,
-            <Drawer.Screen name="Reservation" component={ReservationScreen} />,
-            <Drawer.Screen name="Damage" component={DamageScreen} />,
-            <Drawer.Screen name="NoPicturDamage" component={NoPictureDamageScreen} />,
-            <Drawer.Screen name="Activate" component={ActivateScreen} />,
-            <Drawer.Screen name="Notifications" component={NotificationScreen} />,
-            <Drawer.Screen name="EditProfile" component={EditProfile} />,
-            <Drawer.Screen name="Documents" component={DocumentScreen} />,
-            <Drawer.Screen name="SingleUpload" component={SingleUploadScreen} />,
-            <Drawer.Screen name="Sign" component={SignScreen} />,
-            <Drawer.Screen name="EndRental" component={EndRentalScreen} />,
-            <Drawer.Screen name="Policy" component={PolicyScreen} />,
-            <Drawer.Screen name="TermsConditions" component={TermsConditionsScreen} />,
-            <Drawer.Screen name="NoResult" component={NoResultScreen} />,
-            <Drawer.Screen name="Faq" component={FaqScreen} />,
+            {name: 'CreateBooking', screen: <Drawer.Screen name="CreateBooking" component={SelectLocation} />},
+            {name: 'Location', screen: <Drawer.Screen name="Location" component={LocalitationScreen} />},
+            {name: 'Reservation', screen: <Drawer.Screen name="Reservation" component={ReservationScreen} />},
+            {name: 'Damage', screen: <Drawer.Screen name="Damage" component={DamageScreen} />},
+            {name: 'NoPicturDamage', screen: <Drawer.Screen name="NoPicturDamage" component={NoPictureDamageScreen} />},
+            {name: 'Activate', screen: <Drawer.Screen name="Activate" component={ActivateScreen} />},
+            {name: 'Notifications', screen: <Drawer.Screen name="Notifications" component={NotificationScreen} />},
+            {name: 'EditProfile', screen: <Drawer.Screen name="EditProfile" component={EditProfile} />},
+            {name: 'Documents', screen: <Drawer.Screen name="Documents" component={DocumentScreen} />},
+            {name: 'SingleUpload', screen: <Drawer.Screen name="SingleUpload" component={SingleUploadScreen} />},
+            {name: 'Sign', screen: <Drawer.Screen name="Sign" component={SignScreen} />},
+            {name: 'EndRental', screen: <Drawer.Screen name="EndRental" component={EndRentalScreen} />},
+            {name: 'Policy', screen: <Drawer.Screen name="Policy" component={PolicyScreen} />},
+            {name: 'TermsConditions', screen: <Drawer.Screen name="TermsConditions" component={TermsConditionsScreen} />},
+            {name: 'NoResult', screen: <Drawer.Screen name="NoResult" component={NoResultScreen} />},
+            {name: 'Faq', screen: <Drawer.Screen name="Faq" component={FaqScreen} />},
         )
-        screens.unshift(<Drawer.Screen name="MyBookings" component={MyTripsScreens} />)
+        screens.unshift({ name: 'MyBookings', screen: <Drawer.Screen name="MyBookings" component={MyTripsScreens} />})
     }
 
     useEffect(() => {
@@ -88,9 +82,22 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
         }
     }, [])
 
+    useEffect(() => {
+        if (profile && profile.mobilenumber != "" && profile.mobilecode != "" && profile.vphone != 1) {
+            if (!screens.find(i => i.name == 'Opt')){
+                screens.unshift({ name: "Opt", screen: <Drawer.Screen name="Opt" component={VerifyPhoneScreen} />});
+            }
+        }
+        if (profile && profile.vemail == 0) {
+            if (!screens.find(i => i.name == 'VerifyEmail')){
+                screens.unshift({ name: 'VerifyEmail', screen: <Drawer.Screen name="VerifyEmail" component={VerifyEmailScreen} />});
+            }
+        }
+    }, [profile])
+
     return (
         <Drawer.Navigator drawerContent={(props) => <DrawerMenu navigation={props.navigation} />} initialRouteName="Home">
-            {screens.map((s) => s)}
+            {screens.map((s) => s.screen)}
         </Drawer.Navigator>
     )
 };

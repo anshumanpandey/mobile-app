@@ -14,6 +14,7 @@ const DocumentScreen = () => {
 
   const [idxFocusInput, setIdxFocusInput] = React.useState<number>(-1);
   const [pin, setPin] = React.useState<Array<number>>([-1, -1, -1, -1]);
+  const [counter, setCounter] = React.useState(30);
 
   const [cancelReq, cancelBooking] = useAxios({
     url: `https://OTA.right-cars.com/`,
@@ -51,6 +52,16 @@ const DocumentScreen = () => {
       data: {module_name: 'SEND_CANCEL_CODE'}
     })
     .then(() => {
+      const timer = setInterval(() => {
+        setCounter(p => {
+          const v = p-1
+          if (v == 0){
+            clearInterval(timer)
+            return 30
+          }
+          return v
+        })
+      }, 1000);
       Alert.alert('A cancel code has been sent to you phone')
     })
   },[route.params.registratioNumber])
@@ -161,6 +172,17 @@ const DocumentScreen = () => {
           <Text style={{ textAlign: 'center' }}>Didn't receive SMS </Text>
           <Text
             onPress={() => {
+              if (counter != 30) return
+              const timer = setInterval(() => {
+                setCounter(p => {
+                  const v = p-1
+                  if (v == 0){
+                    clearInterval(timer)
+                    return 30
+                  }
+                  return v
+                })
+              }, 1000);
               callAPI({
                 data: {module_name: 'SEND_CANCEL_CODE'}
               })
@@ -168,13 +190,19 @@ const DocumentScreen = () => {
                 Alert.alert('Code Sended', 'A cancel code has been sended to you')
               })
             }}
-            style={{ color: '#41d5fb' }}>Resend Code</Text>
+            style={{ color: counter == 30 ? '#41d5fb':'#41d5fb80' }}>Resend Code</Text>
         </Layout>
+
+        {counter != 30 && (<Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', backgroundColor: '#00000000', marginTop: '5%' }}>
+          <Text >Wait {counter} sec before sending resending the SMS </Text>
+        </Layout>)}
 
         <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', backgroundColor: '#00000000', marginTop: '5%' }}>
           <Text
             onPress={() => {
-              navigation.navigate('Login')
+              if (navigation.canGoBack()) {
+                navigation.goBack()
+              }
             }}
             style={{ color: '#41d5fb' }}>Verify later</Text>
         </Layout>
