@@ -31,9 +31,9 @@ axiosInstance.interceptors.response.use(
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
       dispatchGlobalState({ type: 'error', state: error.response.data.error });
-      /*if (error.response.status === 401) {
-          dispatchGlobalState({ type: 'logout' });
-      }*/
+      if (error.response.status === 401) {
+        dispatchGlobalState({ type: 'logout' });
+      }
       console.log('error.response');
       console.log(error.response.headers);
       console.log(error.response.data);

@@ -32,76 +32,39 @@ const DocumentScreen = () => {
   const [upcommingTrips, setUpcommingTrips] = useState(null);
   const [completedTrips, setCompletedTrips] = useState(null);
 
-
-  const [{ loading, error }, refetch] = useAxios<BookingResponse>({
-    url: `https://OTA.right-cars.com/`,
-    method: 'POST',
-    data: `<OTA_VehListRQ xmlns="http://www.opentravel.org/OTA/2003/05" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation = "http://www.opentravel.org/OTA/2003/05 VehResRQ.xsd" >
-    <POS>
-    <Source>
-    <RequestorID Type="5" ID="MOBILE001" />
-    </Source>
-    </POS>
-    <Customer>
-    <Primary>
-    <Email>${profile?.emailaddress}</Email>
-    </Primary>
-    </Customer>
-    </OTA_OTA_VehListRQ>`,
-    headers: {
-      "Content-Type": "application/soap+xml;charset=utf-8"
-    }
+  const [{ loading, error }, refetch] = useAxios({
+    url: `${GRCGDS_BACKEND}?module_name=GET_BOOKINGS`,
+    method: 'GET',
   }, { manual: true })
 
   useFocusEffect(
     React.useCallback(() => {
       refetch()
         .then(r => {
-          parseString(r.data, function (err, result: BookingResponse) {
-            setTimeout(() => {
+          console.log(r.data)
+          setParsedResponse(r.data.map(i => {
+            const storedData = storedBookings.find(a => a.reservationNumber == i.resnumber)
 
-              if (!result.OTA_VehListRS.VehResRSCore) {
-                setParsedResponse([])
-                return
-              }
-
-              const dataParsed = result.OTA_VehListRS.VehResRSCore.map(i => {
-                const Resnumber = i.VehReservation[0].VehSegmentCore[0].ConfID[0].Resnumber[0]
-                const pLocation = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Name[0]
-                const pLocationAddress = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Address[0].AddressLine[0]
-                const pickUpInstructions = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Pickupinst[0]
-                const pPhoneNumber = i.VehReservation[0].VehSegmentCore[0].LocationDetails[0].Telephone[0].PhoneNumber[0]
-                const unixPTime = i.VehReservation[0].VehSegmentCore[0].VehRentalCore[0].PickUpDateTime[0]
-                const rLocation = i.VehReservation[0].VehSegmentCore[0].LocationDetails[1].Name[0]
-                const unixRTime = i.VehReservation[0].VehSegmentCore[0].VehRentalCore[0].ReturnDateTime[0]
-                const reservationStatus = i.VehReservation[0].VehSegmentCore[0].ConfID[0].ReservationStatus[0]
-
-                const storedData = storedBookings.find(i => i.reservationNumber == Resnumber)
-
-                return {
-                  currencyCode: storedData?.currency_code,
-                  image_preview_url: storedData?.veh_picture ? storedData?.veh_picture : 'https://carimages.rent.it/EN/1539285845928.png',
-                  leftImageUri: '../image/rightcars.png',
-                  keyLess: false,
-                  "tripDate": moment.utc(moment.unix(unixPTime)),
-                  "pickupLocation": pLocation,
-                  "dropOffLocation": rLocation,
-                  pickupLocationPhoneNumber: pPhoneNumber,
-                  "pickupTime": moment.utc(moment.unix(unixPTime)),
-                  "dropoffTime": moment.utc(moment.unix(unixRTime)),
-                  carName: `${storedData?.veh_name}\nOr Similar`,
-                  registratioNumber: Resnumber,
-                  "finalCost": storedData?.total_price ? new Decimal(storedData?.total_price).toFixed(2) : '',
-                  "arrivalTime": moment.utc(moment.unix(unixRTime)),
-                  pickUpInstructions,
-                  reservationStatus,
-                  pLocationAddress
-                }
-
-              })
-              setParsedResponse(dataParsed)
-            }, 0)
-          })
+            return {
+              currencyCode: storedData?.currency_code,
+              image_preview_url: storedData?.veh_picture ? storedData?.veh_picture : 'https://carimages.rent.it/EN/1539285845928.png',
+              leftImageUri: '../image/rightcars.png',
+              keyLess: false,
+              "tripDate": moment.utc(moment.unix(i.unixPTime)),
+              "pickupLocation": i.pLocation,
+              "dropOffLocation": i.rLocation,
+              pickupLocationPhoneNumber: i.pPhoneNumber,
+              "pickupTime": moment.utc(moment.unix(i.unixPTime)),
+              "dropoffTime": moment.utc(moment.unix(i.unixRTime)),
+              carName: `${storedData?.veh_name}\nOr Similar`,
+              registratioNumber: i.resnumber,
+              "finalCost": storedData?.total_price ? new Decimal(storedData?.total_price).toFixed(2) : '',
+              "arrivalTime": moment.utc(moment.unix(i.unixRTime)),
+              pickUpInstructions: i.pickUpInstructions,
+              reservationStatus: i.reservationStatus,
+              pLocationAddress: i.pLocationAddress
+            }
+          }))
         })
     }, [])
   );
