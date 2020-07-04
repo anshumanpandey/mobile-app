@@ -156,7 +156,9 @@ const DocumentScreen = () => {
 
         <Button
           onPress={() => {
-            navigation.navigate('MyBookings')
+            if (navigation.canGoBack()){
+              navigation.goBack();
+            }
           }}
           size="giant"
           style={{

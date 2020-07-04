@@ -147,13 +147,13 @@ export default () => {
                                                         <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display', fontSize: 16 }}>
                                                             Right Cars{' '}
                                                         </Text>
-                                                        <Text {...evaProps} onPress={() => {/*navigation.navigate('Signup')*/}} style={{ color: '#41d5fb', fontSize: 16 }}>
+                                                        <Text {...evaProps} onPress={() => navigation.navigate('TermsConditions')} style={{ color: '#41d5fb', fontSize: 16 }}>
                                                             Terms & Conditions
                                                         </Text>
                                                         <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display', fontSize: 16 }}>
                                                             {' '}and{' '}
                                                         </Text>
-                                                        <Text {...evaProps} onPress={() => {/*navigation.navigate('Signup')*/}} style={{ color: '#41d5fb', fontSize: 16 }}>Privacy Policy.</Text>
+                                                        <Text {...evaProps} onPress={() => navigation.navigate('Policy')} style={{ color: '#41d5fb', fontSize: 16 }}>Privacy Policy.</Text>
                                                     </View>
                                                 );
                                             }}
