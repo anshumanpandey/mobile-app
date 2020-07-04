@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 import 'react-native-gesture-handler';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useReducer } from 'react'
 import './utils/ErrorTrack';
 
 import * as eva from '@eva-design/eva';
@@ -28,17 +28,39 @@ import VerifyEmailScreen from './screens/VerifyEmailScreen';
 import { useGlobalState, dispatchGlobalState } from './state';
 import SplashScreen from 'react-native-splash-screen'
 import { Alert } from 'react-native';
+import { AppState } from 'react-native'
+import BackgroundTimer from 'react-native-background-timer';
 
 const Stack = createStackNavigator();
-
 
 export default () => {
   const [token] = useGlobalState('token');
   const [profile] = useGlobalState('profile');
   const [error] = useGlobalState('error');
 
+  const cb = (nextAppState) => {
+    if (nextAppState.match(/inactive|background/)) {
+      console.log('app is on back')
+      let c = 30
+      BackgroundTimer.runBackgroundTimer(() => {
+        console.log(c)
+        if (c == 0){
+          c = 30
+          dispatchGlobalState({ type: 'logout'})
+        } else {
+          c  = c - 1
+        }
+      }, 1000 * 60 * 30);
+    } else {
+      BackgroundTimer.stopBackgroundTimer(); //after this call all code on background stop run.
+    }
+  }
+
   useEffect(() => {
     SplashScreen.hide()
+    AppState.addEventListener('change', cb);
+    
+    return () => AppState.removeEventListener('change', cb);
   }, []);
   const j = { ...EvaMapping }
   j.strict["text-font-family"] = "SF-UI-Display-Regular"
