@@ -322,9 +322,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         {errors.mobilenumber && touched.mobilenumber && <ErrorLabel text={errors.mobilenumber} />}
                                     </Layout>
 
-                                    <Toggle disabled={profile == null || profile.vphone != 1} checked={values.twoauth} style={{ marginBottom: '0%' }} onChange={() => setFieldValue("twoauth", !values.twoauth)}>
-                                        Enable 2-factor authentication
-                                    </Toggle>
+                                    {profile && profile.socialmedia != 1 && (
+                                        <Toggle checked={values.twoauth} style={{ marginBottom: '0%' }} onChange={() => setFieldValue("twoauth", !values.twoauth)}>
+                                            Enable 2-factor authentication
+                                        </Toggle>
+                                    )}
 
                                     <Layout style={{ marginBottom: '3%' }}>
                                         <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>Country</Text>
