@@ -41,9 +41,10 @@ const DocumentScreen = () => {
     React.useCallback(() => {
       refetch()
         .then(r => {
-          console.log(r.data)
           setParsedResponse(r.data.map(i => {
             const storedData = storedBookings.find(a => a.reservationNumber == i.resnumber)
+
+            console.log(i)
 
             return {
               currencyCode: storedData?.currency_code,
@@ -115,7 +116,6 @@ const DocumentScreen = () => {
     try {
       AsyncStorage.getItem('myBookings')
         .then(jsonStringData => {
-          console.log(jsonStringData)
           const parsedValues = JSON.parse(jsonStringData).map(i => {
             return {
               currencyCode: i.currencyCode,

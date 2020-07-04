@@ -66,7 +66,6 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
             { name: 'TermsConditions', screen: <Drawer.Screen name="TermsConditions" component={TermsConditionsScreen} /> },
             { name: 'NoResult', screen: <Drawer.Screen name="NoResult" component={NoResultScreen} /> },
             { name: 'Faq', screen: <Drawer.Screen name="Faq" component={FaqScreen} /> },
-            { name: 'Home', screen: <Drawer.Screen name="Home" component={MyTripsScreens} /> },
         )
         screens.unshift({ name: 'MyBookings', screen: <Drawer.Screen name="MyBookings" component={MyTripsScreens} /> })
     }

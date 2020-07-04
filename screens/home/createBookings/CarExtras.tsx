@@ -55,6 +55,7 @@ export default () => {
                         return (
                             <TimeCheckbox
                                 style={{ marginBottom: '5%' }}
+                                checked={found != null && found.amount != 0}
                                 title={`${equip.Equipment.Description} ${currentPrice ? `(${ResolveCurrencySymbol(found?.Charge.Taxamount.CurrencyCode)}${currentPrice})` : ''}`}
                                 replaceCheckbox={() => {
                                     const found = selectedExtras.find(i => i.Equipment.Description == equip.Equipment.Description)
@@ -133,7 +134,12 @@ export default () => {
                                     return toReturn
                                     
                                 }
-                                return [...p, { ...selectedEquip, amount: amountSelected }]
+
+                                if (amountSelected != 0) {
+                                    return [...p, { ...selectedEquip, amount: amountSelected }]
+                                }
+
+                                return p
                             })
                         }}>
                             Done

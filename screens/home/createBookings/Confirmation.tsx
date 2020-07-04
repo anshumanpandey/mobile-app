@@ -24,6 +24,7 @@ export default () => {
     const [reservationNumber] = useCreateBookingState("reservationNumber");
     const [, setExtras] = useCreateBookingState("extras");
     const [, setVehicle] = useCreateBookingState("vehicle");
+    const [, setInmediatePickup] = useCreateBookingState("inmediatePickup");
 
     const [extras] = useCreateBookingState("extras");
     const [vehicle] = useCreateBookingState("vehicle");
@@ -68,6 +69,7 @@ export default () => {
                                     setArrivalTime('');
                                     setExtras([])
                                     setVehicle(null)
+                                    setInmediatePickup(null);
                                 }, 2000);
                                 navigation.dispatch(
                                     CommonActions.reset({

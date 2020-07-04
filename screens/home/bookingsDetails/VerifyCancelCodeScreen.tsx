@@ -143,9 +143,7 @@ const DocumentScreen = () => {
                   return;
                 }
 
-                if (navigation.canGoBack()) {
-                  navigation.goBack()
-                }
+                navigation.navigate("MyBookings")
             })
 
           }}

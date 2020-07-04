@@ -10,13 +10,14 @@ export type TimeCheckboxProps = {
     defaultChecked?: boolean
     checked?: boolean
     nonEditable?: boolean
+    disabledStyling?: boolean
     onChange: (v: boolean) => void
     onClick?: () => void
     accessoryRight?: (props: { style: TextStyle}) => React.ReactNode;
     replaceCheckbox?: (props?: { style: TextStyle}) => React.ReactNode;
 }
 
-const TimeCheckbox: React.FC<TimeCheckboxProps> = ({ title, nonEditable, replaceCheckbox, onClick,subTitle, style, onChange, defaultChecked, checked: forceChecked, accessoryRight: AccessoryRight }) => {
+const TimeCheckbox: React.FC<TimeCheckboxProps> = ({ title, disabledStyling = false,nonEditable, replaceCheckbox, onClick,subTitle, style, onChange, defaultChecked, checked: forceChecked, accessoryRight: AccessoryRight }) => {
     const [checked, setChecked] = useState(false);
     const styles = {
         color: '#EEF1F5',
@@ -24,7 +25,7 @@ const TimeCheckbox: React.FC<TimeCheckboxProps> = ({ title, nonEditable, replace
         backgroundColor: '#F7F8FA50'
     }
 
-    if (checked) {
+    if (checked && disabledStyling == false) {
         styles.color = '#41D5FB'
         styles.textColor = '#41D5FB'
         styles.backgroundColor = 'white'

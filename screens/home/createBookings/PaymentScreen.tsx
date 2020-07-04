@@ -177,6 +177,7 @@ export default () => {
                                             })
                                         })
                                         .then((res) => {
+                                            console.log(res.data)
                                             navigation.navigate('WebView', { url: res.data.links.find(i => i.method == 'REDIRECT').href, paypalPaymentId: res.data.id, ...paypalJson })
                                         })
                                         .catch(err => {
