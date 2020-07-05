@@ -21,8 +21,8 @@ const menuData = [
     { name: "Terms and Conditions", screenName: "TermsConditions", iconName: 'file-document',key: 'sdsfwwe' },
     { name: "Logout", iconName: 'logout', key: 'assdrw', onPress: () => {
         Alert.alert(
-            "Are you sure you want to logout?",
             "",
+            "Are you sure you want to logout?",
             [
                 {
                     text: "No",

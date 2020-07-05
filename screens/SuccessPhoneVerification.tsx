@@ -36,7 +36,7 @@ const DocumentScreen = () => {
           </Text>
 
           <Text style={{ textAlign: 'center', marginBottom: '30%' }} category="h5">
-            Please verify your email as well to start using the app
+            We have sent a message to your email account {profile?.emailaddress} containing a link to verify your email address, please verify and then click Continue
           </Text>
         </Layout>
 
@@ -61,7 +61,7 @@ const DocumentScreen = () => {
             shadowRadius: 13.16,
             elevation: 10,
           }}>
-          {() => <Text style={{ color: 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>Done</Text>}
+          {() => <Text style={{ color: 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>Continue</Text>}
         </Button>
 
       </Layout>

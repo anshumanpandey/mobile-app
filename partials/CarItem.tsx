@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Text } from '@ui-kitten/components';
+import { Layout, Text, Avatar } from '@ui-kitten/components';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Image, TouchableWithoutFeedback, ViewStyle, View } from 'react-native';
 import ResolveDoors from '../utils/ResolveDoors';
@@ -27,12 +27,18 @@ const CarItem: React.FC<Props> = ({ vehicle, isActive, onClick, style: customeSt
     return (
         <TouchableWithoutFeedback onPress={() => onClick && onClick()}>
             <Layout style={{ paddingLeft: '3%', paddingRight: '3%', borderBottomColor: 'gray', borderBottomWidth: 1, display: 'flex', flexDirection: 'column', backgroundColor: currentStyles.backgroundColor, ...customeStyles }}>
-                <View>
-                    <Text style={{ textAlign: centerCarName ? 'center': 'left', fontSize: 14, fontFamily: 'SF-UI-Display_Bold', color: 'gray' }}>
-                        {GetCategoryByAcrissCode(vehicle.Vehicle.VehType.VehicleCategory)}
-                    </Text>
-                    <Text style={{ textAlign: centerCarName ? 'center': 'left', fontSize: 16, fontFamily: 'SF-UI-Display_Bold', }}>{vehicle.Vehicle.VehMakeModel.Name}</Text>
-                    <Text style={{ textAlign: centerCarName ? 'center': 'left', fontSize: 12, color: 'gray' }}>or similar</Text>
+                <View style={{ display: 'flex', flexDirection: 'row',justifyContent: 'space-between'}}>
+                    <View>
+                        <Text style={{ textAlign: centerCarName ? 'center' : 'left', fontSize: 14, fontFamily: 'SF-UI-Display_Bold', color: 'gray' }}>
+                            {GetCategoryByAcrissCode(vehicle.Vehicle.VehType.VehicleCategory)}
+                        </Text>
+                        <Text style={{ textAlign: centerCarName ? 'center' : 'left', fontSize: 16, fontFamily: 'SF-UI-Display_Bold', }}>{vehicle.Vehicle.VehMakeModel.Name}</Text>
+                        <Text style={{ textAlign: centerCarName ? 'center' : 'left', fontSize: 12, color: 'gray' }}>or similar</Text>
+                    </View>
+
+                    <View style={{ padding: '3%'}}>
+                    <Avatar style={{ borderRadius: 10 }} shape='square' source={require('../image/rightcars.png')} />
+                    </View>
                 </View>
                 <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '70%', backgroundColor: '#00000000' }}>
                     <Layout style={{ display: 'flex', flexDirection: 'row', backgroundColor: '#00000000' }}>
@@ -64,6 +70,13 @@ const CarItem: React.FC<Props> = ({ vehicle, isActive, onClick, style: customeSt
                                     <Text>{ResolveTransmission(vehicle.Vehicle.VehType.VehicleCategory)}</Text>
                                 </Layout>
                             )}
+
+                            <Layout style={{ display: 'flex', flexDirection: 'row', marginBottom: '4%', backgroundColor: 'rgba(0,0,0,0)' }}>
+                                <Avatar style={{ borderRadius: 10, height: 35, width: 35 }} shape='square' source={require('../image/key.png')} />
+                            </Layout>
+
+
+
                         </Layout>
 
                     </Layout>
