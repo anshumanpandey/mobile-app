@@ -98,6 +98,9 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
             renderItem={({ item, i }) => (
               <TouchableOpacity onPress={() => {
                 props.onOriginLocationSelected(item)
+                if (returnSameLocation) {
+                  props.onReturnLocationSelected(item)
+                }
                 setOriginInputText(item.locationname)
                 setOrigin(item)
                 setPickupResults(null)
