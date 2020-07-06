@@ -135,6 +135,7 @@ export default () => {
                                             Then you will be return to Right Cars App to obtain your booking confirmation
                                         </Text>
                                         <CheckBox
+                                            status="control"
                                             style={{ width: '90%', marginTop: '5%', justifyContent: 'flex-start' }}
                                             checked={termsAcepted}
                                             onChange={nextChecked => setTermsAcepted(nextChecked)}>
@@ -177,7 +178,7 @@ export default () => {
                                             })
                                         })
                                         .then((res) => {
-                                            console.log(res.data)
+                                            console.log(JSON.stringify(res.data))
                                             navigation.navigate('WebView', { url: res.data.links.find(i => i.method == 'REDIRECT').href, paypalPaymentId: res.data.id, ...paypalJson })
                                         })
                                         .catch(err => {

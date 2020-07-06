@@ -69,7 +69,7 @@ export default () => {
                                     setArrivalTime('');
                                     setExtras([])
                                     setVehicle(null)
-                                    setInmediatePickup(null);
+                                    setInmediatePickup(false);
                                 }, 2000);
                                 navigation.dispatch(
                                     CommonActions.reset({

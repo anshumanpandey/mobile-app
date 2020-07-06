@@ -96,7 +96,7 @@ const WebViewScreen = () => {
                 setArrivalTime('');
                 setExtras([])
                 setVehicle(null)
-                setInmediatePickup(null);
+                setInmediatePickup(false);
             })
 
     }, [navigatedToSuccess]);
