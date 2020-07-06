@@ -44,8 +44,6 @@ const DocumentScreen = () => {
           setParsedResponse(r.data.map(i => {
             const storedData = storedBookings.find(a => a.reservationNumber == i.resnumber)
 
-            console.log(i)
-
             return {
               currencyCode: storedData?.currency_code,
               image_preview_url: storedData?.veh_picture ? storedData?.veh_picture : 'https://carimages.rent.it/EN/1539285845928.png',
@@ -63,7 +61,8 @@ const DocumentScreen = () => {
               "arrivalTime": moment.utc(moment.unix(i.unixRTime)),
               pickUpInstructions: i.pickUpInstructions,
               reservationStatus: i.reservationStatus,
-              pLocationAddress: i.pLocationAddress
+              pLocationAddress: i.pLocationAddress,
+              equipment: storedData?.equipment || [],
             }
           }))
         })
@@ -117,6 +116,8 @@ const DocumentScreen = () => {
       AsyncStorage.getItem('myBookings')
         .then(jsonStringData => {
           const parsedValues = JSON.parse(jsonStringData).map(i => {
+          
+            console.log(i)
             return {
               currencyCode: i.currencyCode,
               image_preview_url: i.image_preview_url,
@@ -134,7 +135,8 @@ const DocumentScreen = () => {
               "arrivalTime": moment(i.arrivalTime),
               pickUpInstructions: i.pickUpInstructions,
               reservationStatus: i.reservationStatus,
-              pLocationAddress: i.pLocationAddress
+              pLocationAddress: i.pLocationAddress,
+              equipment: i?.equipment || [],
             }
           })
           setCompletedTrips(parsedValues)
