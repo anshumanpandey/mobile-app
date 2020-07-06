@@ -175,7 +175,7 @@ const DocumentScreen = () => {
               }
 
               return (
-                <CarItem key={o.VehID} vehicle={o} isActive={selectedIdx == idx} onClick={() => {
+                <CarItem centerCarName={true} key={o.VehID} vehicle={o} isActive={selectedIdx == idx} onClick={() => {
                   if (idx == selectedIdx) return setSelectedIdx(-1)
                   return setSelectedIdx(idx)
                 }} />

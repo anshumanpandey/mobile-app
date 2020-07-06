@@ -24,11 +24,13 @@ type Props = {
 const CarItem: React.FC<Props> = ({ vehicle, isActive, onClick, style: customeStyles, centerCarName = false }) => {
     const currentStyles = isActive ? hightLightStyles : { backgroundColor: 'white', priceColor: 'black' }
 
+    console.log(centerCarName)
+
     return (
         <TouchableWithoutFeedback onPress={() => onClick && onClick()}>
             <Layout style={{ paddingLeft: '3%', paddingRight: '3%', borderBottomColor: 'gray', borderBottomWidth: 1, display: 'flex', flexDirection: 'column', backgroundColor: currentStyles.backgroundColor, ...customeStyles }}>
-                <View style={{ display: 'flex', flexDirection: 'row',justifyContent: 'space-between'}}>
-                    <View>
+                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                    <View style={{ display: 'flex', justifyContent: 'center'}}>
                         <Text style={{ textAlign: centerCarName ? 'center' : 'left', fontSize: 14, fontFamily: 'SF-UI-Display_Bold', color: 'gray' }}>
                             {GetCategoryByAcrissCode(vehicle.Vehicle.VehType.VehicleCategory)}
                         </Text>
@@ -36,8 +38,8 @@ const CarItem: React.FC<Props> = ({ vehicle, isActive, onClick, style: customeSt
                         <Text style={{ textAlign: centerCarName ? 'center' : 'left', fontSize: 12, color: 'gray' }}>or similar</Text>
                     </View>
 
-                    <View style={{ padding: '3%'}}>
-                    <Avatar style={{ borderRadius: 10 }} shape='square' source={require('../image/rightcars.png')} />
+                    <View style={{ padding: '3%', position: 'absolute', right: 0 }}>
+                        <Avatar style={{ borderRadius: 10 }} shape='square' source={require('../image/rightcars.png')} />
                     </View>
                 </View>
                 <Layout style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '70%', backgroundColor: '#00000000' }}>
