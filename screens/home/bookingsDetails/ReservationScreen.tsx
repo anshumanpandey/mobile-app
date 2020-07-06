@@ -137,7 +137,7 @@ const DocumentScreen = () => {
               <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
                 Pickup Instructions
               </Text>
-              <Text style={{ fontFamily: 'SF-UI-Display', fontSize: 18 }}>
+              <Text style={{ textAlign: 'center',fontFamily: 'SF-UI-Display', fontSize: 18 }}>
                 {route.params.pickUpInstructions}
               </Text>
             </Layout>
