@@ -41,7 +41,6 @@ const WebViewScreen = () => {
     useEffect(() => {
         console.log("postDone", postDone)
         console.log("navigatedToSuccess", navigatedToSuccess)
-        console.log(extras)
         if (navigatedToSuccess == 0) return
         if (postDone) return
         if (loading) return 
@@ -62,7 +61,10 @@ const WebViewScreen = () => {
             equipment:extras.map(i => {
                 return {
                     vendorEquipID: i.Equipment.vendorEquipID,
-                    amount: i.amount
+                    Description: i.Equipment.Description,
+                    CurrencyCode: i.Charge.Taxamount.CurrencyCode,
+                    amount: i.amount,
+                    price: i.Charge.Amount,
                 }
             }),
             module_name: "CREATE_BOOKING"

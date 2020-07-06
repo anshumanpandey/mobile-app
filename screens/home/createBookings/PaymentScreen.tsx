@@ -12,18 +12,6 @@ import ResolveCurrencySymbol from '../../../utils/ResolveCurrencySymbol';
 import MenuButton from '../../../partials/MenuButton';
 
 const GET_PAYPAL_JSON = (vehicle: VehVendorAvail, meta, extras: (PricedEquip & { amount: number })[]) => {
-    const items = extras.map(i => {
-        return {
-            "name": i.Equipment.Description,
-            "description": i.Equipment.Description,
-            "quantity": i.amount,
-            "price": new Decimal(i.Charge.Amount).toFixed(2),
-            "tax": "0",
-            "sku": "1",
-            "currency": i.Charge.Taxamount.CurrencyCode || "USD"
-        }
-    });
-
     return {
         "intent": "sale",
         "payer": {
@@ -31,10 +19,7 @@ const GET_PAYPAL_JSON = (vehicle: VehVendorAvail, meta, extras: (PricedEquip & {
         },
         "transactions": [{
             "amount": {
-                "total": new Decimal(vehicle.TotalCharge.RateTotalAmount).add(items.reduce((prev, next) => {
-                    prev = new Decimal(next.price).times(next.quantity).add(prev).toNumber()
-                    return prev
-                }, 0)).toString(),
+                "total": new Decimal(vehicle.TotalCharge.RateTotalAmount).toString(),
                 "currency": vehicle.VehicleCharge.CurrencyCode || "USD",
             },
             "description": "This is the payment transaction description.",
@@ -54,7 +39,6 @@ const GET_PAYPAL_JSON = (vehicle: VehVendorAvail, meta, extras: (PricedEquip & {
                     "sku": "1",
                     "currency": vehicle.VehicleCharge.CurrencyCode || "USD"
                 },
-                ...items
                 ],
             }
         }],
@@ -113,13 +97,16 @@ export default () => {
                 <Layout>
                     <Layout style={{ marginTop: '5%' }}>
                         <Layout style={{ backgroundColor: '#f0f2f3', padding: '5%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <View style={{ display: 'flex', flexDirection: 'row'}}>
+                            <View style={{ display: 'flex', flexDirection: 'row' }}>
                                 <MenuButton />
-                                <Text style={{ marginLeft: '5%',fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }}>Pay now</Text>
+                                <Text style={{ marginLeft: '5%', fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }}>Pay now</Text>
                             </View>
                             <Text style={{ fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }}>
                                 {ResolveCurrencySymbol(paypalJson.transactions[0].amount.currency)}{' '}
-                                {new Decimal(paypalJson.transactions[0].amount.total).toFixed(2)}
+                                {new Decimal(paypalJson.transactions[0].amount.total).add(extras.reduce((prev, next) => {
+                                    prev = new Decimal(next.Charge.Amount).times(next.amount).add(prev).toNumber()
+                                    return prev
+                                }, 0)).toFixed(2)}
                             </Text>
                         </Layout>
                         <Layout style={{ padding: '5%' }}>
@@ -127,7 +114,7 @@ export default () => {
                                 indicatorStyle={{ backgroundColor: '#41d5fb' }}
                                 selectedIndex={selectedIndex}
                                 onSelect={index => setSelectedIndex(index)}>
-                                <Tab style={{ paddingTop: '4%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontSize: 18,fontFamily: 'SF-UI-Display_Bold', color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>Paypal</Text>} >
+                                <Tab style={{ paddingTop: '4%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontSize: 18, fontFamily: 'SF-UI-Display_Bold', color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>Paypal</Text>} >
                                     <View style={{ paddingTop: '10%', display: 'flex', alignItems: 'center' }}>
                                         <Image source={require('../../../image/paypal_logo.png')} />
                                         <Text style={{ fontSize: 20, textAlign: 'center', fontFamily: 'SF-UI-Display' }}>
@@ -141,7 +128,7 @@ export default () => {
                                             onChange={nextChecked => setTermsAcepted(nextChecked)}>
                                             {evaProps => {
                                                 return (
-                                                    <View style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row', marginLeft: '3%'}}>
+                                                    <View style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row', marginLeft: '3%' }}>
                                                         <Text {...evaProps} style={{ fontFamily: 'SF-UI-Display', fontSize: 16 }}>
                                                             I have read understood and accepted
                                                         </Text>

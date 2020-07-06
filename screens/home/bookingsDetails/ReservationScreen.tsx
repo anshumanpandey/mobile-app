@@ -17,6 +17,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useCarDetailState } from './detailsState';
 import MenuButton from '../../../partials/MenuButton';
 import moment from 'moment';
+import Decimal from 'decimal.js';
 
 const DocumentScreen = () => {
   const route = useRoute();
@@ -27,7 +28,7 @@ const DocumentScreen = () => {
         <View style={{ paddingTop: '5%', height: '90%', paddingLeft: '5%', paddingRight: '5%', display: 'flex', flexDirection: 'column' }}>
           <View style={{ width: '100%' }}>
             <Layout style={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
-              <View style={{ position: 'absolute',height: '100%', display: 'flex', alignItems: 'center' }}>
+              <View style={{ position: 'absolute', height: '100%', display: 'flex', alignItems: 'center' }}>
                 <MenuButton />
               </View>
               <View style={{ marginLeft: 'auto', marginRight: 'auto' }}>
@@ -84,22 +85,59 @@ const DocumentScreen = () => {
               </Layout>
             </View>
 
+            <Layout style={{ marginBottom: '3%', display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+              <View >
+                <Text style={{ textAlign: 'left', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
+                  Car Booking
+                </Text>
+                {route.params.equipment.map((i) => {
+                  return (
+                    <Text style={{ textAlign: 'left', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
+                      {i.Description}
+                    </Text>
+                  );
+                })}
+                <Text style={{ textAlign: 'left', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
+                  Total Price
+                </Text>
+                <Text style={{ textAlign: 'left', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
+                  Payable At Collection
+                </Text>
+              </View>
 
-            <Layout style={{ marginBottom: '3%' }}>
-              <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
-                Final Cost
-              </Text>
-              <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 16 }}>
-                {route.params.finalCost}
-                {ResolveCurrencySymbol(route.params.currencyCode)}
-              </Text>
+              <View style={{ marginLeft: '5%',display: 'flex', justifyContent: 'center'}}>
+                <Text style={{ fontFamily: 'SF-UI-Display', fontSize: 16 }}>
+                  {route.params.currencyCode}{' '}
+                  {route.params.finalCost}
+                </Text>
+                {route.params.equipment.map((i) => {
+                  return (
+                    <Text style={{ textAlign: 'left', fontFamily: 'SF-UI-Display' }} category="s1">
+                      {route.params.currencyCode}{' '}
+                      {(i.price*i.amount).toFixed(2)}
+                    </Text>
+                  );
+                })}
+                <Text style={{ fontFamily: 'SF-UI-Display', fontSize: 16 }}>
+                  {route.params.currencyCode}{' '}
+                  {new Decimal(route.params.finalCost || 0).add(route.params.equipment.reduce((total, next) => {
+                    return new Decimal(next.price).times(next.amount).add(total).toNumber();
+                  }, 0)).toFixed(2)}
+                </Text>
+                <Text style={{ fontFamily: 'SF-UI-Display', fontSize: 16 }}>
+                  {route.params.currencyCode}{' '}
+                  {route.params.equipment.reduce((total, next) => {
+                    return new Decimal(next.price).times(next.amount).add(total).toFixed(2);
+                  }, 0)}
+                </Text>
+              </View>
             </Layout>
 
             <Layout style={{ width: '75%', marginLeft: 'auto', marginRight: 'auto' }}>
               <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
                 Pickup Instructions
               </Text>
-              <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 18 }}>
+              <Text style={{ fontFamily: 'SF-UI-Display', fontSize: 18 }}>
                 {route.params.pickUpInstructions}
               </Text>
             </Layout>
@@ -222,7 +260,7 @@ export default function App({ navigation, route }) {
                   navigation.navigate('Report', { ...route.params })
                 }}>
                   <View style={{ height: '100%', borderColor: 'rgba(0,0,0,0.2)', borderRightWidth: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
-                    <MaterialIcons name="directions-car" style={{ color: cannotCollect? '#41d5fb40':'#41d5fb' }} size={24} />
+                    <MaterialIcons name="directions-car" style={{ color: cannotCollect ? '#41d5fb40' : '#41d5fb' }} size={24} />
                     <Text style={{ textAlign: 'center', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>COLLECT</Text>
                   </View>
 
@@ -246,7 +284,7 @@ export default function App({ navigation, route }) {
                   navigation.navigate('VerifyCancel', { ...route.params.params })
                 }}>
                   <View style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', borderColor: 'rgba(0,0,0,0.2)', borderRightWidth: 0, flexDirection: 'column' }}>
-                    <MaterialIcons name="cancel" style={{ color: cannotCancel ? '#cf183040':'#cf1830' }} size={24} />
+                    <MaterialIcons name="cancel" style={{ color: cannotCancel ? '#cf183040' : '#cf1830' }} size={24} />
                     <Text style={{ marginLeft: '5%', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>CANCEL </Text>
                   </View>
 
