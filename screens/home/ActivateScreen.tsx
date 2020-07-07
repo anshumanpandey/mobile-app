@@ -10,6 +10,7 @@ import { NativeModules, NativeEventEmitter } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import LoadingSpinner from '../../partials/LoadingSpinner';
 import { AppFontRegular } from '../../constants/fonts';
+import MenuButton from '../../partials/MenuButton';
 
 const eventEmitter = new NativeEventEmitter();
 
@@ -35,6 +36,7 @@ const DocumentScreen = () => {
 
 
         <Layout style={{ padding: '5%', backgroundColor: '#f7f9fc' }}>
+          <MenuButton />
           <TripCard
             {...route.params as TripCardProps}
           />
