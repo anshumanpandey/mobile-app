@@ -114,20 +114,20 @@ const DocumentScreen = () => {
                   return (
                     <Text style={{ textAlign: 'left', fontFamily: 'SF-UI-Display' }} category="s1">
                       {route.params.currencyCode}{' '}
-                      {(i.price*i.amount).toFixed(2)}
+                      {(i.Amount)}
                     </Text>
                   );
                 })}
                 <Text style={{ fontFamily: 'SF-UI-Display', fontSize: 16 }}>
                   {route.params.currencyCode}{' '}
                   {new Decimal(route.params.finalCost || 0).add(route.params.equipment.reduce((total, next) => {
-                    return new Decimal(next.price).times(next.amount).add(total).toNumber();
+                    return new Decimal(next.Amount).times(1).add(total).toNumber();
                   }, 0)).toFixed(2)}
                 </Text>
                 <Text style={{ fontFamily: 'SF-UI-Display', fontSize: 16 }}>
                   {route.params.currencyCode}{' '}
                   {route.params.equipment.reduce((total, next) => {
-                    return new Decimal(next.price).times(next.amount).add(total).toFixed(2);
+                    return new Decimal(next.Amount).times(1).add(total).toFixed(2);
                   }, 0)}
                 </Text>
               </View>

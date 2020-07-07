@@ -41,6 +41,7 @@ const DocumentScreen = () => {
     React.useCallback(() => {
       refetch()
         .then(r => {
+          console.log(r.data)
           setParsedResponse(r.data.map(i => {
             const storedData = storedBookings.find(a => a.reservationNumber == i.resnumber)
 
@@ -55,14 +56,15 @@ const DocumentScreen = () => {
               pickupLocationPhoneNumber: i.pPhoneNumber,
               "pickupTime": moment.utc(moment.unix(i.unixPTime)),
               "dropoffTime": moment.utc(moment.unix(i.unixRTime)),
-              carName: `${storedData?.veh_name}\nOr Similar`,
+              carName: `${i.carModel}\nOr Similar`,
               registratioNumber: i.resnumber,
-              "finalCost": storedData?.total_price ? new Decimal(storedData?.total_price).toFixed(2) : '',
+              "finalCost": i?.finalCost ? new Decimal(i.finalCost.replace("USD","").replace(/\s/g, '')).toFixed(2) : '',
               "arrivalTime": moment.utc(moment.unix(i.unixRTime)),
               pickUpInstructions: i.pickUpInstructions,
               reservationStatus: i.reservationStatus,
               pLocationAddress: i.pLocationAddress,
-              equipment: storedData?.equipment || [],
+              equipment: i?.equipment || [],
+              keytype: i?.keytype,
             }
           }))
         })
@@ -117,7 +119,6 @@ const DocumentScreen = () => {
         .then(jsonStringData => {
           const parsedValues = JSON.parse(jsonStringData).map(i => {
           
-            console.log(i)
             return {
               currencyCode: i.currencyCode,
               image_preview_url: i.image_preview_url,

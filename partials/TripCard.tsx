@@ -22,7 +22,7 @@ export type TripCardProps = {
 
   reservationNumber?: string
 
-  keyLess: boolean
+  keytype: string
 
   completed?: boolean
   upcoming?: boolean
@@ -40,8 +40,8 @@ const TripCard: React.FC<TripCardProps> = (props) => {
 
   return (
     <TouchableWithoutFeedback onPress={() => {
-      if (props.keyLess) navigation.navigate('Activate', { ...props, leftImageUri: undefined })
-      if (!props.keyLess) navigation.navigate('Reservation', {  screen: 'Home', params: {...props, leftImageUri: undefined}} )
+      //if (props.keyLess) navigation.navigate('Activate', { ...props, leftImageUri: undefined })
+      navigation.navigate('Reservation', {  screen: 'Home', params: {...props, leftImageUri: undefined}} )
     }}>
       <Layout style={{ backgroundColor: '#00000000', marginBottom: '5%' }}>
         <Layout style={{ backgroundColor: '#00000000', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -104,7 +104,7 @@ const TripCard: React.FC<TripCardProps> = (props) => {
             <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingTop: props.displayPreview == true && props.image_preview_url ? 0 : '5%', paddingBottom: '5%', paddingLeft: '5%', paddingRight: '5%', borderBottomLeftRadius: (props.upcoming || props.completed) ? 0 : 16, borderBottomRightRadius: (props.upcoming || props.completed) ? 0 : 16 }}>
               <Layout style={{ display: 'flex', flexDirection: 'row', width: '50%', alignSelf: 'flex-end' }}>
                 <Layout style={{ marginRight: '3%' }}>
-                  <Avatar style={{ borderRadius: 10 }} shape='square' source={props.keyLess ? require('../image/keyx.png') : require('../image/key.png')} />
+                  <Avatar style={{ borderRadius: 10 }} shape='square' source={props.keytype == "Keyless" ? require('../image/keyx.png') : require('../image/key.png')} />
                 </Layout>
                 <Layout>
                   <Text style={{ fontFamily: 'SF-UI-Display_Bold', fontSize: 15 }} category='h6'>{props.carName}</Text>
