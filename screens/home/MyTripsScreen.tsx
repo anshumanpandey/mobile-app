@@ -154,16 +154,6 @@ const DocumentScreen = () => {
         <Layout>
           <Layout style={{ paddingTop: '3%', paddingLeft: '3%', display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between' }}>
             <MenuButton />
-            <Datepicker
-              style={{ paddingLeft: '5%', paddingRight: '5%', width: '45%' }}
-              controlStyle={{ backgroundColor: 'white', borderRadius: 10, padding: '4%' }}
-              placeholder='Pick Date'
-              date={date}
-              title={(d) => moment(d).format(DATE_FORMAT)}
-              dateService={formatDateService}
-              onSelect={nextDate => setDate(nextDate)}
-              accessoryLeft={() => <EntypoIcon style={{ color: 'black' }} name="calendar" size={22} />}
-            />
           </Layout>
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', paddingRight: '5%', }}>
             <Text style={{ alignSelf: 'flex-start', marginLeft: '3%', fontFamily: 'SF-UI-Display_Bold', fontSize: 29 }}>My Trips</Text>
