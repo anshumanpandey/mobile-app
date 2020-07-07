@@ -10,6 +10,7 @@ import TripCard from '../../../partials/TripCard';
 import ResolveCurrencySymbol from '../../../utils/ResolveCurrencySymbol';
 import CarTripInfoCard from '../../../partials/CarTripInfoCard';
 import MenuButton from '../../../partials/MenuButton';
+import { AppFontBold } from '../../../constants/fonts'
 
 
 export default () => {
@@ -88,7 +89,7 @@ export default () => {
                                 paddingRight: 20,
                                 marginBottom: '2%'
                             }}>
-                            {() => <Text style={{ color: 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>Go My Trips</Text>}
+                            {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>Go My Trips</Text>}
                         </Button>
                     </Layout>
                 </Layout>

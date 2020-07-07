@@ -5,10 +5,10 @@ import GPSState from 'react-native-gps-state'
 import SystemSetting from 'react-native-system-setting'
 import { Image, Alert } from 'react-native';
 import { Layout, Text, Button } from '@ui-kitten/components';
-import Geolocation from '@react-native-community/geolocation';
 import MenuButton from '../../partials/MenuButton';
 import LocationIconComponent from '../../image/LocationIconComponent';
 import { useNavigation, useRoute, StackActions, CommonActions, useFocusEffect } from '@react-navigation/native';
+import { AppFontBold, AppFontRegular } from '../../constants/fonts'
 
 const DocumentScreen = () => {
   const navigation = useNavigation();
@@ -119,7 +119,7 @@ const DocumentScreen = () => {
             <Text style={{ textAlign: 'center' }} category="h4">You have authorized the use of Geolocation</Text>
             :
             <>
-              <Text style={{ textAlign: 'center', fontSize: 24, fontFamily: 'SF-UI-Display_Bold' }} category="h4">Enable Location</Text>
+              <Text style={{ textAlign: 'center', fontSize: 24, fontFamily: AppFontBold }} category="h4">Enable Location</Text>
               <Layout style={{ width: '70%' }}>
                 <Text style={{ textAlign: 'center', fontSize: 13, color: '#8F9BB3', marginBottom: '15%' }}>Choose your location to start find the request around you.</Text>
               </Layout>
@@ -141,7 +141,7 @@ const DocumentScreen = () => {
                   elevation: 10,
                 }}>
 
-                {() => <Text style={{ color: 'white', fontSize: 18, fontFamily: 'SF-UI-Display_Bold', textAlign: 'center', width: '100%' }}>Allow access</Text>}
+                {() => <Text style={{ color: 'white', fontSize: 18, fontFamily: AppFontBold, textAlign: 'center', width: '100%' }}>Allow access</Text>}
               </Button>
             </>
           }

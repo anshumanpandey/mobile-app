@@ -6,6 +6,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useCreateBookingState } from './CreateBookingState';
 import moment from 'moment';
 import CarTripInfoCard from '../../../partials/CarTripInfoCard';
+import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
 
 
 export default () => {
@@ -61,7 +62,7 @@ export default () => {
                                 paddingRight: 20,
                                 marginBottom: '2%'
                             }}>
-                            {() => <Text style={{ color: 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>Go My Trips</Text>}
+                            {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>Go My Trips</Text>}
                         </Button>
                     </Layout>
                 </Layout>

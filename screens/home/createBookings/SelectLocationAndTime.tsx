@@ -21,6 +21,7 @@ import LoadingSpinner from '../../../partials/LoadingSpinner';
 import { VehicleResponse } from '../../../types/SearchVehicleResponse';
 import MenuButton from '../../../partials/MenuButton';
 import { checkMultiple, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
+import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
 
 
 export default () => {
@@ -147,7 +148,7 @@ export default () => {
                 <Layout>
                     <View style={{ display: 'flex', flexDirection: 'row' }}>
                         <MenuButton />
-                        <Text style={{ width: '80%', textAlign: 'center', fontSize: 22, fontFamily: 'SF-UI-Display_Bold' }} category='s2'>
+                        <Text style={{ width: '80%', textAlign: 'center', fontSize: 22, fontFamily: AppFontBold }} category='s2'>
                             NEW BOOKING
                         </Text>
                     </View>
@@ -200,7 +201,7 @@ export default () => {
                                     setReturnTime(moment(d).add('days', 1).toDate())
                                 }}
                             />
-                            <Text style={{ fontFamily: 'SF-UI-Display_Bold' }}>Return Time</Text>
+                            <Text style={{ fontFamily: AppFontBold }}>Return Time</Text>
                             <DatePicker
                                 minuteInterval={30}
                                 date={returnTime}
@@ -268,7 +269,7 @@ export default () => {
                             paddingRight: 20,
                             marginBottom: '2%'
                         }}>
-                        {() => <Text style={{ color: loading ? "#ACB1C0" : 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>Search</Text>}
+                        {() => <Text style={{ color: loading ? "#ACB1C0" : 'white', fontFamily: AppFontBold, fontSize: 18 }}>Search</Text>}
                     </Button>
                 </Layout>
             </ScrollView >

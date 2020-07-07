@@ -18,6 +18,7 @@ import { useCarDetailState } from './detailsState';
 import MenuButton from '../../../partials/MenuButton';
 import moment from 'moment';
 import Decimal from 'decimal.js';
+import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
 
 const DocumentScreen = () => {
   const route = useRoute();
@@ -32,10 +33,10 @@ const DocumentScreen = () => {
                 <MenuButton />
               </View>
               <View style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-                <Text style={{ textAlign: 'center' }} category="h5">
+                <Text style={{ fontFamily: AppFontRegular, textAlign: 'center' }} category="h5">
                   CONFIRMATION
               </Text>
-                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display_Bold', fontSize: 22 }} >
+                <Text style={{ textAlign: 'center', fontFamily: AppFontBold, fontSize: 22 }} >
                   {route.params.registratioNumber}{' '}
                 </Text>
                 <Image
@@ -47,19 +48,19 @@ const DocumentScreen = () => {
 
             <View style={{ flexDirection: 'row', display: 'flex', justifyContent: 'space-around' }}>
               <Layout style={{ marginBottom: '3%' }}>
-                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
+                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: AppFontBold }} category="s1">
                   Pickup Location
                   </Text>
-                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 16 }}>
+                <Text style={{ textAlign: 'center', fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.pickupLocation}
                 </Text>
               </Layout>
 
               <Layout style={{ marginBottom: '3%' }}>
-                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
+                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: AppFontBold }} category="s1">
                   Dropout Location
               </Text>
-                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 16 }}>
+                <Text style={{ textAlign: 'center', fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.dropOffLocation}
                 </Text>
               </Layout>
@@ -67,19 +68,19 @@ const DocumentScreen = () => {
 
             <View style={{ flexDirection: 'row', display: 'flex', justifyContent: 'space-around' }}>
               <Layout style={{ marginBottom: '3%' }}>
-                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
+                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: AppFontBold }} category="s1">
                   Pickup Time
                   </Text>
-                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 16 }}>
+                <Text style={{ textAlign: 'center', fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.pickupTime.format('HH:mm')}
                 </Text>
               </Layout>
 
               <Layout style={{ marginBottom: '3%' }}>
-                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
+                <Text style={{ textAlign: 'center', color: 'grey', fontFamily: AppFontBold }} category="s1">
                   Dropout Time
               </Text>
-                <Text style={{ textAlign: 'center', fontFamily: 'SF-UI-Display', fontSize: 16 }}>
+                <Text style={{ textAlign: 'center', fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.dropoffTime.format('HH:mm')}
                 </Text>
               </Layout>
@@ -87,44 +88,44 @@ const DocumentScreen = () => {
 
             <Layout style={{ marginBottom: '3%', display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
               <View >
-                <Text style={{ textAlign: 'left', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
+                <Text style={{ textAlign: 'left', fontFamily: AppFontBold }} category="s1">
                   Car Booking
                 </Text>
                 {route.params.equipment.map((i) => {
                   return (
-                    <Text style={{ textAlign: 'left', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
+                    <Text style={{ textAlign: 'left', fontFamily: AppFontBold }} category="s1">
                       {i.Description}
                     </Text>
                   );
                 })}
-                <Text style={{ textAlign: 'left', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
+                <Text style={{ textAlign: 'left', fontFamily: AppFontBold }} category="s1">
                   Total Price
                 </Text>
-                <Text style={{ textAlign: 'left', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
+                <Text style={{ textAlign: 'left', fontFamily: AppFontBold }} category="s1">
                   Payable At Collection
                 </Text>
               </View>
 
               <View style={{ marginLeft: '5%',display: 'flex', justifyContent: 'center'}}>
-                <Text style={{ fontFamily: 'SF-UI-Display', fontSize: 16 }}>
+                <Text style={{ fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.currencyCode}{' '}
                   {route.params.finalCost}
                 </Text>
                 {route.params.equipment.map((i) => {
                   return (
-                    <Text style={{ textAlign: 'left', fontFamily: 'SF-UI-Display' }} category="s1">
+                    <Text style={{ textAlign: 'left', fontFamily: AppFontRegular }} category="s1">
                       {route.params.currencyCode}{' '}
                       {(i.Amount)}
                     </Text>
                   );
                 })}
-                <Text style={{ fontFamily: 'SF-UI-Display', fontSize: 16 }}>
+                <Text style={{ fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.currencyCode}{' '}
                   {new Decimal(route.params.finalCost || 0).add(route.params.equipment.reduce((total, next) => {
                     return new Decimal(next.Amount).times(1).add(total).toNumber();
                   }, 0)).toFixed(2)}
                 </Text>
-                <Text style={{ fontFamily: 'SF-UI-Display', fontSize: 16 }}>
+                <Text style={{ fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.currencyCode}{' '}
                   {route.params.equipment.reduce((total, next) => {
                     return new Decimal(next.Amount).times(1).add(total).toFixed(2);
@@ -134,10 +135,10 @@ const DocumentScreen = () => {
             </Layout>
 
             <Layout style={{ width: '75%', marginLeft: 'auto', marginRight: 'auto' }}>
-              <Text style={{ textAlign: 'center', color: 'grey', fontFamily: 'SF-UI-Display_Bold' }} category="s1">
+              <Text style={{ textAlign: 'center', color: 'grey', fontFamily: AppFontBold }} category="s1">
                 Pickup Instructions
               </Text>
-              <Text style={{ textAlign: 'center',fontFamily: 'SF-UI-Display', fontSize: 18 }}>
+              <Text style={{ textAlign: 'center',fontFamily: AppFontRegular, fontSize: 18 }}>
                 {route.params.pickUpInstructions}
               </Text>
             </Layout>
@@ -218,7 +219,7 @@ export default function App({ navigation, route }) {
                 }}>
                   <View style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', borderColor: 'rgba(0,0,0,0.2)', borderRightWidth: 0 }}>
                     <MaterialIcons name="location-on" style={{ color: '#41d5fb' }} size={24} />
-                    <Text style={{ marginLeft: '5%', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>DIRECTIONS</Text>
+                    <Text style={{ marginLeft: '5%', color: 'gray', fontFamily: AppFontRegular, fontSize: 12 }}>DIRECTIONS</Text>
                   </View>
 
                 </TouchableOpacity>
@@ -239,7 +240,7 @@ export default function App({ navigation, route }) {
                 }}>
                   <View style={{ height: '100%', borderColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
                     <MaterialIcons name="phone" style={{ color: '#41d5fb' }} size={24} />
-                    <Text style={{ textAlign: 'center', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>HELP</Text>
+                    <Text style={{ textAlign: 'center', color: 'gray', fontFamily: AppFontRegular, fontSize: 12 }}>HELP</Text>
                   </View>
 
                 </TouchableOpacity>
@@ -263,7 +264,7 @@ export default function App({ navigation, route }) {
                 }}>
                   <View style={{ height: '100%', borderColor: 'rgba(0,0,0,0.2)', borderRightWidth: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
                     <MaterialIcons name="directions-car" style={{ color: cannotCollect ? '#41d5fb40' : '#41d5fb' }} size={24} />
-                    <Text style={{ textAlign: 'center', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>COLLECT</Text>
+                    <Text style={{ textAlign: 'center', color: 'gray', fontFamily: AppFontRegular, fontSize: 12 }}>COLLECT</Text>
                   </View>
 
                 </TouchableOpacity>
@@ -287,7 +288,7 @@ export default function App({ navigation, route }) {
                 }}>
                   <View style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', borderColor: 'rgba(0,0,0,0.2)', borderRightWidth: 0, flexDirection: 'column' }}>
                     <MaterialIcons name="cancel" style={{ color: cannotCancel ? '#cf183040' : '#cf1830' }} size={24} />
-                    <Text style={{ marginLeft: '5%', color: 'gray', fontFamily: 'SF-UI-Display', fontSize: 12 }}>CANCEL </Text>
+                    <Text style={{ marginLeft: '5%', color: 'gray', fontFamily: AppFontRegular, fontSize: 12 }}>CANCEL </Text>
                   </View>
 
                 </TouchableOpacity>

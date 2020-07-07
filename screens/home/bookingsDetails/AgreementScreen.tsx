@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Layout, Text, Button, Input } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView, Image, TextInput, View } from 'react-native';
 import MenuButton from '../../../partials/MenuButton';
+import { AppFontBold } from '../../../constants/fonts'
 
 const DocumentScreen = ({ navigation, route }) => {
     return (
@@ -42,7 +43,7 @@ const DocumentScreen = ({ navigation, route }) => {
                         shadowRadius: 13.16,
                         elevation: 10,
                     }}>
-                    {() => <Text style={{ color: 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>Sign agreement</Text>}
+                    {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>Sign agreement</Text>}
                 </Button>
 
             </Layout>

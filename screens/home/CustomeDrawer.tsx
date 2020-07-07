@@ -15,14 +15,16 @@ import userHasFullProfile from "../../utils/userHasFullProfile";
 import userHasAllFiles from "../../utils/userHasAllFiles";
 import { useIsDrawerOpen } from "@react-navigation/drawer";
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { AppFontRegular } from "../../constants/fonts";
 
 const menuData = [
     { name: "Privacy Policy", screenName: "Policy", iconName: 'shield',key: 'swwe' },
     { name: "Terms and Conditions", screenName: "TermsConditions", iconName: 'file-document',key: 'sdsfwwe' },
+    { name: "Help", screenName: "MyBookings",iconName: 'help',key: 'qwrfwwe' },
     { name: "Logout", iconName: 'logout', key: 'assdrw', onPress: () => {
         Alert.alert(
-            "",
             "Are you sure you want to logout?",
+            "You will be send the Sign in",
             [
                 {
                     text: "No",
@@ -129,7 +131,8 @@ const styles = StyleSheet.create({
     menuItemText: {
         fontSize: 18,
         fontWeight: "300",
-        color: "rgba(0,0,0,0.8)"
+        color: "rgba(0,0,0,0.8)",
+        fontFamily: AppFontRegular
     },
 });
 

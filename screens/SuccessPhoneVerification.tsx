@@ -2,12 +2,12 @@ import React, { useRef } from 'react';
 import { Layout, Text, Button } from '@ui-kitten/components';
 import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native';
 import useAxios from 'axios-hooks'
-import { useGlobalState, dispatchGlobalState } from '../state';
-import { axiosInstance } from '../utils/AxiosBootstrap';
+import { useGlobalState } from '../state';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import LoadingSpinner from '../partials/LoadingSpinner';
 import { useNavigation } from '@react-navigation/native';
 import BackButton from '../partials/BackButton';
+import { AppFontBold } from '../constants/fonts'
 
 const DocumentScreen = () => {
   const [profile] = useGlobalState('profile');
@@ -61,7 +61,7 @@ const DocumentScreen = () => {
             shadowRadius: 13.16,
             elevation: 10,
           }}>
-          {() => <Text style={{ color: 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>Continue</Text>}
+          {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>Continue</Text>}
         </Button>
 
       </Layout>

@@ -13,6 +13,7 @@ import { VehVendorAvail, PricedEquip } from '../../../types/SearchVehicleRespons
 import ResolveCurrencySymbol from '../../../utils/ResolveCurrencySymbol';
 import MenuButton from '../../../partials/MenuButton';
 import Decimal from 'decimal.js';
+import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
 
 type ParamList = {
     CarExtras: {
@@ -84,7 +85,7 @@ export default () => {
                                 paddingRight: 20,
                                 marginBottom: '2%'
                             }}>
-                            {() => <Text style={{ color: 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>CONTINUE</Text>}
+                            {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>CONTINUE</Text>}
                         </Button>
                     </Layout>
                 </Layout>

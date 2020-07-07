@@ -4,6 +4,7 @@ import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventDa
 import { useNavigation } from '@react-navigation/native';
 import MenuButton from '../../partials/MenuButton';
 import { ScrollView } from 'react-native-gesture-handler';
+import { AppFontBold } from '../../constants/fonts';
 
 const DocumentScreen = () => {
   const navigation = useNavigation();
@@ -43,7 +44,7 @@ const DocumentScreen = () => {
             shadowRadius: 13.16,
             elevation: 10,
           }}>
-          {() => <Text style={{ color: 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>Go Back</Text>}
+          {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>Go Back</Text>}
         </Button>
 
       </Layout>

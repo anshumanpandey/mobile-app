@@ -10,6 +10,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import BackButton from '../../../partials/BackButton';
 import MenuButton from '../../../partials/MenuButton';
 import MapView from 'react-native-maps';
+import { AppFontBold } from '../../../constants/fonts';
 
 const DocumentScreen = () => {
   const navigation = useNavigation();
@@ -79,7 +80,7 @@ const DocumentScreen = () => {
 
 
       <Layout style={{ padding: '5%',position: 'absolute',display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '15%', marginBottom: '10%' }}>
-        <Text style={{ fontFamily: 'SF-UI-Display_Bold', textAlign: 'center' }} category="h5">No result :(</Text>
+        <Text style={{ fontFamily: AppFontBold, textAlign: 'center' }} category="h5">No result :(</Text>
         <Text style={{ color: '#8F9BB3', textAlign: 'center', marginBottom: '50%' }} category="h6">
           Sorry there are no vehicles available in your immediate area
         </Text>
@@ -110,7 +111,7 @@ const DocumentScreen = () => {
           shadowRadius: 13.16,
           elevation: 10,
         }}>
-        {() => <Text style={{ color: 'white', fontFamily: 'SF-UI-Display_Bold', fontSize: 18 }}>Go Back</Text>}
+        {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>Go Back</Text>}
       </Button>
 
     </SafeAreaView>
