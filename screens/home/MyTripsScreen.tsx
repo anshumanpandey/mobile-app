@@ -100,13 +100,13 @@ const DocumentScreen = () => {
       setActiveTrips(activeTrips)
 
       const upcomming = sortedBookings ? sortedBookings.filter(booking => {
-        return booking.pickupTime.isAfter(moment().add('h', 24)) && booking.reservationStatus != 'Cancelled'
+        return booking.pickupTime.isAfter(moment().add('h', 24)) && booking.reservationStatus != 'Cancelled' && booking.reservationStatus != 'Completed'
       }) : null
 
       setUpcommingTrips(upcomming)
 
       const completed = sortedBookings ? sortedBookings.filter(booking => {
-        return booking.dropoffTime.isBefore(moment()) || booking.reservationStatus == 'Cancelled'
+        return booking.dropoffTime.isBefore(moment()) || booking.reservationStatus == 'Cancelled' || booking.reservationStatus == 'Completed'
       }) : null
 
       setCompletedTrips(completed)

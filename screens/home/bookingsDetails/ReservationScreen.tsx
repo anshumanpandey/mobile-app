@@ -161,7 +161,9 @@ export default function App({ navigation, route }) {
   }, [])
 
   return (
-    <Tab.Navigator>
+    <Tab.Navigator tabBarOptions={{
+      style: { display: route.params.params.reservationStatus == 'Completed' ? 'none': 'flex'}
+    }} >
       <Tab.Screen
         name="Home"
         component={DocumentScreen}
@@ -251,7 +253,7 @@ export default function App({ navigation, route }) {
         component={ReportScreen}
         options={{
           tabBarButton: () => {
-            const cannotCollect = route.params.params.reservationStatus == 'Cancelled'
+            const cannotCollect = route.params.params.pickupTime.isAfter(moment().add('h', 24)) && route.params.params.reservationStatus != 'Cancelled' && route.params.params.reservationStatus != 'Completed'
 
             return (
               <View style={{ width: '25%' }}>
