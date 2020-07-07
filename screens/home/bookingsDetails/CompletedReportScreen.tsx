@@ -58,7 +58,7 @@ const DocumentScreen = ({ navigation, route }) => {
 
             post({ data })
             .then((r) => {
-              navigation.navigate("Home");
+              navigation.navigate("Activate", details);
             })
           }}
           size="giant"
