@@ -17,7 +17,7 @@ import LoadingSpinner from '../../../partials/LoadingSpinner';
 export default () => {
     const navigation = useNavigation();
     const route = useRoute();
-    const returnAddressString = `${route.params.pLocationAddress._.replace(/ /g, '+')}${route.params.pLocationAddress.CountryName[0].Name[0]}`
+    const returnAddressString = `${route.params.pLocationAddress.addressName.replace(/ /g, '+')}${route.params.pLocationAddress.CountryName.Name}`
     const [currentLocation, setCurrentLocation] = useState(null);
 
     const [returnLocationReq, refetchReturn] = useAxios({
