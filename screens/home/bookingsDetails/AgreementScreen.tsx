@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Layout, Text, Button, Input } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView, Image, TextInput, View } from 'react-native';
 import MenuButton from '../../../partials/MenuButton';
-import { AppFontBold } from '../../../constants/fonts'
+import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
 
 const DocumentScreen = ({ navigation, route }) => {
     return (
@@ -14,11 +14,11 @@ const DocumentScreen = ({ navigation, route }) => {
                 <MenuButton />
 
                 <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '10%', marginBottom: '10%' }}>
-                    <Text style={{ marginBottom: '10%', textAlign: 'center' }} category="h3">
+                    <Text style={{ fontFamily: AppFontRegular,marginBottom: '10%', textAlign: 'center' }} category="h3">
                         Sign our agreement
           </Text>
 
-                    <Text style={{ textAlign: 'center' }} category="h5">
+                    <Text style={{ fontFamily: AppFontRegular,textAlign: 'center' }} category="h5">
                         Now sign our agreement and complete the report process
                 </Text>
                 </Layout>

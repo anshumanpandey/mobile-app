@@ -24,7 +24,7 @@ const DocumentScreen = ({ navigation, route }) => {
         <MenuButton />
 
         <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '10%', marginBottom: '10%' }}>
-          <Text style={{ marginBottom: '10%', textAlign: 'center' }} category="h3">
+          <Text style={{ fontFamily: AppFontBold,marginBottom: '10%', textAlign: 'center' }} category="h3">
             Sign our agreement
           </Text>
 
