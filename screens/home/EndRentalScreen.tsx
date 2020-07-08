@@ -6,7 +6,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import moment from 'moment';
 import TripCard from '../../partials/TripCard';
 import ResolveCurrencySymbol from '../../utils/ResolveCurrencySymbol';
-import { AppFontBold } from '../../constants/fonts'
+import { AppFontBold, AppFontRegular } from '../../constants/fonts'
 
 export default () => {
     const navigation = useNavigation();
@@ -23,12 +23,12 @@ export default () => {
                         {...route.params}
                     />
 
-                    <Text style={{ textAlign: 'center', color: '#d1021b', fontSize: 22 }}>DURATION {route.params.pickupTime.add(1, 'h').diff(route.params.dropoffTime, 'hour')} Hrs - Mileage 23 Miles</Text>
-                    <Text style={{ textAlign: 'center', color: '#d1021b', fontSize: 22 }}> TOTAL COST OF RENTAL {ResolveCurrencySymbol(route.params.currency)} {route.params.finalCost} </Text>
+                    <Text style={{ fontFamily: AppFontRegular,textAlign: 'center', color: '#d1021b', fontSize: 22 }}>DURATION {route.params.pickupTime.add(1, 'h').diff(route.params.dropoffTime, 'hour')} Hrs - Mileage 23 Miles</Text>
+                    <Text style={{ fontFamily: AppFontRegular,textAlign: 'center', color: '#d1021b', fontSize: 22 }}> TOTAL COST OF RENTAL {ResolveCurrencySymbol(route.params.currency)} {route.params.finalCost} </Text>
 
                     <Layout style={{ position: 'relative',display: 'flex', alignItems: 'center', justifyContent: 'flex-end',height: 280}}>
                         <Image source={require('../../image/map.jpg')} style={{ position: 'absolute',flex: 1, width: 280, height: 280, resizeMode: 'contain' }} />
-                        <Text style={{ textAlign: 'center', color: '#d1021b', fontSize: 22 }}>
+                        <Text style={{ fontFamily: AppFontRegular,textAlign: 'center', color: '#d1021b', fontSize: 22 }}>
                             WHEN DEPARTING THE VEHICLE
                             PLEASE MAKE SURE YOU
                             COLLECT ALL YOUR BELONGING
