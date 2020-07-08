@@ -6,19 +6,8 @@ import TripCard, { TripCardProps } from '../../partials/TripCard';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
 
-import { NativeModules, NativeEventEmitter } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import LoadingSpinner from '../../partials/LoadingSpinner';
-
-const eventEmitter = new NativeEventEmitter();
-
-eventEmitter.addListener('DeviceStatus', (event) => {
-  console.log(event) // "someValue"
-});
-
-eventEmitter.addListener('turnOnBluetoothDevice', (event) => {
-  console.log(event) // "someValue"
-});
 
 const DocumentScreen = () => {
   const route = useRoute();
@@ -61,8 +50,8 @@ const DocumentScreen = () => {
                     const { tacsLeaseTokenTable, tacsSorcBlobTable } = tacsKeyring
                     const { blob } = tacsSorcBlobTable[0]
 
-                    NativeModules.HelloWorld.init(tacsLeaseTokenTable[0], blob)
-                    NativeModules.HelloWorld.onUnlockDoorsClick()
+                    /*NativeModules.HelloWorld.init(tacsLeaseTokenTable[0], blob)
+                    NativeModules.HelloWorld.onUnlockDoorsClick()*/
                   })
               }}>
                 <Image

@@ -60,7 +60,9 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>We need to use your location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need to use your location</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

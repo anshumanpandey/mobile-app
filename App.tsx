@@ -63,7 +63,7 @@ export default () => {
     return () => AppState.removeEventListener('change', cb);
   }, []);
   const j = { ...EvaMapping }
-  j.strict["text-font-family"] = "SF-UI-Display-Regular"
+  //j.strict["text-font-family"] = "SF-UI-Display-Regular"
   j.components.Input.appearances.default.variantGroups.status.basic.state.focused.borderColor = '#41D5FB'
   j.components.Input.appearances.default.variantGroups.status.basic.backgroundColor = "white"
 
