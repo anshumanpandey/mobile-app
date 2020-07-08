@@ -122,13 +122,13 @@ const DocumentScreen = () => {
                 <Text style={{ fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.currencyCode}{' '}
                   {new Decimal(route.params.finalCost || 0).add(route.params.equipment.reduce((total, next) => {
-                    return new Decimal(next.Amount).times(1).add(total).toNumber();
+                    return new Decimal(next.Amount || 0).times(1).add(total || 0).toNumber();
                   }, 0)).toFixed(2)}
                 </Text>
                 <Text style={{ fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.currencyCode}{' '}
                   {route.params.equipment.reduce((total, next) => {
-                    return new Decimal(next.Amount).times(1).add(total).toFixed(2);
+                    return new Decimal(next.Amount || 0).times(1).add(total || 0).toFixed(2);
                   }, 0)}
                 </Text>
               </View>
