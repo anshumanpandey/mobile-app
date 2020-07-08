@@ -56,7 +56,7 @@ const DocumentScreen = ({ navigation }) => {
                 );
               })}
             </View>
-            <Text style={{ textAlign: 'center', marginTop: '15%', }} category="h5">
+            <Text style={{ fontFamily: AppFontRegular, textAlign: 'center', marginTop: '15%', }} category="h5">
               Please move to position {currentPicktureIndex + 1} as shown in the picture and take a picture of the car
             </Text>
             <View style={{ display: 'flex', width: '100%', alignItems: 'center' }}>

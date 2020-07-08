@@ -448,7 +448,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             )}
 
                             {(currentPosition == 1 || currentPosition == 2 || currentPosition == 3) && (
-                                <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1, backgroundColor: 'red' }}>
+                                <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1, backgroundColor: 'white' }}>
                                     {sendFileReq.loading && (
                                         <View style={{ backgroundColor: 'white', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                             <Progress.Circle

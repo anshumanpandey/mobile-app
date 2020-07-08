@@ -8,6 +8,8 @@ import { GRCGDS_BACKEND } from 'react-native-dotenv'
 
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import LoadingSpinner from '../../partials/LoadingSpinner';
+import { AppFontRegular } from '../../constants/fonts';
+import MenuButton from '../../partials/MenuButton';
 
 const DocumentScreen = () => {
   const route = useRoute();
@@ -23,6 +25,7 @@ const DocumentScreen = () => {
 
 
         <Layout style={{ padding: '5%', backgroundColor: '#f7f9fc' }}>
+          <MenuButton />
           <TripCard
             {...route.params as TripCardProps}
           />
@@ -63,16 +66,16 @@ const DocumentScreen = () => {
           </Layout>
 
           <Layout style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: '#00000000' }}>
-            <Text category="h4">ODOMETER 00056887</Text>
-            <Text style={{ fontSize: 45 }} category="h1">LOCKED</Text>
+            <Text style={{ fontFamily: AppFontRegular }} category="h4">ODOMETER 00056887</Text>
+            <Text style={{ fontSize: 45, fontFamily: AppFontRegular }} category="h1">LOCKED</Text>
           </Layout>
 
           <Layout style={{ backgroundColor: '#00000000' }}>
             <Button onPress={() => navigation.navigate('EndRental', { ...route.params })} size="giant" style={{ borderRadius: 10, backgroundColor: '#5ac8fa', borderColor: '#5ac8fa', paddingLeft: 20, paddingRight: 20, marginBottom: '2%' }}>
-              {() => <Text style={{ color: 'white' }}>END RENTAL</Text>}
+              {() => <Text style={{ fontFamily: AppFontRegular,color: 'white' }}>END RENTAL</Text>}
             </Button>
             <Button onPress={() => navigation.navigate('Damage', { ...route.params })} size="giant" style={{ borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', paddingLeft: 20, paddingRight: 20 }}>
-              {() => <Text style={{ color: 'white' }}>HELP</Text>}
+              {() => <Text style={{ fontFamily: AppFontRegular,color: 'white' }}>HELP</Text>}
             </Button>
           </Layout>
 

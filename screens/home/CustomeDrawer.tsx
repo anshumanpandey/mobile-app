@@ -23,8 +23,8 @@ const menuData = [
     { name: "Help", screenName: "MyBookings",iconName: 'help',key: 'qwrfwwe' },
     { name: "Logout", iconName: 'logout', key: 'assdrw', onPress: () => {
         Alert.alert(
-            "Are you sure you want to logout?",
-            "You will be send the Sign in",
+            "",
+            "Do you really want to logout",
             [
                 {
                     text: "No",

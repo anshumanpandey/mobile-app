@@ -69,7 +69,7 @@ const TripCard: React.FC<TripCardProps> = (props) => {
             <View style={{ backgroundColor: 'white', paddingLeft: '5%', paddingTop: '2%',paddingRight: '5%', borderTopRightRadius: 16, borderTopLeftRadius: 16}}>
             {props.reservationStatus == 'Cancelled' && (
               <Layout style={{ alignSelf: 'flex-end' }}>
-                <Text style={{ textAlign: 'right', color: 'red' }}>CANCELLED</Text>
+                <Text style={{ fontFamily: AppFontRegular,textAlign: 'right', color: 'red' }}>CANCELLED</Text>
               </Layout>
             )}
             <Layout style={{ display: 'flex', flexDirection: 'row' }}>
@@ -86,11 +86,11 @@ const TripCard: React.FC<TripCardProps> = (props) => {
               <Layout style={{ display: 'flex', flexDirection: 'column', width: '90%' }}>
                 <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '5%' }}>
                   <Text style={{ fontSize: 16, fontFamily: AppFontBold }}>{props.pickupLocation}</Text>
-                  <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.pickupTime.format('DD MMM,HH:mm')}</Text>
+                  <Text style={{ fontFamily: AppFontBold, color: '#ACB1C0', fontSize: 13 }}>{props.pickupTime.format('DD MMM,HH:mm')}</Text>
                 </Layout>
                 <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text style={{ fontSize: 16, fontFamily: AppFontBold }}>{props.dropOffLocation}</Text>
-                  <Text style={{ color: '#ACB1C0', fontSize: 13 }}>{props.dropoffTime.format('DD MMM,HH:mm')}</Text>
+                  <Text style={{ fontFamily: AppFontBold, color: '#ACB1C0', fontSize: 13 }}>{props.dropoffTime.format('DD MMM,HH:mm')}</Text>
                 </Layout>
               </Layout>
             </Layout>
@@ -108,12 +108,12 @@ const TripCard: React.FC<TripCardProps> = (props) => {
                 </Layout>
                 <Layout>
                   <Text style={{ fontFamily: AppFontBold, fontSize: 15 }} category='h6'>{props.carName}</Text>
-                  <Text>{props.registratioNumber}</Text>
+                  <Text style={{ fontFamily: AppFontRegular }}>{props.registratioNumber}</Text>
                 </Layout>
               </Layout>
 
               <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Text style={{ color: '#ACB1C0', fontSize: 13 }}>Final cost</Text>
+                  <Text style={{ fontFamily: AppFontRegular,color: '#ACB1C0', fontSize: 13 }}>Final cost</Text>
                   <View style={{ display: 'flex', flexDirection: 'row' }}>
                     {props.currencyCode && <Text style={{ fontSize: 15, fontFamily: AppFontBold }}>{ResolveCurrencySymbol(props.currencyCode)}</Text>}
                     <Text style={{ fontSize: 15, fontFamily: AppFontBold }}>{props.finalCost}</Text>

@@ -8,6 +8,7 @@ import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 import { useGlobalState } from '../../../state';
 import MenuButton from '../../../partials/MenuButton';
+import { AppFontRegular } from '../../../constants/fonts';
 
 
 const DocumentScreen = ({ navigation }) => {
@@ -50,7 +51,7 @@ const DocumentScreen = ({ navigation }) => {
                     }}
                 />
                 {isClean && <View style={{ position: 'absolute', width: '100%',top: '50%' }}>
-                    <Text style={{ fontSize: 48,textAlign: 'center', color: 'rgba(0,0,0,0.2)'}}>Please sign here</Text>
+                    <Text style={{ fontFamily: AppFontRegular,fontSize: 48,textAlign: 'center', color: 'rgba(0,0,0,0.2)'}}>Please sign here</Text>
                 </View>}
                 <View style={{ position: 'absolute', top: '5%', left: '5%', zIndex: 4 }}>
                     <MenuButton />
@@ -67,7 +68,7 @@ const DocumentScreen = ({ navigation }) => {
                 </View>
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ marginLeft: '5%', fontSize: 18 }}>Signed by: {profile.firstname}{' '}{profile.lastname}</Text>
+                <Text style={{ fontFamily: AppFontRegular,marginLeft: '5%', fontSize: 18 }}>Signed by: {profile.firstname}{' '}{profile.lastname}</Text>
                 <Button
                     disabled={isClean}
                     onPress={() => {
