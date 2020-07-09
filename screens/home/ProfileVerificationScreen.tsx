@@ -621,10 +621,20 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     {!sendFileReq.loading && (
                                         <TouchableWithoutFeedback onPress={async () => {
                                             try {
-                                                const res = await DocumentPicker.pick({
-                                                    type: [DocumentPicker.types.images],
+                                                //adarsh chsnges on 9 jul 2020
+                                                ImagePicker.launchImageLibrary(options, (response) => {
+                                                    //console.log('Response = ', response);
+
+                                                    if (response.didCancel) {
+                                                        console.log('User cancelled image picker');
+                                                    } else if (response.error) {
+                                                        console.log('ImagePicker Error: ', response.error);
+                                                    } else if (response.customButton) {
+                                                        console.log('User tapped custom button: ', response.customButton);
+                                                    } else {
+                                                        dispatchFileState({ type: currentFileType, state: { file: response } })
+                                                    }
                                                 });
-                                                dispatchFileState({ type: currentFileType, state: { file: res } })
                                             } catch (error) {
                                                 axiosInstance({
                                                     url: GRCGDS_BACKEND,
