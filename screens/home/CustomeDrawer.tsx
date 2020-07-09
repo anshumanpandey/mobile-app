@@ -20,7 +20,6 @@ import { AppFontRegular } from "../../constants/fonts";
 const menuData = [
     { name: "Privacy Policy", screenName: "Policy", iconName: 'shield',key: 'swwe' },
     { name: "Terms and Conditions", screenName: "TermsConditions", iconName: 'file-document',key: 'sdsfwwe' },
-    { name: "Help", screenName: "MyBookings",iconName: 'help',key: 'qwrfwwe' },
     { name: "Logout", iconName: 'logout', key: 'assdrw', onPress: () => {
         Alert.alert(
             "",
