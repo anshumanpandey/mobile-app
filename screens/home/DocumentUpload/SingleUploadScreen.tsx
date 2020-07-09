@@ -4,7 +4,7 @@ import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-pi
 import { TouchableWithoutFeedback, ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import ImagePicker, { ImagePickerResponse } from 'react-native-image-picker';
-import { Image, Alert, View, TouchableOpacity } from 'react-native';
+import { Image, Alert, View, TouchableOpacity, Platform } from 'react-native';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { dispatchFileState, FileTypeEnum, useDocumentState, Actions } from './DocumentState';
 import { Formik } from 'formik';
@@ -121,7 +121,10 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                     }
 
                     data.append("module_name", "FILE_UPLOAD");
-                    data.append("file", file);
+                    data.append("file", {
+                        ...file,
+                        uri: (Platform.OS==='android') ? file.uri : file.uri.replace('file://', '')
+                    });
                     console.log(currentFileType)
                     data.append("fileType", currentFileType);
                     console.log(values)
@@ -168,7 +171,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                             showsText={true}
                                             textStyle={{ color: "#41d5fb" }}
                                             color={"#41d5fb"}
-                                            size={250}
+                                            size={100}
                                             progress={uploadPercent / 100}
                                             indeterminate={uploadPercent == 0}
                                             formatText={() => {
@@ -291,7 +294,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                 </View>}
 
                                 {!getFilesReq.loading && (
-                                    <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-55%' : '-35%', justifyContent: 'center', alignItems: 'center' }}>
+                                    <View style={{ zIndex: dictionary.get(currentFileType)?.file ? -1 : 4,position: 'absolute', top: 0, left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-55%' : '-35%', justifyContent: 'center', alignItems: 'center' }}>
                                         <Button
                                             onPress={(e) => {
                                                 ImagePicker.launchCamera(options, (response) => {
@@ -341,7 +344,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                         dispatchFileState({ type: currentFileType, state: { file: res } })
                                     }}>
 
-                                    <EntypoIcon style={{ marginRight: '5%', color: 'black' }} size={24} name="images" />
+                                    <EntypoIcon style={{ zIndex: 1, marginRight: '5%', color: 'black' }} size={24} name="images" />
                                     <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, fontFamily: AppFontBold }} category='s2'>
                                         Select the document from gallery
                                     </Text>
