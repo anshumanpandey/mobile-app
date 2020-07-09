@@ -24,7 +24,7 @@ const DocumentScreen = () => {
   const route = useRoute();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#f6f7f9', }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white', }}>
       <ScrollView contentContainerStyle={{ backgroundColor: 'white', flexGrow: 1 }}>
         <View style={{ paddingTop: '5%', height: '90%', paddingLeft: '5%', paddingRight: '5%', display: 'flex', flexDirection: 'column' }}>
           <View style={{ width: '100%' }}>
@@ -163,7 +163,7 @@ export default function App({ navigation, route }) {
 
   return (
     <Tab.Navigator tabBarOptions={{
-      style: { display: route.params.params.reservationStatus == 'Completed' || route.params.params.reservationStatus == 'Cancelled' ? 'none': 'flex'}
+      style: { display: route.params.params.pickupTime.isAfter(moment().add('h', 24)) || route.params.params.reservationStatus == 'Completed' || route.params.params.reservationStatus == 'Cancelled' ? 'none': 'flex'}
     }} >
       <Tab.Screen
         name="Home"
