@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Layout, Text, Input, Button, Datepicker, NativeDateService, Avatar, Toggle } from '@ui-kitten/components';
-import { SafeAreaView, ScrollView, View, Image, TouchableWithoutFeedback, TouchableOpacity, Alert } from 'react-native';
+import { SafeAreaView, ScrollView, View, Image, TouchableWithoutFeedback, TouchableOpacity, Platform, Alert } from 'react-native';
 import useAxios from 'axios-hooks'
 import { Formik } from 'formik';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
@@ -33,6 +33,8 @@ const options = {
     storageOptions: {
         skipBackup: true,
         path: 'images',
+        cameraRoll: true,
+        waitUntilSaved: true        
     },
 };
 
@@ -245,7 +247,10 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         }
 
                         data.append("module_name", "FILE_UPLOAD");
-                        data.append("file", file);
+                        data.append("file", {
+                            ...file,
+                            uri: (Platform.OS==='android') ? file.uri : file.uri.replace('file://', '')
+                        });
                         data.append("fileType", currentFileType);
                         if (values.expDate) {
                             data.append("expDate", values.expDate.format('YYYY-MM-DD'));
