@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Layout, Text, Button, Input } from '@ui-kitten/components';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { SafeAreaView, ScrollView, Image, TextInput, View } from 'react-native';
+import { SafeAreaView, ScrollView, Image, TextInput, View, Platform } from 'react-native';
 import ImagePicker, { ImagePickerResponse } from 'react-native-image-picker';
-import LoadingSpinner from '../../../partials/LoadingSpinner';
-import { useRoute } from '@react-navigation/native';
+import * as Progress from 'react-native-progress';
+import useAxios from 'axios-hooks'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import MenuButton from '../../../partials/MenuButton';
 import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
+import { GRCGDS_BACKEND } from 'react-native-dotenv';
+import LoadingSpinner from '../../../partials/LoadingSpinner';
+import { useCarDetailState } from './detailsState';
 
 const imageArr = []
 
@@ -24,6 +27,20 @@ const DocumentScreen = ({ navigation }) => {
   const maxPhotosAmount = 8
   const [pictures, setPictures] = useState<{ [k: number]: ImagePickerResponse }>({});
   const [currentPicktureIndex, setCurrentPicktureIndex] = useState(0);
+  const [uploadPercent, setUploadPercent] = useState(0);
+  const [details] = useCarDetailState("details");
+
+
+  const [postReq, post] = useAxios({
+    url: GRCGDS_BACKEND,
+    method: 'POST',
+    onUploadProgress: (e) => {
+      console.log(e)
+      var percentCompleted = Math.round((e.loaded * 100) / e.total)
+      console.log("percentCompleted", percentCompleted)
+      setUploadPercent(percentCompleted);
+    }
+  }, { manual: true })
 
   const options = {
     title: 'Select Avatar',
@@ -36,11 +53,26 @@ const DocumentScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1, display: 'flex', backgroundColor: '#f7f9fc' }}>
+        {postReq.loading && (
+          <View style={{ backgroundColor: 'rgba(255,255,255,0.85)', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, zIndex: 4 }}>
+            <Progress.Circle
+              showsText={true}
+              textStyle={{ color: "#41d5fb" }}
+              color={"#41d5fb"}
+              size={100}
+              progress={uploadPercent / 100}
+              indeterminate={uploadPercent == 0}
+              formatText={() => {
+                return `${uploadPercent}%`
+              }}
+            />
+          </View>
+        )}
         <View style={{ backgroundColor: '#f7f9fc' }}>
           <View style={{ position: 'absolute', padding: '5%', zIndex: 2, justifyContent: 'center', alignItems: 'center' }}>
             <MenuButton />
           </View>
-          <View style={{ display: 'flex', alignItems: 'center'}}>
+          <View style={{ display: 'flex', alignItems: 'center' }}>
             {imageArr[currentPicktureIndex] && <Image source={imageArr[currentPicktureIndex]} style={{ height: 250, margin: 0, padding: 0, resizeMode: 'contain' }} />}
           </View>
 
@@ -62,7 +94,7 @@ const DocumentScreen = ({ navigation }) => {
             <View style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
               <TouchableOpacity onPress={() => {
                 ImagePicker.launchCamera(options, (response) => {
-                  console.log('Response = ', response);
+                  //console.log('Response = ', response);
 
                   if (response.didCancel) {
                     console.log('User cancelled image picker');
@@ -84,13 +116,31 @@ const DocumentScreen = ({ navigation }) => {
             <Button
               disabled={!pictures[currentPicktureIndex]}
               onPress={(e) => {
-                setCurrentPicktureIndex(p => {
-                  const total = p + 1
-                  if (total == maxPhotosAmount) {
-                    navigation.navigate("Agreement", { pictures })
-                    return p;
-                  }
-                  return total
+                const data = new FormData();
+
+                data.append("module_name", "SAVE_DAMAGE_IMAGES");
+                data.append("resNumber", details.registratioNumber);
+
+                data.append("files[]", {
+                  name: `${currentPicktureIndex + 1}-${pictures[currentPicktureIndex].fileName}`,
+                  uri: Platform.OS === 'android' ? pictures[currentPicktureIndex].uri : pictures[currentPicktureIndex].uri.replace('file://', ''),
+                  type: pictures[currentPicktureIndex].type,
+                });
+
+                post({ data })
+                .then(() => {
+                  setUploadPercent(0);
+                  setCurrentPicktureIndex(p => {
+                    const total = p + 1
+                    if (total == maxPhotosAmount) {
+                      navigation.navigate("Agreement", { pictures })
+                      return p;
+                    }
+                    return total
+                  })
+                })
+                .catch(() => {
+                  setUploadPercent(0);
                 })
               }}
               size="giant"
