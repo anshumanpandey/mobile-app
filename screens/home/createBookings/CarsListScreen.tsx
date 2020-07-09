@@ -84,7 +84,7 @@ const DocumentScreen = () => {
   useEffect(() => {
     Orientation.addDeviceOrientationListener(onOrientationDidChange);
     Orientation.getOrientation(onOrientationDidChange);
-    
+
     cars.unshift({ header: true, vehicle: { deeplink: 'q' } })
     const sortedCars = cars
       .sort((a, b) => {
@@ -274,34 +274,36 @@ const DocumentScreen = () => {
           marginHorizontal: 0,
           margin: 0,
         }}>
-        <Layout style={{ height: '100%', padding: '3%' }}>
-          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={{ marginBottom: '6%' }} category="h5">Sort By</Text>
-            <Text onPress={() => setShowSortModal(false)} style={{ fontFamily: AppFontBold }} category="h3">X</Text>
-          </View>
-          <TouchableOpacity onPress={() => {
-            setShowSortModal(false)
-            setSortState("LowToHigh")
-          }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+          <Layout style={{ height: '100%', padding: '3%' }}>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: AppFontBold, marginBottom: '5%' }}>
-                Price Low To High
-            </Text>
-              {sortState == "LowToHigh" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start', color: '#41d5fb' }} name={"check"} size={24} />}
+              <Text style={{ marginBottom: '6%' }} category="h5">Sort By</Text>
+              <Text onPress={() => setShowSortModal(false)} style={{ fontFamily: AppFontBold }} category="h3">X</Text>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
-            setShowSortModal(false)
-            setSortState("HighToLow")
-          }}>
-            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: AppFontBold, marginBottom: '5%' }}>
-                Price High to Low
+            <TouchableOpacity onPress={() => {
+              setShowSortModal(false)
+              setSortState("LowToHigh")
+            }}>
+              <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: AppFontBold, marginBottom: '5%' }}>
+                  Price Low To High
             </Text>
-              {sortState == "HighToLow" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start', color: '#41d5fb' }} name={"check"} size={24} />}
-            </View>
-          </TouchableOpacity>
-        </Layout>
+                {sortState == "LowToHigh" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start', color: '#41d5fb' }} name={"check"} size={24} />}
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              setShowSortModal(false)
+              setSortState("HighToLow")
+            }}>
+              <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: AppFontBold, marginBottom: '5%' }}>
+                  Price High to Low
+            </Text>
+                {sortState == "HighToLow" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start', color: '#41d5fb' }} name={"check"} size={24} />}
+              </View>
+            </TouchableOpacity>
+          </Layout>
+        </SafeAreaView>
       </Modal>
 
       <Modal
@@ -311,137 +313,139 @@ const DocumentScreen = () => {
           margin: 0,
           justifyContent: 'flex-end',
         }}>
-        <Layout style={{ height: '100%', padding: '3%' }}>
-          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={{ marginBottom: '4%' }} category="h5">Filter By</Text>
-            <Text onPress={() => setShowFilterModal(false)} style={{ fontFamily: AppFontBold }} category="h3">X</Text>
-          </View>
-          <ScrollView>
-            <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: AppFontBold, marginBottom: '3%' }}>Transmission</Text>
-            {carTransmissionOptions.map(i => {
-              return (
-                <Card
-                  onPress={() => {
-                    setShowSortModal(false)
-                    setTransmissionFilter(p => {
-                      if (p.includes(i)) {
-                        return p.filter(o => o != i)
-                      }
-
-                      return [...p, i]
-                    })
-                  }}
-                  style={{
-                    marginBottom: '4%',
-                    shadowColor: '#000',
-                    shadowOffset: { width: 0, height: 1 },
-                    shadowOpacity: 0.5,
-                    shadowRadius: 3,
-                    elevation: 2,
-                  }}>
-                  <View style={{ display: 'flex', flexDirection: 'row' }}>
-                    <Text style={{ textAlign: 'left', color: '#41d5fb', fontFamily: AppFontRegular }} category="h6">
-                      {i}
-                    </Text>
-                    {transmissionFilters.includes(i) && <MaterialCommunityIcons style={{ marginLeft: '2%', color: '#41d5fb' }} name={"check"} size={24} />}
-                  </View>
-                </Card>
-              );
-            })}
-
-            <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: AppFontBold, marginBottom: '3%' }}>Car Type</Text>
-            {carTypeOptions.map(i => {
-              return (
-                <Card
-                  onPress={() => {
-                    setShowSortModal(false)
-                    setTypesFilter(p => {
-                      if (p.includes(i)) {
-                        return p.filter(o => o != i)
-                      }
-
-                      return [...p, i]
-                    })
-                  }}
-                  style={{
-                    marginBottom: '4%',
-                    shadowColor: '#000',
-                    shadowOffset: { width: 0, height: 1 },
-                    shadowOpacity: 0.5,
-                    shadowRadius: 3,
-                    elevation: 2,
-                  }}>
-                  <View style={{ display: 'flex', flexDirection: 'row' }}>
-                    <Text style={{ textAlign: 'left', color: '#41d5fb', fontFamily: AppFontRegular }} category="h6">
-                      {i}
-                    </Text>
-                    {typesFiter.includes(i) && <MaterialCommunityIcons style={{ marginLeft: '2%', color: '#41d5fb' }} name={"check"} size={24} />}
-                  </View>
-                </Card>
-              );
-            })}
-          </ScrollView>
-          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Button
-              onPress={(e) => {
-                setShowFilterModal(false)
-              }}
-              size="small"
-              style={{
-                width: '48%',
-                backgroundColor: '#41d5fb',
-                borderColor: '#41d5fb',
-                borderRadius: 10,
-                shadowColor: '#41d5fb',
-                shadowOffset: {
-                  width: 0,
-                  height: 10,
-                },
-                shadowOpacity: 0.51,
-                shadowRadius: 13.16,
-                elevation: 10,
-              }}>
-              {() => {
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+          <Layout style={{ height: '100%', padding: '3%' }}>
+            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={{ marginBottom: '4%' }} category="h5">Filter By</Text>
+              <Text onPress={() => setShowFilterModal(false)} style={{ fontFamily: AppFontBold }} category="h3">X</Text>
+            </View>
+            <ScrollView>
+              <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: AppFontBold, marginBottom: '3%' }}>Transmission</Text>
+              {carTransmissionOptions.map(i => {
                 return (
-                  <>
-                    <MaterialCommunityIcons style={{ color: 'white' }} size={26} name="close" />
-                    <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 18 }}>Close</Text>
-                  </>
-                );
-              }}
-            </Button>
-            <Button
-              onPress={(e) => {
-                setApplyFilter(true)
-                setShowFilterModal(false)
-              }}
-              size="small"
-              style={{
-                width: '48%',
-                backgroundColor: '#41d5fb',
-                borderColor: '#41d5fb',
-                borderRadius: 10,
-                shadowColor: '#41d5fb',
-                shadowOffset: {
-                  width: 0,
-                  height: 10,
-                },
-                shadowOpacity: 0.51,
-                shadowRadius: 13.16,
-                elevation: 10,
-              }}>
-              {() => {
-                return (
-                  <>
-                    <MaterialCommunityIcons style={{ color: 'white' }} size={26} name="check" />
-                    <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 18 }}>Apply</Text>
-                  </>
-                );
-              }}
-            </Button>
-          </View>
+                  <Card
+                    onPress={() => {
+                      setShowSortModal(false)
+                      setTransmissionFilter(p => {
+                        if (p.includes(i)) {
+                          return p.filter(o => o != i)
+                        }
 
-        </Layout>
+                        return [...p, i]
+                      })
+                    }}
+                    style={{
+                      marginBottom: '4%',
+                      shadowColor: '#000',
+                      shadowOffset: { width: 0, height: 1 },
+                      shadowOpacity: 0.5,
+                      shadowRadius: 3,
+                      elevation: 2,
+                    }}>
+                    <View style={{ display: 'flex', flexDirection: 'row' }}>
+                      <Text style={{ textAlign: 'left', color: '#41d5fb', fontFamily: AppFontRegular }} category="h6">
+                        {i}
+                      </Text>
+                      {transmissionFilters.includes(i) && <MaterialCommunityIcons style={{ marginLeft: '2%', color: '#41d5fb' }} name={"check"} size={24} />}
+                    </View>
+                  </Card>
+                );
+              })}
+
+              <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: AppFontBold, marginBottom: '3%' }}>Car Type</Text>
+              {carTypeOptions.map(i => {
+                return (
+                  <Card
+                    onPress={() => {
+                      setShowSortModal(false)
+                      setTypesFilter(p => {
+                        if (p.includes(i)) {
+                          return p.filter(o => o != i)
+                        }
+
+                        return [...p, i]
+                      })
+                    }}
+                    style={{
+                      marginBottom: '4%',
+                      shadowColor: '#000',
+                      shadowOffset: { width: 0, height: 1 },
+                      shadowOpacity: 0.5,
+                      shadowRadius: 3,
+                      elevation: 2,
+                    }}>
+                    <View style={{ display: 'flex', flexDirection: 'row' }}>
+                      <Text style={{ textAlign: 'left', color: '#41d5fb', fontFamily: AppFontRegular }} category="h6">
+                        {i}
+                      </Text>
+                      {typesFiter.includes(i) && <MaterialCommunityIcons style={{ marginLeft: '2%', color: '#41d5fb' }} name={"check"} size={24} />}
+                    </View>
+                  </Card>
+                );
+              })}
+            </ScrollView>
+            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Button
+                onPress={(e) => {
+                  setShowFilterModal(false)
+                }}
+                size="small"
+                style={{
+                  width: '48%',
+                  backgroundColor: '#41d5fb',
+                  borderColor: '#41d5fb',
+                  borderRadius: 10,
+                  shadowColor: '#41d5fb',
+                  shadowOffset: {
+                    width: 0,
+                    height: 10,
+                  },
+                  shadowOpacity: 0.51,
+                  shadowRadius: 13.16,
+                  elevation: 10,
+                }}>
+                {() => {
+                  return (
+                    <>
+                      <MaterialCommunityIcons style={{ color: 'white' }} size={26} name="close" />
+                      <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 18 }}>Close</Text>
+                    </>
+                  );
+                }}
+              </Button>
+              <Button
+                onPress={(e) => {
+                  setApplyFilter(true)
+                  setShowFilterModal(false)
+                }}
+                size="small"
+                style={{
+                  width: '48%',
+                  backgroundColor: '#41d5fb',
+                  borderColor: '#41d5fb',
+                  borderRadius: 10,
+                  shadowColor: '#41d5fb',
+                  shadowOffset: {
+                    width: 0,
+                    height: 10,
+                  },
+                  shadowOpacity: 0.51,
+                  shadowRadius: 13.16,
+                  elevation: 10,
+                }}>
+                {() => {
+                  return (
+                    <>
+                      <MaterialCommunityIcons style={{ color: 'white' }} size={26} name="check" />
+                      <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 18 }}>Apply</Text>
+                    </>
+                  );
+                }}
+              </Button>
+            </View>
+
+          </Layout>
+        </SafeAreaView>
       </Modal>
     </SafeAreaView>
   );

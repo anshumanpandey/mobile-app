@@ -82,7 +82,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
         )}
         <Layout style={{ display: 'flex', flexDirection: 'column', width: '85%', marginLeft: '1%' }}>
           <Autocomplete
-            style={{ fontFamily: AppFontBold, fontSize: 16, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }}
+            style={{ fontFamily: AppFontBold, padding: '3%',fontSize: 16, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }}
             containerStyle={{ width: '100%' }}
             inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
             listStyle={{ borderColor: 'white' }}
@@ -114,7 +114,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
             <Autocomplete
               style={{ fontFamily: AppFontBold, fontSize: 16, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }}
               containerStyle={{ width: '100%' }}
-              inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
+              inputContainerStyle={{ width: '100%', padding: '3%',borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
               listStyle={{ borderColor: 'white' }}
               placeholder="Enter Destination"
               data={!returnResults ? [] : returnResults}
