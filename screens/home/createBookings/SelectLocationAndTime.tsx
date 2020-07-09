@@ -73,10 +73,10 @@ export default () => {
                             break;
                         case RESULTS.DENIED:
                             console.log('The permission has not been requested / is denied but requestable');
-                            request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {
-                                if (result == RESULTS.UNAVAILABLE) Alert.alert('This feature is not available (on this device / in this context)')
-                                if (result == RESULTS.DENIED) Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
-                                if (result == RESULTS.BLOCKED) Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
+                            request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((r) => {
+                                if (r == RESULTS.UNAVAILABLE) Alert.alert('This feature is not available (on this device / in this context)')
+                                if (r == RESULTS.DENIED) Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
+                                if (r == RESULTS.BLOCKED) Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
                             });
                             break;
                         case RESULTS.GRANTED:
