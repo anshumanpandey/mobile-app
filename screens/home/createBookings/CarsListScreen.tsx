@@ -117,10 +117,10 @@ const DocumentScreen = () => {
               (type, dim) => {
                 if (type === 'HEADER') {
                   dim.width = Dimensions.get("window").width;
-                  dim.height = (Dimensions.get("window").height / 100) * 25;
+                  dim.height = 180;
                 } else {
                   dim.width = Dimensions.get("window").width;
-                  dim.height = (Dimensions.get("window").height / 100) * 46;
+                  dim.height = 290;
                 }
               }
             )}
