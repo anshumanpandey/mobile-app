@@ -59,6 +59,7 @@ export default () => {
             })
         } else {
             setOriginLocation(null)
+            setReturnLocation(null)
         }
     }, [inmediatePickup])
 
