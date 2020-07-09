@@ -254,7 +254,7 @@ export default function App({ navigation, route }) {
         component={ReportScreen}
         options={{
           tabBarButton: () => {
-            const cannotCollect = route.params.params.pickupTime.isAfter(moment().add('h', 24)) || route.params.params.reservationStatus == 'Cancelled' || route.params.params.reservationStatus != 'Completed'
+            const cannotCollect = route.params.params.pickupTime.isAfter(moment().add('h', 24)) || route.params.params.reservationStatus == 'Cancelled' || route.params.params.reservationStatus == 'Completed'
 
             return (
               <View style={{ width: '25%' }}>
