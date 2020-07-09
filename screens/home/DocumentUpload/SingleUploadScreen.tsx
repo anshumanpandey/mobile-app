@@ -4,7 +4,7 @@ import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-pi
 import { TouchableWithoutFeedback, ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import ImagePicker, { ImagePickerResponse } from 'react-native-image-picker';
-import { Image, Alert, View, TouchableOpacity, Platform } from 'react-native';
+import { Image, SafeAreaView, View, TouchableOpacity, Platform } from 'react-native';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { dispatchFileState, FileTypeEnum, useDocumentState, Actions } from './DocumentState';
 import { Formik } from 'formik';
@@ -18,6 +18,7 @@ import CountryPicker, { getAllCountries, FlagType } from 'react-native-country-p
 import * as Progress from 'react-native-progress';
 import { useFocusEffect } from '@react-navigation/native';
 import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
+import MenuButton from '../../../partials/MenuButton';
 
 const DATE_FORMAT = 'MMM DD,YYYY'
 const formatDateService = new NativeDateService('en', { format: DATE_FORMAT });
@@ -103,294 +104,300 @@ const DocumentScreen = ({ route, navigation }: Props) => {
     }
 
     return (
-        <Layout style={{ display: 'flex', flex: 1, padding: '3%' }}>
-            <Formik
-                initialValues={initialValues}
-                enableReinitialize={true}
-                onSubmit={values => {
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
 
-                    const data = new FormData();
+            <Layout style={{ display: 'flex', flex: 1, padding: '3%' }}>
+                <Formik
+                    initialValues={initialValues}
+                    enableReinitialize={true}
+                    onSubmit={values => {
 
-                    const file = dictionary.get(currentFileType)?.file;
+                        const data = new FormData();
 
-                    const currentFile = dictionary.get(currentFileType)?.file
-                    if (currentFile) {
-                        if ("fileName" in currentFile) {
-                            (file as DocumentPickerResponse).name = (currentFile as ImagePickerResponse).fileName || currentFileType;
+                        const file = dictionary.get(currentFileType)?.file;
+
+                        const currentFile = dictionary.get(currentFileType)?.file
+                        if (currentFile) {
+                            if ("fileName" in currentFile) {
+                                (file as DocumentPickerResponse).name = (currentFile as ImagePickerResponse).fileName || currentFileType;
+                            }
                         }
-                    }
 
-                    data.append("module_name", "FILE_UPLOAD");
-                    data.append("file", {
-                        ...file,
-                        uri: (Platform.OS==='android') ? file.uri : file.uri.replace('file://', '')
-                    });
-                    console.log(currentFileType)
-                    data.append("fileType", currentFileType);
-                    console.log(values)
-                    if (currentFileType != FileTypeEnum.selfi) {
-                        data.append("expDate", values.expDate.format('YYYY-MM-DD'));
-                        data.append("filecountry", currentCountryObj.cca2?.toLowerCase());
-                        data.append("docNumber", values.docNumber);
-                    }
+                        data.append("module_name", "FILE_UPLOAD");
+                        data.append("file", {
+                            ...file,
+                            uri: (Platform.OS === 'android') ? file.uri : file.uri.replace('file://', '')
+                        });
+                        console.log(currentFileType)
+                        data.append("fileType", currentFileType);
+                        console.log(values)
+                        if (currentFileType != FileTypeEnum.selfi) {
+                            data.append("expDate", values.expDate.format('YYYY-MM-DD'));
+                            data.append("filecountry", currentCountryObj.cca2?.toLowerCase());
+                            data.append("docNumber", values.docNumber);
+                        }
 
-                    sendFile({ data })
-                        .then(r => {
-                            if (route.params.fileType == FileTypeEnum.passport) {
-                                setFileToShow(`https://www.right-cars.com/uploads/pass/${r.data?.passimage}`)
-                            }
-                            if (route.params.fileType == FileTypeEnum.driving_license) {
-                                setFileToShow(`https://www.right-cars.com/uploads/drlic/${r.data?.drimage}`)
-                            }
-                            if (route.params.fileType == FileTypeEnum.selfi) {
-                                setFileToShow(`https://www.right-cars.com/uploads/selfi/${r.data?.selfiurl}`)
-                            }
-                            dispatchGlobalState({ type: 'profile', state: r.data })
-                            dispatchFileState({ type: Actions.RESET, state: {} })
-                            triggerChange(p => !p)
-                            setUploadPercent(0)
-                        })
-                        .catch(r => console.log(r))
+                        sendFile({ data })
+                            .then(r => {
+                                if (route.params.fileType == FileTypeEnum.passport) {
+                                    setFileToShow(`https://www.right-cars.com/uploads/pass/${r.data?.passimage}`)
+                                }
+                                if (route.params.fileType == FileTypeEnum.driving_license) {
+                                    setFileToShow(`https://www.right-cars.com/uploads/drlic/${r.data?.drimage}`)
+                                }
+                                if (route.params.fileType == FileTypeEnum.selfi) {
+                                    setFileToShow(`https://www.right-cars.com/uploads/selfi/${r.data?.selfiurl}`)
+                                }
+                                dispatchGlobalState({ type: 'profile', state: r.data })
+                                dispatchFileState({ type: Actions.RESET, state: {} })
+                                triggerChange(p => !p)
+                                setUploadPercent(0)
+                            })
+                            .catch(r => console.log(r))
 
-                }}
-            >
-                {({ handleChange, setFieldValue, handleSubmit, values, errors, touched, setFieldTouched }) => {
-                    console.log(fileToShow)
+                    }}
+                >
+                    {({ handleChange, setFieldValue, handleSubmit, values, errors, touched, setFieldTouched }) => {
+                        console.log(fileToShow)
 
-                    return (
-                        <>
-                            <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1 }}>
-                                <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', zIndex: 2 }}>
-                                    <Text style={{ textAlign: 'center', fontSize: 24, fontFamily: AppFontBold }} category='s2'>
-                                        {currentFileType}
+                        return (
+                            <>
+                                <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1 }}>
+                                    <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', zIndex: 2 }}>
+                                        <View style={{ position: 'absolute', left: 0, zIndex: 4}}>
+                                            <MenuButton />
+                                        </View>
+                                        <Text style={{ textAlign: 'center', fontSize: 24, fontFamily: AppFontBold }} category='s2'>
+                                            {currentFileType}
+                                        </Text>
+                                    </Layout>
+                                    {getFilesReq.loading && (
+                                        <View style={{ backgroundColor: 'white', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                            <Progress.Circle
+                                                showsText={true}
+                                                textStyle={{ color: "#41d5fb" }}
+                                                color={"#41d5fb"}
+                                                size={100}
+                                                progress={uploadPercent / 100}
+                                                indeterminate={uploadPercent == 0}
+                                                formatText={() => {
+                                                    return `${uploadPercent}%`
+                                                }}
+                                            />
+                                        </View>
+                                    )}
+                                    {!getFilesReq.loading && !route.params.fileToShow && !dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                        <UploadIconComponent />
+                                        <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, fontFamily: AppFontRegular }} category='s2'>
+                                            We need you to upload your
                                     </Text>
-                                </Layout>
-                                {getFilesReq.loading && (
-                                    <View style={{ backgroundColor: 'white', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <Progress.Circle
-                                            showsText={true}
-                                            textStyle={{ color: "#41d5fb" }}
-                                            color={"#41d5fb"}
-                                            size={100}
-                                            progress={uploadPercent / 100}
-                                            indeterminate={uploadPercent == 0}
-                                            formatText={() => {
-                                                return `${uploadPercent}%`
-                                            }}
-                                        />
-                                    </View>
-                                )}
-                                {!getFilesReq.loading && !route.params.fileToShow && !dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                    <UploadIconComponent />
-                                    <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, fontFamily: AppFontRegular }} category='s2'>
-                                        We need you to upload your
-                                    </Text>
-                                    <Text style={{ color: 'black', textAlign: 'left', fontSize: 26, fontFamily: AppFontBold }} category='s2'>
-                                        {currentFileType}
-                                    </Text>
-                                </View>}
+                                        <Text style={{ color: 'black', textAlign: 'left', fontSize: 26, fontFamily: AppFontBold }} category='s2'>
+                                            {currentFileType}
+                                        </Text>
+                                    </View>}
 
-                                {fileToShow && !dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                    {change ? (
-                                        <Avatar
-                                            key={fileToShow}
-                                            style={{ width: 200, height: 200, resizeMode: 'cover', marginBottom: '3%', zIndex: -2 }}
-                                            source={{ uri: fileToShow, cache: 'reload' }}
-                                        />
-                                    ) : (
+                                    {fileToShow && !dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                        {change ? (
                                             <Avatar
                                                 key={fileToShow}
                                                 style={{ width: 200, height: 200, resizeMode: 'cover', marginBottom: '3%', zIndex: -2 }}
                                                 source={{ uri: fileToShow, cache: 'reload' }}
                                             />
-                                        )}
-
-                                </View>}
-
-                                {dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                    <>
-                                        <Avatar
-                                            key={dictionary.get(currentFileType)?.file?.uri}
-                                            style={{ width: 175, height: 175, resizeMode: 'cover', marginTop: '3%', marginBottom: '3%', zIndex: -2 }}
-                                            source={{ uri: dictionary.get(currentFileType)?.file?.uri, cache: 'reload' }}
-                                        />
-                                        {currentFileType != FileTypeEnum.selfi && (
-                                            <>
-                                                <Datepicker
-                                                    style={{ paddingLeft: '5%', paddingRight: '5%', marginBottom: '1%', width: '100%' }}
-                                                    controlStyle={{
-                                                        backgroundColor: 'white',
-                                                        borderRadius: 10,
-                                                        borderColor: errors.expDate && touched.expDate ? '#ffa5bc' : '#E4E9F2'
-                                                    }}
-                                                    placeholder={() => <Text style={{ padding: '1.5%', paddingLeft: '4%', color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3' }}>{errors.expDate && touched.expDate ? errors.expDate : 'Expire Date'}</Text>}
-                                                    date={values?.expDate?.toDate()}
-                                                    title={(d) => moment(d)?.format(DATE_FORMAT)}
-                                                    dateService={formatDateService}
-                                                    onSelect={nextDate => setFieldValue("expDate", moment(nextDate))}
-                                                    accessoryRight={() => <EntypoIcon style={{ color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3', textAlign: 'left' }} name="calendar" size={22} />}
+                                        ) : (
+                                                <Avatar
+                                                    key={fileToShow}
+                                                    style={{ width: 200, height: 200, resizeMode: 'cover', marginBottom: '3%', zIndex: -2 }}
+                                                    source={{ uri: fileToShow, cache: 'reload' }}
                                                 />
+                                            )}
 
-                                                <Input
-                                                    status={errors.docNumber && touched.docNumber ? 'danger' : undefined}
-                                                    value={values.docNumber}
-                                                    onChangeText={handleChange('docNumber')}
-                                                    placeholderTextColor={errors.docNumber && touched.docNumber ? '#ffa5bc' : '#8F9BB3'}
-                                                    style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '1%', width: "90%" }}
-                                                    size="large"
-                                                    onBlur={() => setFieldTouched('docNumber')}
-                                                    placeholder={errors.docNumber && touched.docNumber ? errors.docNumber : 'Document Number'}
-                                                />
-                                                <Layout style={{ marginBottom: '1%', width: '90%' }}>
-                                                    <TouchableOpacity onPress={() => setShowCountryModal(true)}>
-                                                        <View style={{ width: '100%', borderWidth: 1, borderColor: errors.fileCountry && touched.fileCountry ? '#ffa5bc' : '#E4E9F2', borderRadius: 10 }}>
-                                                            {errors.fileCountry && touched.fileCountry && !currentCountryObj && (
-                                                                <Text style={{ color: '#ffa5bc', padding: '3.5%', marginLeft: '3.5%' }}>
-                                                                    {errors.fileCountry}
+                                    </View>}
+
+                                    {dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                        <>
+                                            <Avatar
+                                                key={dictionary.get(currentFileType)?.file?.uri}
+                                                style={{ width: 175, height: 175, resizeMode: 'cover', marginTop: '3%', marginBottom: '3%', zIndex: -2 }}
+                                                source={{ uri: dictionary.get(currentFileType)?.file?.uri, cache: 'reload' }}
+                                            />
+                                            {currentFileType != FileTypeEnum.selfi && (
+                                                <>
+                                                    <Datepicker
+                                                        style={{ paddingLeft: '5%', paddingRight: '5%', marginBottom: '1%', width: '100%' }}
+                                                        controlStyle={{
+                                                            backgroundColor: 'white',
+                                                            borderRadius: 10,
+                                                            borderColor: errors.expDate && touched.expDate ? '#ffa5bc' : '#E4E9F2'
+                                                        }}
+                                                        placeholder={() => <Text style={{ padding: '1.5%', paddingLeft: '4%', color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3' }}>{errors.expDate && touched.expDate ? errors.expDate : 'Expire Date'}</Text>}
+                                                        date={values?.expDate?.toDate()}
+                                                        title={(d) => moment(d)?.format(DATE_FORMAT)}
+                                                        dateService={formatDateService}
+                                                        onSelect={nextDate => setFieldValue("expDate", moment(nextDate))}
+                                                        accessoryRight={() => <EntypoIcon style={{ color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3', textAlign: 'left' }} name="calendar" size={22} />}
+                                                    />
+
+                                                    <Input
+                                                        status={errors.docNumber && touched.docNumber ? 'danger' : undefined}
+                                                        value={values.docNumber}
+                                                        onChangeText={handleChange('docNumber')}
+                                                        placeholderTextColor={errors.docNumber && touched.docNumber ? '#ffa5bc' : '#8F9BB3'}
+                                                        style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '1%', width: "90%" }}
+                                                        size="large"
+                                                        onBlur={() => setFieldTouched('docNumber')}
+                                                        placeholder={errors.docNumber && touched.docNumber ? errors.docNumber : 'Document Number'}
+                                                    />
+                                                    <Layout style={{ marginBottom: '1%', width: '90%' }}>
+                                                        <TouchableOpacity onPress={() => setShowCountryModal(true)}>
+                                                            <View style={{ width: '100%', borderWidth: 1, borderColor: errors.fileCountry && touched.fileCountry ? '#ffa5bc' : '#E4E9F2', borderRadius: 10 }}>
+                                                                {errors.fileCountry && touched.fileCountry && !currentCountryObj && (
+                                                                    <Text style={{ color: '#ffa5bc', padding: '3.5%', marginLeft: '3.5%' }}>
+                                                                        {errors.fileCountry}
                                                                     asd
-                                                                </Text>
-                                                            )}
-                                                            {!errors.fileCountry && currentCountryObj && currentCountryObj.name && (
-                                                                <Text style={{ color: '#8F9BB3', padding: '3.5%', marginLeft: '3.5%' }}>
-                                                                    {currentCountryObj.name.trim()}
-                                                                </Text>
-                                                            )}
-                                                            {(!errors.fileCountry || !touched.fileCountry) && !currentCountryObj && (
-                                                                <Text style={{ color: '#8F9BB3', padding: '3.5%', marginLeft: '3.5%' }}>
-                                                                    Select Country
-                                                                </Text>
-                                                            )}
-                                                        </View>
-                                                    </TouchableOpacity>
-                                                    {showCountryModal && (
-                                                        <CountryPicker
-                                                            containerButtonStyle={{
-                                                                borderWidth: 1,
-                                                                borderColor: errors.expDate && errors.expDate ? '#ffa5bc' : '#E4E9F2',
-                                                                padding: '3%',
-                                                                borderRadius: 10,
-                                                                width: 350,
-                                                            }}
-                                                            countryCode={values.fileCountry?.cca2?.toUpperCase()}
-                                                            visible={true}
-                                                            withFilter={true}
-                                                            withFlagButton={true}
-                                                            withCountryNameButton={true}
-                                                            renderFlagButton={() => {
-                                                                return
-                                                            }}
-                                                            onClose={() => setTimeout(() => setShowCountryModal(false), 0)}
-                                                            onSelect={(country) => {
-                                                                setCurrentCountryObj(country)
-                                                                setFieldValue('fileCountry', country)
-                                                                setTimeout(() => setShowCountryModal(false), 0)
-                                                            }}
-                                                        />
-                                                    )}
-                                                </Layout>
-                                            </>
-                                        )}
-                                    </>
-                                </View>}
+                                                                    </Text>
+                                                                )}
+                                                                {!errors.fileCountry && currentCountryObj && currentCountryObj.name && (
+                                                                    <Text style={{ color: '#8F9BB3', padding: '3.5%', marginLeft: '3.5%' }}>
+                                                                        {currentCountryObj.name.trim()}
+                                                                    </Text>
+                                                                )}
+                                                                {(!errors.fileCountry || !touched.fileCountry) && !currentCountryObj && (
+                                                                    <Text style={{ color: '#8F9BB3', padding: '3.5%', marginLeft: '3.5%' }}>
+                                                                        Select Country
+                                                                    </Text>
+                                                                )}
+                                                            </View>
+                                                        </TouchableOpacity>
+                                                        {showCountryModal && (
+                                                            <CountryPicker
+                                                                containerButtonStyle={{
+                                                                    borderWidth: 1,
+                                                                    borderColor: errors.expDate && errors.expDate ? '#ffa5bc' : '#E4E9F2',
+                                                                    padding: '3%',
+                                                                    borderRadius: 10,
+                                                                    width: 350,
+                                                                }}
+                                                                countryCode={values.fileCountry?.cca2?.toUpperCase()}
+                                                                visible={true}
+                                                                withFilter={true}
+                                                                withFlagButton={true}
+                                                                withCountryNameButton={true}
+                                                                renderFlagButton={() => {
+                                                                    return
+                                                                }}
+                                                                onClose={() => setTimeout(() => setShowCountryModal(false), 0)}
+                                                                onSelect={(country) => {
+                                                                    setCurrentCountryObj(country)
+                                                                    setFieldValue('fileCountry', country)
+                                                                    setTimeout(() => setShowCountryModal(false), 0)
+                                                                }}
+                                                            />
+                                                        )}
+                                                    </Layout>
+                                                </>
+                                            )}
+                                        </>
+                                    </View>}
 
-                                {!getFilesReq.loading && (
-                                    <View style={{ zIndex: dictionary.get(currentFileType)?.file ? -1 : 4,position: 'absolute', top: 0, left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-55%' : '-35%', justifyContent: 'center', alignItems: 'center' }}>
-                                        <Button
-                                            onPress={(e) => {
-                                                ImagePicker.launchCamera(options, (response) => {
-                                                    //console.log('Response = ', response);
+                                    {!getFilesReq.loading && (
+                                        <View style={{ zIndex: dictionary.get(currentFileType)?.file ? -1 : 4, position: 'absolute', top: '50%', left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-5%' : '0%', height: '15%', justifyContent: 'center', alignItems: 'center' }}>
+                                            <Button
+                                                onPress={(e) => {
+                                                    ImagePicker.launchCamera(options, (response) => {
+                                                        //console.log('Response = ', response);
 
-                                                    if (response.didCancel) {
-                                                        console.log('User cancelled image picker');
-                                                    } else if (response.error) {
-                                                        console.log('ImagePicker Error: ', response.error);
-                                                    } else if (response.customButton) {
-                                                        console.log('User tapped custom button: ', response.customButton);
-                                                    } else {
-                                                        dispatchFileState({ type: currentFileType, state: { file: response } })
-                                                    }
-                                                });
-                                            }}
-                                            style={{
-                                                zIndex: 2,
-                                                backgroundColor: '#41d5fb',
-                                                borderColor: '#41d5fb',
-                                                borderRadius: 30,
-                                                width: '50%',
-                                                marginLeft: 'auto',
-                                                marginRight: 'auto'
-                                            }}>
-                                            {() => {
-                                                return (
-                                                    <>
-                                                        <EntypoIcon style={{ marginRight: '5%', color: 'white' }} size={24} name="camera" />
-                                                        <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 18 }}>
-                                                            Use Camera
+                                                        if (response.didCancel) {
+                                                            console.log('User cancelled image picker');
+                                                        } else if (response.error) {
+                                                            console.log('ImagePicker Error: ', response.error);
+                                                        } else if (response.customButton) {
+                                                            console.log('User tapped custom button: ', response.customButton);
+                                                        } else {
+                                                            dispatchFileState({ type: currentFileType, state: { file: response } })
+                                                        }
+                                                    });
+                                                }}
+                                                style={{
+                                                    zIndex: 2,
+                                                    backgroundColor: '#41d5fb',
+                                                    borderColor: '#41d5fb',
+                                                    borderRadius: 30,
+                                                    width: '50%',
+                                                    marginLeft: 'auto',
+                                                    marginRight: 'auto'
+                                                }}>
+                                                {() => {
+                                                    return (
+                                                        <>
+                                                            <EntypoIcon style={{ marginRight: '5%', color: 'white' }} size={24} name="camera" />
+                                                            <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 18 }}>
+                                                                Use Camera
                                                     </Text>
-                                                    </>
-                                                );
-                                            }}
-                                        </Button>
-                                    </View>
+                                                        </>
+                                                    );
+                                                }}
+                                            </Button>
+                                        </View>
 
-                                )}
+                                    )}
 
-                                <TouchableWithoutFeedback
-                                    style={{ backgroundColor: 'white', height: '55%', display: 'flex', justifyContent: 'center', alignItems: dictionary.get(currentFileType)?.file ? 'flex-end' : 'center', flexDirection: 'row' }}
-                                    onPress={async () => {
-                                        const res = await DocumentPicker.pick({
-                                            type: [DocumentPicker.types.images],
-                                        });
-                                        dispatchFileState({ type: currentFileType, state: { file: res } })
-                                    }}>
+                                    <TouchableWithoutFeedback
+                                        style={{ backgroundColor: 'white', height: '55%', display: 'flex', justifyContent: 'center', alignItems: dictionary.get(currentFileType)?.file ? 'flex-end' : 'center', flexDirection: 'row' }}
+                                        onPress={async () => {
+                                            const res = await DocumentPicker.pick({
+                                                type: [DocumentPicker.types.images],
+                                            });
+                                            dispatchFileState({ type: currentFileType, state: { file: res } })
+                                        }}>
 
-                                    <EntypoIcon style={{ zIndex: 1, marginRight: '5%', color: 'black' }} size={24} name="images" />
-                                    <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, fontFamily: AppFontBold }} category='s2'>
-                                        Select the document from gallery
+                                        <EntypoIcon style={{ zIndex: 1, marginRight: '5%', color: 'black' }} size={24} name="images" />
+                                        <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, fontFamily: AppFontBold }} category='s2'>
+                                            Select the document from gallery
                                     </Text>
 
-                                </TouchableWithoutFeedback>
+                                    </TouchableWithoutFeedback>
 
 
-                            </ScrollView>
+                                </ScrollView>
 
-                            <Layout style={{ paddingTop: '2%' }}>
-                                <Button
-                                    disabled={currenButtonState().disabled || getFilesReq.loading}
-                                    onPress={() => {
-                                        const currentState = currenButtonState()
-                                        console.log(currentState)
-                                        if (currentState.canGoNext) {
-                                            navigation.navigate(currentState.goTo, currentState.with)
-                                            return
-                                        } else {
-                                            handleSubmit()
-                                        }
-                                    }}
-                                    size="giant"
-                                    style={{
-                                        backgroundColor: currenButtonState().disabled || getFilesReq.loading ? '#e4e9f2' : '#41d5fb',
-                                        borderColor: currenButtonState().disabled || getFilesReq.loading ? '#e4e9f2' : '#41d5fb',
-                                        borderRadius: 10,
-                                        shadowColor: '#41d5fb',
-                                        shadowOffset: {
-                                            width: 0,
-                                            height: 10,
-                                        },
-                                        shadowOpacity: 0.51,
-                                        shadowRadius: 13.16,
-                                        elevation: 10,
-                                    }}>
-                                    {() => <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 18 }}>
-                                        {currenButtonState().btnTxt}
-                                    </Text>}
-                                </Button>
-                            </Layout>
-                        </>
-                    )
-                }}
-            </Formik>
-        </Layout>
+                                <Layout style={{ paddingTop: '2%' }}>
+                                    <Button
+                                        disabled={currenButtonState().disabled || getFilesReq.loading}
+                                        onPress={() => {
+                                            const currentState = currenButtonState()
+                                            console.log(currentState)
+                                            if (currentState.canGoNext) {
+                                                navigation.navigate(currentState.goTo, currentState.with)
+                                                return
+                                            } else {
+                                                handleSubmit()
+                                            }
+                                        }}
+                                        size="giant"
+                                        style={{
+                                            backgroundColor: currenButtonState().disabled || getFilesReq.loading ? '#e4e9f2' : '#41d5fb',
+                                            borderColor: currenButtonState().disabled || getFilesReq.loading ? '#e4e9f2' : '#41d5fb',
+                                            borderRadius: 10,
+                                            shadowColor: '#41d5fb',
+                                            shadowOffset: {
+                                                width: 0,
+                                                height: 10,
+                                            },
+                                            shadowOpacity: 0.51,
+                                            shadowRadius: 13.16,
+                                            elevation: 10,
+                                        }}>
+                                        {() => <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 18 }}>
+                                            {currenButtonState().btnTxt}
+                                        </Text>}
+                                    </Button>
+                                </Layout>
+                            </>
+                        )
+                    }}
+                </Formik>
+            </Layout>
+        </SafeAreaView>
     )
 };
 
