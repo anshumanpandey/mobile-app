@@ -22,6 +22,7 @@ import { VehicleResponse } from '../../../types/SearchVehicleResponse';
 import MenuButton from '../../../partials/MenuButton';
 import { checkMultiple, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
+import Orientation, { OrientationType } from 'react-native-orientation-locker';
 
 
 export default () => {
@@ -32,12 +33,25 @@ export default () => {
     const [departureTime, setDepartureTime] = useCreateBookingState("departureTime");
     const [returnTime, setReturnTime] = useCreateBookingState("returnTime");
     const [currentLocation, setCurrentLocation] = useState(null);
+    const [currentWidth, setCurrentWidth] = useState(Dimensions.get('window').width);
 
     const [{ data, loading, error }, doSearch] = useAxios<VehicleResponse>({
         url: `${GRCGDS_BACKEND}/SEARCH_VEHICLE`,
         method: 'GET',
         validateStatus: () => true
     }, { manual: true })
+
+    const onOrientationDidChange = (orientation: OrientationType) => {
+        console.log("Dimensions.get('screen').width", Dimensions.get('screen').width)
+        setCurrentWidth(Dimensions.get('screen').width);
+    }
+
+    useEffect(() => {
+        Orientation.addDeviceOrientationListener(onOrientationDidChange);
+        Orientation.getOrientation(onOrientationDidChange);
+
+        return () => Orientation.removeDeviceOrientationListener(onOrientationDidChange);
+    }, []);
 
     useEffect(() => {
         if (inmediatePickup == true) {
@@ -75,8 +89,8 @@ export default () => {
                             console.log('The permission has not been requested / is denied but requestable');
                             request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((r) => {
                                 if (r == RESULTS.UNAVAILABLE) Alert.alert('This feature is not available (on this device / in this context)')
-                                if (r == RESULTS.DENIED) Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
-                                if (r == RESULTS.BLOCKED) Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
+                                if (r == RESULTS.DENIED) Alert.alert(':(', 'Please, allow the location, for us to do amazing things for you!')
+                                if (r == RESULTS.BLOCKED) Alert.alert(':(', 'Please, allow the location, for us to do amazing things for you!')
                             });
                             break;
                         case RESULTS.GRANTED:
@@ -95,7 +109,7 @@ export default () => {
                             break;
                         case RESULTS.BLOCKED:
                             console.log('The permission is denied and not requestable anymore');
-                            Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
+                            Alert.alert(':(', 'Please, allow the location, for us to do amazing things for you!')
                             break;
                     }
 
@@ -110,8 +124,8 @@ export default () => {
                             request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then((result) => {
                                 request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {
                                     if (result == RESULTS.UNAVAILABLE) Alert.alert('This feature is not available (on this device / in this context)')
-                                    if (result == RESULTS.DENIED) Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
-                                    if (result == RESULTS.BLOCKED) Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
+                                    if (result == RESULTS.DENIED) Alert.alert(':(', 'Please, allow the location, for us to do amazing things for you!')
+                                    if (result == RESULTS.BLOCKED) Alert.alert(':(', 'Please, allow the location, for us to do amazing things for you!')
                                 });
                             });
                             break;
@@ -131,7 +145,7 @@ export default () => {
                             break;
                         case RESULTS.BLOCKED:
                             console.log('The permission is denied and not requestable anymore');
-                            Alert.alert(':(','Please, allow the location, for us to do amazing things for you!')
+                            Alert.alert(':(', 'Please, allow the location, for us to do amazing things for you!')
                             break;
                     }
                 })
@@ -184,8 +198,9 @@ export default () => {
                         onReturnLocationSelected={(l) => setReturnLocation(l)}
                     />
                     {inmediatePickup !== null && (
-                        <>
+                        <View style={{ display: 'flex', flexDirection: 'column' }}>
                             <DatePicker
+                                style={{ width: currentWidth, alignSelf: 'center' }}
                                 minuteInterval={30}
                                 date={departureTime}
                                 onDateChange={(d) => {
@@ -204,11 +219,12 @@ export default () => {
                             />
                             <Text style={{ fontFamily: AppFontBold }}>Return Time</Text>
                             <DatePicker
+                                style={{ width: currentWidth, alignSelf: 'center' }}
                                 minuteInterval={30}
                                 date={returnTime}
                                 onDateChange={(d) => setReturnTime(d)}
                             />
-                        </>
+                        </View>
                     )}
                 </Layout>
                 <Layout style={{ marginTop: '5%' }}>

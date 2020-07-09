@@ -12,6 +12,7 @@ import { VehVendorAvail, VehRentalCore } from '../../../type/SearchVehicleRespon
 import { ScrollView } from 'react-native-gesture-handler';
 import GetCategoryByAcrissCode from '../../../utils/GetCategoryByAcrissCode';
 import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
+import Orientation, { OrientationType } from 'react-native-orientation-locker';
 
 const _dataProvider = new DataProvider((r1, r2) => r1.VehID !== r2.VehID)
 
@@ -28,7 +29,21 @@ const DocumentScreen = () => {
   const [showFilterModal, setShowFilterModal] = useState(false)
   const [showSortModal, setShowSortModal] = useState(false)
   const [sortState, setSortState] = useState<"LowToHigh" | "HighToLow">("LowToHigh")
-
+  const [currentLayoutProvider, setLp] = useState(new LayoutProvider(
+    index => {
+      if (index == 0) return 'HEADER'
+      return 0
+    },
+    (type, dim) => {
+      if (type === 'HEADER') {
+        dim.width = Dimensions.get('window').width;
+        dim.height = 190;
+      } else {
+        dim.width = Dimensions.get('window').width;
+        dim.height = 300;
+      }
+    }
+  ))
   const [carTransmissionOptions, setCarTransmissionOptions] = useState([])
   const [carTypeOptions, setCarTypeOptions] = useState([])
   const [carClassOptions, setCarClassOptions] = useState([])
@@ -40,7 +55,36 @@ const DocumentScreen = () => {
 
   const [dataToUse, setDataToUse] = useState(_dataProvider.cloneWithRows(cars));
 
+  const onOrientationDidChange = (orientation: OrientationType) => {
+    let isPortrait = false
+    if (orientation == 'PORTRAIT' || orientation == 'PORTRAIT-UPSIDEDOWN' || orientation == 'FACE-DOWN' || orientation == 'FACE-UP') {
+      isPortrait = true
+      console.log('isPortrait')
+    } else {
+      console.log('isnotPortrait')
+    }
+
+    setLp(new LayoutProvider(
+      index => {
+        if (index == 0) return 'HEADER'
+        return 0
+      },
+      (type, dim) => {
+        if (type === 'HEADER') {
+          dim.width = Dimensions.get('window').width;
+          dim.height = 190;
+        } else {
+          dim.width = Dimensions.get('window').width;
+          dim.height = isPortrait ? 290 : 330;
+        }
+      }
+    ))
+  };
+
   useEffect(() => {
+    Orientation.addDeviceOrientationListener(onOrientationDidChange);
+    Orientation.getOrientation(onOrientationDidChange);
+    
     cars.unshift({ header: true, vehicle: { deeplink: 'q' } })
     const sortedCars = cars
       .sort((a, b) => {
@@ -59,6 +103,8 @@ const DocumentScreen = () => {
       .filter(c => c.VehID)
       .map(c => GetCategoryByAcrissCode(c.Vehicle.VehType.VehicleCategory));
     setCarTypeOptions(Array.from((new Set(categories)).values()))
+
+    return () => Orientation.removeDeviceOrientationListener(onOrientationDidChange);
   }, [])
 
   useEffect(() => {
@@ -108,22 +154,9 @@ const DocumentScreen = () => {
         )}
         {route.params.cars.length != 0 && (
           <RecyclerListView
+            canChangeSize={true}
             style={{ width: '100%', backgroundColor: '#f0f2f3' }}
-            layoutProvider={new LayoutProvider(
-              index => {
-                if (index == 0) return 'HEADER'
-                return 0
-              },
-              (type, dim) => {
-                if (type === 'HEADER') {
-                  dim.width = Dimensions.get("window").width;
-                  dim.height = 190;
-                } else {
-                  dim.width = Dimensions.get("window").width;
-                  dim.height = 290;
-                }
-              }
-            )}
+            layoutProvider={currentLayoutProvider}
             dataProvider={dataToUse}
             rowRenderer={(type, o: VehVendorAvail, idx) => {
 
