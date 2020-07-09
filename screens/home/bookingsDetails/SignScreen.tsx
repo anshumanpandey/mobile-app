@@ -29,7 +29,7 @@ const DocumentScreen = ({ navigation }) => {
     );
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <>
             <View style={[{ flex: 1 }]}>
                 <SignatureCapture
                     ref={ref => {
@@ -37,8 +37,8 @@ const DocumentScreen = ({ navigation }) => {
                     }}
                     style={[{ flex: 1 }]}
                     showNativeButtons={false}
-                    showTitleLabel={true}
-                    showBorder={true}
+                    showBorder={false}
+                    showTitleLabel={false}
                     onDragEvent={() => {
                         setIsClean(false);
                     }}
@@ -80,7 +80,7 @@ const DocumentScreen = ({ navigation }) => {
                         borderColor: isClean == false ? '#41d5fb' : '#e4e9f2',
                     }}>Confirm</Button>
             </View>
-        </SafeAreaView>
+            </>
     );
 };
 

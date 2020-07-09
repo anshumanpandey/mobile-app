@@ -18,67 +18,68 @@ const DocumentScreen = ({ navigation, route }) => {
   }, { manual: true })
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1, display: 'flex', backgroundColor: '#f7f9fc' }}>
+        <Layout style={{ flex: 1, padding: '5%', backgroundColor: 'white' }}>
+          <MenuButton />
 
-      <Layout style={{ flex: 1, padding: '5%', backgroundColor: 'white' }}>
-        <MenuButton />
-
-        <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '10%', marginBottom: '10%' }}>
-          <Text style={{ fontFamily: AppFontBold,marginBottom: '10%', textAlign: 'center' }} category="h3">
-            Sign our agreement
+          <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '10%', marginBottom: '10%' }}>
+            <Text style={{ fontFamily: AppFontBold, marginBottom: '10%', textAlign: 'center' }} category="h3">
+              Sign our agreement
           </Text>
 
-          <View>
-            <Image
-              style={{ borderWidth: 1, borderColor: '#41d5fb', height: '65%', resizeMode: 'contain' }}
-              source={{ uri: route?.params?.signImagePath }}
-            />
-          </View>
+            <View>
+              <Image
+                style={{ borderWidth: 1, borderColor: '#41d5fb', height: '65%', resizeMode: 'contain' }}
+                source={{ uri: route?.params?.signImagePath }}
+              />
+            </View>
 
+
+          </Layout>
+
+
+          <Button
+            disabled={postReq.loading}
+            accessoryRight={postReq.loading ? LoadingSpinner : undefined}
+            onPress={() => {
+              const data = new FormData();
+
+              data.append("module_name", "SAVE_DAMAGE_IMAGES");
+              data.append("resNumber", details.registratioNumber);
+
+              Object.keys(route.params.pictures).map(key => {
+                data.append("files[]", {
+                  name: `${key + 1}-${route.params.pictures[key].fileName}`,
+                  uri: Platform.OS === 'android' ? route.params.pictures[key].uri : route.params.pictures[key].uri.replace('file://', ''),
+                  type: route.params.pictures[key].type,
+                });
+              })
+
+              post({ data })
+                .then((r) => {
+                  navigation.navigate("Activate", details);
+                })
+            }}
+            size="giant"
+            style={{
+              backgroundColor: postReq.loading == false ? '#41d5fb' : '#e4e9f2',
+              borderColor: postReq.loading == false ? '#41d5fb' : '#e4e9f2',
+              borderRadius: 10,
+              shadowColor: '#41d5fb',
+              shadowOffset: {
+                width: 0,
+                height: 10,
+              },
+              shadowOpacity: 0.51,
+              shadowRadius: 13.16,
+              elevation: 10,
+            }}>
+            {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>Complete</Text>}
+          </Button>
 
         </Layout>
-
-
-        <Button
-          disabled={postReq.loading}
-          accessoryRight={postReq.loading ? LoadingSpinner : undefined}
-          onPress={() => {
-            const data = new FormData();
-
-            data.append("module_name", "SAVE_DAMAGE_IMAGES");
-            data.append("resNumber", details.registratioNumber);
-
-            Object.keys(route.params.pictures).map(key => {
-              data.append("files[]", {
-                name: `${key+1}-${route.params.pictures[key].fileName}`,
-                uri: Platform.OS === 'android' ? route.params.pictures[key].uri : route.params.pictures[key].uri.replace('file://', ''),
-                type: route.params.pictures[key].type,
-              });
-            })
-
-            post({ data })
-            .then((r) => {
-              navigation.navigate("Activate", details);
-            })
-          }}
-          size="giant"
-          style={{
-            backgroundColor: postReq.loading == false ? '#41d5fb' : '#e4e9f2',
-            borderColor: postReq.loading == false ? '#41d5fb' : '#e4e9f2',
-            borderRadius: 10,
-            shadowColor: '#41d5fb',
-            shadowOffset: {
-              width: 0,
-              height: 10,
-            },
-            shadowOpacity: 0.51,
-            shadowRadius: 13.16,
-            elevation: 10,
-          }}>
-          {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>Complete</Text>}
-        </Button>
-
-      </Layout>
+      </ScrollView>
     </SafeAreaView>
   );
 };
