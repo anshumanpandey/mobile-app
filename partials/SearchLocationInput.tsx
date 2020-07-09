@@ -60,7 +60,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
 
   return (
     <>
-      <Layout style={{ display: 'flex', flexDirection: 'row' }}>
+      <Layout style={{ display: 'flex', flexDirection: 'row', zIndex: 6 }}>
         {returnSameLocation && (
           <Layout style={{ marginLeft: '2%',display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
             <FontAwesomeIcon size={15} style={{ color: '#41d5fb' }} name="circle" />
@@ -99,14 +99,11 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
             renderItem={({ item, i }) => (
               <TouchableOpacity onPress={() => {
                 props.onOriginLocationSelected(item)
-                if (returnSameLocation) {
-                  props.onReturnLocationSelected(item)
-                }
                 setOriginInputText(item.locationname)
                 setOrigin(item)
                 setPickupResults(null)
               }}>
-                <Layout style={{ display: 'flex', flexDirection: 'row', borderBottomColor: '#E4E9F2', borderBottomWidth: 1, paddingBottom: '3%', paddingTop: '3%' }}>
+                <Layout style={{ display: 'flex', flexDirection: 'row', backgroundColor: "white",borderBottomColor: '#E4E9F2', borderBottomWidth: 1, paddingBottom: '3%', paddingTop: '3%' }}>
                   <EvilIcon style={{ color: '#41D5FB' }} name="location" size={32} />
                   <Text style={{ fontSize: 18 }}>{item.locationname}</Text>
                 </Layout>

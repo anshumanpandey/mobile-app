@@ -6,7 +6,7 @@ import { useCreateBookingState } from './CreateBookingState';
 import moment from 'moment';
 import { dispatchGlobalState, useGlobalState } from '../../../state';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
-var parseString = require('react-native-xml2js').parseString;
+import { SafeAreaView } from 'react-native';
 
 const WebViewScreen = () => {
     const navigation = useNavigation()
@@ -36,14 +36,14 @@ const WebViewScreen = () => {
     const [{ loading, error }, postCreation] = useAxios({
         url: `${GRCGDS_BACKEND}`,
         method: 'POST',
-      }, { manual: true })
+    }, { manual: true })
 
     useEffect(() => {
         console.log("postDone", postDone)
         console.log("navigatedToSuccess", navigatedToSuccess)
         if (navigatedToSuccess == 0) return
         if (postDone) return
-        if (loading) return 
+        if (loading) return
 
         const data = {
             pickup_date: moment(departureTime).format("YYYY-MM-DD"),
@@ -58,7 +58,7 @@ const WebViewScreen = () => {
             currency_code: route.params.transactions[0].amount.currency,
             paypalPaymentId: route.params.paypalPaymentId,
             total_price: route.params.transactions[0].amount.total,
-            equipment:extras.map(i => {
+            equipment: extras.map(i => {
                 return {
                     vendorEquipID: i.Equipment.vendorEquipID,
                     Description: i.Equipment.Description,
@@ -73,7 +73,7 @@ const WebViewScreen = () => {
             .then((res) => {
                 console.log("postCreation", res.data);
                 setReservationNumber(res.data.VehSegmentCore.ConfID.Resnumber)
-                dispatchGlobalState({ type: 'saveBooking', state: { ...data, reservationNumber: res.data.VehSegmentCore.ConfID.Resnumber }})
+                dispatchGlobalState({ type: 'saveBooking', state: { ...data, reservationNumber: res.data.VehSegmentCore.ConfID.Resnumber } })
 
                 navigation.navigate("Confirmation")
                 setPostDone(true)
@@ -103,30 +103,34 @@ const WebViewScreen = () => {
 
     }, [navigatedToSuccess]);
 
-    return <WebView
-        ref={ref => (webview.current = ref)}
-        source={{ uri: route.params.url }}
-        onNavigationStateChange={(e) => {
-            const { url } = e;
-            if (!url) return;
+    return (
+        <SafeAreaView style={{ flex: 1}}>
+            <WebView
+                ref={ref => (webview.current = ref)}
+                source={{ uri: route.params.url }}
+                onNavigationStateChange={(e) => {
+                    const { url } = e;
+                    if (!url) return;
 
-            // handle certain doctypes
-            console.log('webview', url)
-            console.log('includes', url.includes('PAYMENT_CANCELLED'))
-            if (url.includes('PAYMENT_SUCCESS')) {
-                setNavigatedToSuccess(p => p + 1)
-            }
-            if (url.includes('PAYMENT_CANCELLED')) {
-                navigation.dispatch(
-                    CommonActions.reset({
-                        index: 0,
-                        routes: [
-                            { name: 'MyBookings' },
-                        ],
-                    })
-                );
-            }
-        }}
-    />;
+                    // handle certain doctypes
+                    console.log('webview', url)
+                    console.log('includes', url.includes('PAYMENT_CANCELLED'))
+                    if (url.includes('PAYMENT_SUCCESS')) {
+                        setNavigatedToSuccess(p => p + 1)
+                    }
+                    if (url.includes('PAYMENT_CANCELLED')) {
+                        navigation.dispatch(
+                            CommonActions.reset({
+                                index: 0,
+                                routes: [
+                                    { name: 'MyBookings' },
+                                ],
+                            })
+                        );
+                    }
+                }}
+            />
+        </SafeAreaView>
+    );
 }
 export default WebViewScreen

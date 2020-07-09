@@ -98,7 +98,7 @@ const DocumentScreen = () => {
 
 
   return (
-    <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: 'white' }}>
+    <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: '#f0f2f3' }}>
       <View style={{ flex: 1, width: '100%', display: 'flex', justifyContent: 'center' }}>
         {route.params.cars.length == 0 && (
           <>
@@ -117,10 +117,10 @@ const DocumentScreen = () => {
               (type, dim) => {
                 if (type === 'HEADER') {
                   dim.width = Dimensions.get("window").width;
-                  dim.height = (Dimensions.get("window").height / 100) * 25;
+                  dim.height = 190;
                 } else {
                   dim.width = Dimensions.get("window").width;
-                  dim.height = (Dimensions.get("window").height / 100) * 46;
+                  dim.height = 290;
                 }
               }
             )}
