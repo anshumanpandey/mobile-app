@@ -1,8 +1,8 @@
 
-import React, { useState, useRef, useEffect } from 'react'
-import { Layout, Text, Input, Button, Select, SelectItem, Popover, Toggle } from '@ui-kitten/components';
-import { SafeAreaView, ScrollView, Image, View } from 'react-native';
-import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
+import React, { useState } from 'react'
+import { Text, Input, Button } from '@ui-kitten/components';
+import { SafeAreaView, View } from 'react-native';
+import { useRoute, useFocusEffect } from '@react-navigation/native';
 import MapView from "react-native-maps";
 import MapViewDirections from 'react-native-maps-directions';
 //@ts-ignore
@@ -10,15 +10,16 @@ import GetLocation from 'react-native-get-location'
 // @ts-ignore
 import GPSState from 'react-native-gps-state'
 import useAxios from 'axios-hooks'
-import TripCard from '../../../partials/TripCard';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../../../utils/i18n';
 
 
 export default () => {
-    const navigation = useNavigation();
+    const { i18n } = useTranslation();
     const route = useRoute();
     const returnAddressString = `${route.params.pLocationAddress.addressName.replace(/ /g, '+')}${route.params.pLocationAddress.CountryName.Name}`
-    const [currentLocation, setCurrentLocation] = useState(null);
+    const [currentLocation, setCurrentLocation] = useState<{[k: string]: any} | null>(null);
 
     const [returnLocationReq, refetchReturn] = useAxios({
         url: `https://maps.googleapis.com/maps/api/geocode/json?address=${returnAddressString}&key=AIzaSyBJ8evu2aDcSyb2F2NIuNQ3L5TeLAGpino`,
@@ -88,20 +89,22 @@ export default () => {
 
                 {!currentLocation && returnLocationReq.loading && (
                     <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                        <Text category="h2">Loading your route...</Text>
+                        <Text category="h2">
+                            {i18n.t(TRANSLATIONS_KEY.DETAILS_MAP_LOADING_ROUTE_TAG).toString()}
+                        </Text>
                         <LoadingSpinner />
                     </View>
                 )}
 
                 {returnLocationReq.error && (
                     <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                        <Text category="h2">We could not load your route</Text>
+                        <Text category="h2">{i18n.t(TRANSLATIONS_KEY.DETAILS_MAP_FAIL_LOAD_ROUTE_TAG).toString()}</Text>
                     </View>
                 )}
                 {(returnLocationReq.data && !currentLocation && !returnLocationReq.loading) && <Button onPress={() => {
 
                 }} size="small" style={{ position: 'absolute', right: 0, marginTop: '2%', marginLeft: '2%', borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', width: '30%' }}>
-                    {() => <Text style={{ color: 'white' }}>HELP</Text>}
+                    {() => <Text style={{ color: 'white' }}>{i18n.t(TRANSLATIONS_KEY.HELP_WORD).toString()}</Text>}
                 </Button>}
             </View>
 

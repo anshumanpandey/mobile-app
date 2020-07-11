@@ -10,14 +10,31 @@
     "PRIVACY_POLICY_WORD": "Privacy Policy",
     "AND_WORD": "and",
     "CANCELLED_WORD": "Cancelled",
+    "CONFIRMATION_WORD": "Confirmation",
+    "HELP_WORD": "Confirmation",
 
     "TRIP_CAR_COST_TAG":"Final cost",
+
+    "DETAILS_DIRECTION_MENU_OPTION":"Directions",
+    "DETAILS_HELP_MENU_OPTION":"Help",
+    "DETAILS_COLLECT_MENU_OPTION":"Collect",
+    "DETAILS_CANCEL_MENU_OPTION":"Cancel",
+    "DETAILS_PICKUP_LOCATION_TAG":"Pickup Location",
+    "DETAILS_DROP_LOCATION_TAG":"Dropout Location",
+    "DETAILS_PICKUP_LOCATION_TIME_TAG":"Pickup Time",
+    "DETAILS_DROP_LOCATION_TIME_TAG":"Dropout Time",
+    "DETAILS_CAR_BOOKING_TAG":"Car Booking",
+    "DETAILS_TOTAL_PRICE_TAG":"Total Price",
+    "DETAILS_PAYABLE_COLLECTION_TAG":"Payable At Collection",
+    "DETAILS_PICKUP_INSTRUCTIONS_TAG":"Pickup Instructions",
+    "DETAILS_MAP_LOADING_ROUTE_TAG":"Loading your route...",
+    "DETAILS_MAP_FAIL_LOAD_ROUTE_TAG":"We could not load your route",
+
 
     "CAR_LIST_ITEM_FUEL_POLICY": "Fuel policy",
     "CAR_LIST_ITEM_FUEL_POLICY_LILE_TO_LIKE": "Like to like",
     "CAR_LIST_ITEM_MILEAGE": "Mileage",
     "CAR_LIST_ITEM_UNLIMITED": "Unlimited",
-
 
     "MENU_ITEM_PRIVACY_POLICY": "Privacy Policy",
     "MENU_ITEM_TERMS_CONDITIONS": "Terms and Conditions",

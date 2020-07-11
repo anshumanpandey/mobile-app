@@ -19,9 +19,12 @@ import MenuButton from '../../../partials/MenuButton';
 import moment from 'moment';
 import Decimal from 'decimal.js';
 import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../../../utils/i18n';
 
 const DocumentScreen = () => {
   const route = useRoute();
+  const { i18n } = useTranslation();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white', }}>
@@ -33,8 +36,8 @@ const DocumentScreen = () => {
                 <MenuButton />
               </View>
               <View style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-                <Text style={{ fontFamily: AppFontRegular, textAlign: 'center' }} category="h5">
-                  CONFIRMATION
+                <Text style={{ fontFamily: AppFontRegular, textAlign: 'center', textTransform: 'uppercase' }} category="h5">
+                  {i18n.t(TRANSLATIONS_KEY.CONFIRMATION_WORD).toString()}
               </Text>
                 <Text style={{ textAlign: 'center', fontFamily: AppFontBold, fontSize: 22 }} >
                   {route.params.registratioNumber}{' '}
@@ -49,7 +52,7 @@ const DocumentScreen = () => {
             <View style={{ flexDirection: 'row', display: 'flex', justifyContent: 'space-around' }}>
               <Layout style={{ marginBottom: '3%' }}>
                 <Text style={{ textAlign: 'center', color: 'grey', fontFamily: AppFontBold }} category="s1">
-                  Pickup Location
+                  {i18n.t(TRANSLATIONS_KEY.DETAILS_PICKUP_LOCATION_TAG).toString()}
                   </Text>
                 <Text style={{ textAlign: 'center', fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.pickupLocation}
@@ -58,7 +61,7 @@ const DocumentScreen = () => {
 
               <Layout style={{ marginBottom: '3%' }}>
                 <Text style={{ textAlign: 'center', color: 'grey', fontFamily: AppFontBold }} category="s1">
-                  Dropout Location
+                  {i18n.t(TRANSLATIONS_KEY.DETAILS_DROP_LOCATION_TAG).toString()}
               </Text>
                 <Text style={{ textAlign: 'center', fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.dropOffLocation}
@@ -69,7 +72,7 @@ const DocumentScreen = () => {
             <View style={{ flexDirection: 'row', display: 'flex', justifyContent: 'space-around' }}>
               <Layout style={{ marginBottom: '3%' }}>
                 <Text style={{ textAlign: 'center', color: 'grey', fontFamily: AppFontBold }} category="s1">
-                  Pickup Time
+                  {i18n.t(TRANSLATIONS_KEY.DETAILS_PICKUP_LOCATION_TIME_TAG).toString()}
                   </Text>
                 <Text style={{ textAlign: 'center', fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.pickupTime.format('HH:mm')}
@@ -78,7 +81,7 @@ const DocumentScreen = () => {
 
               <Layout style={{ marginBottom: '3%' }}>
                 <Text style={{ textAlign: 'center', color: 'grey', fontFamily: AppFontBold }} category="s1">
-                  Dropout Time
+                  {i18n.t(TRANSLATIONS_KEY.DETAILS_DROP_LOCATION_TIME_TAG).toString()}
               </Text>
                 <Text style={{ textAlign: 'center', fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.dropoffTime.format('HH:mm')}
@@ -89,7 +92,7 @@ const DocumentScreen = () => {
             <Layout style={{ marginBottom: '3%', display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
               <View >
                 <Text style={{ textAlign: 'left', fontFamily: AppFontBold }} category="s1">
-                  Car Booking
+                  {i18n.t(TRANSLATIONS_KEY.DETAILS_CAR_BOOKING_TAG).toString()}
                 </Text>
                 {route.params.equipment.map((i) => {
                   return (
@@ -99,10 +102,10 @@ const DocumentScreen = () => {
                   );
                 })}
                 <Text style={{ textAlign: 'left', fontFamily: AppFontBold }} category="s1">
-                  Total Price
+                {i18n.t(TRANSLATIONS_KEY.DETAILS_TOTAL_PRICE_TAG).toString()}
                 </Text>
                 <Text style={{ textAlign: 'left', fontFamily: AppFontBold }} category="s1">
-                  Payable At Collection
+                  {i18n.t(TRANSLATIONS_KEY.DETAILS_PAYABLE_COLLECTION_TAG).toString()}
                 </Text>
               </View>
 
@@ -136,7 +139,7 @@ const DocumentScreen = () => {
 
             <Layout style={{ width: '75%', marginLeft: 'auto', marginRight: 'auto' }}>
               <Text style={{ textAlign: 'center', color: 'grey', fontFamily: AppFontBold }} category="s1">
-                Pickup Instructions
+                {i18n.t(TRANSLATIONS_KEY.DETAILS_PICKUP_INSTRUCTIONS_TAG).toString()}
               </Text>
               <Text style={{ textAlign: 'center',fontFamily: AppFontRegular, fontSize: 18 }}>
                 {route.params.pickUpInstructions}
@@ -156,6 +159,8 @@ const DocumentScreen = () => {
 const Tab = createBottomTabNavigator();
 export default function App({ navigation, route }) {
   const [, setDetails] = useCarDetailState("details");
+  const { i18n } = useTranslation();
+
 
   useEffect(() => {
     setDetails(route.params.params)
@@ -219,7 +224,9 @@ export default function App({ navigation, route }) {
                 }}>
                   <View style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', borderColor: 'rgba(0,0,0,0.2)', borderRightWidth: 0 }}>
                     <MaterialIcons name="location-on" style={{ color: '#41d5fb' }} size={24} />
-                    <Text style={{ marginLeft: '5%', color: 'gray', fontFamily: AppFontRegular, fontSize: 12 }}>DIRECTIONS</Text>
+                    <Text style={{ marginLeft: '5%', color: 'gray', fontFamily: AppFontRegular, fontSize: 12, textTransform: 'uppercase' }}>
+                      {i18n.t(TRANSLATIONS_KEY.DETAILS_DIRECTION_MENU_OPTION).toString()}
+                    </Text>
                   </View>
 
                 </TouchableOpacity>
@@ -240,7 +247,9 @@ export default function App({ navigation, route }) {
                 }}>
                   <View style={{ height: '100%', borderColor: 'rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
                     <MaterialIcons name="phone" style={{ color: '#41d5fb' }} size={24} />
-                    <Text style={{ textAlign: 'center', color: 'gray', fontFamily: AppFontRegular, fontSize: 12 }}>HELP</Text>
+                    <Text style={{ textAlign: 'center', color: 'gray', fontFamily: AppFontRegular, fontSize: 12, textTransform: 'uppercase' }}>
+                      {i18n.t(TRANSLATIONS_KEY.DETAILS_HELP_MENU_OPTION).toString()}
+                    </Text>
                   </View>
 
                 </TouchableOpacity>
@@ -264,7 +273,9 @@ export default function App({ navigation, route }) {
                 }}>
                   <View style={{ height: '100%', borderColor: 'rgba(0,0,0,0.2)', borderRightWidth: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
                     <MaterialIcons name="directions-car" style={{ color: cannotCollect ? '#41d5fb40' : '#41d5fb' }} size={24} />
-                    <Text style={{ textAlign: 'center', color: 'gray', fontFamily: AppFontRegular, fontSize: 12 }}>COLLECT</Text>
+                    <Text style={{ textAlign: 'center', color: 'gray', fontFamily: AppFontRegular, fontSize: 12, textTransform: 'uppercase' }}>
+                    {i18n.t(TRANSLATIONS_KEY.DETAILS_COLLECT_MENU_OPTION).toString()}
+                    </Text>
                   </View>
 
                 </TouchableOpacity>
@@ -288,7 +299,9 @@ export default function App({ navigation, route }) {
                 }}>
                   <View style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', borderColor: 'rgba(0,0,0,0.2)', borderRightWidth: 0, flexDirection: 'column' }}>
                     <MaterialIcons name="cancel" style={{ color: cannotCancel ? '#cf183040' : '#cf1830' }} size={24} />
-                    <Text style={{ marginLeft: '5%', color: 'gray', fontFamily: AppFontRegular, fontSize: 12 }}>CANCEL </Text>
+                    <Text style={{ marginLeft: '5%', color: 'gray', fontFamily: AppFontRegular, fontSize: 12, textTransform: 'uppercase' }}>
+                    {i18n.t(TRANSLATIONS_KEY.DETAILS_CANCEL_MENU_OPTION).toString()}
+                    </Text>
                   </View>
 
                 </TouchableOpacity>
