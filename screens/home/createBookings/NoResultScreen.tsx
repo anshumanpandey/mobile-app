@@ -1,19 +1,21 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Layout, Text, Button } from '@ui-kitten/components';
-import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData, View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 // @ts-ignore
 import GPSState from 'react-native-gps-state'
 //@ts-ignore
 import GetLocation from 'react-native-get-location'
 import LoadingSpinner from '../../../partials/LoadingSpinner';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import BackButton from '../../../partials/BackButton';
 import MenuButton from '../../../partials/MenuButton';
 import MapView from 'react-native-maps';
 import { AppFontBold } from '../../../constants/fonts';
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../../../utils/i18n';
 
 const DocumentScreen = () => {
   const navigation = useNavigation();
+  const { i18n } = useTranslation();
   const [currentLocation, setCurrentLocation] = useState(null);
 
   useFocusEffect(
@@ -67,7 +69,9 @@ const DocumentScreen = () => {
 
         {!currentLocation && (
           <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <Text category="h4">Fetching your location...</Text>
+            <Text category="h4">
+              {i18n.t(TRANSLATIONS_KEY.NO_RESULT_FETCHING_LOCATION_TAG).toString()}
+            </Text>
             <LoadingSpinner />
           </View>
         )}
@@ -80,9 +84,11 @@ const DocumentScreen = () => {
 
 
       <Layout style={{ padding: '5%',position: 'absolute',display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '15%', marginBottom: '10%' }}>
-        <Text style={{ fontFamily: AppFontBold, textAlign: 'center' }} category="h5">No result :(</Text>
+        <Text style={{ fontFamily: AppFontBold, textAlign: 'center' }} category="h5">
+          {i18n.t(TRANSLATIONS_KEY.NO_RESULT_TITLE).toString()}:(
+        </Text>
         <Text style={{ color: '#8F9BB3', textAlign: 'center', marginBottom: '50%' }} category="h6">
-          Sorry there are no vehicles available in your immediate area
+          {i18n.t(TRANSLATIONS_KEY.NO_RESULT_SUB_TITLE).toString()}
         </Text>
       </Layout>
 
@@ -111,7 +117,7 @@ const DocumentScreen = () => {
           shadowRadius: 13.16,
           elevation: 10,
         }}>
-        {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>Go Back</Text>}
+        {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>{i18n.t(TRANSLATIONS_KEY.NO_RESULT_GO_BACK_BTN).toString()}</Text>}
       </Button>
 
     </SafeAreaView>

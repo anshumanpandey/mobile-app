@@ -6,16 +6,16 @@ import { useNavigation, useRoute, CommonActions } from '@react-navigation/native
 import { Decimal } from 'decimal.js';
 import { useCreateBookingState } from './CreateBookingState';
 import moment from 'moment';
-import TripCard from '../../../partials/TripCard';
-import ResolveCurrencySymbol from '../../../utils/ResolveCurrencySymbol';
 import CarTripInfoCard from '../../../partials/CarTripInfoCard';
 import MenuButton from '../../../partials/MenuButton';
 import { AppFontBold } from '../../../constants/fonts'
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../../../utils/i18n';
 
 
 export default () => {
     const navigation = useNavigation();
-    const route = useRoute();
+    const { i18n } = useTranslation();
 
     const [departureTime, setDepartureTime] = useCreateBookingState("departureTime");
     const [returnTime, setReturnTime] = useCreateBookingState("returnTime");
@@ -89,7 +89,7 @@ export default () => {
                                 paddingRight: 20,
                                 marginBottom: '2%'
                             }}>
-                            {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>Go My Trips</Text>}
+                            {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>{i18n.t(TRANSLATIONS_KEY.CONFIRMATION_GO_HOME_BTN).toString()}</Text>}
                         </Button>
                     </Layout>
                 </Layout>

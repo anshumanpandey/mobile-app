@@ -39,6 +39,11 @@
     "NEW_BOOKING_RETURN_DESTINATION_PLACEHOLDER": "Enter Destination",
     "NEW_BOOKING_RETURN_TIME_TAG": "Return Time",
 
+    "NO_RESULT_TITLE": "No result",
+    "NO_RESULT_SUB_TITLE": "Sorry there are no vehicles available in your immediate area",
+    "NO_RESULT_GO_BACK_BTN": "Go Back",
+    "NO_RESULT_FETCHING_LOCATION_TAG": "Fetching your location...",
+
     "CAR_LIST_SORT_LABEL": "Sort By",
     "CAR_LIST_FILTER_LABEL": "Filter",
     "CAR_LIST_LOW_TO_HIGH_OPTION": "Price Low To High",
@@ -54,4 +59,5 @@
     "PAYMENT_AGREE_AND_UNDERSTAND": "I have read understood and accepted",
     "PAYMENT_BOOOK_NOW_BTN": "Book Now",
 
+    "CONFIRMATION_GO_HOME_BTN": "Go My Trips",
 }
