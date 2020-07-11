@@ -5,6 +5,10 @@
     "CLOSE_WORD": "Close",
     "APPLY_WORD": "Apply",
     "CONTINUE_WORD": "Continue",
+    "TERMS_CONDITIONS_WORD": "Terms & Conditions",
+    "RIGHT_CARS_WORD": "Right Cars",
+    "PRIVACY_POLICY_WORD": "Privacy Policy",
+    "AND_WORD": "and",
 
     "CAR_LIST_ITEM_FUEL_POLICY": "Fuel policy",
     "CAR_LIST_ITEM_FUEL_POLICY_LILE_TO_LIKE": "Like to like",
@@ -44,4 +48,10 @@
     "CAR_LIST_BOOOK_NOW_BTN": "BOOK NOW",
 
     "CAR_EXTRAS_TAG": "EQUIPEMENT (OPTIONAL EXTRAS)",
+
+    "PAYMENT_SCREEN_TILE": "Pay now",
+    "PAYMENT_INFO": "You will be redirected to PayPal's website to acess your account and submit your payment.\nThen you will be return to Right Cars App to obtain your booking confirmation",
+    "PAYMENT_AGREE_AND_UNDERSTAND": "I have read understood and accepted",
+    "PAYMENT_BOOOK_NOW_BTN": "Book Now",
+
 }
