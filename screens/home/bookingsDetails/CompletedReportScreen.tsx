@@ -43,23 +43,7 @@ const DocumentScreen = ({ navigation, route }) => {
             disabled={postReq.loading}
             accessoryRight={postReq.loading ? LoadingSpinner : undefined}
             onPress={() => {
-              const data = new FormData();
-
-              data.append("module_name", "SAVE_DAMAGE_IMAGES");
-              data.append("resNumber", details.registratioNumber);
-
-              Object.keys(route.params.pictures).map(key => {
-                data.append("files[]", {
-                  name: `${key + 1}-${route.params.pictures[key].fileName}`,
-                  uri: Platform.OS === 'android' ? route.params.pictures[key].uri : route.params.pictures[key].uri.replace('file://', ''),
-                  type: route.params.pictures[key].type,
-                });
-              })
-
-              post({ data })
-                .then((r) => {
-                  navigation.navigate("Activate", details);
-                })
+              navigation.navigate("Activate", details);
             }}
             size="giant"
             style={{
