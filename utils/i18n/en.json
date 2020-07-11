@@ -4,6 +4,13 @@
     "YES_WORD": "Yes",
     "CLOSE_WORD": "Close",
     "APPLY_WORD": "Apply",
+    "CONTINUE_WORD": "Continue",
+
+    "CAR_LIST_ITEM_FUEL_POLICY": "Fuel policy",
+    "CAR_LIST_ITEM_FUEL_POLICY_LILE_TO_LIKE": "Like to like",
+    "CAR_LIST_ITEM_MILEAGE": "Mileage",
+    "CAR_LIST_ITEM_UNLIMITED": "Unlimited",
+
 
     "MENU_ITEM_PRIVACY_POLICY": "Privacy Policy",
     "MENU_ITEM_TERMS_CONDITIONS": "Terms and Conditions",
@@ -35,4 +42,6 @@
     "CAR_LIST_TRANSMISSION_SUBTITLE": "Transmission",
     "CAR_LIST_CAR_TYPE_SUBTITLE": "Car Type",
     "CAR_LIST_BOOOK_NOW_BTN": "BOOK NOW",
+
+    "CAR_EXTRAS_TAG": "EQUIPEMENT (OPTIONAL EXTRAS)",
 }

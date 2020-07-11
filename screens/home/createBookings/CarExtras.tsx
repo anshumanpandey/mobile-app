@@ -14,6 +14,8 @@ import ResolveCurrencySymbol from '../../../utils/ResolveCurrencySymbol';
 import MenuButton from '../../../partials/MenuButton';
 import Decimal from 'decimal.js';
 import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
+import { TRANSLATIONS_KEY } from '../../../utils/i18n';
+import { useTranslation } from 'react-i18next';
 
 type ParamList = {
     CarExtras: {
@@ -23,6 +25,7 @@ type ParamList = {
 export default () => {
     const navigation = useNavigation();
     const route = useRoute<RouteProp<ParamList, 'CarExtras'>>();
+    const { i18n } = useTranslation();
 
     const [selectedExtras, setExtras] = useCreateBookingState("extras");
     const [showCounterModal, setShowCounterModal] = useState(false)
@@ -48,7 +51,9 @@ export default () => {
                         }
                         }} />
 
-                    <Text style={{ marginBottom: '5%' }}>EQUIPEMENT (OPTIONAL EXTRAS)</Text>
+                    <Text style={{ marginBottom: '5%' }}>
+                        {i18n.t(TRANSLATIONS_KEY.CAR_EXTRAS_TAG).toString()}
+                    </Text>
 
                     {route.params.vehicle.PricedEquips.map(equip => {
                         const found = selectedExtras.find(i =>i.Equipment.vendorEquipID == equip.Equipment.vendorEquipID)
@@ -85,7 +90,7 @@ export default () => {
                                 paddingRight: 20,
                                 marginBottom: '2%'
                             }}>
-                            {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>CONTINUE</Text>}
+                            {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>{i18n.t(TRANSLATIONS_KEY.CONTINUE_WORD).toString()}</Text>}
                         </Button>
                     </Layout>
                 </Layout>

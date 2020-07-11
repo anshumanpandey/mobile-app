@@ -8,6 +8,8 @@ import ResolveCurrencySymbol from '../utils/ResolveCurrencySymbol';
 import GetCategoryByAcrissCode from '../utils/GetCategoryByAcrissCode';
 import { VehVendorAvail } from '../types/SearchVehicleResponse';
 import { AppFontBold, AppFontRegular } from '../constants/fonts'
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../utils/i18n';
 
 const hightLightStyles = {
     backgroundColor: '#41d5fb',
@@ -23,9 +25,9 @@ type Props = {
 }
 
 const CarItem: React.FC<Props> = ({ vehicle, isActive, onClick, style: customeStyles, centerCarName = false }) => {
-    const currentStyles = isActive ? hightLightStyles : { backgroundColor: 'white', priceColor: 'black' }
+    const { i18n } = useTranslation();
 
-    console.log(centerCarName)
+    const currentStyles = isActive ? hightLightStyles : { backgroundColor: 'white', priceColor: 'black' }
 
     return (
         <TouchableWithoutFeedback onPress={() => onClick && onClick()}>
@@ -87,14 +89,20 @@ const CarItem: React.FC<Props> = ({ vehicle, isActive, onClick, style: customeSt
                         <View style={{ display: 'flex', flexDirection: 'row' }}>
                             <FontAwesome5 style={{ marginRight: '2%' }} name={"gas-pump"} size={16} />
                             <Text style={{ fontSize: 13, fontFamily: AppFontBold }}>
-                                Fuel policy:{' '}
+                            {i18n.t(TRANSLATIONS_KEY.CAR_LIST_ITEM_FUEL_POLICY).toString()}:{' '}
                             </Text>
-                            <Text style={{ fontSize: 13 }}>Like to like</Text>
+                            <Text style={{ fontSize: 13 }}>
+                                {i18n.t(TRANSLATIONS_KEY.CAR_LIST_ITEM_FUEL_POLICY_LILE_TO_LIKE).toString()}
+                            </Text>
                         </View>
                         <View style={{ display: 'flex', flexDirection: 'row' }}>
                             <FontAwesome5 style={{ marginRight: '2%' }} name={"road"} size={16} />
-                            <Text style={{ fontSize: 13, fontFamily: AppFontBold }}>Mileage:{' '}</Text>
-                            <Text style={{ fontSize: 13 }}>Unlimited</Text>
+                            <Text style={{ fontSize: 13, fontFamily: AppFontBold }}>
+                                {i18n.t(TRANSLATIONS_KEY.CAR_LIST_ITEM_MILEAGE).toString()}:{' '}
+                            </Text>
+                            <Text style={{ fontSize: 13 }}>
+                                {i18n.t(TRANSLATIONS_KEY.CAR_LIST_ITEM_UNLIMITED).toString()}
+                            </Text>
                         </View>
                     </Layout>
 
