@@ -16,21 +16,22 @@ import userHasAllFiles from "../../utils/userHasAllFiles";
 import { useIsDrawerOpen } from "@react-navigation/drawer";
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { AppFontRegular } from "../../constants/fonts";
+import i18n, { TRANSLATIONS_KEY } from "../../utils/i18n";
 
 const menuData = [
-    { name: "Privacy Policy", screenName: "Policy", iconName: 'shield',key: 'swwe' },
-    { name: "Terms and Conditions", screenName: "TermsConditions", iconName: 'file-document',key: 'sdsfwwe' },
-    { name: "Logout", iconName: 'logout', key: 'assdrw', onPress: () => {
+    { name: i18n.t(TRANSLATIONS_KEY.MENU_ITEM_PRIVACY_POLICY), screenName: "Policy", iconName: 'shield',key: 'swwe' },
+    { name: i18n.t(TRANSLATIONS_KEY.MENU_ITEM_TERMS_CONDITIONS), screenName: "TermsConditions", iconName: 'file-document',key: 'sdsfwwe' },
+    { name: i18n.t(TRANSLATIONS_KEY.MENU_ITEM_LOGOUT), iconName: 'logout', key: 'assdrw', onPress: () => {
         Alert.alert(
             "",
-            "Do you really want to logout",
+            i18n.t(TRANSLATIONS_KEY.LOGOUT_MESSAGE),
             [
                 {
-                    text: "No",
+                    text: i18n.t(TRANSLATIONS_KEY.NO_WORD),
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel"
                 },
-                { text: "Yes", onPress: () => dispatchGlobalState({ type: 'logout' }) }
+                { text: i18n.t(TRANSLATIONS_KEY.YES_WORD), onPress: () => dispatchGlobalState({ type: 'logout' }) }
             ],
             { cancelable: false }
         );

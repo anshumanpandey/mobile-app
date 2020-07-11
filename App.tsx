@@ -30,6 +30,7 @@ import SplashScreen from 'react-native-splash-screen'
 import { Alert } from 'react-native';
 import { AppState } from 'react-native'
 import BackgroundTimer from 'react-native-background-timer';
+import './utils/i18n';
 
 const Stack = createStackNavigator();
 
