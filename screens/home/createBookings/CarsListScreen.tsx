@@ -13,6 +13,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import GetCategoryByAcrissCode from '../../../utils/GetCategoryByAcrissCode';
 import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
 import Orientation, { OrientationType } from 'react-native-orientation-locker';
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../../../utils/i18n';
 
 const _dataProvider = new DataProvider((r1, r2) => r1.VehID !== r2.VehID)
 
@@ -23,6 +25,8 @@ type ParamList = {
 };
 const DocumentScreen = () => {
   const route = useRoute<RouteProp<ParamList, 'CarsList'>>();
+  const { i18n } = useTranslation();
+
   const navigation = useNavigation();
   const [, setVehicle] = useCreateBookingState('vehicle')
   const [selectedIdx, setSelectedIdx] = useState(-1)
@@ -191,7 +195,7 @@ const DocumentScreen = () => {
                         <View style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', justifyContent: 'center', borderWidth: 1, borderColor: '#00000050' }}>
                           <MaterialCommunityIcons style={{ alignSelf: 'flex-start', marginTop: 'auto', marginBottom: 'auto', color: 'gray' }} name={"sort-variant"} size={18} />
                           <Text style={{ fontSize: 18, textAlign: 'center', width: '50%', fontFamily: AppFontBold }}>
-                            Sort By
+                            {i18n.t(TRANSLATIONS_KEY.CAR_LIST_SORT_LABEL).toString()}
                         </Text>
                         </View>
                       </TouchableOpacity>
@@ -199,7 +203,7 @@ const DocumentScreen = () => {
                         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', borderWidth: 1, borderColor: '#00000050' }}>
                           <MaterialCommunityIcons style={{ alignSelf: 'flex-start', marginTop: 'auto', marginBottom: 'auto', color: 'gray' }} name={"filter"} size={18} />
                           <Text style={{ fontSize: 18, textAlign: 'center', width: '50%', fontFamily: AppFontBold }}>
-                            Filter
+                            {i18n.t(TRANSLATIONS_KEY.CAR_LIST_FILTER_LABEL).toString()}
                         </Text>
                         </View>
                       </TouchableOpacity>
@@ -264,7 +268,7 @@ const DocumentScreen = () => {
             shadowRadius: 13.16,
             elevation: 10,
           }}>
-          {() => <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 18 }}>BOOK NOW</Text>}
+          {() => <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 18 }}>{i18n.t(TRANSLATIONS_KEY.CAR_LIST_BOOOK_NOW_BTN).toString()}</Text>}
         </Button>
       )}
       <Modal
@@ -286,7 +290,7 @@ const DocumentScreen = () => {
             }}>
               <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: AppFontBold, marginBottom: '5%' }}>
-                  Price Low To High
+                  {i18n.t(TRANSLATIONS_KEY.CAR_LIST_LOW_TO_HIGH_OPTION).toString()}
             </Text>
                 {sortState == "LowToHigh" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start', color: '#41d5fb' }} name={"check"} size={24} />}
               </View>
@@ -297,7 +301,7 @@ const DocumentScreen = () => {
             }}>
               <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: AppFontBold, marginBottom: '5%' }}>
-                  Price High to Low
+                  {i18n.t(TRANSLATIONS_KEY.CAR_LIST_HIGH_TO_LOW_OPTION).toString()}
             </Text>
                 {sortState == "HighToLow" && <MaterialCommunityIcons style={{ alignSelf: 'flex-start', color: '#41d5fb' }} name={"check"} size={24} />}
               </View>
@@ -320,7 +324,9 @@ const DocumentScreen = () => {
               <Text onPress={() => setShowFilterModal(false)} style={{ fontFamily: AppFontBold }} category="h3">X</Text>
             </View>
             <ScrollView>
-              <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: AppFontBold, marginBottom: '3%' }}>Transmission</Text>
+              <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: AppFontBold, marginBottom: '3%' }}>
+                {i18n.t(TRANSLATIONS_KEY.CAR_LIST_TRANSMISSION_SUBTITLE).toString()}
+              </Text>
               {carTransmissionOptions.map(i => {
                 return (
                   <Card
@@ -352,7 +358,9 @@ const DocumentScreen = () => {
                 );
               })}
 
-              <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: AppFontBold, marginBottom: '3%' }}>Car Type</Text>
+              <Text style={{ fontSize: 18, color: '#33adcc', fontFamily: AppFontBold, marginBottom: '3%' }}>
+                {i18n.t(TRANSLATIONS_KEY.CAR_LIST_CAR_TYPE_SUBTITLE).toString()}
+              </Text>
               {carTypeOptions.map(i => {
                 return (
                   <Card
@@ -408,7 +416,9 @@ const DocumentScreen = () => {
                   return (
                     <>
                       <MaterialCommunityIcons style={{ color: 'white' }} size={26} name="close" />
-                      <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 18 }}>Close</Text>
+                      <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 18 }}>
+                        {i18n.t(TRANSLATIONS_KEY.CLOSE_WORD).toString()}
+                      </Text>
                     </>
                   );
                 }}
@@ -437,7 +447,9 @@ const DocumentScreen = () => {
                   return (
                     <>
                       <MaterialCommunityIcons style={{ color: 'white' }} size={26} name="check" />
-                      <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 18 }}>Apply</Text>
+                      <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 18 }}>
+                        {i18n.t(TRANSLATIONS_KEY.APPLY_WORD).toString()}
+                      </Text>
                     </>
                   );
                 }}

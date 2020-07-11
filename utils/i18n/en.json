@@ -2,6 +2,8 @@
     "SEARCH_WORD": "Search",
     "NO_WORD": "No",
     "YES_WORD": "Yes",
+    "CLOSE_WORD": "Close",
+    "APPLY_WORD": "Apply",
 
     "MENU_ITEM_PRIVACY_POLICY": "Privacy Policy",
     "MENU_ITEM_TERMS_CONDITIONS": "Terms and Conditions",
@@ -25,4 +27,12 @@
     "NEW_BOOKING_ENTER_ORIGIN_PLACEHOLDER": "Enter Origin",
     "NEW_BOOKING_RETURN_DESTINATION_PLACEHOLDER": "Enter Destination",
     "NEW_BOOKING_RETURN_TIME_TAG": "Return Time",
+
+    "CAR_LIST_SORT_LABEL": "Sort By",
+    "CAR_LIST_FILTER_LABEL": "Filter",
+    "CAR_LIST_LOW_TO_HIGH_OPTION": "Price Low To High",
+    "CAR_LIST_HIGH_TO_LOW_OPTION": "Price High to Low",
+    "CAR_LIST_TRANSMISSION_SUBTITLE": "Transmission",
+    "CAR_LIST_CAR_TYPE_SUBTITLE": "Car Type",
+    "CAR_LIST_BOOOK_NOW_BTN": "BOOK NOW",
 }
