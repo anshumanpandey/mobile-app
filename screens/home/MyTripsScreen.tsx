@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { Layout, Text, Tab, Datepicker, NativeDateService, TabView, Card, Avatar, List, Button } from '@ui-kitten/components';
 import { SafeAreaView, View, AsyncStorage } from 'react-native';
 import moment from 'moment';
@@ -10,30 +9,24 @@ import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import useAxios from 'axios-hooks'
 import LoadingSpinner from '../../partials/LoadingSpinner';
 import { useGlobalState } from '../../state';
-import { BookingResponse } from '../../types/BookingsResponse';
 import Decimal from 'decimal.js';
 import { AppFontBold, AppFontRegular } from '../../constants/fonts'
-
-
-const DATE_FORMAT = 'MMM DD,YYYY'
-
-const formatDateService = new NativeDateService('en', { format: DATE_FORMAT });
-
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../../utils/i18n';
 
 const DocumentScreen = () => {
   const navigation = useNavigation();
+  const { i18n } = useTranslation();
 
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [date, setDate] = useState(new Date());
   const [parsedResponse, setParsedResponse] = useState([]);
-  const [profile] = useGlobalState('profile');
   const [storedBookings] = useGlobalState('storedBookings');
 
   const [activeTrips, setActiveTrips] = useState(null);
   const [upcommingTrips, setUpcommingTrips] = useState(null);
   const [completedTrips, setCompletedTrips] = useState(null);
 
-  const [{ loading, error }, refetch] = useAxios({
+  const [{ loading }, refetch] = useAxios({
     url: `${GRCGDS_BACKEND}?module_name=GET_BOOKINGS`,
     method: 'GET',
   }, { manual: true })
@@ -157,7 +150,9 @@ const DocumentScreen = () => {
             <MenuButton />
           </Layout>
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', paddingRight: '5%', }}>
-            <Text style={{ alignSelf: 'flex-start', marginLeft: '3%', fontFamily: AppFontBold, fontSize: 29 }}>My Trips</Text>
+            <Text style={{ alignSelf: 'flex-start', marginLeft: '3%', fontFamily: AppFontBold, fontSize: 29 }}>
+              {i18n.t(TRANSLATIONS_KEY.MY_TRIPS_SCREEN_TITLE).toString()}
+            </Text>
             <Button
               onPress={(e) => navigation.navigate("CreateBooking")}
               size="small"
@@ -166,7 +161,7 @@ const DocumentScreen = () => {
                 borderColor: '#41d5fb',
                 borderRadius: 10,
               }}>
-              {() => <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 16 }}>Create Booking</Text>}
+              {() => <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 16 }}>{i18n.t(TRANSLATIONS_KEY.CREATE_BTN_TEXT).toString()}</Text>}
             </Button>
           </View>
         </Layout>
@@ -176,7 +171,7 @@ const DocumentScreen = () => {
             indicatorStyle={{ backgroundColor: '#41d5fb' }}
             selectedIndex={selectedIndex}
             onSelect={index => setSelectedIndex(index)}>
-            <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: AppFontBold, color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>ACTIVE</Text>} >
+            <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: AppFontBold, color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>{i18n.t(TRANSLATIONS_KEY.ACTIVE_TAB_TXT).toString()}</Text>} >
               <Layout style={{ height: '86%' }}>
                 {loading && (
                   <Layout style={{ display: 'flex', justifyContent: 'center', alignItems: "center" }}>
@@ -195,11 +190,11 @@ const DocumentScreen = () => {
                     );
                   }}
                 />}
-                {!loading && activeTrips && activeTrips.length == 0 && <Text style={{ fontFamily: AppFontRegular,textAlign: 'center', marginTop: '20%' }} category="h5">No active bookings</Text>}
+                {!loading && activeTrips && activeTrips.length == 0 && <Text style={{ fontFamily: AppFontRegular,textAlign: 'center', marginTop: '20%' }} category="h5">{i18n.t(TRANSLATIONS_KEY.NO_ACTIVE_BOOKING_TXT).toString()}</Text>}
 
               </Layout>
             </Tab>
-            <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: AppFontBold, color: selectedIndex == 1 ? '#41d5fb' : '#aeb1c3' }}>UPCOMING</Text>} >
+            <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: AppFontBold, color: selectedIndex == 1 ? '#41d5fb' : '#aeb1c3' }}>{i18n.t(TRANSLATIONS_KEY.UPCOMING_TAB_TXT).toString()}</Text>} >
               <Layout style={{ height: '96%' }}>
                 {loading && (
                   <Layout style={{ display: 'flex', justifyContent: 'center', alignItems: "center" }}>
@@ -219,11 +214,11 @@ const DocumentScreen = () => {
                   }}
                 />}
 
-                {!loading && upcommingTrips && upcommingTrips.length == 0 && <Text style={{ fontFamily: AppFontRegular,textAlign: 'center', marginTop: '20%' }} category="h5">No upcoming bookings</Text>}
+                {!loading && upcommingTrips && upcommingTrips.length == 0 && <Text style={{ fontFamily: AppFontRegular,textAlign: 'center', marginTop: '20%' }} category="h5">{i18n.t(TRANSLATIONS_KEY.NO_UPCOMING_BOOKING_TXT).toString()}</Text>}
               </Layout>
             </Tab>
 
-            <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: AppFontBold, color: selectedIndex == 2 ? '#41d5fb' : '#aeb1c3' }}>COMPLETED</Text>} >
+            <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: AppFontBold, color: selectedIndex == 2 ? '#41d5fb' : '#aeb1c3' }}>{i18n.t(TRANSLATIONS_KEY.COMPLETED_TAB_TXT).toString()}</Text>} >
               <Layout style={{ height: '96%' }}>
                 {loading && (
                   <Layout style={{ display: 'flex', justifyContent: 'center', alignItems: "center" }}>
@@ -243,7 +238,7 @@ const DocumentScreen = () => {
                   }}
                 />}
 
-                {!loading && completedTrips && completedTrips.length == 0 && <Text style={{ fontFamily: AppFontRegular,textAlign: 'center', marginTop: '20%' }} category="h5">No completed bookings</Text>}
+                {!loading && completedTrips && completedTrips.length == 0 && <Text style={{ fontFamily: AppFontRegular,textAlign: 'center', marginTop: '20%' }} category="h5">{i18n.t(TRANSLATIONS_KEY.NO_COMPLETED_BOOKING_TXT).toString()}</Text>}
               </Layout>
             </Tab>
 

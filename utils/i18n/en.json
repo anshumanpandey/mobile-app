@@ -5,4 +5,13 @@
     "LOGOUT_MESSAGE": "Do you really want to logout",
     "NO_WORD": "No",
     "YES_WORD": "Yes",
+
+    "MY_TRIPS_SCREEN_TITLE": "My Trips",
+    "CREATE_BTN_TEXT": "Create Booking",
+    "ACTIVE_TAB_TXT": "ACTIVE",
+    "NO_ACTIVE_BOOKING_TXT": "No active bookings",
+    "UPCOMING_TAB_TXT": "UPCOMING",
+    "NO_UPCOMING_BOOKING_TXT": "No active bookings",
+    "COMPLETED_TAB_TXT": "COMPLETED",
+    "NO_COMPLETED_BOOKING_TXT": "No completed bookings",
 }
