@@ -6,6 +6,8 @@ import { Layout, Text, Card, Avatar, Button, Divider } from '@ui-kitten/componen
 import { useNavigation } from '@react-navigation/native';
 import ResolveCurrencySymbol from '../utils/ResolveCurrencySymbol';
 import { AppFontBold, AppFontRegular } from '../constants/fonts'
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../utils/i18n';
 
 export type TripCardProps = {
   pickupLocation: string
@@ -37,6 +39,7 @@ export type TripCardProps = {
 
 const TripCard: React.FC<TripCardProps> = (props) => {
   const navigation = useNavigation();
+  const { i18n } = useTranslation();
 
   return (
     <TouchableWithoutFeedback onPress={() => {
@@ -69,7 +72,9 @@ const TripCard: React.FC<TripCardProps> = (props) => {
             <View style={{ backgroundColor: 'white', paddingLeft: '5%', paddingTop: '2%',paddingRight: '5%', borderTopRightRadius: 16, borderTopLeftRadius: 16}}>
             {props.reservationStatus == 'Cancelled' && (
               <Layout style={{ alignSelf: 'flex-end' }}>
-                <Text style={{ fontFamily: AppFontRegular,textAlign: 'right', color: 'red' }}>CANCELLED</Text>
+                <Text style={{ fontFamily: AppFontRegular,textAlign: 'right', color: 'red', textTransform: 'uppercase' }}>
+                  {i18n.t(TRANSLATIONS_KEY.TRIP_CAR_COST_TAG).toString()}
+                </Text>
               </Layout>
             )}
             <Layout style={{ display: 'flex', flexDirection: 'row' }}>
@@ -113,7 +118,9 @@ const TripCard: React.FC<TripCardProps> = (props) => {
               </Layout>
 
               <Layout style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Text style={{ fontFamily: AppFontRegular,color: '#ACB1C0', fontSize: 13 }}>Final cost</Text>
+                  <Text style={{ fontFamily: AppFontRegular,color: '#ACB1C0', fontSize: 13 }}>
+                    {i18n.t(TRANSLATIONS_KEY.TRIP_CAR_COST_TAG).toString()}
+                  </Text>
                   <View style={{ display: 'flex', flexDirection: 'row' }}>
                     {props.currencyCode && <Text style={{ fontSize: 15, fontFamily: AppFontBold }}>{ResolveCurrencySymbol(props.currencyCode)}</Text>}
                     <Text style={{ fontSize: 15, fontFamily: AppFontBold }}>{props.finalCost}</Text>
