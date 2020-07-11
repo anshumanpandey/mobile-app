@@ -23,10 +23,13 @@ import MenuButton from '../../../partials/MenuButton';
 import { checkMultiple, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
 import Orientation, { OrientationType } from 'react-native-orientation-locker';
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../../../utils/i18n';
 
 
 export default () => {
     const navigation = useNavigation();
+    const { i18n } = useTranslation();
     const [originLocation, setOriginLocation] = useCreateBookingState("originLocation");
     const [returnLocation, setReturnLocation] = useCreateBookingState("returnLocation");
     const [inmediatePickup, setInmediatePickup] = useCreateBookingState("inmediatePickup");
@@ -164,14 +167,14 @@ export default () => {
                     <View style={{ display: 'flex', flexDirection: 'row' }}>
                         <MenuButton />
                         <Text style={{ width: '80%', textAlign: 'center', fontSize: 22, fontFamily: AppFontBold }} category='s2'>
-                            NEW BOOKING
+                            {i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_SCREEN_TITLE).toString()}
                         </Text>
                     </View>
                     <TimeCheckbox
                         checked={inmediatePickup == undefined ? undefined : inmediatePickup}
                         style={{ marginBottom: '5%' }}
-                        title="IMMEDIATE PICKUP"
-                        subTitle="Collect A Car Near Me Immediately"
+                        title={i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_IMMEDIATE_PICKUP_TITLE).toString()}
+                        subTitle={i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_IMMEDIATE_PICKUP_SUBTITLE).toString()}
                         onChange={(v) => setInmediatePickup(p => {
                             if (p === null) return true
                             return !p
@@ -179,7 +182,7 @@ export default () => {
                     />
                     <TimeCheckbox
                         checked={inmediatePickup == undefined ? undefined : !inmediatePickup}
-                        title="SCHEDULE A PICKUP IN ADVANCE"
+                        title={i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_IN_ADVANCE_PICKUP_TITLE).toString()}
                         onChange={(v) => {
                             setInmediatePickup(p => {
                                 if (p === null) return false
@@ -217,7 +220,7 @@ export default () => {
                                     setReturnTime(moment(d).add('days', 1).toDate())
                                 }}
                             />
-                            <Text style={{ fontFamily: AppFontBold }}>Return Time</Text>
+                            <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_TIME_TAG).toString()}</Text>
                             <DatePicker
                                 style={{ width: currentWidth, alignSelf: 'center' }}
                                 minuteInterval={30}
@@ -286,7 +289,7 @@ export default () => {
                             paddingRight: 20,
                             marginBottom: '2%'
                         }}>
-                        {() => <Text style={{ color: loading ? "#ACB1C0" : 'white', fontFamily: AppFontBold, fontSize: 18 }}>Search</Text>}
+                        {() => <Text style={{ color: loading ? "#ACB1C0" : 'white', fontFamily: AppFontBold, fontSize: 18 }}>{i18n.t(TRANSLATIONS_KEY.SEARCH_WORD).toString()}</Text>}
                     </Button>
                 </Layout>
             </ScrollView >

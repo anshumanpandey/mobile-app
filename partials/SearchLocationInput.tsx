@@ -9,6 +9,8 @@ import Autocomplete from 'react-native-autocomplete-input';
 import FuzzySearch from 'fuzzy-search';
 import { GrcgdsLocation } from '../types';
 import { AppFontBold, AppFontRegular } from '../constants/fonts'
+import { TRANSLATIONS_KEY } from '../utils/i18n';
+import { useTranslation } from 'react-i18next';
 
 export type LocationSearchInputProps = {
   pickupLocation?: { [k: string]: any } | null
@@ -21,6 +23,7 @@ export type LocationSearchInputProps = {
 }
 const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnToggle = false, isInmediatePickup = false,...props}) => {
   const [searchingFor, setSearchingFor] = useState<"ORIGIN" | "RETURN">("ORIGIN");
+  const { i18n } = useTranslation();
   const [locations, setLocations] = useState<GrcgdsLocation[]>([]);
   const [pickupResults, setPickupResults] = useState<GrcgdsLocation[] | null>(null);
   const [returnResults, setReturnResults] = useState<GrcgdsLocation[] | null>(null);
@@ -86,7 +89,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
             containerStyle={{ width: '100%' }}
             inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
             listStyle={{ borderColor: 'white' }}
-            placeholder="Enter Origin"
+            placeholder={i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_ENTER_ORIGIN_PLACEHOLDER).toString()}
             data={!pickupResults ? [] : pickupResults}
             value={originInputText}
             onChangeText={text => {
@@ -116,7 +119,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
               containerStyle={{ width: '100%' }}
               inputContainerStyle={{ width: '100%', padding: '3%',borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
               listStyle={{ borderColor: 'white' }}
-              placeholder="Enter Destination"
+              placeholder={i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_DESTINATION_PLACEHOLDER).toString()}
               data={!returnResults ? [] : returnResults}
               value={returnInputText}
               onChangeText={text => {
@@ -145,7 +148,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
       </Layout>
       {hideReturnToggle !== false && (
         <Toggle checked={returnSameLocation} style={{ alignSelf: 'flex-start', marginTop: '3%', marginBottom: '3%' }} onChange={() => setReturnSameLocation(p => !p)}>
-        Return car on same location
+          {i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_ON_SAME_LOCATION_TAG).toString()}
       </Toggle>
       )}
     </>

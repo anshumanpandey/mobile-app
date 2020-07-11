@@ -1,10 +1,12 @@
 {
+    "SEARCH_WORD": "Search",
+    "NO_WORD": "No",
+    "YES_WORD": "Yes",
+
     "MENU_ITEM_PRIVACY_POLICY": "Privacy Policy",
     "MENU_ITEM_TERMS_CONDITIONS": "Terms and Conditions",
     "MENU_ITEM_LOGOUT": "Logut",
     "LOGOUT_MESSAGE": "Do you really want to logout",
-    "NO_WORD": "No",
-    "YES_WORD": "Yes",
 
     "MY_TRIPS_SCREEN_TITLE": "My Trips",
     "CREATE_BTN_TEXT": "Create Booking",
@@ -14,4 +16,13 @@
     "NO_UPCOMING_BOOKING_TXT": "No active bookings",
     "COMPLETED_TAB_TXT": "COMPLETED",
     "NO_COMPLETED_BOOKING_TXT": "No completed bookings",
+
+    "NEW_BOOKING_SCREEN_TITLE": "NEW BOOKING",
+    "NEW_BOOKING_IMMEDIATE_PICKUP_TITLE": "IMMEDIATE PICKUP",
+    "NEW_BOOKING_IMMEDIATE_PICKUP_SUBTITLE": "Collect A Car Near Me Immediately",
+    "NEW_BOOKING_IN_ADVANCE_PICKUP_TITLE": "SCHEDULE A PICKUP IN ADVANCE",
+    "NEW_BOOKING_RETURN_ON_SAME_LOCATION_TAG": "Return car on same location",
+    "NEW_BOOKING_ENTER_ORIGIN_PLACEHOLDER": "Enter Origin",
+    "NEW_BOOKING_RETURN_DESTINATION_PLACEHOLDER": "Enter Destination",
+    "NEW_BOOKING_RETURN_TIME_TAG": "Return Time",
 }
