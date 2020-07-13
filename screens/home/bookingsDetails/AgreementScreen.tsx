@@ -3,8 +3,12 @@ import { Layout, Text, Button, Input } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView, Image, TextInput, View } from 'react-native';
 import MenuButton from '../../../partials/MenuButton';
 import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../../../utils/i18n';
 
 const DocumentScreen = ({ navigation, route }) => {
+    const { i18n } = useTranslation();
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1}} >
@@ -15,11 +19,11 @@ const DocumentScreen = ({ navigation, route }) => {
 
                 <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '10%', marginBottom: '10%' }}>
                     <Text style={{ fontFamily: AppFontRegular,marginBottom: '10%', textAlign: 'center' }} category="h3">
-                        Sign our agreement
-          </Text>
+                        {i18n.t(TRANSLATIONS_KEY.SIGN_OUR_AGREEMEN).toString()}
+                    </Text>
 
                     <Text style={{ fontFamily: AppFontRegular,textAlign: 'center' }} category="h5">
-                        Now sign our agreement and complete the report process
+                        {i18n.t(TRANSLATIONS_KEY.SIGN_MESSAGE).toString()}
                 </Text>
                 </Layout>
 
@@ -43,7 +47,7 @@ const DocumentScreen = ({ navigation, route }) => {
                         shadowRadius: 13.16,
                         elevation: 10,
                     }}>
-                    {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>Sign agreement</Text>}
+                    {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>{i18n.t(TRANSLATIONS_KEY.SIGN_AGREEMENT_BTN).toString()}</Text>}
                 </Button>
 
             </Layout>

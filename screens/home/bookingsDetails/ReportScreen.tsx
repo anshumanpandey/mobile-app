@@ -11,6 +11,8 @@ import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
 import { useCarDetailState } from './detailsState';
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../../../utils/i18n';
 
 const imageArr = []
 
@@ -24,6 +26,7 @@ imageArr[6] = require('../../../image/car-7.jpg')
 imageArr[7] = require('../../../image/car-8.jpg')
 
 const DocumentScreen = ({ navigation }) => {
+  const { i18n } = useTranslation();
   const maxPhotosAmount = 8
   const [pictures, setPictures] = useState<{ [k: number]: ImagePickerResponse }>({});
   const [currentPicktureIndex, setCurrentPicktureIndex] = useState(0);
@@ -89,7 +92,7 @@ const DocumentScreen = ({ navigation }) => {
               })}
             </View>
             <Text style={{ fontFamily: AppFontRegular, textAlign: 'center', marginTop: '15%', }} category="h5">
-              Please move to position {currentPicktureIndex + 1} as shown in the picture and take a picture of the car
+              {i18n.t(TRANSLATIONS_KEY.COLLECT_INSTRUCTION,{ INDEX: currentPicktureIndex + 1 }).toString()}
             </Text>
             <View style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
               <TouchableOpacity onPress={() => {

@@ -81,7 +81,7 @@ const DocumentScreen = ({ navigation }) => {
                     style={{
                         backgroundColor: isClean == false ? '#41d5fb' : '#e4e9f2',
                         borderColor: isClean == false ? '#41d5fb' : '#e4e9f2',
-                    }}>{i18n.t(TRANSLATIONS_KEY.CONFIRMATION_WORD).toString()}</Button>
+                    }}>{i18n.t(TRANSLATIONS_KEY.CONFIRM_WORD).toString()}</Button>
             </View>
             </>
     );

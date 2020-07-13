@@ -8,8 +8,11 @@ import useAxios from 'axios-hooks'
 import { useCarDetailState } from './detailsState';
 import MenuButton from '../../../partials/MenuButton';
 import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../../../utils/i18n';
 
 const DocumentScreen = ({ navigation, route }) => {
+  const { i18n } = useTranslation();
   const [details] = useCarDetailState("details");
 
   const [postReq, post] = useAxios({
@@ -25,7 +28,7 @@ const DocumentScreen = ({ navigation, route }) => {
 
           <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '10%', marginBottom: '10%' }}>
             <Text style={{ fontFamily: AppFontBold, marginBottom: '10%', textAlign: 'center' }} category="h3">
-              Sign our agreement
+              {i18n.t(TRANSLATIONS_KEY.SIGN_OUR_AGREEMEN).toString()}
           </Text>
 
             <View>
@@ -59,7 +62,7 @@ const DocumentScreen = ({ navigation, route }) => {
               shadowRadius: 13.16,
               elevation: 10,
             }}>
-            {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>Complete</Text>}
+            {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>{i18n.t(TRANSLATIONS_KEY.COMPLETE_WORD).toString()}</Text>}
           </Button>
 
         </Layout>

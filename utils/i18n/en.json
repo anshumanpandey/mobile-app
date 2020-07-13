@@ -15,6 +15,7 @@
     "HELP_WORD": "Help",
     "VERIFY_WORD": "Verify",
     "WAIT_WORD": "Wait",
+    "COMPLETE_WORD": "Complete",
 
     "TRIP_CAR_COST_TAG":"Final cost",
 
@@ -92,4 +93,11 @@
     "OPT_LATER": "Verify later",
 
     "SIGN_SIGNED_BY": "Signed by: ",
+
+    "COLLECT_INSTRUCTION": "Please move to position {{ INDEX }} as shown in the picture and take a picture of the car",
+
+    "SIGN_OUR_AGREEMEN": "Sign our agreement",
+    "SIGN_MESSAGE": "Now sign our agreement and complete the report process",
+    "SIGN_AGREEMENT_BTN": "Sign agreement",
+
 }
