@@ -20,9 +20,13 @@ import { FileTypeEnum } from './DocumentUpload/DocumentState';
 import userIsCompany from '../../utils/userIsCompany';
 import TimeCheckbox from '../../partials/TimeCheckbox';
 import { useFocusEffect } from '@react-navigation/native';
-import { AppFontBold, AppFontRegular } from '../../constants/fonts'
+import { AppFontBold } from '../../constants/fonts'
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../../utils/i18n';
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
+    const { i18n } = useTranslation();
+
     const [{ data, loading, error }, doLogin] = useAxios({
         url: `${GRCGDS_BACKEND}`,
         method: 'POST'
@@ -47,7 +51,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
       );
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'red' }}>
             <ScrollView keyboardShouldPersistTaps={"handled"} >
 
                 <Layout style={{ flex: 1, padding: '3%' }}>
@@ -59,7 +63,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             </Layout>
                         )}
                         <Text style={{ textAlign: 'left', fontSize: 24, fontFamily: AppFontBold }} category='s2'>
-                            Profile
+                            {i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_SCREEN_TITLE).toString()}
                         </Text>
                     </Layout>
 
@@ -83,12 +87,12 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         enableReinitialize
                         validate={(values) => {
                             const errors: { mobilenumber?: string, mobilecode?: string, tele?: string, company?: string, vat?: string } = {};
-                            if (!values.mobilenumber) errors.mobilenumber = 'Required';
-                            if (!values.mobilecode) errors.mobilecode = 'Required';
+                            if (!values.mobilenumber) errors.mobilenumber = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD);
+                            if (!values.mobilecode) errors.mobilecode = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD);
 
                             if (userIsCompany(profile || {})) {
-                                if (!values.company) errors.company = 'Required';
-                                if (!values.vat) errors.vat = 'Required';
+                                if (!values.company) errors.company = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD);
+                                if (!values.vat) errors.vat = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD);
                             }
 
                             return errors
@@ -116,7 +120,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         indicatorStyle={{ backgroundColor: '#41d5fb' }}
                                         selectedIndex={selectedIndex}
                                         onSelect={index => setSelectedIndex(index)}>
-                                        <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: AppFontBold, color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>PROFILE</Text>} >
+                                        <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: AppFontBold, color: selectedIndex == 0 ? '#41d5fb' : '#aeb1c3' }}>{i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_PROFILE_TAB).toString()}</Text>} >
                                             <>
                                                 <Input
                                                     disabled={profile?.socialmedia}
@@ -125,14 +129,16 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                     onChangeText={handleChange('emailaddress')}
                                                     style={{ backgroundColor: profile?.socialmedia ? 'rgba(0,0,0,0.2)':'#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                                     size="large"
-                                                    label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Email</Text>}
-                                                    placeholder='Enter your email'
+                                                    label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>{i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_EMAIL_TAG).toString()}</Text>}
+                                                    placeholder={i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_EMAIL_PLACEHOLDER).toString()}
                                                     caption={errors.emailaddress && touched.emailaddress ? () => <ErrorLabel text={errors.emailaddress} /> : undefined}
 
                                                 />
 
                                                 <Layout style={{ marginBottom: '3%' }}>
-                                                    <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>Phone number</Text>
+                                                    <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>
+                                                        {i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_PHONE_NUMBER_TAG).toString()}
+                                                    </Text>
                                                     <PhoneInputComponent
                                                         styles={{ borderColor: errors.mobilenumber && touched.mobilenumber ? '#ffa5bc' : '#e5eaf2', }}
                                                         mobilecode={values.mobilecode}
@@ -150,11 +156,13 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                 </Layout>
 
                                                 <Toggle disabled={profile == null || profile.vphone != 1} checked={values.twoauth == true || values.twoauth == 1} style={{ marginBottom: '0%' }} onChange={() => setFieldValue("twoauth", !values.twoauth)}>
-                                                    Enable 2-factor authentication
+                                                    {i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_ENABLE_2_FACTOR).toString()}
                                                 </Toggle>
 
                                                 <Layout style={{ marginBottom: '3%' }}>
-                                                    <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>Country</Text>
+                                                    <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>
+                                                        {i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_COUNTRY_TAG).toString()}
+                                                    </Text>
                                                     <CountryPicker
                                                         containerButtonStyle={{ borderWidth: 1, borderColor: '#E4E9F2', padding: '2%', borderRadius: 10 }}
                                                         countryCode={values.countryCode.toUpperCase()}
@@ -173,8 +181,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                     onChangeText={handleChange('firstname')}
                                                     style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                                     size="large"
-                                                    label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>First Name</Text>}
-                                                    placeholder='Enter First Name'
+                                                    label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>{i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_FIRST_NAME_TAG).toString()}</Text>}
+                                                    placeholder={i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_FIRST_NAME_PLACEHOLDER).toString()}
                                                     caption={errors.firstname && touched.firstname ? () => <ErrorLabel text={errors.firstname} /> : undefined}
                                                 />
 
@@ -184,8 +192,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                     onChangeText={handleChange('lastname')}
                                                     style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                                     size="large"
-                                                    label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Last Name</Text>}
-                                                    placeholder='Enter your last name'
+                                                    label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>{i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_LAST_NAME_PLACEHOLDER).toString()}</Text>}
+                                                    placeholder={i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_LAST_NAME_PLACEHOLDER).toString()}
                                                     caption={errors.lastname && touched.lastname ? () => <ErrorLabel text={errors.lastname} /> : undefined}
                                                 />
 
@@ -195,8 +203,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                     onChangeText={handleChange('add1')}
                                                     style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                                     size="large"
-                                                    label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Address 1</Text>}
-                                                    placeholder='Enter your address'
+                                                    label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>{i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_ADDRESS_1_PLACEHOLDER).toString()}</Text>}
+                                                    placeholder={i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_ADDRESS_1_PLACEHOLDER).toString()}
                                                     caption={errors.add1 && touched.add1 ? () => <ErrorLabel text={errors.add1} /> : undefined}
                                                 />
 
@@ -206,8 +214,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                     onChangeText={handleChange('add2')}
                                                     style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                                     size="large"
-                                                    label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Address 2</Text>}
-                                                    placeholder='Enter your address'
+                                                    label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>{i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_ADDRESS_2_PLACEHOLDER).toString()}</Text>}
+                                                    placeholder={i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_ADDRESS_2_PLACEHOLDER).toString()}
                                                     caption={errors.add2 && touched.add2 ? () => <ErrorLabel text={errors.add2} /> : undefined}
                                                 />
 
@@ -217,8 +225,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                     onChangeText={handleChange('city')}
                                                     style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                                     size="large"
-                                                    label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>City</Text>}
-                                                    placeholder='Enter your address'
+                                                    label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>{i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_CITY_TAG).toString()}</Text>}
+                                                    placeholder={i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_CITY_PLACEHOLDER).toString()}
                                                     caption={errors.city && touched.city ? () => <ErrorLabel text={errors.city} /> : undefined}
                                                 />
 
@@ -228,13 +236,13 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                     onChangeText={handleChange('postcode')}
                                                     style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                                     size="large"
-                                                    label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Postcode</Text>}
-                                                    placeholder='Enter your address'
+                                                    label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>{i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_POSTCODE_TAG).toString()}</Text>}
+                                                    placeholder={i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_POSTCODE_PLACEHOLDER).toString()}
                                                     caption={errors.postcode && touched.postcode ? () => <ErrorLabel text={errors.postcode} /> : undefined}
                                                 />
 
                                                 <Toggle checked={asCompany} style={{ marginBottom: '5%' }} onChange={() => setAsCompany(p => !p)}>
-                                                    Company Account
+                                                    {i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_COMPANY_TAG).toString()}
                                                 </Toggle>
 
                                                 {asCompany && (
@@ -245,8 +253,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                             onChangeText={handleChange('company')}
                                                             style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                                             size="large"
-                                                            label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Company Name</Text>}
-                                                            placeholder='Enter your Company Name'
+                                                            label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>{i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_COMPANY_NAME_TAG).toString()}</Text>}
+                                                            placeholder={i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_COMPANY_NAME_PLACEHOLDER).toString()}
                                                             caption={errors.company && touched.company ? () => <ErrorLabel text={errors.company} /> : undefined}
                                                         /><Input
                                                             status={errors.vat && touched.vat ? 'danger' : undefined}
@@ -254,8 +262,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                             onChangeText={handleChange('vat')}
                                                             style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                                             size="large"
-                                                            label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Company VAT Number</Text>}
-                                                            placeholder='Enter your Company VAT number'
+                                                            label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>{i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_COMPANY_VAT_TAG).toString()}</Text>}
+                                                            placeholder={i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_COMPANY_VAT_PLACEHOLDER).toString()}
                                                             caption={errors.vat && touched.vat ? () => <ErrorLabel text={errors.vat} /> : undefined}
                                                         />
                                                     </>
@@ -295,7 +303,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                 </Button>
                                             </>
                                         </Tab>
-                                        <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: AppFontBold, color: selectedIndex == 1 ? '#41d5fb' : '#aeb1c3' }}>DOCUMENTS</Text>} >
+                                        <Tab style={{ paddingTop: '6%', paddingBottom: '1%' }} title={evaProps => <Text {...evaProps} style={{ fontFamily: AppFontBold, color: selectedIndex == 1 ? '#41d5fb' : '#aeb1c3' }}>{i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_DOCUMENT_TAB).toString()}</Text>} >
                                             <>
                                                 {profile?.passimage != "" ? (
                                                     <TimeCheckbox
@@ -319,10 +327,10 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                         accessoryRight={(style) => {
                                                             return <MaterialCommunityIcon style={{ color: style.style.color }} size={24} name="file-document" />
                                                         }}
-                                                        subTitle={profile?.passimage ? `Format: ${profile?.passimage.split('.').pop()}` : undefined}
+                                                        subTitle={profile?.passimage ? `${i18n.t(TRANSLATIONS_KEY.FORMAT_WORD).toString()}: ${profile?.passimage.split('.').pop()}` : undefined}
                                                         defaultChecked={profile?.vself == 1}
                                                         style={{ marginBottom: '5%' }}
-                                                        title={"Passport"}
+                                                        title={i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_PASSPORT_TAG).toString()}
                                                         onChange={() => {
 
                                                         }}
@@ -344,10 +352,10 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                         accessoryRight={(style) => {
                                                             return <MaterialCommunityIcon style={{ color: style.style.color }} size={24} name="file-document" />
                                                         }}
-                                                        subTitle={profile?.selfiurl ? `Format: ${profile?.selfiurl.split('.').pop()}` : undefined}
+                                                        subTitle={profile?.selfiurl ? `${i18n.t(TRANSLATIONS_KEY.FORMAT_WORD).toString()}: ${profile?.selfiurl.split('.').pop()}` : undefined}
                                                         defaultChecked={profile?.vpass == 1}
                                                         style={{ marginBottom: '5%' }}
-                                                        title={"Selfi"}
+                                                        title={i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_SELFI_TAG).toString()}
                                                         onChange={() => {
 
                                                         }}
@@ -376,10 +384,10 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                         accessoryRight={(style) => {
                                                             return <MaterialCommunityIcon style={{ color: style.style.color }} size={24} name="file-document" />
                                                         }}
-                                                        subTitle={profile?.drimage ? `Format: ${profile?.drimage.split('.').pop()}` : undefined}
+                                                        subTitle={profile?.drimage ? `${i18n.t(TRANSLATIONS_KEY.FORMAT_WORD).toString()}: ${profile?.drimage.split('.').pop()}` : undefined}
                                                         defaultChecked={profile?.vdr == 1}
                                                         style={{ marginBottom: '5%' }}
-                                                        title={"Driver License"}
+                                                        title={i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_DRIVER_LICENSE_TAG).toString()}
                                                         onChange={() => {
 
                                                         }}
