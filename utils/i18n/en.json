@@ -12,6 +12,8 @@
     "CANCELLED_WORD": "Cancelled",
     "CONFIRMATION_WORD": "Confirmation",
     "HELP_WORD": "Confirmation",
+    "VERIFY_WORD": "Verify",
+    "WAIT_WORD": "Wait",
 
     "TRIP_CAR_COST_TAG":"Final cost",
 
@@ -80,4 +82,12 @@
     "PAYMENT_BOOOK_NOW_BTN": "Book Now",
 
     "CONFIRMATION_GO_HOME_BTN": "Go My Trips",
+
+    "OPT_SCREEN_TITLE": "Verify phone number",
+    "OPT_SCREEN_SUB_TITLE": "Check your SMS messages. We've sent you the PIN at",
+    "OPT_DID_NOT_RECEIVE": "Didn't receive SMS",
+    "OPT_RESEND": "Resend Code",
+    "OPT_WAIT_SMS": "sec before sending resending the SMS",
+    "OPT_LATER": "Verify later"
+
 }
