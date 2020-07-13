@@ -9,9 +9,12 @@ import { useFocusEffect, useRoute } from '@react-navigation/native';
 import { useGlobalState } from '../../../state';
 import MenuButton from '../../../partials/MenuButton';
 import { AppFontRegular } from '../../../constants/fonts';
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../../../utils/i18n';
 
 
 const DocumentScreen = ({ navigation }) => {
+    const { i18n } = useTranslation();
     const signRef = useRef<TextInput | null>(null);
     const route = useRoute();
     const [isClean, setIsClean] = useState(true);
@@ -68,7 +71,7 @@ const DocumentScreen = ({ navigation }) => {
                 </View>
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ fontFamily: AppFontRegular,marginLeft: '5%', fontSize: 18 }}>Signed by: {profile.firstname}{' '}{profile.lastname}</Text>
+                <Text style={{ fontFamily: AppFontRegular,marginLeft: '5%', fontSize: 18 }}>{i18n.t(TRANSLATIONS_KEY.SIGN_SIGNED_BY).toString()} {profile.firstname}{' '}{profile.lastname}</Text>
                 <Button
                     disabled={isClean}
                     onPress={() => {
@@ -78,7 +81,7 @@ const DocumentScreen = ({ navigation }) => {
                     style={{
                         backgroundColor: isClean == false ? '#41d5fb' : '#e4e9f2',
                         borderColor: isClean == false ? '#41d5fb' : '#e4e9f2',
-                    }}>Confirm</Button>
+                    }}>{i18n.t(TRANSLATIONS_KEY.CONFIRMATION_WORD).toString()}</Button>
             </View>
             </>
     );

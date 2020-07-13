@@ -11,7 +11,8 @@
     "AND_WORD": "and",
     "CANCELLED_WORD": "Cancelled",
     "CONFIRMATION_WORD": "Confirmation",
-    "HELP_WORD": "Confirmation",
+    "CONFIRM_WORD": "Confirm",
+    "HELP_WORD": "Help",
     "VERIFY_WORD": "Verify",
     "WAIT_WORD": "Wait",
 
@@ -88,6 +89,7 @@
     "OPT_DID_NOT_RECEIVE": "Didn't receive SMS",
     "OPT_RESEND": "Resend Code",
     "OPT_WAIT_SMS": "sec before sending resending the SMS",
-    "OPT_LATER": "Verify later"
+    "OPT_LATER": "Verify later",
 
+    "SIGN_SIGNED_BY": "Signed by: ",
 }
