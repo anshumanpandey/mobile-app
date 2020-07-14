@@ -216,4 +216,9 @@
 
     "SUCCESS_VERIFY_PHONE_MSG": "Thank You for verifying your phone number",
     "SUCCESS_VERIFY_PHONE_INFO": "We have sent a message to your email account {{email}} containing a link to verify your email address, please verify and then click Continue",
+
+    "VERIFY_EMAIL_SCREEN_TITLE": "Verify Your Email",
+    "VERIFY_EMAIL_SCREEN_SUB_TITLE": "To access the app we need your to verify your email.\nPlease login to your email account {{email}} and click on Confirm Account button to verify your email account.",
+    "VERIFY_EMAIL_DID_NOT_RECEIVE": "Did not receive an email yet?",
+    "VERIFY_EMAIL_RESEND": "Resend Email",
 }

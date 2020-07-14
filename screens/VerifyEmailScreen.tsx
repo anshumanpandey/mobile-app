@@ -1,17 +1,19 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Layout, Text, Button } from '@ui-kitten/components';
-import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import useAxios from 'axios-hooks'
 import { useGlobalState, dispatchGlobalState } from '../state';
-import { axiosInstance } from '../utils/AxiosBootstrap';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import LoadingSpinner from '../partials/LoadingSpinner';
 import { useNavigation } from '@react-navigation/native';
 import BackButton from '../partials/BackButton';
 import { AppFontBold } from '../constants/fonts'
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../utils/i18n';
 
 const DocumentScreen = () => {
   const [profile] = useGlobalState('profile');
+  const { i18n } = useTranslation();
   const navigation = useNavigation();
 
   const [{ data, loading, error }, doVerify] = useAxios({
@@ -27,23 +29,24 @@ const DocumentScreen = () => {
         <Layout style={{ display: 'flex', flexDirection: 'row', backgroundColor: '#00000000', alignItems: 'center' }}>
           <BackButton />
 
-          <Text style={{ marginLeft: '2%', textAlign: 'left' }} category="h3">Login</Text>
+          <Text style={{ marginLeft: '2%', textAlign: 'left' }} category="h3">
+            {i18n.t(TRANSLATIONS_KEY.LOGIN_WORD).toString()}
+          </Text>
         </Layout>
 
         <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '15%', marginBottom: '10%' }}>
           <Text style={{ marginBottom: '10%', textAlign: 'center' }} category="h3">
-            Verify Your Email
+            {i18n.t(TRANSLATIONS_KEY.VERIFY_EMAIL_SCREEN_TITLE).toString()}
           </Text>
 
           <Text style={{ textAlign: 'center' }} category="h5">
-            To access the app we need your to verify your email.
-            Please login to your email account {profile?.emailaddress} and click on Confirm Account button to verify your email account.
+            {i18n.t(TRANSLATIONS_KEY.VERIFY_EMAIL_SCREEN_SUB_TITLE).toString()}
           </Text>
         </Layout>
 
         <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '10%', marginBottom: '5%' }}>
           <Text style={{ textAlign: 'center' }} category="h6">
-            Did not receive an email yet?
+            {i18n.t(TRANSLATIONS_KEY.VERIFY_EMAIL_DID_NOT_RECEIVE).toString()}
           </Text>
         </Layout>
 
@@ -80,7 +83,7 @@ const DocumentScreen = () => {
             shadowRadius: 13.16,
             elevation: 10,
           }}>
-          {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>Resend Email</Text>}
+          {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>{i18n.t(TRANSLATIONS_KEY.VERIFY_EMAIL_DID_NOT_RECEIVE).toString()}</Text>}
         </Button>
 
       </Layout>
