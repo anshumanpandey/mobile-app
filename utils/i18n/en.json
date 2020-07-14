@@ -202,4 +202,11 @@
     "REGISTER_TERM_COND": "terms and conditions",
     "REGISTER_AS_WELL": "as well as our",
     "REGISTER_PRIVACY": "privacy policy",
+
+    "FORGOT_SCREEN_TITLE": "Forgot your password",
+    "FORGOT_SCREEN_SUB_TITLE": "Please enter your email address below to receive your password reset instructions.",
+    "FORGOT_EMAIL_TAG": "Email",
+    "FORGOT_EMAIL_PLACEHOLDER": "Enter your email",
+    "FORGOT_SEND": "Send",
+    "FORGOT_BACK_TO_SIGN": "Back to Sign in",
 }
