@@ -6,6 +6,7 @@ import { TextStyle, View } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal'
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../utils/i18n';
 
 type Props = {
     mobilecode?: string

@@ -19,7 +19,7 @@ import userIsCompany from '../../utils/userIsCompany';
 import StepIndicator from 'react-native-step-indicator';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import ImagePicker, { ImagePickerResponse } from 'react-native-image-picker';
-import UploadIconComponent from '../../image/UploadIconComponent';
+import Modal from 'react-native-modal';
 import moment from 'moment';
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
 import { axiosInstance } from '../../utils/AxiosBootstrap';
@@ -49,7 +49,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
             skipBackup: true,
             path: 'images',
             cameraRoll: true,
-            waitUntilSaved: true        
+            waitUntilSaved: true
         },
     };
 
@@ -76,6 +76,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     const hasFullProfile = userHasFullProfile(profile || {})
     const hasAllFiles = userHasAllFiles(profile || {})
     const [asCompany, setAsCompany] = useState(false);
+    const [showCounterModal, setShowCounterModal] = useState(false)
 
     useEffect(() => {
         if (hasAllFiles) {
@@ -272,7 +273,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 dispatchGlobalState({ type: 'profile', state: r.data })
                                 dispatchFileState({ type: Actions.RESET, state: {} })
                                 setCurrentPosition(p => {
-                                    resetForm({ touched: {} })
+                                    resetForm({ touched: {}, errors: {} })
                                     console.log(`to step ${p + 1}`)
                                     return p + 1
                                 })
@@ -464,7 +465,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             )}
 
                             {(currentPosition == 1 || currentPosition == 2 || currentPosition == 3) && (
-                                <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1, backgroundColor: 'white' }}>
+                                <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1, backgroundColor: 'white'}}>
                                     {sendFileReq.loading && (
                                         <View style={{ backgroundColor: 'white', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                             <Progress.Circle
@@ -481,25 +482,45 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         </View>
                                     )}
 
-                                    {!sendFileReq.loading && !dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <UploadIconComponent />
-                                        <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, fontFamily: AppFontRegular }} category='s2'>
-                                            {i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_ASK_FILE).toString()}
-                                        </Text>
-                                        <Text style={{ color: 'black', textAlign: 'left', fontSize: 26, fontFamily: AppFontBold }} category='s2'>
-                                            {currentFileType}
-                                        </Text>
-                                    </View>}
+                                    {!sendFileReq.loading && !dictionary.get(currentFileType)?.file && (
+                                        <TouchableOpacity onPress={() => {
+                                            setShowCounterModal(true)
+                                        }}>
+                                            <View style={{ backgroundColor: 'white', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
-                                    {!sendFileReq.loading && dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '77%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                <EntypoIcon style={{ marginRight: '5%', color: '#41d5fb' }} size={100} name="camera" />
+                                                <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, fontFamily: AppFontRegular }} category='s2'>
+                                                    {i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_ASK_FILE).toString()}
+                                                </Text>
+                                                <Text style={{ color: 'black', textAlign: 'left', fontSize: 26, fontFamily: AppFontBold }} category='s2'>
+                                                    {currentFileType}
+                                                </Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    )}
+
+                                    {!sendFileReq.loading && dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', minHeight: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         <>
-                                            <Avatar
-                                                key={dictionary.get(currentFileType)?.file?.uri}
-                                                style={{ width: 200, height: 200, resizeMode: 'cover', marginBottom: '3%', zIndex: -2 }}
-                                                source={{ uri: dictionary.get(currentFileType)?.file?.uri, cache: 'reload' }}
-                                            />
+                                            <TouchableOpacity onPress={() => {
+                                                setShowCounterModal(true)
+                                            }}>
+                                                <View style={{ marginBottom: '3%' }}>
+                                                    <Avatar
+                                                        key={dictionary.get(currentFileType)?.file?.uri}
+                                                        style={{ width: 200, height: 200, resizeMode: 'cover', zIndex: -2 }}
+                                                        source={{ uri: dictionary.get(currentFileType)?.file?.uri, cache: 'reload' }}
+                                                    />
+
+                                                    <View style={{ zIndex: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 100, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                                                        <EntypoIcon style={{ backgroundColor: 'rgba(255,255,255,0.5)', padding: '1%', paddingHorizontal: '3%', borderRadius: 10 }} size={20} name="edit" />
+                                                    </View>
+                                                </View>
+                                            </TouchableOpacity>
                                             {currentFileType != FileTypeEnum.selfi && (
                                                 <>
+                                                    <Text style={{ fontSize: 15, marginBottom: '2%', marginLeft: '5%',alignSelf: 'flex-start' }} category='s2'>
+                                                        {i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_EXPIRE_DATE_TAG).toString()}
+                                                    </Text>
                                                     <Datepicker
                                                         style={{ paddingLeft: '5%', paddingRight: '5%', marginBottom: '1%', width: '100%' }}
                                                         controlStyle={{
@@ -509,14 +530,18 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                         }}
                                                         min={new Date()}
                                                         max={moment().startOf('year').add(100, 'y').toDate()}
-                                                        placeholder={() => <Text style={{ padding: '1.5%', paddingLeft: '4%', color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3' }}>{errors.expDate && touched.expDate ? errors.expDate : i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_EXPIRE_DATE_TAG).toString()}</Text>}
+                                                        placeholder={() => <Text style={{ padding: '1.5%', paddingLeft: '4%', color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3' }}>{i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_EXPIRE_DATE_PLACEHOLDER).toString()}</Text>}
                                                         date={values?.expDate?.toDate()}
                                                         title={(d) => moment(d)?.format(DATE_FORMAT)}
                                                         dateService={formatDateService}
                                                         onSelect={nextDate => setFieldValue("expDate", moment(nextDate))}
                                                         accessoryRight={() => <EntypoIcon style={{ color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3', textAlign: 'left' }} name="calendar" size={22} />}
                                                     />
+                                                    {errors.expDate && touched.expDate && <ErrorLabel style={{ marginLeft: '5%',alignSelf: 'flex-start' }} text={errors.expDate} />}
 
+                                                    <Text style={{ fontSize: 15, marginBottom: '2%', marginLeft: '5%',alignSelf: 'flex-start' }} category='s2'>
+                                                        {i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_DOCUMENT_NUMBER_TAG).toString()}
+                                                    </Text>
                                                     <Input
                                                         status={errors.docNumber && touched.docNumber ? 'danger' : undefined}
                                                         value={values.docNumber}
@@ -525,14 +550,19 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                         style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '1%', width: "90%" }}
                                                         size="large"
                                                         onBlur={() => setFieldTouched('docNumber')}
-                                                        placeholder={errors.docNumber && touched.docNumber ? errors.docNumber : i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_DOCUMENT_NUMBER_TAG).toString()}
+                                                        placeholder={i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_DOCUMENT_NUMBER_PLACEHOLDER).toString()}
                                                     />
+                                                    {errors.docNumber && touched.docNumber && <ErrorLabel style={{ marginLeft: '5%',alignSelf: 'flex-start' }} text={errors.docNumber} />}
+
+                                                    <Text style={{ fontSize: 15, marginBottom: '2%', marginLeft: '5%',alignSelf: 'flex-start' }} category='s2'>
+                                                        {i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_FILE_COUNTRY_TAG).toString()}
+                                                    </Text>
                                                     <Layout style={{ marginBottom: '1%', width: '90%' }}>
                                                         <TouchableOpacity onPress={() => setShowCountryModal(true)}>
                                                             <View style={{ width: '100%', borderWidth: 1, borderColor: errors.fileCountry && touched.fileCountry ? '#ffa5bc' : '#E4E9F2', borderRadius: 10 }}>
                                                                 {errors.fileCountry && touched.fileCountry && (
                                                                     <Text style={{ color: '#ffa5bc', padding: '3.5%', marginLeft: '3.5%' }}>
-                                                                        {errors.fileCountry}
+                                                                        {i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_FILE_COUNTRY_PLACEHOLDER).toString()}
                                                                     </Text>
                                                                 )}
                                                                 {!errors.fileCountry && values.fileCountry.name && (
@@ -542,11 +572,12 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                                 )}
                                                                 {(!errors.fileCountry || !touched.fileCountry) && !values.fileCountry.name && (
                                                                     <Text style={{ color: '#8F9BB3', padding: '3.5%', marginLeft: '3.5%' }}>
-                                                                        {i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_FILE_COUNTRY_TAG).toString()}
+                                                                        {i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_FILE_COUNTRY_PLACEHOLDER).toString()}
                                                                     </Text>
                                                                 )}
                                                             </View>
                                                         </TouchableOpacity>
+                                                        {errors.fileCountry && touched.fileCountry && <ErrorLabel style={{ marginLeft: '5%',alignSelf: 'flex-start' }} text={errors.fileCountry} />}
                                                         {showCountryModal && (
                                                             <CountryPicker
                                                                 containerButtonStyle={{
@@ -576,96 +607,6 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                             )}
                                         </>
                                     </View>}
-
-                                    {!sendFileReq.loading && (
-                                        <View style={{ zIndex: dictionary.get(currentFileType)?.file ? -1 : 4, position: 'absolute', top: '50%', left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-5%' : '0%', height: '15%', justifyContent: 'center', alignItems: 'center' }}>
-                                            <Button
-                                                onPress={(e) => {
-                                                    try {
-                                                        ImagePicker.launchCamera(options, (response) => {
-                                                            //console.log('Response = ', response);
-
-                                                            if (response.didCancel) {
-                                                                console.log('User cancelled image picker');
-                                                            } else if (response.error) {
-                                                                console.log('ImagePicker Error: ', response.error);
-                                                            } else if (response.customButton) {
-                                                                console.log('User tapped custom button: ', response.customButton);
-                                                            } else {
-                                                                dispatchFileState({ type: currentFileType, state: { file: response } })
-                                                            }
-                                                        });
-                                                    } catch (error) {
-                                                        axiosInstance({
-                                                            url: GRCGDS_BACKEND,
-                                                            method: 'POST',
-                                                            data: {
-                                                                module_name: 'ERROR_TRACK',
-                                                                errorMessage: `${error.message}\n${error.stack}`,
-                                                            }
-                                                        })
-                                                    }
-                                                }}
-                                                style={{
-                                                    backgroundColor: '#41d5fb',
-                                                    borderColor: '#41d5fb',
-                                                    borderRadius: 30,
-                                                    width: '50%',
-                                                    marginLeft: 'auto',
-                                                    marginRight: 'auto'
-                                                }}>
-                                                {() => {
-                                                    return (
-                                                        <>
-                                                            <EntypoIcon style={{ marginRight: '5%', color: 'white' }} size={24} name="camera" />
-                                                            <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 18 }}>
-                                                                {i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_USE_CAMERA).toString()}
-                                                            </Text>
-                                                        </>
-                                                    );
-                                                }}
-                                            </Button>
-                                        </View>
-
-                                    )}
-
-                                    {!sendFileReq.loading && (
-                                        <TouchableWithoutFeedback onPress={async () => {
-                                            try {
-                                                //adarsh chsnges on 9 jul 2020
-                                                ImagePicker.launchImageLibrary(options, (response) => {
-                                                    //console.log('Response = ', response);
-
-                                                    if (response.didCancel) {
-                                                        console.log('User cancelled image picker');
-                                                    } else if (response.error) {
-                                                        console.log('ImagePicker Error: ', response.error);
-                                                    } else if (response.customButton) {
-                                                        console.log('User tapped custom button: ', response.customButton);
-                                                    } else {
-                                                        dispatchFileState({ type: currentFileType, state: { file: response } })
-                                                    }
-                                                });
-                                            } catch (error) {
-                                                axiosInstance({
-                                                    url: GRCGDS_BACKEND,
-                                                    method: 'POST',
-                                                    data: {
-                                                        module_name: 'ERROR_TRACK',
-                                                        errorMessage: `${error.message}\n${error.stack}`,
-                                                    }
-                                                })
-                                            }
-                                        }}>
-                                            <Layout style={{ zIndex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'center', height: dictionary.get(currentFileType)?.file ? '23%' : '40%', alignItems: dictionary.get(currentFileType)?.file ? 'flex-end' : 'center' }}>
-                                                <EntypoIcon style={{ marginRight: '5%', color: 'black', textAlign: 'center', }} size={24} name="images" />
-                                                <Text style={{ color: 'black', textAlign: 'center', fontSize: 16, fontFamily: AppFontBold }} category='s2'>
-                                                    {i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_USE_GALLERY).toString()}
-                                                </Text>
-                                            </Layout>
-
-                                        </TouchableWithoutFeedback>
-                                    )}
 
                                 </ScrollView>
                             )}
@@ -698,6 +639,92 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     </Text>
                                 }}
                             </Button>
+                            <Modal
+                                onBackdropPress={() => setShowCounterModal(false)}
+                                isVisible={showCounterModal}
+                                style={{
+                                    justifyContent: 'flex-end',
+                                    margin: 0,
+                                }}>
+                                <Layout style={{ height: '40%', padding: '3%' }}>
+                                    <View style={{ height: '100%' }}>
+                                        <Text style={{ textAlign: 'center', width: '100%', fontFamily: AppFontBold }}>Complete using action</Text>
+                                        <View style={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+                                            <TouchableOpacity onPress={(e) => {
+                                                try {
+                                                    ImagePicker.launchCamera(options, (response) => {
+                                                        //console.log('Response = ', response);
+
+                                                        if (response.didCancel) {
+                                                            console.log('User cancelled image picker');
+                                                        } else if (response.error) {
+                                                            console.log('ImagePicker Error: ', response.error);
+                                                        } else if (response.customButton) {
+                                                            console.log('User tapped custom button: ', response.customButton);
+                                                        } else {
+                                                            setShowCounterModal(false)
+                                                            dispatchFileState({ type: currentFileType, state: { file: response } })
+                                                        }
+                                                    });
+                                                } catch (error) {
+                                                    axiosInstance({
+                                                        url: GRCGDS_BACKEND,
+                                                        method: 'POST',
+                                                        data: {
+                                                            module_name: 'ERROR_TRACK',
+                                                            errorMessage: `${error.message}\n${error.stack}`,
+                                                        }
+                                                    })
+                                                }
+                                            }}>
+                                                <View>
+                                                    <EntypoIcon style={{ color: '#41d5fb' }} size={50} name="camera" />
+                                                    <Text style={{ textAlign: 'center', width: '100%', fontFamily: AppFontBold }}>
+                                                        {i18n.t(TRANSLATIONS_KEY.CAMERA_WORD).toString()}
+                                                    </Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity onPress={(e) => {
+                                                try {
+                                                    ImagePicker.launchImageLibrary(options, (response) => {
+                                                        //console.log('Response = ', response);
+
+                                                        if (response.didCancel) {
+                                                            console.log('User cancelled image picker');
+                                                        } else if (response.error) {
+                                                            console.log('ImagePicker Error: ', response.error);
+                                                        } else if (response.customButton) {
+                                                            console.log('User tapped custom button: ', response.customButton);
+                                                        } else {
+                                                            setShowCounterModal(false)
+                                                            dispatchFileState({ type: currentFileType, state: { file: response } })
+                                                        }
+                                                    });
+                                                } catch (error) {
+                                                    axiosInstance({
+                                                        url: GRCGDS_BACKEND,
+                                                        method: 'POST',
+                                                        data: {
+                                                            module_name: 'ERROR_TRACK',
+                                                            errorMessage: `${error.message}\n${error.stack}`,
+                                                        }
+                                                    })
+                                                }
+                                            }}>
+                                                <View>
+                                                    <EntypoIcon style={{ color: '#41d5fb' }} size={50} name="folder-images" />
+                                                    <Text style={{ textAlign: 'center', width: '100%', fontFamily: AppFontBold }}>
+                                                        {i18n.t(TRANSLATIONS_KEY.GALLERY_WORD).toString()}
+                                                    </Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                        <Text onPress={() => setShowCounterModal(false)} style={{ textAlign: 'center', width: '100%', fontFamily: AppFontBold }}>
+                                            Cancel
+                                        </Text>
+                                    </View>
+                                </Layout>
+                            </Modal>
                         </>
                     )
                 }}

@@ -23,6 +23,9 @@
     "FORMAT_WORD": "Format",
     "LOGIN_WORD": "Login",
     "MOBILE_NUMBER_WORD": "Mobile number",
+    "EDIT_WORD": "Edit",
+    "CAMERA_WORD": "Camera",
+    "GALLERY_WORD": "Gallery",
 
     "ONLY_NUMBERS_ERRORS": "Can be only number",
 
@@ -51,7 +54,7 @@
 
     "MENU_ITEM_PRIVACY_POLICY": "Privacy Policy",
     "MENU_ITEM_TERMS_CONDITIONS": "Terms and Conditions",
-    "MENU_ITEM_LOGOUT": "Logut",
+    "MENU_ITEM_LOGOUT": "Logout",
     "LOGOUT_MESSAGE": "Do you really want to logout",
 
     "MY_TRIPS_SCREEN_TITLE": "My Trips",
@@ -137,9 +140,12 @@
     "PROFILE_VERIFICATION_COMPANY_NAME_PLACEHOLDER": "Enter your Company Name",
     "PROFILE_VERIFICATION_COMPANY_VAT_TAG": "Company VAT Number",
     "PROFILE_VERIFICATION_COMPANY_VAT_PLACEHOLDER": "Enter your Company VAT number",
-    "PROFILE_VERIFICATION_EXPIRE_DATE_TAG": "Expire Date",
+    "PROFILE_VERIFICATION_EXPIRE_DATE_TAG": "Expiry Date",
+    "PROFILE_VERIFICATION_EXPIRE_DATE_PLACEHOLDER": "Select Expiry Date",
     "PROFILE_VERIFICATION_DOCUMENT_NUMBER_TAG":"Document Number",
-    "PROFILE_VERIFICATION_FILE_COUNTRY_TAG":"Select Country",
+    "PROFILE_VERIFICATION_DOCUMENT_NUMBER_PLACEHOLDER":"Enter Document Number",
+    "PROFILE_VERIFICATION_FILE_COUNTRY_TAG":"Country",
+    "PROFILE_VERIFICATION_FILE_COUNTRY_PLACEHOLDER":"Select Country",
     "PROFILE_VERIFICATION_SUCCESS_MESSAGE": "Thank You for completing your profile, we shall let you know once your documents are verified",
     "PROFILE_VERIFICATION_ASK_FILE": "We need you to upload your",
     "PROFILE_VERIFICATION_USE_CAMERA": "Use Camera",

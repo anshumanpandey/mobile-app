@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Layout, Text, Button, Datepicker, NativeDateService, Input, Avatar } from '@ui-kitten/components';
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
 import { TouchableWithoutFeedback, ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
@@ -7,18 +7,21 @@ import ImagePicker, { ImagePickerResponse } from 'react-native-image-picker';
 import { Image, SafeAreaView, View, TouchableOpacity, Platform } from 'react-native';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { dispatchFileState, FileTypeEnum, useDocumentState, Actions } from './DocumentState';
-import { Formik } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import moment from 'moment';
+import Modal from 'react-native-modal';
 import useAxios from 'axios-hooks'
 import { useGlobalState, dispatchGlobalState } from '../../../state';
 import { StackScreenProps } from '@react-navigation/stack';
 import { LoginScreenProps } from '../../../types';
-import UploadIconComponent from '../../../image/UploadIconComponent';
 import CountryPicker, { getAllCountries, FlagType } from 'react-native-country-picker-modal'
 import * as Progress from 'react-native-progress';
 import { useFocusEffect } from '@react-navigation/native';
 import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
 import MenuButton from '../../../partials/MenuButton';
+import i18n, { TRANSLATIONS_KEY } from '../../../utils/i18n';
+import { composeInitialProps } from 'react-i18next';
+import ErrorLabel from '../../../partials/ErrorLabel';
 
 const DATE_FORMAT = 'MMM DD,YYYY'
 const formatDateService = new NativeDateService('en', { format: DATE_FORMAT });
@@ -43,6 +46,8 @@ const DocumentScreen = ({ route, navigation }: Props) => {
     const [dictionary] = useDocumentState("dictionary")
     const [profile] = useGlobalState('profile')
     const [uploadPercent, setUploadPercent] = useState(0);
+    const [showCounterModal, setShowCounterModal] = useState(false)
+    const formikRef = useRef<FormikProps<any>>()
 
     const [getFilesReq, sendFile] = useAxios({
         url: `${GRCGDS_BACKEND}`,
@@ -57,17 +62,9 @@ const DocumentScreen = ({ route, navigation }: Props) => {
 
     const initialValues = {
         docNumber: route.params?.docNumber,
-        fileCountry: '',
+        fileCountry: route.params?.docCountry,
         expDate: moment(`${route.params.year}-${route.params.month}-${route.params.day}`, 'YYYY-MM-DD')
     }
-
-    useEffect(() => {
-        getAllCountries(FlagType.FLAT)
-            .then(countries => {
-                const found = countries.find(c => c.cca2.toLowerCase() == route.params?.docCountry)
-                setCurrentCountryObj(found)
-            })
-    }, [])
 
     useFocusEffect(
         React.useCallback(() => {
@@ -81,6 +78,15 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                 setFileToShow(`https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}`)
             }
             triggerChange(p => !p)
+            getAllCountries(FlagType.FLAT)
+                .then(countries => {
+                    const found = countries.find(c => c.cca2.toLowerCase() == route.params?.docCountry)
+                    setCurrentCountryObj(found)
+                })
+            return () => {
+                dispatchFileState({ type: Actions.RESET, state: {} })
+                formikRef.current?.resetForm({ values: initialValues })
+            }
         }, [route.params])
     );
 
@@ -108,8 +114,16 @@ const DocumentScreen = ({ route, navigation }: Props) => {
 
             <Layout style={{ display: 'flex', flex: 1, padding: '3%' }}>
                 <Formik
+                    innerRef={(r) => formikRef.current = r}
                     initialValues={initialValues}
                     enableReinitialize={true}
+                    validate={(values) => {
+                        
+                        const errors: any  = {}
+                        if (!values.docNumber && route.params.fileType != FileTypeEnum.selfi) errors.docNumber = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD);
+
+                        return errors
+                    }}
                     onSubmit={values => {
 
                         const data = new FormData();
@@ -124,11 +138,12 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                         }
 
                         data.append("module_name", "FILE_UPLOAD");
-                        data.append("file", {
-                            ...file,
-                            uri: (Platform.OS === 'android') ? file.uri : file.uri.replace('file://', '')
-                        });
-                        console.log(currentFileType)
+                        if (file) {
+                            data.append("file", {
+                                ...file,
+                                uri: (Platform.OS === 'android') ? file.uri : file.uri.replace('file://', '')
+                            });
+                        }
                         data.append("fileType", currentFileType);
                         console.log(values)
                         if (currentFileType != FileTypeEnum.selfi) {
@@ -163,8 +178,8 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                         return (
                             <>
                                 <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1 }}>
-                                    <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', zIndex: 2 }}>
-                                        <View style={{ position: 'absolute', left: 0, zIndex: 4}}>
+                                    <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', zIndex: 2, marginBottom: '15%' }}>
+                                        <View style={{ position: 'absolute', left: 0, zIndex: 4 }}>
                                             <MenuButton />
                                         </View>
                                         <Text style={{ textAlign: 'center', fontSize: 24, fontFamily: AppFontBold }} category='s2'>
@@ -172,7 +187,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                         </Text>
                                     </Layout>
                                     {getFilesReq.loading && (
-                                        <View style={{ backgroundColor: 'white', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                        <View style={{ backgroundColor: 'white', height: '100%',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                             <Progress.Circle
                                                 showsText={true}
                                                 textStyle={{ color: "#41d5fb" }}
@@ -186,183 +201,150 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                             />
                                         </View>
                                     )}
-                                    {!getFilesReq.loading && !route.params.fileToShow && !dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <UploadIconComponent />
-                                        <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, fontFamily: AppFontRegular }} category='s2'>
-                                            We need you to upload your
-                                    </Text>
-                                        <Text style={{ color: 'black', textAlign: 'left', fontSize: 26, fontFamily: AppFontBold }} category='s2'>
-                                            {currentFileType}
-                                        </Text>
-                                    </View>}
+                                    {!getFilesReq.loading && !route.params.fileToShow && !dictionary.get(currentFileType)?.file && (
+                                        <TouchableOpacity onPress={() => {
+                                            setShowCounterModal(true)
+                                        }}>
+                                            <View style={{ backgroundColor: 'white', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
-                                    {fileToShow && !dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                <EntypoIcon style={{ marginRight: '5%', color: '#41d5fb' }} size={100} name="camera" />
+                                                <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, fontFamily: AppFontRegular }} category='s2'>
+                                                    {i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_ASK_FILE).toString()}
+                                                </Text>
+                                                <Text style={{ color: 'black', textAlign: 'left', fontSize: 26, fontFamily: AppFontBold }} category='s2'>
+                                                    {currentFileType}
+                                                </Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    )}
+
+                                    {fileToShow && !dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         {change ? (
-                                            <Avatar
-                                                key={fileToShow}
-                                                style={{ width: 200, height: 200, resizeMode: 'cover', marginBottom: '3%', zIndex: -2 }}
-                                                source={{ uri: fileToShow, cache: 'reload' }}
-                                            />
-                                        ) : (
-                                                <Avatar
-                                                    key={fileToShow}
-                                                    style={{ width: 200, height: 200, resizeMode: 'cover', marginBottom: '3%', zIndex: -2 }}
-                                                    source={{ uri: fileToShow, cache: 'reload' }}
-                                                />
-                                            )}
+                                            <TouchableOpacity onPress={() => {
+                                                console.log('opeing modal')
+                                                setShowCounterModal(true)
+                                            }}>
+                                                <View style={{ marginBottom: '3%' }}>
+                                                    <Avatar
+                                                        key={fileToShow}
+                                                        style={{ width: 200, height: 200, resizeMode: 'cover', zIndex: -2 }}
+                                                        source={{ uri: fileToShow, cache: 'reload' }}
+                                                    />
 
+                                                    <View style={{ zIndex: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 100, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                                                        <EntypoIcon style={{ backgroundColor: 'rgba(255,255,255,0.5)', padding: '1%', paddingHorizontal: '3%', borderRadius: 10 }} size={20} name="edit" />
+                                                    </View>
+                                                </View>
+                                            </TouchableOpacity>
+                                        ) : (
+                                                <TouchableOpacity onPress={() => {
+                                                    console.log('opeing modal')
+                                                    setShowCounterModal(true)
+                                                }}>
+                                                    <View style={{ marginBottom: '3%' }}>
+                                                        <Avatar
+                                                            key={fileToShow}
+                                                            style={{ width: 200, height: 200, resizeMode: 'cover', zIndex: -2 }}
+                                                            source={{ uri: fileToShow, cache: 'reload' }}
+                                                        />
+
+                                                        <View style={{ zIndex: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 100, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                                                            <EntypoIcon style={{ backgroundColor: 'rgba(255,255,255,0.5)', padding: '1%', paddingHorizontal: '3%', borderRadius: 10 }} size={20} name="edit" />
+                                                        </View>
+                                                    </View>
+                                                </TouchableOpacity>
+                                            )}
+                                        {currentFileType != FileTypeEnum.selfi && (
+                                            <View style={{ backgroundColor: 'white', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                <Datepicker
+                                                    style={{ paddingLeft: '5%', paddingRight: '5%', marginBottom: '1%', width: '100%' }}
+                                                    controlStyle={{
+                                                        backgroundColor: 'white',
+                                                        borderRadius: 10,
+                                                        borderColor: errors.expDate && touched.expDate ? '#ffa5bc' : '#E4E9F2'
+                                                    }}
+                                                    placeholder={() => <Text style={{ padding: '1.5%', paddingLeft: '4%', color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3' }}>{errors.expDate && touched.expDate ? errors.expDate : 'Expire Date'}</Text>}
+                                                    date={values?.expDate?.toDate()}
+                                                    title={(d) => moment(d)?.format(DATE_FORMAT)}
+                                                    dateService={formatDateService}
+                                                    onSelect={nextDate => setFieldValue("expDate", moment(nextDate))}
+                                                    accessoryRight={() => <EntypoIcon style={{ color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3', textAlign: 'left' }} name="calendar" size={22} />}
+                                                />
+
+                                                <Input
+                                                    status={errors.docNumber && touched.docNumber ? 'danger' : undefined}
+                                                    value={values.docNumber}
+                                                    onChangeText={handleChange('docNumber')}
+                                                    placeholderTextColor={errors.docNumber && touched.docNumber ? '#ffa5bc' : '#8F9BB3'}
+                                                    style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '1%', width: "90%" }}
+                                                    size="large"
+                                                    onBlur={() => setFieldTouched('docNumber')}
+                                                    placeholder={'Document Number'}
+                                                />
+                                                {errors.docNumber && touched.docNumber && <ErrorLabel style={{ marginLeft: '5%',alignSelf: 'flex-start' }} text={errors.docNumber} />}
+                                                <Layout style={{ marginBottom: '1%', width: '90%' }}>
+                                                    <TouchableOpacity onPress={() => setShowCountryModal(true)}>
+                                                        <View style={{ width: '100%', borderWidth: 1, borderColor: errors.fileCountry && touched.fileCountry ? '#ffa5bc' : '#E4E9F2', borderRadius: 10 }}>
+                                                            {errors.fileCountry && touched.fileCountry && !currentCountryObj && (
+                                                                <Text style={{ color: '#ffa5bc', padding: '3.5%', marginLeft: '3.5%' }}>
+                                                                    {errors.fileCountry}
+                                                                </Text>
+                                                            )}
+                                                            {!errors.fileCountry && currentCountryObj && currentCountryObj.name && (
+                                                                <Text style={{ color: '#8F9BB3', padding: '3.5%', marginLeft: '3.5%' }}>
+                                                                    {currentCountryObj.name.trim()}
+                                                                </Text>
+                                                            )}
+                                                            {(!errors.fileCountry || !touched.fileCountry) && !currentCountryObj && (
+                                                                <Text style={{ color: '#8F9BB3', padding: '3.5%', marginLeft: '3.5%' }}>
+                                                                    Select Country
+                                                                </Text>
+                                                            )}
+                                                        </View>
+                                                    </TouchableOpacity>
+                                                    {showCountryModal && (
+                                                        <CountryPicker
+                                                            containerButtonStyle={{
+                                                                borderWidth: 1,
+                                                                borderColor: errors.expDate && errors.expDate ? '#ffa5bc' : '#E4E9F2',
+                                                                padding: '3%',
+                                                                borderRadius: 10,
+                                                                width: 350,
+                                                            }}
+                                                            countryCode={values.fileCountry?.cca2?.toUpperCase()}
+                                                            visible={true}
+                                                            withFilter={true}
+                                                            withFlagButton={true}
+                                                            withCountryNameButton={true}
+                                                            renderFlagButton={() => {
+                                                                return
+                                                            }}
+                                                            onClose={() => setTimeout(() => setShowCountryModal(false), 0)}
+                                                            onSelect={(country) => {
+                                                                setCurrentCountryObj(country)
+                                                                setFieldValue('fileCountry', country)
+                                                                setTimeout(() => setShowCountryModal(false), 0)
+                                                            }}
+                                                        />
+                                                    )}
+                                                </Layout>
+                                            </View>
+                                        )}
                                     </View>}
 
                                     {dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <>
-                                            <Avatar
-                                                key={dictionary.get(currentFileType)?.file?.uri}
-                                                style={{ width: 175, height: 175, resizeMode: 'cover', marginTop: '3%', marginBottom: '3%', zIndex: -2 }}
-                                                source={{ uri: dictionary.get(currentFileType)?.file?.uri, cache: 'reload' }}
-                                            />
-                                            {currentFileType != FileTypeEnum.selfi && (
-                                                <>
-                                                    <Datepicker
-                                                        style={{ paddingLeft: '5%', paddingRight: '5%', marginBottom: '1%', width: '100%' }}
-                                                        controlStyle={{
-                                                            backgroundColor: 'white',
-                                                            borderRadius: 10,
-                                                            borderColor: errors.expDate && touched.expDate ? '#ffa5bc' : '#E4E9F2'
-                                                        }}
-                                                        placeholder={() => <Text style={{ padding: '1.5%', paddingLeft: '4%', color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3' }}>{errors.expDate && touched.expDate ? errors.expDate : 'Expire Date'}</Text>}
-                                                        date={values?.expDate?.toDate()}
-                                                        title={(d) => moment(d)?.format(DATE_FORMAT)}
-                                                        dateService={formatDateService}
-                                                        onSelect={nextDate => setFieldValue("expDate", moment(nextDate))}
-                                                        accessoryRight={() => <EntypoIcon style={{ color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3', textAlign: 'left' }} name="calendar" size={22} />}
-                                                    />
-
-                                                    <Input
-                                                        status={errors.docNumber && touched.docNumber ? 'danger' : undefined}
-                                                        value={values.docNumber}
-                                                        onChangeText={handleChange('docNumber')}
-                                                        placeholderTextColor={errors.docNumber && touched.docNumber ? '#ffa5bc' : '#8F9BB3'}
-                                                        style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '1%', width: "90%" }}
-                                                        size="large"
-                                                        onBlur={() => setFieldTouched('docNumber')}
-                                                        placeholder={errors.docNumber && touched.docNumber ? errors.docNumber : 'Document Number'}
-                                                    />
-                                                    <Layout style={{ marginBottom: '1%', width: '90%' }}>
-                                                        <TouchableOpacity onPress={() => setShowCountryModal(true)}>
-                                                            <View style={{ width: '100%', borderWidth: 1, borderColor: errors.fileCountry && touched.fileCountry ? '#ffa5bc' : '#E4E9F2', borderRadius: 10 }}>
-                                                                {errors.fileCountry && touched.fileCountry && !currentCountryObj && (
-                                                                    <Text style={{ color: '#ffa5bc', padding: '3.5%', marginLeft: '3.5%' }}>
-                                                                        {errors.fileCountry}
-                                                                    asd
-                                                                    </Text>
-                                                                )}
-                                                                {!errors.fileCountry && currentCountryObj && currentCountryObj.name && (
-                                                                    <Text style={{ color: '#8F9BB3', padding: '3.5%', marginLeft: '3.5%' }}>
-                                                                        {currentCountryObj.name.trim()}
-                                                                    </Text>
-                                                                )}
-                                                                {(!errors.fileCountry || !touched.fileCountry) && !currentCountryObj && (
-                                                                    <Text style={{ color: '#8F9BB3', padding: '3.5%', marginLeft: '3.5%' }}>
-                                                                        Select Country
-                                                                    </Text>
-                                                                )}
-                                                            </View>
-                                                        </TouchableOpacity>
-                                                        {showCountryModal && (
-                                                            <CountryPicker
-                                                                containerButtonStyle={{
-                                                                    borderWidth: 1,
-                                                                    borderColor: errors.expDate && errors.expDate ? '#ffa5bc' : '#E4E9F2',
-                                                                    padding: '3%',
-                                                                    borderRadius: 10,
-                                                                    width: 350,
-                                                                }}
-                                                                countryCode={values.fileCountry?.cca2?.toUpperCase()}
-                                                                visible={true}
-                                                                withFilter={true}
-                                                                withFlagButton={true}
-                                                                withCountryNameButton={true}
-                                                                renderFlagButton={() => {
-                                                                    return
-                                                                }}
-                                                                onClose={() => setTimeout(() => setShowCountryModal(false), 0)}
-                                                                onSelect={(country) => {
-                                                                    setCurrentCountryObj(country)
-                                                                    setFieldValue('fileCountry', country)
-                                                                    setTimeout(() => setShowCountryModal(false), 0)
-                                                                }}
-                                                            />
-                                                        )}
-                                                    </Layout>
-                                                </>
-                                            )}
-                                        </>
+                                        <Avatar
+                                            key={dictionary.get(currentFileType)?.file?.uri}
+                                            style={{ width: 175, height: 175, resizeMode: 'cover', marginTop: '3%', marginBottom: '3%', zIndex: -2 }}
+                                            source={{ uri: dictionary.get(currentFileType)?.file?.uri, cache: 'reload' }}
+                                        />
                                     </View>}
-
-                                    {!getFilesReq.loading && (
-                                        <View style={{ zIndex: dictionary.get(currentFileType)?.file ? -1 : 4, position: 'absolute', top: '50%', left: 0, right: 0, bottom: dictionary.get(currentFileType)?.file ? '-5%' : '0%', height: '15%', justifyContent: 'center', alignItems: 'center' }}>
-                                            <Button
-                                                onPress={(e) => {
-                                                    ImagePicker.launchCamera(options, (response) => {
-                                                        //console.log('Response = ', response);
-
-                                                        if (response.didCancel) {
-                                                            console.log('User cancelled image picker');
-                                                        } else if (response.error) {
-                                                            console.log('ImagePicker Error: ', response.error);
-                                                        } else if (response.customButton) {
-                                                            console.log('User tapped custom button: ', response.customButton);
-                                                        } else {
-                                                            dispatchFileState({ type: currentFileType, state: { file: response } })
-                                                        }
-                                                    });
-                                                }}
-                                                style={{
-                                                    zIndex: 2,
-                                                    backgroundColor: '#41d5fb',
-                                                    borderColor: '#41d5fb',
-                                                    borderRadius: 30,
-                                                    width: '50%',
-                                                    marginLeft: 'auto',
-                                                    marginRight: 'auto'
-                                                }}>
-                                                {() => {
-                                                    return (
-                                                        <>
-                                                            <EntypoIcon style={{ marginRight: '5%', color: 'white' }} size={24} name="camera" />
-                                                            <Text style={{ fontFamily: AppFontBold, color: 'white', fontSize: 18 }}>
-                                                                Use Camera
-                                                    </Text>
-                                                        </>
-                                                    );
-                                                }}
-                                            </Button>
-                                        </View>
-
-                                    )}
-
-                                    <TouchableWithoutFeedback
-                                        style={{ backgroundColor: 'white', height: '55%', display: 'flex', justifyContent: 'center', alignItems: dictionary.get(currentFileType)?.file ? 'flex-end' : 'center', flexDirection: 'row' }}
-                                        onPress={async () => {
-                                            const res = await DocumentPicker.pick({
-                                                type: [DocumentPicker.types.images],
-                                            });
-                                            dispatchFileState({ type: currentFileType, state: { file: res } })
-                                        }}>
-
-                                        <EntypoIcon style={{ zIndex: 1, marginRight: '5%', color: 'black' }} size={24} name="images" />
-                                        <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, fontFamily: AppFontBold }} category='s2'>
-                                            Select the document from gallery
-                                    </Text>
-
-                                    </TouchableWithoutFeedback>
-
 
                                 </ScrollView>
 
                                 <Layout style={{ paddingTop: '2%' }}>
                                     <Button
-                                        disabled={currenButtonState().disabled || getFilesReq.loading}
+                                        disabled={getFilesReq.loading}
                                         onPress={() => {
                                             const currentState = currenButtonState()
                                             console.log(currentState)
@@ -375,8 +357,8 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                         }}
                                         size="giant"
                                         style={{
-                                            backgroundColor: currenButtonState().disabled || getFilesReq.loading ? '#e4e9f2' : '#41d5fb',
-                                            borderColor: currenButtonState().disabled || getFilesReq.loading ? '#e4e9f2' : '#41d5fb',
+                                            backgroundColor: getFilesReq.loading ? '#e4e9f2' : '#41d5fb',
+                                            borderColor: getFilesReq.loading ? '#e4e9f2' : '#41d5fb',
                                             borderRadius: 10,
                                             shadowColor: '#41d5fb',
                                             shadowOffset: {
@@ -396,6 +378,70 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                         )
                     }}
                 </Formik>
+                <Modal
+                    onBackdropPress={() => setShowCounterModal(false)}
+                    isVisible={showCounterModal}
+                    style={{
+                        justifyContent: 'flex-end',
+                        margin: 0,
+                    }}>
+                    <Layout style={{ height: '40%', padding: '3%' }}>
+                        <View style={{ height: '100%' }}>
+                            <Text style={{ textAlign: 'center', width: '100%', fontFamily: AppFontBold }}>Complete using action</Text>
+                            <View style={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+                                <TouchableOpacity onPress={(e) => {
+                                    ImagePicker.launchCamera(options, (response) => {
+                                        //console.log('Response = ', response);
+
+                                        if (response.didCancel) {
+                                            console.log('User cancelled image picker');
+                                        } else if (response.error) {
+                                            console.log('ImagePicker Error: ', response.error);
+                                        } else if (response.customButton) {
+                                            console.log('User tapped custom button: ', response.customButton);
+                                        } else {
+                                            setShowCounterModal(false)
+                                            dispatchFileState({ type: currentFileType, state: { file: response } })
+                                        }
+                                    });
+                                }}>
+                                    <View>
+                                        <EntypoIcon style={{ color: '#41d5fb' }} size={50} name="camera" />
+                                        <Text style={{ textAlign: 'center', width: '100%', fontFamily: AppFontBold }}>
+                                            {i18n.t(TRANSLATIONS_KEY.CAMERA_WORD).toString()}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={(e) => {
+                                    ImagePicker.launchImageLibrary(options, (response) => {
+                                        //console.log('Response = ', response);
+
+                                        if (response.didCancel) {
+                                            console.log('User cancelled image picker');
+                                        } else if (response.error) {
+                                            console.log('ImagePicker Error: ', response.error);
+                                        } else if (response.customButton) {
+                                            console.log('User tapped custom button: ', response.customButton);
+                                        } else {
+                                            setShowCounterModal(false)
+                                            dispatchFileState({ type: currentFileType, state: { file: response } })
+                                        }
+                                    });
+                                }}>
+                                    <View>
+                                        <EntypoIcon style={{ color: '#41d5fb' }} size={50} name="folder-images" />
+                                        <Text style={{ textAlign: 'center', width: '100%', fontFamily: AppFontBold }}>
+                                            {i18n.t(TRANSLATIONS_KEY.GALLERY_WORD).toString()}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                            <Text onPress={() => setShowCounterModal(false)} style={{ textAlign: 'center', width: '100%', fontFamily: AppFontBold }}>
+                                Cancel
+                                        </Text>
+                        </View>
+                    </Layout>
+                </Modal>
             </Layout>
         </SafeAreaView>
     )

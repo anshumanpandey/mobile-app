@@ -44,11 +44,13 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
         React.useCallback(() => {
             console.log(profile.company)
             console.log(profile.vat)
-          if (profile && profile.company != 'NONE' && profile.vat != 'NONE') setAsCompany(true)
+            if (profile && profile.company != 'NONE' && profile.vat != 'NONE') setAsCompany(true)
 
-          return () => formRef?.current?.resetForm();
+            return () => formRef?.current?.resetForm();
         }, [])
-      );
+    );
+
+    console.log(profile)
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'red' }}>
@@ -103,10 +105,10 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 .then((res) => {
                                     console.log(res.data)
                                     if (res.data.vphone != 1 || res.data.vemail != 1) {
-                                        dispatchGlobalState({ type: 'logout'})
+                                        dispatchGlobalState({ type: 'logout' })
                                         return
                                     }
-                                    
+
                                     dispatchGlobalState({ type: 'token', state: res.data.token })
                                     dispatchGlobalState({ type: 'profile', state: res.data })
                                 })
@@ -127,7 +129,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                     status={errors.emailaddress && touched.emailaddress ? 'danger' : undefined}
                                                     value={values.emailaddress}
                                                     onChangeText={handleChange('emailaddress')}
-                                                    style={{ backgroundColor: profile?.socialmedia ? 'rgba(0,0,0,0.2)':'#ffffff', borderRadius: 10, marginBottom: '3%' }}
+                                                    style={{ backgroundColor: profile?.socialmedia ? 'rgba(0,0,0,0.2)' : '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                                     size="large"
                                                     label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>{i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_EMAIL_TAG).toString()}</Text>}
                                                     placeholder={i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_EMAIL_PLACEHOLDER).toString()}

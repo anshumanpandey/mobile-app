@@ -193,6 +193,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     setLoadingLogin(false)
                                 })
                                 .catch((error) => {
+                                    setLoadingLogin(false)
                                     console.log("Login fail with error: " + error)
                                     navigation.navigate('Login')
                                 })
