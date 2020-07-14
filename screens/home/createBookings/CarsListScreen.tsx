@@ -44,7 +44,7 @@ const DocumentScreen = () => {
         dim.height = 190;
       } else {
         dim.width = Dimensions.get('window').width;
-        dim.height = 300;
+        dim.height = 340;
       }
     }
   ))
@@ -68,7 +68,7 @@ const DocumentScreen = () => {
       console.log('isnotPortrait')
     }
 
-    setLp(new LayoutProvider(
+    /*setLp(new LayoutProvider(
       index => {
         if (index == 0) return 'HEADER'
         return 0
@@ -79,10 +79,10 @@ const DocumentScreen = () => {
           dim.height = 210;
         } else {
           dim.width = Dimensions.get('window').width;
-          dim.height = isPortrait ? 210 : 350;
+          dim.height = 340;
         }
       }
-    ))
+    ))/
   };
 
   useEffect(() => {
