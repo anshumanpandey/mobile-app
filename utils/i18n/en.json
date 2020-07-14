@@ -213,4 +213,7 @@
 
     "SUCCESS_FORGOT_SCREEN_TITLE": "Success",
     "SUCCESS_FORGOT_SCREEN_SUB_TITLE": "Your new password has been sent to your registered email ID",
+
+    "SUCCESS_VERIFY_PHONE_MSG": "Thank You for verifying your phone number",
+    "SUCCESS_VERIFY_PHONE_INFO": "We have sent a message to your email account {{email}} containing a link to verify your email address, please verify and then click Continue",
 }

@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Layout, Text, Button } from '@ui-kitten/components';
-import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import useAxios from 'axios-hooks'
 import { useGlobalState } from '../state';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
@@ -8,9 +8,12 @@ import LoadingSpinner from '../partials/LoadingSpinner';
 import { useNavigation } from '@react-navigation/native';
 import BackButton from '../partials/BackButton';
 import { AppFontBold } from '../constants/fonts'
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../utils/i18n';
 
 const DocumentScreen = () => {
   const [profile] = useGlobalState('profile');
+  const { i18n } = useTranslation();
   const navigation = useNavigation();
 
   const [{ data, loading, error }, doVerify] = useAxios({
@@ -27,16 +30,18 @@ const DocumentScreen = () => {
         <Layout style={{ display: 'flex', flexDirection: 'row', backgroundColor: '#00000000', alignItems: 'center' }}>
           <BackButton />
 
-          <Text style={{ marginLeft: '2%', textAlign: 'left' }} category="h3">Login</Text>
+          <Text style={{ marginLeft: '2%', textAlign: 'left' }} category="h3">
+            {i18n.t(TRANSLATIONS_KEY.LOGIN_WORD).toString()}
+          </Text>
         </Layout>
 
         <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '15%', marginBottom: '10%' }}>
           <Text style={{ marginBottom: '10%', textAlign: 'center' }} category="h3">
-            Thank You for verifying your phone number
+            {i18n.t(TRANSLATIONS_KEY.SUCCESS_VERIFY_PHONE_MSG).toString()}
           </Text>
 
           <Text style={{ textAlign: 'center', marginBottom: '30%' }} category="h5">
-            We have sent a message to your email account {profile?.emailaddress} containing a link to verify your email address, please verify and then click Continue
+            {i18n.t(TRANSLATIONS_KEY.SUCCESS_VERIFY_PHONE_INFO, { email: profile?.emailaddress }).toString()}
           </Text>
         </Layout>
 
@@ -61,7 +66,7 @@ const DocumentScreen = () => {
             shadowRadius: 13.16,
             elevation: 10,
           }}>
-          {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>Continue</Text>}
+          {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>{i18n.t(TRANSLATIONS_KEY.CONTINUE_WORD).toString()}</Text>}
         </Button>
 
       </Layout>
