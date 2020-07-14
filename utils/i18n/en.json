@@ -171,4 +171,15 @@
     "EDIT_PROFILE_PASSPORT_TAG": "Passport",
     "EDIT_PROFILE_SELFI_TAG": "Selfi",
     "EDIT_PROFILE_DRIVER_LICENSE_TAG": "Driver License",
+
+    "LOGIN_SCREEN_TITLE": "Sign in to your account",
+    "LOGIN_FORGOT_PASSWORD_TAG": "Forgot your password?",
+    "LOGIN_OR_SOCIAL_LOGIN": "Or sign in with social account",
+    "LOGIN_DONT_HAVE_ACCOUNT": "Don't have an account?",
+    "LOGIN_SIGN_UP": "Sign up",
+    "LOGIN_SIGN_IN": "Sign in",
+    "LOGIN_EMAIL_TAG": "Email",
+    "LOGIN_EMAIL_PLACEHOLDER": "Enter your email",
+    "LOGIN_PASSWORD_TAG": "Password",
+    "LOGIN_PASSWORD_PLACEHOLDER": "Enter your password",
 }

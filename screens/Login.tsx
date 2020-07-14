@@ -20,8 +20,12 @@ import { axiosInstance } from '../utils/AxiosBootstrap';
 import userHasFullProfile from '../utils/userHasFullProfile';
 import * as Progress from 'react-native-progress';
 import { AppFontBold, AppFontRegular } from '../constants/fonts'
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../utils/i18n';
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
+    const { i18n } = useTranslation();
+
     const [{ data, loading, error }, doLogin] = useAxios({
         url: `${GRCGDS_BACKEND}/user/login`,
         method: 'POST'
@@ -59,7 +63,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                 <Layout style={{ flex: 1, padding: '3%' }}>
                     <Layout style={{ paddingBottom: '10%' }}>
                         <Text style={{ textAlign: 'left', fontSize: 24, marginBottom: 10, fontFamily: AppFontBold }} category='s2'>
-                            Sign in to your account
+                            {i18n.t(TRANSLATIONS_KEY.LOGIN_SCREEN_TITLE).toString()}
                         </Text>
                     </Layout>
 
@@ -68,11 +72,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         validate={(values) => {
                             const errors: { clientname?: string, password?: string } = {};
                             if (!values.clientname) {
-                                errors.clientname = 'Required';
+                                errors.clientname = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD).toString();
                             }
 
                             if (!values.password) {
-                                errors.password = 'Required';
+                                errors.password = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD).toString();
                             }
 
                             return errors
@@ -111,8 +115,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         onChangeText={handleChange('clientname')}
                                         style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                         size="large"
-                                        label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Email</Text>}
-                                        placeholder='Enter your email'
+                                        label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>{i18n.t(TRANSLATIONS_KEY.LOGIN_EMAIL_TAG).toString()}</Text>}
+                                        placeholder={i18n.t(TRANSLATIONS_KEY.LOGIN_EMAIL_PLACEHOLDER).toString()}
                                         caption={errors.clientname && touched.clientname ? () => <ErrorLabel text={errors.clientname} /> : undefined}
 
                                     />
@@ -123,8 +127,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         onChangeText={handleChange('password')}
                                         style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                         size="large"
-                                        label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>Password</Text>}
-                                        placeholder='Enter your password'
+                                        label={() => <Text style={{ fontSize: 15, marginBottom: '5%' }} category='s2'>{i18n.t(TRANSLATIONS_KEY.LOGIN_PASSWORD_TAG).toString()}</Text>}
+                                        placeholder={i18n.t(TRANSLATIONS_KEY.LOGIN_PASSWORD_PLACEHOLDER).toString()}
                                         secureTextEntry={secureTextEntry}
                                         accessoryRight={renderInputIcon}
                                         caption={errors.password && touched.password ? () => <ErrorLabel text={errors.password} /> : undefined}
@@ -149,14 +153,16 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                             shadowRadius: 13.16,
                                             elevation: 10,
                                         }}>
-                                        {() => <Text style={{ fontFamily: AppFontBold, color: loading ? "#ACB1C0" : 'white', fontSize: 18 }}>Sign in</Text>}
+                                        {() => <Text style={{ fontFamily: AppFontBold, color: loading ? "#ACB1C0" : 'white', fontSize: 18 }}>{i18n.t(TRANSLATIONS_KEY.LOGIN_SIGN_IN).toString()}</Text>}
                                     </Button>
                                 </>
                             )
                         }}
                     </Formik>
 
-                    <Text style={{ textAlign: 'center', color: '#8f9bb5', marginBottom: '5%' }} category='s2'>Or sign in with social account</Text>
+                    <Text style={{ textAlign: 'center', color: '#8f9bb5', marginBottom: '5%' }} category='s2'>
+                        {i18n.t(TRANSLATIONS_KEY.LOGIN_OR_SOCIAL_LOGIN).toString()}
+                    </Text>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
                         <FacebookButton onPress={() => {
@@ -207,8 +213,12 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     </Layout>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10%' }}>
-                        <Text style={{ color: 'black' }}> Don't have an account? </Text>
-                        <Text onPress={() => navigation.navigate('Signup')} style={{ color: '#41d5fb' }}>Sign up</Text>
+                        <Text style={{ color: 'black' }}>
+                            {i18n.t(TRANSLATIONS_KEY.LOGIN_DONT_HAVE_ACCOUNT).toString()}{' '}
+                        </Text>
+                        <Text onPress={() => navigation.navigate('Signup')} style={{ color: '#41d5fb' }}>
+                            {i18n.t(TRANSLATIONS_KEY.LOGIN_SIGN_UP).toString()}
+                        </Text>
                     </Layout>
                 </Layout>
             </ScrollView>
