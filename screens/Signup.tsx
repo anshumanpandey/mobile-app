@@ -21,10 +21,13 @@ import { LoginManager, GraphRequest, GraphRequestManager } from "react-native-fb
 import { handlePermissionPromt, handleUserData } from '../utils/FacebookAuth';
 import { axiosInstance } from '../utils/AxiosBootstrap';
 import { AppFontBold, AppFontRegular } from '../constants/fonts'
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../utils/i18n';
 
 
 export default () => {
     const navigation = useNavigation();
+    const { i18n } = useTranslation();
 
     const [secureTextEntry, setSecureTextEntry] = useState(true);
     const [phonenumberToShow, setPhonenumberToShow] = useState<string>('');
@@ -59,11 +62,17 @@ export default () => {
                     <Layout style={{ paddingBottom: '5%' }}>
                         <Layout style={{ flex: 1, paddingTop: '3%', paddingBottom: '2%', display: 'flex', flexDirection: 'row' }}>
                             <BackButton />
-                            <Text style={{ textAlign: 'left', paddingLeft: '3%',fontSize: 25, marginBottom: '3%', fontFamily: AppFontBold }} category='s2'>Create your account</Text>
+                            <Text style={{ textAlign: 'left', paddingLeft: '3%',fontSize: 25, marginBottom: '3%', fontFamily: AppFontBold }} category='s2'>
+                                {i18n.t(TRANSLATIONS_KEY.REGISTER_SCREEN_TITLE).toString()}
+                            </Text>
                         </Layout>
                         <Layout style={{ display: 'flex', flexDirection: 'row' }}>
-                            <Text style={{ color: 'black' }}>Already have an account? </Text>
-                            <Text onPress={() => navigation.navigate('Login')} style={{ color: '#41d5fb' }}>Log in</Text>
+                            <Text style={{ color: 'black' }}>
+                                {i18n.t(TRANSLATIONS_KEY.REGISTER_HAVE_ACCOUNT).toString()}
+                            </Text>
+                            <Text onPress={() => navigation.navigate('Login')} style={{ color: '#41d5fb' }}>
+                                {i18n.t(TRANSLATIONS_KEY.REGISTER_LOG_IN).toString()}
+                            </Text>
                         </Layout>
                     </Layout>
 
@@ -81,15 +90,15 @@ export default () => {
                         validate={(values) => {
                             const errors: { emailaddress?: string, password?: string, tele?: string } = {};
                             if (!values.emailaddress) {
-                                errors.emailaddress = 'Required';
+                                errors.emailaddress = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD).toString();
                             }
 
                             if (!values.password) {
-                                errors.password = 'Required';
+                                errors.password = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD).toString();
                             }
 
                             if (!values.tele) {
-                                errors.tele = 'Required';
+                                errors.tele = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD).toString();
                             }
 
                             return errors
@@ -126,8 +135,8 @@ export default () => {
                                         status={errors.emailaddress && touched.emailaddress ? 'danger' : undefined}
                                         style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                         size="large"
-                                        label={() => <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>Email</Text>}
-                                        placeholder='Enter your email'
+                                        label={() => <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>{i18n.t(TRANSLATIONS_KEY.REGISTER_LOGIN_TAG).toString()}</Text>}
+                                        placeholder={i18n.t(TRANSLATIONS_KEY.REGISTER_LOGIN_PLACEHOLDER).toString()}
                                         value={values.emailaddress}
                                         onChangeText={handleChange('emailaddress')}
                                         caption={errors.emailaddress && touched.emailaddress ? () => <ErrorLabel text={errors.emailaddress} /> : undefined}
@@ -136,8 +145,8 @@ export default () => {
                                         status={errors.password && touched.password ? 'danger' : undefined}
                                         style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '3%' }}
                                         size="large"
-                                        label={() => <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>Password</Text>}
-                                        placeholder='Enter your password'
+                                        label={() => <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>{i18n.t(TRANSLATIONS_KEY.REGISTER_PASSWORD_TAG).toString()}</Text>}
+                                        placeholder={i18n.t(TRANSLATIONS_KEY.REGISTER_PASSWORD_TAG).toString()}
                                         secureTextEntry={secureTextEntry}
                                         accessoryRight={renderInputIcon}
                                         value={values.password}
@@ -149,7 +158,9 @@ export default () => {
                                     />
 
                                     <Layout style={{ marginBottom: '3%' }}>
-                                        <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>Phone number</Text>
+                                        <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>
+                                            {i18n.t(TRANSLATIONS_KEY.REGISTER_PHONE_NUMBER_TAG).toString()}
+                                        </Text>
                                         <PhoneInputComponent
                                             styles={{ borderColor: errors.tele && touched.tele ? '#ffa5bc' : '#e5eaf2', }}
                                             mobilecode={values.telecode}
@@ -168,7 +179,7 @@ export default () => {
                                     </Layout>
 
                                     <Toggle checked={asCompany} onChange={() => setAsCompany(p => !p)}>
-                                        Register as Company
+                                        {i18n.t(TRANSLATIONS_KEY.REGISTER_COMPANY_NAME_PLACEHOLDER).toString()}
                                     </Toggle>
 
                                     {asCompany && (
@@ -177,8 +188,8 @@ export default () => {
                                                 status={errors.company && touched.company ? 'danger' : undefined}
                                                 style={{ backgroundColor: '#ffffff', borderRadius: 10, marginTop: '3%', marginBottom: '3%' }}
                                                 size="large"
-                                                label={() => <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>Company Name</Text>}
-                                                placeholder='Enter your company name'
+                                                label={() => <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>{i18n.t(TRANSLATIONS_KEY.REGISTER_COMPANY_NAME_TAG).toString()}</Text>}
+                                                placeholder={i18n.t(TRANSLATIONS_KEY.REGISTER_COMPANY_NAME_PLACEHOLDER).toString()}
                                                 value={values.company}
                                                 onChangeText={handleChange('company')}
                                                 caption={errors.company && touched.company ? () => <ErrorLabel text={errors.company} /> : undefined}
@@ -187,8 +198,8 @@ export default () => {
                                                 status={errors.vat && touched.vat ? 'danger' : undefined}
                                                 style={{ backgroundColor: '#ffffff', borderRadius: 10 }}
                                                 size="large"
-                                                label={() => <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>Company VAT Number</Text>}
-                                                placeholder='Enter your company VAT number'
+                                                label={() => <Text style={{ fontSize: 15, marginBottom: '2%' }} category='s2'>{i18n.t(TRANSLATIONS_KEY.REGISTER_COMPANY_VAT_TAG).toString()}</Text>}
+                                                placeholder={i18n.t(TRANSLATIONS_KEY.REGISTER_COMPANY_VAT_PLACEHOLDER).toString()}
                                                 value={values.vat}
                                                 onChangeText={handleChange('vat')}
                                                 caption={errors.vat && touched.vat ? () => <ErrorLabel text={errors.vat} /> : undefined}
@@ -216,14 +227,16 @@ export default () => {
                                             shadowRadius: 13.16,
                                             elevation: 10,
                                         }}>
-                                        {() => <Text style={{ fontFamily: AppFontBold, color: loading ? "#ACB1C0" : 'white', fontSize: 18 }}>Sign up</Text>}
+                                        {() => <Text style={{ fontFamily: AppFontBold, color: loading ? "#ACB1C0" : 'white', fontSize: 18 }}>{i18n.t(TRANSLATIONS_KEY.REGISTER_SIGN_UP).toString()}</Text>}
                                     </Button>
                                 </>
                             );
                         }}
                     </Formik>
 
-                    <Text style={{ textAlign: 'center', color: '#8f9bb5', marginBottom: '5%' }} category='s2'>Or sign up with social media</Text>
+                    <Text style={{ textAlign: 'center', color: '#8f9bb5', marginBottom: '5%' }} category='s2'>
+                        {i18n.t(TRANSLATIONS_KEY.REGISTER_OR_SOCIAL).toString()}
+                    </Text>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
                         <FacebookButton onPress={() => {
@@ -249,10 +262,10 @@ export default () => {
                     </Layout>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '5%', flexWrap: 'wrap' }}>
-                        <Text style={{ fontFamily: AppFontRegular,color: 'black' }}>By clicking "Sign Up" you agree to our</Text>
-                        <Text style={{ fontFamily: AppFontRegular,color: '#41d5fb' }}>terms and conditions </Text>
-                        <Text style={{ fontFamily: AppFontRegular,color: 'black' }}>as well as our </Text>
-                        <Text style={{ fontFamily: AppFontRegular,color: '#41d5fb' }}>privacy policy</Text>
+                        <Text style={{ fontFamily: AppFontRegular,color: 'black' }}>{i18n.t(TRANSLATIONS_KEY.REGISTER_BY_CLICK_YOU_ACCEPT).toString()}</Text>
+                        <Text style={{ fontFamily: AppFontRegular,color: '#41d5fb' }}>{i18n.t(TRANSLATIONS_KEY.REGISTER_TERM_COND).toString()} </Text>
+                        <Text style={{ fontFamily: AppFontRegular,color: 'black' }}>{i18n.t(TRANSLATIONS_KEY.REGISTER_AS_WELL).toString()} </Text>
+                        <Text style={{ fontFamily: AppFontRegular,color: '#41d5fb' }}>{i18n.t(TRANSLATIONS_KEY.REGISTER_PRIVACY).toString()}</Text>
                     </Layout>
                 </Layout>
             </ScrollView>
