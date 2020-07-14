@@ -5,6 +5,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import { TextStyle, View } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal'
 import { useFocusEffect } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     mobilecode?: string
@@ -15,6 +16,7 @@ type Props = {
     styles?: TextStyle
 }
 const PhoneInput: React.FC<Props> = ({ mobilecode, mobileNumber = "", onCodeChange, onNumberChange, styles, onCountryChanged }) => {
+    const { i18n } = useTranslation();
     const [phonenumberToShow, setPhonenumberToShow] = useState<string>(mobileNumber);
     const [showFlagModal, setShowFlagModal] = useState<boolean>(false);
     const phoneInput = useRef<ReactNativePhoneInput<typeof TextInput> | null>(null);
@@ -54,7 +56,7 @@ const PhoneInput: React.FC<Props> = ({ mobilecode, mobileNumber = "", onCodeChan
             <RNPhoneInput
                 style={{ borderWidth: 1, borderRadius: 10, padding: 15, ...styles }}
                 textProps={{
-                    placeholder: 'Mobile number',
+                    placeholder: i18n.t(TRANSLATIONS_KEY.MOBILE_NUMBER_WORD).toString(),
                     value: `${mobilecode || '+1'} ${phonenumberToShow}`,
                     onChangeText: (c: string) => {
                         setPhonenumberToShow(p => {

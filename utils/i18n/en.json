@@ -22,6 +22,7 @@
     "REQUIRED_WORD": "Required",
     "FORMAT_WORD": "Format",
     "LOGIN_WORD": "Login",
+    "MOBILE_NUMBER_WORD": "Mobile number",
 
     "ONLY_NUMBERS_ERRORS": "Can be only number",
 
