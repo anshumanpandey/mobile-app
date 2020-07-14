@@ -8,9 +8,12 @@ import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import LoadingSpinner from '../partials/LoadingSpinner';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 import { AppFontBold, AppFontRegular } from '../constants/fonts'
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../utils/i18n';
 
 const DocumentScreen = () => {
   const [profile] = useGlobalState('profile');
+  const { i18n } = useTranslation();
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -78,8 +81,8 @@ const DocumentScreen = () => {
       <Layout style={{ flex: 1, padding: '5%', backgroundColor: 'white' }}>
 
         <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000' }}>
-          <Text style={{ textAlign: 'left' }} category="h3">Verify phone number</Text>
-          <Text category="s1"> Check your SMS messages. We've sent you the PIN at </Text>
+        <Text style={{ textAlign: 'left' }} category="h3">{i18n.t(TRANSLATIONS_KEY.OPT_SCREEN_TITLE).toString()}</Text>
+        <Text category="s1"> {i18n.t(TRANSLATIONS_KEY.OPT_SCREEN_SUB_TITLE).toString()} </Text>
           <Text style={{ color: '#41d5fb' }}>({profile?.mobilecode}) {profile?.mobilenumber}</Text>
         </Layout>
 
@@ -159,10 +162,12 @@ const DocumentScreen = () => {
             shadowRadius: 13.16,
             elevation: 10,
           }}>
-          {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>Verify</Text>}
+          {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>{i18n.t(TRANSLATIONS_KEY.VERIFY_WORD).toString()}</Text>}
         </Button>
         <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', backgroundColor: '#00000000' }}>
-          <Text style={{ textAlign: 'center' }}>Didn't receive SMS </Text>
+        <Text style={{ textAlign: 'center' }}>
+          {i18n.t(TRANSLATIONS_KEY.OPT_DID_NOT_RECEIVE).toString()}
+        </Text>
           <Text
             onPress={() => {
               if (!profile) return
@@ -207,11 +212,11 @@ const DocumentScreen = () => {
               }
 
             }}
-            style={{ color: counter == 30 ? '#41d5fb':'#41d5fb80' }}>Resend Code</Text>
+            style={{ color: counter == 30 ? '#41d5fb':'#41d5fb80' }}>{i18n.t(TRANSLATIONS_KEY.OPT_RESEND).toString()}</Text>
         </Layout>
 
         {counter != 30 && (<Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', backgroundColor: '#00000000', marginTop: '5%' }}>
-          <Text >Wait {counter} sec before sending resending the SMS </Text>
+        <Text >{i18n.t(TRANSLATIONS_KEY.WAIT_WORD).toString()} {counter} {i18n.t(TRANSLATIONS_KEY.OPT_WAIT_SMS).toString()} </Text>
         </Layout>)}
 
         <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', backgroundColor: '#00000000', marginTop: '5%' }}>
@@ -223,7 +228,7 @@ const DocumentScreen = () => {
                 navigation.navigate('Login')
               }
             }}
-            style={{ color: '#41d5fb' }}>Verify later</Text>
+            style={{ color: '#41d5fb' }}>{i18n.t(TRANSLATIONS_KEY.OPT_LATER).toString()}</Text>
         </Layout>
 
       </Layout>
