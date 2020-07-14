@@ -1,17 +1,17 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Layout, Text, Button } from '@ui-kitten/components';
-import { SafeAreaView, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import useAxios from 'axios-hooks'
-import { useGlobalState, dispatchGlobalState } from '../state';
-import { axiosInstance } from '../utils/AxiosBootstrap';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import LoadingSpinner from '../partials/LoadingSpinner';
 import { useNavigation } from '@react-navigation/native';
 import BackButton from '../partials/BackButton';
-import { AppFontBold, AppFontRegular } from '../constants/fonts'
+import { AppFontBold } from '../constants/fonts'
+import { useTranslation } from 'react-i18next';
+import { TRANSLATIONS_KEY } from '../utils/i18n';
 
 const DocumentScreen = () => {
-  const [profile] = useGlobalState('profile');
+  const { i18n } = useTranslation();
   const navigation = useNavigation();
 
   const [{ data, loading, error }, doVerify] = useAxios({
@@ -28,12 +28,18 @@ const DocumentScreen = () => {
         <Layout style={{ display: 'flex', flexDirection: 'row', backgroundColor: '#00000000', alignItems: 'center' }}>
           <BackButton />
 
-          <Text style={{ marginLeft: '2%', textAlign: 'left' }} category="h3">Login</Text>
+          <Text style={{ marginLeft: '2%', textAlign: 'left' }} category="h3">
+            {i18n.t(TRANSLATIONS_KEY.LOGIN_WORD).toString()}
+          </Text>
         </Layout>
 
         <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '15%', marginBottom: '10%' }}>
-          <Text style={{ fontFamily: AppFontBold, textAlign: 'center' }} category="h3">Success</Text>
-          <Text style={{ color: '#8F9BB3', textAlign: 'center', marginBottom: '15%' }} category="h6">Your new password has been sent to your registered email ID</Text>
+          <Text style={{ fontFamily: AppFontBold, textAlign: 'center' }} category="h3">
+            {i18n.t(TRANSLATIONS_KEY.SUCCESS_FORGOT_SCREEN_TITLE).toString()}
+          </Text>
+          <Text style={{ color: '#8F9BB3', textAlign: 'center', marginBottom: '15%' }} category="h6">
+            {i18n.t(TRANSLATIONS_KEY.SUCCESS_FORGOT_SCREEN_SUB_TITLE).toString()}
+          </Text>
         </Layout>
 
         <Button
@@ -57,7 +63,7 @@ const DocumentScreen = () => {
             shadowRadius: 13.16,
             elevation: 10,
           }}>
-          {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>Ok</Text>}
+          {() => <Text style={{ color: 'white', fontFamily: AppFontBold, fontSize: 18 }}>{i18n.t(TRANSLATIONS_KEY.OK_WORD).toString()}</Text>}
         </Button>
 
       </Layout>
