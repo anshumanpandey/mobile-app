@@ -82,7 +82,7 @@ const DocumentScreen = () => {
           dim.height = 340;
         }
       }
-    ))/
+    ))*/
   };
 
   useEffect(() => {
