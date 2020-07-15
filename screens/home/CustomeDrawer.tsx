@@ -17,6 +17,7 @@ import { useIsDrawerOpen } from "@react-navigation/drawer";
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { AppFontRegular } from "../../constants/fonts";
 import i18n, { TRANSLATIONS_KEY } from "../../utils/i18n";
+import { CommonActions } from "@react-navigation/native";
 
 const menuData = [
     { name: i18n.t(TRANSLATIONS_KEY.MENU_ITEM_PRIVACY_POLICY), screenName: "Policy", iconName: 'shield',key: 'swwe' },
@@ -49,7 +50,7 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
     useEffect(() => {
         if (hasFullProfile && hasAllFiles) {
             const found = menuData.find(i => i.key == "asd")
-            if (!found) menuData.unshift({ name: "My Trips", screenName: "MyBookings", iconName: "car-side",iconSize: 30,key: 'asd' });
+            if (!found) menuData.unshift({ name: "My Trips", screenName: "MyBookings", iconName: "car-side",iconSize: 30, resetHistory: true,key: 'asd' });
         }
     }, [wasDrawerOpen])
 
@@ -86,6 +87,7 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
                             screenName={item.screenName as keyof LoginScreenProps}
                             name={item.name}
                             key={item.key}
+                            resetHistory={item.resetHistory}
                         />
                     )}
                 />
@@ -94,13 +96,25 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
     );
 }
 
-const DrawerItem = ({ navigation, name, iconName,screenName,iconSize,onPress }: StackScreenProps<LoginScreenProps> & { name: string, iconSize: number,iconName: string,onPress?:() => void,screenName?: keyof LoginScreenProps }) => {
+const DrawerItem = ({ navigation, name, iconName,screenName,iconSize, resetHistory,onPress }: StackScreenProps<LoginScreenProps> & { name: string, iconSize: number, resetHistory?: boolean,iconName: string,onPress?:() => void,screenName?: keyof LoginScreenProps }) => {
     return (
         <TouchableOpacity
             style={styles.menuItem}
             onPress={() => {
                 if (screenName) {
-                    navigation.navigate(screenName)
+                    
+                    if (resetHistory == true) {
+                        navigation.dispatch(
+                            CommonActions.reset({
+                                index: 0,
+                                routes: [
+                                    { name: screenName },
+                                ],
+                            })
+                        );
+                    } else {
+                        navigation.navigate(screenName)
+                    }
                 } else {
                     onPress && onPress();
                 }

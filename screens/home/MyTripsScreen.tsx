@@ -13,6 +13,7 @@ import Decimal from 'decimal.js';
 import { AppFontBold, AppFontRegular } from '../../constants/fonts'
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../../utils/i18n';
+import { resetBookingCreationState } from './createBookings/CreateBookingState';
 
 const DocumentScreen = () => {
   const navigation = useNavigation();
@@ -33,6 +34,7 @@ const DocumentScreen = () => {
 
   useFocusEffect(
     React.useCallback(() => {
+      resetBookingCreationState()
       refetch()
         .then(r => {
           console.log(r.data)

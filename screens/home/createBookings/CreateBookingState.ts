@@ -22,7 +22,7 @@ type InitialState = {
     vehicle: VehVendorAvail | null
 };
  
-const initialState: InitialState = {
+const initialCreatingBookingState: InitialState = {
     originLocation: null,
     returnLocation: null,
     inmediatePickup: false,
@@ -34,4 +34,19 @@ const initialState: InitialState = {
     arrivalTime: '',
 };
 
-export const { useGlobalState: useCreateBookingState } = createGlobalState<InitialState>(initialState);
+export const {
+    useGlobalState: useCreateBookingState,
+    setGlobalState: setCreatingBookingGlobalState,
+} = createGlobalState<InitialState>(initialCreatingBookingState);
+
+export const resetBookingCreationState = () => {
+    setCreatingBookingGlobalState("originLocation", initialCreatingBookingState.originLocation)
+    setCreatingBookingGlobalState("returnLocation", initialCreatingBookingState.returnLocation)
+    setCreatingBookingGlobalState("inmediatePickup", initialCreatingBookingState.inmediatePickup)
+    setCreatingBookingGlobalState("reservationNumber", initialCreatingBookingState.reservationNumber)
+    setCreatingBookingGlobalState("departureTime", initialCreatingBookingState.departureTime)
+    setCreatingBookingGlobalState("returnTime", initialCreatingBookingState.returnTime)
+    setCreatingBookingGlobalState("extras", initialCreatingBookingState.extras)
+    setCreatingBookingGlobalState("vehicle", initialCreatingBookingState.vehicle)
+    setCreatingBookingGlobalState("arrivalTime", initialCreatingBookingState.arrivalTime)
+}
