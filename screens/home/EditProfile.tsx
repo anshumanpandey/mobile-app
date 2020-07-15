@@ -90,7 +90,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         enableReinitialize
                         validate={(values) => {
                             const errors: { mobilenumber?: string, mobilecode?: string, tele?: string, company?: string, vat?: string } = {};
-                            if (!values.mobilenumber) errors.mobilenumber = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD);
+                            if (!values.mobilenumber) {
+                                errors.mobilenumber = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD);
+                            } else if (values.mobilenumber.length > 10) {
+                                errors.tele = 'Phone number can be max 10 digits';
+                            }
                             if (!values.mobilecode) errors.mobilecode = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD);
 
                             if (userIsCompany(profile || {})) {
