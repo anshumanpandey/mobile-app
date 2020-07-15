@@ -107,6 +107,8 @@ export default () => {
                         onSubmit={values => {
 
                             const data = values
+                            if (!data.telecode) data.telecode = '+1';
+                            if (!data.countryCode) data.countryCode = 'us';
                             data.username = values.emailaddress
                             data.module_name = "REGISTER"
 

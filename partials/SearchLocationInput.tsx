@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EvilIcon from 'react-native-vector-icons/EvilIcons';
-import { Layout, List, Text, Toggle } from '@ui-kitten/components';
-import { TextInput, TouchableHighlight, TouchableWithoutFeedback, AsyncStorage, TouchableOpacity } from 'react-native';
+import { Layout, Text, Toggle } from '@ui-kitten/components';
+import { AsyncStorage, TouchableOpacity, TextInput } from 'react-native';
 //@ts-ignore
 import Autocomplete from 'react-native-autocomplete-input';
 import FuzzySearch from 'fuzzy-search';
@@ -90,6 +90,9 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
             inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
             listStyle={{ borderColor: 'white' }}
             placeholder={i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_ENTER_ORIGIN_PLACEHOLDER).toString()}
+            renderTextInput={(props) =>{
+              return <TextInput {...props} placeholderTextColor="black" />
+            }}
             data={!pickupResults ? [] : pickupResults}
             value={originInputText}
             onChangeText={text => {
@@ -120,6 +123,9 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
               inputContainerStyle={{ width: '100%', padding: '3%',borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
               listStyle={{ borderColor: 'white' }}
               placeholder={i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_DESTINATION_PLACEHOLDER).toString()}
+              renderTextInput={(props) =>{
+                return <TextInput {...props} placeholderTextColor="black" />
+              }}
               data={!returnResults ? [] : returnResults}
               value={returnInputText}
               onChangeText={text => {

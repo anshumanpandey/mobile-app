@@ -57,6 +57,7 @@ const PhoneInput: React.FC<Props> = ({ mobilecode, mobileNumber = "", onCodeChan
             <RNPhoneInput
                 style={{ borderWidth: 1, borderRadius: 10, padding: 15, ...styles }}
                 textProps={{
+                    placeholderTextColor: "black",
                     placeholder: i18n.t(TRANSLATIONS_KEY.MOBILE_NUMBER_WORD).toString(),
                     value: `${mobilecode || '+1'} ${phonenumberToShow}`,
                     onChangeText: (c: string) => {
