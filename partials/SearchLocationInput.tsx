@@ -151,7 +151,14 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
         </Layout>
       </Layout>
       {hideReturnToggle !== false && (
-        <Toggle checked={returnSameLocation} style={{ alignSelf: 'flex-start', marginTop: '3%', marginBottom: '3%' }} onChange={() => setReturnSameLocation(p => !p)}>
+        <Toggle checked={returnSameLocation} style={{ alignSelf: 'center', marginTop: '3%', marginBottom: '3%' }} onChange={() => setReturnSameLocation(p => {
+          const n = !p
+          if (n) {
+            setReturnInputText("")
+            props.onReturnLocationSelected(null)
+          }
+          return n
+        })}>
           {i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_ON_SAME_LOCATION_TAG).toString()}
       </Toggle>
       )}
