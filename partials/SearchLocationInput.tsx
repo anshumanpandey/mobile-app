@@ -118,7 +118,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
           {!returnSameLocation && (
             <Autocomplete
               containerStyle={{ width: '100%' }}
-              inputContainerStyle={{ width: '100%', padding: '3%',borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
+              inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
               listStyle={{ borderColor: 'white' }}
               placeholder={i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_DESTINATION_PLACEHOLDER).toString()}
               renderTextInput={(props) =>{
