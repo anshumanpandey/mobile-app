@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { Layout, Text, Input, Button, TabView, Tab, Toggle } from '@ui-kitten/components';
-import { SafeAreaView, ScrollView } from 'react-native';
+import { SafeAreaView, ScrollView, Image, View } from 'react-native';
 import useAxios from 'axios-hooks'
 import { Formik } from 'formik';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
@@ -20,9 +20,10 @@ import { FileTypeEnum } from './DocumentUpload/DocumentState';
 import userIsCompany from '../../utils/userIsCompany';
 import TimeCheckbox from '../../partials/TimeCheckbox';
 import { useFocusEffect } from '@react-navigation/native';
-import { AppFontBold } from '../../constants/fonts'
+import { AppFontBold, AppFontRegular } from '../../constants/fonts'
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../../utils/i18n';
+import moment from 'moment';
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
     const { i18n } = useTranslation();
@@ -327,9 +328,24 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                         }}
                                                         nonEditable={true}
                                                         accessoryRight={(style) => {
-                                                            return <MaterialCommunityIcon style={{ color: style.style.color }} size={24} name="file-document" />
+                                                            return (
+                                                                <Image
+                                                                    style={{ width: 50, height: 50, borderRadius: 25, marginRight: '5%' }}
+                                                                    source={{ uri: `https://www.right-cars.com/uploads/pass/${profile?.passimage}` }}
+                                                                />
+                                                            );
                                                         }}
-                                                        subTitle={profile?.passimage ? `${i18n.t(TRANSLATIONS_KEY.FORMAT_WORD).toString()}: ${profile?.passimage.split('.').pop()}` : undefined}
+                                                        subTitle={profile?.passimage ? () => {
+                                                            return (
+                                                                <FileMetadata
+                                                                    docNum={profile?.passport}
+                                                                    docCountry={profile?.passcountry}
+                                                                    day={profile?.passday}
+                                                                    month={profile?.passmonth}
+                                                                    year={profile?.passyear}
+                                                                />
+                                                            );
+                                                        } : undefined}
                                                         defaultChecked={profile?.vself == 1}
                                                         style={{ marginBottom: '5%' }}
                                                         title={i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_PASSPORT_TAG).toString()}
@@ -352,9 +368,18 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                         }}
                                                         nonEditable={true}
                                                         accessoryRight={(style) => {
-                                                            return <MaterialCommunityIcon style={{ color: style.style.color }} size={24} name="file-document" />
+                                                            return (
+                                                                <Image
+                                                                    style={{ width: 50, height: 50, borderRadius: 25, marginRight: '5%' }}
+                                                                    source={{ uri: `https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}` }}
+                                                                />
+                                                            );
                                                         }}
-                                                        subTitle={profile?.selfiurl ? `${i18n.t(TRANSLATIONS_KEY.FORMAT_WORD).toString()}: ${profile?.selfiurl.split('.').pop()}` : undefined}
+                                                        subTitle={profile?.passimage ? () => {
+                                                            return (
+                                                                <FileMetadata />
+                                                            );
+                                                        } : undefined}
                                                         defaultChecked={profile?.vpass == 1}
                                                         style={{ marginBottom: '5%' }}
                                                         title={i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_SELFI_TAG).toString()}
@@ -384,9 +409,24 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                         }}
                                                         nonEditable={true}
                                                         accessoryRight={(style) => {
-                                                            return <MaterialCommunityIcon style={{ color: style.style.color }} size={24} name="file-document" />
+                                                            return (
+                                                                <Image
+                                                                    style={{ width: 50, height: 50, borderRadius: 25, marginRight: '5%' }}
+                                                                    source={{ uri: `https://www.right-cars.com/uploads/drlic/${profile?.drimage}` }}
+                                                                />
+                                                            );
                                                         }}
-                                                        subTitle={profile?.drimage ? `${i18n.t(TRANSLATIONS_KEY.FORMAT_WORD).toString()}: ${profile?.drimage.split('.').pop()}` : undefined}
+                                                        subTitle={profile?.passimage ? () => {
+                                                            return (
+                                                                <FileMetadata
+                                                                    docNum={profile?.drlic}
+                                                                    docCountry={profile?.drcountry}
+                                                                    day={profile?.drday}
+                                                                    month={profile?.drmonth}
+                                                                    year={profile?.dryear}
+                                                                />
+                                                            );
+                                                        } : undefined}
                                                         defaultChecked={profile?.vdr == 1}
                                                         style={{ marginBottom: '5%' }}
                                                         title={i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_DRIVER_LICENSE_TAG).toString()}
@@ -412,3 +452,36 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
         </SafeAreaView>
     )
 };
+
+type Props = { docNum?: string, docCountry?: string, day?: string, month?: string, year?: string }
+const FileMetadata: React.FC<Props> = ({ docNum, docCountry, day, month, year }) => {
+    return (
+        <>
+            <Layout style={{ marginBottom: '3%', display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                <View >
+                    {day && <Text style={{ textAlign: 'left', fontFamily: AppFontBold }} category="s1">
+                        Expiry
+                    </Text>}
+                    {docNum && <Text style={{ textAlign: 'left', fontFamily: AppFontBold }} category="s1">
+                        Document Number
+                    </Text>}
+                    {docCountry && <Text style={{ textAlign: 'left', fontFamily: AppFontBold }} category="s1">
+                        Issuing Country
+                    </Text>}
+                </View>
+
+                <View style={{ marginLeft: '5%', display: 'flex', justifyContent: 'center' }}>
+                    {day && <Text style={{ fontFamily: AppFontRegular, fontSize: 16 }}>
+                        {moment(`${day}-${month}-${year}`, "DD-MM-YYYY").format('D MMM YYYY')}
+                    </Text>}
+                    {docNum && <Text style={{ fontFamily: AppFontRegular, fontSize: 16 }}>
+                        {docNum}
+                    </Text>}
+                    {docCountry && <Text style={{ fontFamily: AppFontRegular, fontSize: 16 }}>
+                        {docCountry}
+                    </Text>}
+                </View>
+            </Layout>
+        </>
+    );
+}

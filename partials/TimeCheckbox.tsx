@@ -6,7 +6,7 @@ import { AppFontBold, AppFontRegular } from '../constants/fonts'
 
 export type TimeCheckboxProps = {
     title: string
-    subTitle?: string
+    subTitle?: (props?: { style: TextStyle}) => React.ReactNode | string
     style?: ViewStyle
     defaultChecked?: boolean
     checked?: boolean
@@ -54,7 +54,8 @@ const TimeCheckbox: React.FC<TimeCheckboxProps> = ({ title, disabledStyling = fa
                 {Node}
                 <Layout style={{ backgroundColor: '#00000000' }}>
                     <Text style={{ color: styles.textColor, fontFamily: AppFontBold }}>{title}</Text>
-                    {subTitle && <Text style={{ color: styles.textColor }}>{subTitle}</Text>}
+                    {subTitle && typeof subTitle == "string" &&<Text style={{ color: styles.textColor }}>{subTitle}</Text>}
+                    {subTitle && typeof subTitle == "function" && subTitle() }
                 </Layout>
             </View>
             {Replace ? Replace: <CheckBox checked={checked} />}
