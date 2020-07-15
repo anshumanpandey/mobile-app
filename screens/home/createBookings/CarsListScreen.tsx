@@ -33,7 +33,15 @@ const DocumentScreen = () => {
   const [showFilterModal, setShowFilterModal] = useState(false)
   const [showSortModal, setShowSortModal] = useState(false)
   const [sortState, setSortState] = useState<"LowToHigh" | "HighToLow">("LowToHigh")
-  const [currentLayoutProvider, setLp] = useState(new LayoutProvider(
+  const [carTransmissionOptions, setCarTransmissionOptions] = useState([])
+  const [carTypeOptions, setCarTypeOptions] = useState([])
+  const [transmissionFilters, setTransmissionFilter] = useState<string[]>([])
+  const [typesFiter, setTypesFilter] = useState<string[]>([])
+  const [applyFilter, setApplyFilter] = useState<boolean>(false)
+
+  const cars = route.params.cars
+
+  const currentLayoutProvider = new LayoutProvider(
     index => {
       if (index == 0) return 'HEADER'
       return 0
@@ -47,15 +55,7 @@ const DocumentScreen = () => {
         dim.height = 290;
       }
     }
-  ))
-  const [carTransmissionOptions, setCarTransmissionOptions] = useState([])
-  const [carTypeOptions, setCarTypeOptions] = useState([])
-  const [carClassOptions, setCarClassOptions] = useState([])
-  const [transmissionFilters, setTransmissionFilter] = useState<string[]>([])
-  const [typesFiter, setTypesFilter] = useState<string[]>([])
-  const [applyFilter, setApplyFilter] = useState<boolean>(false)
-
-  const cars = route.params.cars
+  )
 
   const [dataToUse, setDataToUse] = useState(_dataProvider.cloneWithRows(cars));
 
