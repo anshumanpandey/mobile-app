@@ -44,7 +44,7 @@ const DocumentScreen = () => {
         dim.height = 190;
       } else {
         dim.width = Dimensions.get('window').width;
-        dim.height = 340;
+        dim.height = 290;
       }
     }
   ))
