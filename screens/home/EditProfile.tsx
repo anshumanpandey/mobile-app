@@ -54,7 +54,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     console.log(profile)
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: 'red' }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
             <ScrollView keyboardShouldPersistTaps={"handled"} >
 
                 <Layout style={{ flex: 1, padding: '3%' }}>
