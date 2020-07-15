@@ -25,6 +25,7 @@ import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
 import Orientation, { OrientationType } from 'react-native-orientation-locker';
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../../../utils/i18n';
+import BackButton from '../../../partials/BackButton';
 
 
 export default () => {
@@ -91,7 +92,7 @@ export default () => {
                         case RESULTS.DENIED:
                             console.log('The permission has not been requested / is denied but requestable');
                             request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((r) => {
-                                if (r == RESULTS.UNAVAILABLE) Alert.alert('This feature is not available (on this device / in this context)')
+                                if (r == RESULTS.UNAVAILABLE) Alert.alert('This feature is not available (on this device / in this context) even after asking')
                                 if (r == RESULTS.DENIED) Alert.alert(':(', 'Please, allow the location, for us to do amazing things for you!')
                                 if (r == RESULTS.BLOCKED) Alert.alert(':(', 'Please, allow the location, for us to do amazing things for you!')
                             });
@@ -169,6 +170,7 @@ export default () => {
                         <Text style={{ width: '80%', textAlign: 'center', fontSize: 22, fontFamily: AppFontBold }} category='s2'>
                             {i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_SCREEN_TITLE).toString()}
                         </Text>
+                        <BackButton />
                     </View>
                     <TimeCheckbox
                         checked={inmediatePickup == undefined ? undefined : inmediatePickup}

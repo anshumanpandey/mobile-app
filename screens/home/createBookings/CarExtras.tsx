@@ -16,6 +16,7 @@ import Decimal from 'decimal.js';
 import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
 import { TRANSLATIONS_KEY } from '../../../utils/i18n';
 import { useTranslation } from 'react-i18next';
+import BackButton from '../../../partials/BackButton';
 
 type ParamList = {
     CarExtras: {
@@ -35,8 +36,9 @@ export default () => {
     return (
         <SafeAreaView style={{ flex: 1 }} >
             <ScrollView contentContainerStyle={{ flexGrow: 1, padding: '5%', justifyContent: 'space-between', display: 'flex' }} keyboardShouldPersistTaps={"handled"} style={{ backgroundColor: 'white' }}>
-                <View style={{ position: 'absolute', zIndex: 2, padding: '5%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{ zIndex: 2, flexDirection: 'row',width: '100%', justifyContent: 'space-between', alignItems: 'flex-start'}}>
                     <MenuButton />
+                    <BackButton />
                 </View>
                 <Layout>
                     <CarItem style={{ marginBottom: '5%' }} centerCarName={true} vehicle={{

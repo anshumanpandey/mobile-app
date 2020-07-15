@@ -13,6 +13,7 @@ import MenuButton from '../../../partials/MenuButton';
 import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../../../utils/i18n';
+import BackButton from '../../../partials/BackButton';
 
 const GET_PAYPAL_JSON = (vehicle: VehVendorAvail, meta, extras: (PricedEquip & { amount: number })[]) => {
     return {
@@ -107,13 +108,20 @@ export default () => {
                                     {i18n.t(TRANSLATIONS_KEY.PAYMENT_SCREEN_TILE).toString()}
                                 </Text>
                             </View>
-                            <Text style={{ fontSize: 24, fontFamily: AppFontBold }}>
-                                {ResolveCurrencySymbol(paypalJson.transactions[0].amount.currency)}{' '}
-                                {new Decimal(paypalJson.transactions[0].amount.total).add(extras.reduce((prev, next) => {
-                                    prev = new Decimal(next.Charge.Amount).times(next.amount).add(prev).toNumber()
-                                    return prev
-                                }, 0)).toFixed(2)}
-                            </Text>
+                            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                <View>
+                                    <Text style={{ fontSize: 24, fontFamily: AppFontBold }}>
+                                        {ResolveCurrencySymbol(paypalJson.transactions[0].amount.currency)}{' '}
+                                        {new Decimal(paypalJson.transactions[0].amount.total).add(extras.reduce((prev, next) => {
+                                            prev = new Decimal(next.Charge.Amount).times(next.amount).add(prev).toNumber()
+                                            return prev
+                                        }, 0)).toFixed(2)}
+                                    </Text>
+                                </View>
+                                <View style={{ marginLeft: '15%',}}>
+                                    <BackButton />
+                                </View>
+                            </View>
                         </Layout>
                         <Layout style={{ padding: '5%' }}>
                             <TabView
@@ -140,13 +148,13 @@ export default () => {
                                                         <Text {...evaProps} style={{ fontFamily: AppFontRegular, fontSize: 16 }}>
                                                             {i18n.t(TRANSLATIONS_KEY.RIGHT_CARS_WORD).toString()}{' '}
                                                         </Text>
-                                                        <Text {...evaProps} onPress={() => navigation.navigate('TermsConditions')} style={{ fontFamily: AppFontRegular,color: '#41d5fb', fontSize: 16 }}>
+                                                        <Text {...evaProps} onPress={() => navigation.navigate('TermsConditions')} style={{ fontFamily: AppFontRegular, color: '#41d5fb', fontSize: 16 }}>
                                                             {i18n.t(TRANSLATIONS_KEY.TERMS_CONDITIONS_WORD).toString()}
                                                         </Text>
                                                         <Text {...evaProps} style={{ fontFamily: AppFontRegular, fontSize: 16 }}>
                                                             {' '}{i18n.t(TRANSLATIONS_KEY.AND_WORD).toString()}{' '}
                                                         </Text>
-                                                        <Text {...evaProps} onPress={() => navigation.navigate('Policy')} style={{ fontFamily: AppFontRegular,color: '#41d5fb', fontSize: 16 }}>
+                                                        <Text {...evaProps} onPress={() => navigation.navigate('Policy')} style={{ fontFamily: AppFontRegular, color: '#41d5fb', fontSize: 16 }}>
                                                             {i18n.t(TRANSLATIONS_KEY.PRIVACY_POLICY_WORD).toString()}.
                                                         </Text>
                                                     </View>
