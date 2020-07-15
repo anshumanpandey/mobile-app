@@ -91,7 +91,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
             listStyle={{ borderColor: 'white' }}
             placeholder={i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_ENTER_ORIGIN_PLACEHOLDER).toString()}
             renderTextInput={(props) =>{
-              return <TextInput {...props} placeholderTextColor="black" />
+              return <TextInput {...props} placeholderTextColor="#949494" style={{ color: '#000000'}} />
             }}
             data={!pickupResults ? [] : pickupResults}
             value={originInputText}
@@ -124,7 +124,7 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
               listStyle={{ borderColor: 'white' }}
               placeholder={i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_DESTINATION_PLACEHOLDER).toString()}
               renderTextInput={(props) =>{
-                return <TextInput {...props} placeholderTextColor="black" />
+                return <TextInput {...props} placeholderTextColor="#949494" style={{ color: '#000000'}} />
               }}
               data={!returnResults ? [] : returnResults}
               value={returnInputText}
