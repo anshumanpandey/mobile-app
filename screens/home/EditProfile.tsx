@@ -93,7 +93,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             if (!values.mobilenumber) {
                                 errors.mobilenumber = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD);
                             } else if (values.mobilenumber.length > 10) {
-                                errors.tele = 'Phone number can be max 10 digits';
+                                errors.mobilenumber = 'Phone number can be max 10 digits';
                             }
                             if (!values.mobilecode) errors.mobilecode = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD);
 
