@@ -58,8 +58,8 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
     }, [wasDrawerOpen])
 
     return (
-        <SafeAreaView>
-            <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
+            <View style={{ flex: 1}}>
                 <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
                     <Layout style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative', borderBottomWidth: 1, borderBottomColor: 'grey', paddingBottom: '8%' }}>
                         {profile?.selfiurl == "" && (
@@ -74,7 +74,7 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
                                 source={{ uri: `data:image/jpeg;base64,${profile.selfiurl}` }}
                             />
                         )}
-                        <Text onPress={() => navigation.navigate('Signup')} style={{ color: '#41d5fb' }}>
+                        <Text onPress={() => navigation.navigate('Signup')} style={{ color: '#41d5fb', marginTop: '5%' }}>
                             My Profile
                         </Text>
                     </Layout>
