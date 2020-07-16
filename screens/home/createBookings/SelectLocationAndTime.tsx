@@ -1,15 +1,14 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Text, Input, Button, Select, SelectItem, Popover, List, Toggle } from '@ui-kitten/components';
-import { SafeAreaView, ScrollView, View, TouchableHighlight, TouchableWithoutFeedback, Dimensions, Alert } from 'react-native';
+import { SafeAreaView, ScrollView, View, TouchableHighlight, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import DatePicker from 'react-native-date-picker'
-import EvilIcon from 'react-native-vector-icons/EvilIcons';
+import Modal from 'react-native-modal';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useCreateBookingState } from './CreateBookingState';
 import TimeCheckbox from '../../../partials/TimeCheckbox';
 import LocationSearchInput from '../../../partials/SearchLocationInput';
-// @ts-ignore
-import GPSState from 'react-native-gps-state'
+import DateTimePicker from '@react-native-community/datetimepicker';
 //@ts-ignore
 import GetLocation from 'react-native-get-location'
 // @ts-ignore
@@ -38,6 +37,9 @@ export default () => {
     const [returnTime, setReturnTime] = useCreateBookingState("returnTime");
     const [currentLocation, setCurrentLocation] = useState(null);
     const [currentWidth, setCurrentWidth] = useState(Dimensions.get('window').width);
+    const [showDepartureDatepicker, setShowDepartureDatepicker] = useState(false);
+    const [showReturnDatepicker, setShowReturnDatepicker] = useState(false);
+
 
     const [{ data, loading, error }, doSearch] = useAxios<VehicleResponse>({
         url: `${GRCGDS_BACKEND}/SEARCH_VEHICLE`,
@@ -158,7 +160,7 @@ export default () => {
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }} >
             <ScrollView contentContainerStyle={{ flexGrow: 1, padding: '5%', justifyContent: 'space-between', display: 'flex' }} keyboardShouldPersistTaps={"handled"} style={{ backgroundColor: 'white' }}>
 
-                <Layout>
+                <Layout style={{ flexGrow: 1 }}>
                     <View style={{ display: 'flex', flexDirection: 'row' }}>
                         <MenuButton />
                         <Text style={{ width: '80%', textAlign: 'center', fontSize: 22, fontFamily: AppFontBold }} category='s2'>
@@ -197,32 +199,87 @@ export default () => {
                         onReturnLocationSelected={(l) => setReturnLocation(l)}
                     />
                     {inmediatePickup !== null && (
-                        <View style={{ display: 'flex', flexDirection: 'column' }}>
-                            <DatePicker
-                                style={{ width: currentWidth, alignSelf: 'center' }}
-                                minuteInterval={30}
-                                date={departureTime}
-                                onDateChange={(d) => {
-                                    if (inmediatePickup) {
-                                        const nowPlus24Hours = moment().utc().add('h', 24).set({ minutes: 0, seconds: 0 })
-                                        if (moment(d).isAfter(nowPlus24Hours)) {
-                                            setDepartureTime(nowPlus24Hours.toDate())
-                                        } else {
-                                            setDepartureTime(d)
-                                        }
-                                    } else {
-                                        setDepartureTime(d)
-                                    }
-                                    setReturnTime(moment(d).add('days', 1).toDate())
-                                }}
-                            />
+                        <View style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-evenly' }}>
+                            <View>
+                                <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_DEPARTURE_TIME_TAG).toString()}</Text>
+                                <TouchableOpacity onPress={() => setShowDepartureDatepicker(true)}>
+                                    <View style={{ borderTopWidth: 1, borderBottomWidth: 1 }}>
+                                        <Text style={{ textAlign: 'center', fontSize: 24 }}>{moment(departureTime).format('ddd D H mm a')}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                            {showDepartureDatepicker && (
+                                <Modal
+                                    onBackdropPress={() => setShowDepartureDatepicker(false)}
+                                    isVisible={showDepartureDatepicker}
+                                    style={{
+                                        justifyContent: 'flex-end',
+                                        margin: 0,
+                                    }}>
+                                    <Layout style={{ height: '40%', padding: '3%' }}>
+                                        <View style={{ height: '100%' }}>
+                                            <Text style={{ textAlign: 'center', fontSize: 18, width: '100%', fontFamily: AppFontBold }}>
+                                                Departure Time
+                                            </Text>
+                                            <DatePicker
+                                                style={{ width: currentWidth, alignSelf: 'center', flex: 1 }}
+                                                minuteInterval={30}
+                                                date={departureTime}
+                                                onDateChange={(d) => {
+                                                    if (inmediatePickup) {
+                                                        const nowPlus24Hours = moment().utc().add('h', 24).set({ minutes: 0, seconds: 0 })
+                                                        if (moment(d).isAfter(nowPlus24Hours)) {
+                                                            setDepartureTime(nowPlus24Hours.toDate())
+                                                        } else {
+                                                            setDepartureTime(d)
+                                                        }
+                                                    } else {
+                                                        setDepartureTime(d)
+                                                    }
+                                                    setReturnTime(moment(d).add('days', 1).toDate())
+                                                }}
+                                            />
+                                            <Text onPress={() => setShowDepartureDatepicker(false)} style={{ textAlign: 'center', fontSize: 18, width: '100%', fontFamily: AppFontBold }}>
+                                                Cancel
+                                        </Text>
+                                        </View>
+                                    </Layout>
+                                </Modal>
+                            )}
+                            <View>
                             <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_TIME_TAG).toString()}</Text>
-                            <DatePicker
-                                style={{ width: currentWidth, alignSelf: 'center' }}
-                                minuteInterval={30}
-                                date={returnTime}
-                                onDateChange={(d) => setReturnTime(d)}
-                            />
+                            <TouchableOpacity onPress={() => setShowReturnDatepicker(true)}>
+                                <View style={{ borderTopWidth: 1, borderBottomWidth: 1 }}>
+                                    <Text style={{ textAlign: 'center', fontSize: 24 }}>{moment(returnTime).format('ddd D H mm a')}</Text>
+                                </View>
+                            </TouchableOpacity>
+                            </View>
+                            {showReturnDatepicker && (
+                                <Modal
+                                    onBackdropPress={() => setShowReturnDatepicker(false)}
+                                    isVisible={showReturnDatepicker}
+                                    style={{
+                                        justifyContent: 'flex-end',
+                                        margin: 0,
+                                    }}>
+                                    <Layout style={{ height: '40%', padding: '3%' }}>
+                                        <View style={{ height: '100%' }}>
+                                            <Text style={{ textAlign: 'center', fontSize: 18, width: '100%', fontFamily: AppFontBold }}>
+                                                Return Time
+                                            </Text>
+                                            <DatePicker
+                                                style={{ width: currentWidth, alignSelf: 'center', flex: 1 }}
+                                                minuteInterval={30}
+                                                date={returnTime}
+                                                onDateChange={(d) => setReturnTime(d)}
+                                            />
+                                            <Text onPress={() => setShowReturnDatepicker(false)} style={{ textAlign: 'center', fontSize: 18, width: '100%', fontFamily: AppFontBold }}>
+                                                Cancel
+                                            </Text>
+                                        </View>
+                                    </Layout>
+                                </Modal>
+                            )}
                         </View>
                     )}
                 </Layout>
