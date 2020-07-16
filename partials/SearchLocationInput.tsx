@@ -85,14 +85,12 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
         )}
         <Layout style={{ display: 'flex', flexDirection: 'column', width: '85%', marginLeft: '1%' }}>
           <Autocomplete
+            style={{ color: '#000000', fontFamily: AppFontBold, padding: '3%',fontSize: 16, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }}
             containerStyle={{ width: '100%' }}
             inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
             listStyle={{ borderColor: 'white' }}
             listContainerStyle={{ maxHeight: "100%" }}
             placeholder={i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_ENTER_ORIGIN_PLACEHOLDER).toString()}
-            renderTextInput={(props) =>{
-              return <TextInput {...props} placeholderTextColor="#949494" style={{ color: '#000000', fontFamily: AppFontBold, padding: '3%',fontSize: 16, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }} />
-            }}
             data={!pickupResults ? [] : pickupResults}
             value={originInputText}
             onChangeText={text => {
@@ -118,14 +116,12 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
           />
           {!returnSameLocation && (
             <Autocomplete
+              style={{ color: '#000000', fontFamily: AppFontBold, padding: '3%',fontSize: 16, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }}
               containerStyle={{ width: '100%' }}
               inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
               listStyle={{ borderColor: 'white' }}
               listContainerStyle={{ maxHeight: "100%" }}
               placeholder={i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_DESTINATION_PLACEHOLDER).toString()}
-              renderTextInput={(props) =>{
-                return <TextInput {...props} placeholderTextColor="#949494" style={{ color: '#000000', fontFamily: AppFontBold, padding: '3%',fontSize: 16, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }} />
-              }}
               data={!returnResults ? [] : returnResults}
               value={returnInputText}
               onChangeText={text => {
