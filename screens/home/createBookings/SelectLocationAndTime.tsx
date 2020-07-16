@@ -200,7 +200,7 @@ export default () => {
                     />
                     {inmediatePickup !== null && (
                         <View style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                            <View style={{ marginTop: '8%' }}>
+                            <View style={{ marginTop: '10%' }}>
                                 <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_DEPARTURE_TIME_TAG).toString()}</Text>
                                 <TouchableOpacity onPress={() => setShowDepartureDatepicker(true)}>
                                     <View style={{ borderTopWidth: 1, borderBottomWidth: 1 }}>
@@ -246,7 +246,7 @@ export default () => {
                                     </Layout>
                                 </Modal>
                             )}
-                            <View style={{ marginTop: '8%' }}>
+                            <View style={{ marginTop: '25%' }}>
                                 <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_TIME_TAG).toString()}</Text>
                                 <TouchableOpacity onPress={() => setShowReturnDatepicker(true)}>
                                     <View style={{ borderTopWidth: 1, borderBottomWidth: 1 }}>
