@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../../../utils/i18n';
 import BackButton from '../../../partials/BackButton';
 
+const DATE_FORMAT = "DD MMM YYYY hh mm A"
 
 export default () => {
     const navigation = useNavigation();
@@ -204,7 +205,7 @@ export default () => {
                                 <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_DEPARTURE_TIME_TAG).toString()}</Text>
                                 <TouchableOpacity onPress={() => setShowDepartureDatepicker(true)}>
                                     <View style={{ borderTopWidth: 1, borderBottomWidth: 1 }}>
-                                        <Text style={{ textAlign: 'center', fontSize: 24 }}>{moment(departureTime).format('ddd D H mm a')}</Text>
+                                        <Text style={{ textAlign: 'center', fontSize: 24 }}>{moment(departureTime).format(DATE_FORMAT)}</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -250,7 +251,7 @@ export default () => {
                                 <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_TIME_TAG).toString()}</Text>
                                 <TouchableOpacity onPress={() => setShowReturnDatepicker(true)}>
                                     <View style={{ borderTopWidth: 1, borderBottomWidth: 1 }}>
-                                        <Text style={{ textAlign: 'center', fontSize: 24 }}>{moment(returnTime).format('ddd D H mm a')}</Text>
+                                        <Text style={{ textAlign: 'center', fontSize: 24 }}>{moment(returnTime).format(DATE_FORMAT)}</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>

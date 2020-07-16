@@ -39,6 +39,7 @@ type Props = StackScreenProps<LoginScreenProps, 'SingleUpload'>;
 
 const DocumentScreen = ({ route, navigation }: Props) => {
     const [change, triggerChange] = useState(true);
+    const [saving, setSaving] = useState(false);
     const [fileToShow, setFileToShow] = useState<string | null>(null);
     const [showCountryModal, setShowCountryModal] = useState(false);
     const [currentCountryObj, setCurrentCountryObj] = useState<any>({});
@@ -53,9 +54,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
         url: `${GRCGDS_BACKEND}`,
         method: 'POST',
         onUploadProgress: (e) => {
-            console.log(e)
             var percentCompleted = Math.round((e.loaded * 100) / e.total)
-            console.log("percentCompleted", percentCompleted)
             setUploadPercent(percentCompleted);
         }
     }, { manual: true })
@@ -69,13 +68,13 @@ const DocumentScreen = ({ route, navigation }: Props) => {
     useFocusEffect(
         React.useCallback(() => {
             if (route.params.fileType == FileTypeEnum.passport) {
-                setFileToShow(`https://www.right-cars.com/uploads/pass/${profile?.passimage}`)
+                setFileToShow(`data:image/jpeg;base64,${profile?.passimage}`)
             }
             if (route.params.fileType == FileTypeEnum.driving_license) {
-                setFileToShow(`https://www.right-cars.com/uploads/drlic/${profile?.drimage}`)
+                setFileToShow(`data:image/jpeg;base64,${profile?.drimage}`)
             }
             if (route.params.fileType == FileTypeEnum.selfi) {
-                setFileToShow(`https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}`)
+                setFileToShow(`data:image/jpeg;base64,${profile?.selfiurl}`)
             }
             triggerChange(p => !p)
             getAllCountries(FlagType.FLAT)
@@ -118,8 +117,8 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                     initialValues={initialValues}
                     enableReinitialize={true}
                     validate={(values) => {
-                        
-                        const errors: any  = {}
+
+                        const errors: any = {}
                         if (!values.docNumber && route.params.fileType != FileTypeEnum.selfi) errors.docNumber = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD);
 
                         return errors
@@ -145,14 +144,13 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                             });
                         }
                         data.append("fileType", currentFileType);
-                        console.log(values)
                         if (currentFileType != FileTypeEnum.selfi) {
                             data.append("expDate", values.expDate.format('YYYY-MM-DD'));
                             data.append("filecountry", currentCountryObj.cca2?.toLowerCase());
                             data.append("docNumber", values.docNumber);
                         }
 
-                        sendFile({ data })
+                        /*sendFile({ data })
                             .then(r => {
                                 if (route.params.fileType == FileTypeEnum.passport) {
                                     setFileToShow(`https://www.right-cars.com/uploads/pass/${r.data?.passimage}`)
@@ -168,12 +166,55 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                 triggerChange(p => !p)
                                 setUploadPercent(0)
                             })
-                            .catch(r => console.log(r))
+                            .catch(r => console.log(r))*/
+
+                        setTimeout(() => {
+                            const newProfile = { ...profile }
+
+                            if (currentFileType == FileTypeEnum.passport) {
+                                if (file?.data){
+                                    newProfile.passimage = file?.data;
+                                    setFileToShow(`data:image/jpeg;base64,${file?.data}`)
+                                }
+                                newProfile.passport = values.docNumber
+                                newProfile.passday = values.expDate.format('DD')
+                                newProfile.passmonth = values.expDate.format('MM')
+                                newProfile.passyear = values.expDate.format('YYYY')
+                                newProfile.passcountry = currentCountryObj.cca2?.toLowerCase()
+                            }
+                            if (currentFileType == FileTypeEnum.driving_license) {
+                                if (file?.data){
+                                    newProfile.drimage = file?.data;
+                                    setFileToShow(`data:image/jpeg;base64,${file?.data}`)
+                                }
+                                newProfile.drlic = values.docNumber
+                                newProfile.drday = values.expDate.format('DD')
+                                newProfile.drmonth = values.expDate.format('MM')
+                                newProfile.dryear = values.expDate.format('YYYY')
+                                newProfile.drcountry = currentCountryObj.cca2?.toLowerCase()
+                            }
+                            if (currentFileType == FileTypeEnum.selfi) {
+                                if (file?.data){
+                                    newProfile.selfiurl = file?.data;
+                                    setFileToShow(`data:image/jpeg;base64,${file?.data}`)
+                                }
+                            }
+
+                            console.log("newProfile.passimage",newProfile.passimage != null)
+                            console.log("newProfile.drimage",newProfile.drimage != null)
+                            console.log("newProfile.selfiurl",newProfile.selfiurl != null)
+                            setSaving(false)
+
+                            dispatchGlobalState({ type: 'profile', state: newProfile })
+                            dispatchFileState({ type: Actions.RESET, state: {} })
+                            triggerChange(p => !p)
+                            setUploadPercent(0)
+                            setSaving(false)
+                        }, 0)
 
                     }}
                 >
                     {({ handleChange, setFieldValue, handleSubmit, values, errors, touched, setFieldTouched }) => {
-                        console.log(fileToShow)
 
                         return (
                             <>
@@ -187,7 +228,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                         </Text>
                                     </Layout>
                                     {getFilesReq.loading && (
-                                        <View style={{ backgroundColor: 'white', height: '100%',display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                        <View style={{ backgroundColor: 'white', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                             <Progress.Circle
                                                 showsText={true}
                                                 textStyle={{ color: "#41d5fb" }}
@@ -254,100 +295,101 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                                     </View>
                                                 </TouchableOpacity>
                                             )}
-                                        {currentFileType != FileTypeEnum.selfi && (
-                                            <View style={{ backgroundColor: 'white', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                                <Datepicker
-                                                    style={{ paddingLeft: '5%', paddingRight: '5%', marginBottom: '1%', width: '100%' }}
-                                                    controlStyle={{
-                                                        backgroundColor: 'white',
-                                                        borderRadius: 10,
-                                                        borderColor: errors.expDate && touched.expDate ? '#ffa5bc' : '#E4E9F2'
-                                                    }}
-                                                    placeholder={() => <Text style={{ padding: '1.5%', paddingLeft: '4%', color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3' }}>{errors.expDate && touched.expDate ? errors.expDate : 'Expire Date'}</Text>}
-                                                    date={values?.expDate?.toDate()}
-                                                    title={(d) => moment(d)?.format(DATE_FORMAT)}
-                                                    dateService={formatDateService}
-                                                    onSelect={nextDate => setFieldValue("expDate", moment(nextDate))}
-                                                    accessoryRight={() => <EntypoIcon style={{ color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3', textAlign: 'left' }} name="calendar" size={22} />}
-                                                />
-
-                                                <Input
-                                                    status={errors.docNumber && touched.docNumber ? 'danger' : undefined}
-                                                    value={values.docNumber}
-                                                    onChangeText={handleChange('docNumber')}
-                                                    placeholderTextColor={errors.docNumber && touched.docNumber ? '#ffa5bc' : '#8F9BB3'}
-                                                    style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '1%', width: "90%" }}
-                                                    size="large"
-                                                    onBlur={() => setFieldTouched('docNumber')}
-                                                    placeholder={'Document Number'}
-                                                />
-                                                {errors.docNumber && touched.docNumber && <ErrorLabel style={{ marginLeft: '5%',alignSelf: 'flex-start' }} text={errors.docNumber} />}
-                                                <Layout style={{ marginBottom: '1%', width: '90%' }}>
-                                                    <TouchableOpacity onPress={() => setShowCountryModal(true)}>
-                                                        <View style={{ width: '100%', borderWidth: 1, borderColor: errors.fileCountry && touched.fileCountry ? '#ffa5bc' : '#E4E9F2', borderRadius: 10 }}>
-                                                            {errors.fileCountry && touched.fileCountry && !currentCountryObj && (
-                                                                <Text style={{ color: '#ffa5bc', padding: '3.5%', marginLeft: '3.5%' }}>
-                                                                    {errors.fileCountry}
-                                                                </Text>
-                                                            )}
-                                                            {!errors.fileCountry && currentCountryObj && currentCountryObj.name && (
-                                                                <Text style={{ color: '#8F9BB3', padding: '3.5%', marginLeft: '3.5%' }}>
-                                                                    {currentCountryObj.name.trim()}
-                                                                </Text>
-                                                            )}
-                                                            {(!errors.fileCountry || !touched.fileCountry) && !currentCountryObj && (
-                                                                <Text style={{ color: '#8F9BB3', padding: '3.5%', marginLeft: '3.5%' }}>
-                                                                    Select Country
-                                                                </Text>
-                                                            )}
-                                                        </View>
-                                                    </TouchableOpacity>
-                                                    {showCountryModal && (
-                                                        <CountryPicker
-                                                            containerButtonStyle={{
-                                                                borderWidth: 1,
-                                                                borderColor: errors.expDate && errors.expDate ? '#ffa5bc' : '#E4E9F2',
-                                                                padding: '3%',
-                                                                borderRadius: 10,
-                                                                width: 350,
-                                                            }}
-                                                            countryCode={values.fileCountry?.cca2?.toUpperCase()}
-                                                            visible={true}
-                                                            withFilter={true}
-                                                            withFlagButton={true}
-                                                            withCountryNameButton={true}
-                                                            renderFlagButton={() => {
-                                                                return
-                                                            }}
-                                                            onClose={() => setTimeout(() => setShowCountryModal(false), 0)}
-                                                            onSelect={(country) => {
-                                                                setCurrentCountryObj(country)
-                                                                setFieldValue('fileCountry', country)
-                                                                setTimeout(() => setShowCountryModal(false), 0)
-                                                            }}
-                                                        />
-                                                    )}
-                                                </Layout>
-                                            </View>
-                                        )}
                                     </View>}
 
-                                    {dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', height: '60%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    {dictionary.get(currentFileType)?.file && <View style={{ backgroundColor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         <Avatar
                                             key={dictionary.get(currentFileType)?.file?.uri}
                                             style={{ width: 175, height: 175, resizeMode: 'cover', marginTop: '3%', marginBottom: '3%', zIndex: -2 }}
-                                            source={{ uri: dictionary.get(currentFileType)?.file?.uri, cache: 'reload' }}
+                                            source={{ uri: `data:image/jpeg;base64,${dictionary.get(currentFileType)?.file?.data}`, cache: 'reload' }}
                                         />
                                     </View>}
+                                    {currentFileType != FileTypeEnum.selfi && (
+                                        <View style={{ backgroundColor: 'white', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                            <Datepicker
+                                                style={{ paddingLeft: '5%', paddingRight: '5%', marginBottom: '1%', width: '100%' }}
+                                                controlStyle={{
+                                                    backgroundColor: 'white',
+                                                    borderRadius: 10,
+                                                    borderColor: errors.expDate && touched.expDate ? '#ffa5bc' : '#E4E9F2'
+                                                }}
+                                                placeholder={() => <Text style={{ padding: '1.5%', paddingLeft: '4%', color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3' }}>{errors.expDate && touched.expDate ? errors.expDate : 'Expire Date'}</Text>}
+                                                date={values?.expDate?.toDate()}
+                                                title={(d) => moment(d)?.format(DATE_FORMAT)}
+                                                dateService={formatDateService}
+                                                onSelect={nextDate => setFieldValue("expDate", moment(nextDate))}
+                                                accessoryRight={() => <EntypoIcon style={{ color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3', textAlign: 'left' }} name="calendar" size={22} />}
+                                            />
+
+                                            <Input
+                                                status={errors.docNumber && touched.docNumber ? 'danger' : undefined}
+                                                value={values.docNumber}
+                                                onChangeText={handleChange('docNumber')}
+                                                placeholderTextColor={errors.docNumber && touched.docNumber ? '#ffa5bc' : '#8F9BB3'}
+                                                style={{ backgroundColor: '#ffffff', borderRadius: 10, marginBottom: '1%', width: "90%" }}
+                                                size="large"
+                                                onBlur={() => setFieldTouched('docNumber')}
+                                                placeholder={'Document Number'}
+                                            />
+                                            {errors.docNumber && touched.docNumber && <ErrorLabel style={{ marginLeft: '5%', alignSelf: 'flex-start' }} text={errors.docNumber} />}
+                                            <Layout style={{ marginBottom: '1%', width: '90%' }}>
+                                                <TouchableOpacity onPress={() => setShowCountryModal(true)}>
+                                                    <View style={{ width: '100%', borderWidth: 1, borderColor: errors.fileCountry && touched.fileCountry ? '#ffa5bc' : '#E4E9F2', borderRadius: 10 }}>
+                                                        {errors.fileCountry && touched.fileCountry && !currentCountryObj && (
+                                                            <Text style={{ color: '#ffa5bc', padding: '3.5%', marginLeft: '3.5%' }}>
+                                                                {errors.fileCountry}
+                                                            </Text>
+                                                        )}
+                                                        {!errors.fileCountry && currentCountryObj && currentCountryObj.name && (
+                                                            <Text style={{ color: '#8F9BB3', padding: '3.5%', marginLeft: '3.5%' }}>
+                                                                {currentCountryObj.name.trim()}
+                                                            </Text>
+                                                        )}
+                                                        {(!errors.fileCountry || !touched.fileCountry) && !currentCountryObj && (
+                                                            <Text style={{ color: '#8F9BB3', padding: '3.5%', marginLeft: '3.5%' }}>
+                                                                Select Country
+                                                            </Text>
+                                                        )}
+                                                    </View>
+                                                </TouchableOpacity>
+                                                {showCountryModal && (
+                                                    <CountryPicker
+                                                        containerButtonStyle={{
+                                                            borderWidth: 1,
+                                                            borderColor: errors.expDate && errors.expDate ? '#ffa5bc' : '#E4E9F2',
+                                                            padding: '3%',
+                                                            borderRadius: 10,
+                                                            width: 350,
+                                                        }}
+                                                        countryCode={values.fileCountry?.cca2?.toUpperCase()}
+                                                        visible={true}
+                                                        withFilter={true}
+                                                        withFlagButton={true}
+                                                        withCountryNameButton={true}
+                                                        renderFlagButton={() => {
+                                                            return
+                                                        }}
+                                                        onClose={() => setTimeout(() => setShowCountryModal(false), 0)}
+                                                        onSelect={(country) => {
+                                                            setCurrentCountryObj(country)
+                                                            setFieldValue('fileCountry', country)
+                                                            setTimeout(() => setShowCountryModal(false), 0)
+                                                        }}
+                                                    />
+                                                )}
+                                            </Layout>
+                                        </View>
+                                    )}
 
                                 </ScrollView>
 
                                 <Layout style={{ paddingTop: '2%' }}>
                                     <Button
-                                        disabled={getFilesReq.loading}
+                                        disabled={getFilesReq.loading || saving}
                                         onPress={() => {
                                             const currentState = currenButtonState()
                                             console.log(currentState)
+                                            setSaving(true)
                                             if (currentState.canGoNext) {
                                                 navigation.navigate(currentState.goTo, currentState.with)
                                                 return
@@ -357,8 +399,8 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                         }}
                                         size="giant"
                                         style={{
-                                            backgroundColor: getFilesReq.loading ? '#e4e9f2' : '#41d5fb',
-                                            borderColor: getFilesReq.loading ? '#e4e9f2' : '#41d5fb',
+                                            backgroundColor: getFilesReq.loading || saving ? '#e4e9f2' : '#41d5fb',
+                                            borderColor: getFilesReq.loading || saving ? '#e4e9f2' : '#41d5fb',
                                             borderRadius: 10,
                                             shadowColor: '#41d5fb',
                                             shadowOffset: {

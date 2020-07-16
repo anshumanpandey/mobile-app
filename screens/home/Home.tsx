@@ -46,6 +46,9 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
     const hasAllFiles = userHasAllFiles(profile || {})
     const hasFullProfile = userHasFullProfile(profile || {})
 
+    console.log("hasFullProfile",hasFullProfile)
+    console.log('hasAllFiles',hasAllFiles)
+
     screens.unshift({ name: 'ProfileVerification', screen: <Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} /> });
 
     if (hasFullProfile && hasAllFiles) {
