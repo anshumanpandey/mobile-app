@@ -59,6 +59,12 @@ export default () => {
 
     useEffect(() => {
         if (inmediatePickup == true) {
+            setDepartureTime(moment().toDate())
+            setOriginLocation({
+                internalcode: '32151',
+                locationname: 'Current Location',
+            })
+            
             console.log("GPSState.isAuthorized()", GPSState.isAuthorized())
             if (!GPSState.isAuthorized()) {
                 GPSState.requestAuthorization(GPSState.AUTHORIZED_WHENINUSE)
@@ -69,12 +75,6 @@ export default () => {
                         SystemSetting.switchLocation(() => { })
                     }
                 })
-
-            setDepartureTime(moment().toDate())
-            setOriginLocation({
-                internalcode: '32151',
-                locationname: 'Current Location',
-            })
         } else {
             setOriginLocation(null)
             setReturnLocation(null)
@@ -92,7 +92,7 @@ export default () => {
                         case RESULTS.DENIED:
                             console.log('The permission has not been requested / is denied but requestable');
                             request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((r) => {
-                                if (r == RESULTS.UNAVAILABLE) Alert.alert('This feature is not available (on this device / in this context) even after asking')
+                                // if (r == RESULTS.UNAVAILABLE) Alert.alert('This feature is not available (on this device / in this context) even after asking')
                                 if (r == RESULTS.DENIED) Alert.alert(':(', 'Please, allow the location, for us to do amazing things for you!')
                                 if (r == RESULTS.BLOCKED) Alert.alert(':(', 'Please, allow the location, for us to do amazing things for you!')
                             });
@@ -126,7 +126,7 @@ export default () => {
                         case RESULTS.DENIED:
                             console.log('The permission has not been requested / is denied but requestable');
                             request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then((result) => {
-                                if (result == RESULTS.UNAVAILABLE) Alert.alert('This Location feature is not available (on this device / in this context)')
+                                // if (result == RESULTS.UNAVAILABLE) Alert.alert('This Location feature is not available (on this device / in this context)')
                                 if (result == RESULTS.DENIED) Alert.alert(':(', 'You denied the Location permissions, allow the location, for us to do amazing things for you!')
                                 if (result == RESULTS.BLOCKED) Alert.alert(':(', 'You blocked the Location permissions, allow the location, for us to do amazing things for you!')
                             });
