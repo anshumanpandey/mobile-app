@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { Layout, Text, Input, Button, TabView, Tab, Toggle } from '@ui-kitten/components';
-import { SafeAreaView, ScrollView, Image, View } from 'react-native';
+import { SafeAreaView, ScrollView, Image, View, AsyncStorage } from 'react-native';
 import useAxios from 'axios-hooks'
 import { Formik } from 'formik';
 import { GRCGDS_BACKEND } from 'react-native-dotenv'
@@ -38,6 +38,9 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     const hasAllFiles = userHasAllFiles(profile || {})
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [asCompany, setAsCompany] = useState(false);
+    const [selfie, setSelfie] = useState<null | {[k :string] : any} | boolean>(null);
+    const [driverLicence, setDriverLicence] = useState<null | {[k :string] : any} | boolean>(null);
+    const [passport, setPassport] = useState<null | {[k :string] : any} | boolean>(null);
 
     const formRef = useRef()
 
@@ -322,7 +325,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                             if (profile?.vpass == 0) {
                                                                 navigation.navigate("SingleUpload", {
                                                                     fileType: FileTypeEnum.passport,
-                                                                    fileToShow: `https://www.right-cars.com/uploads/pass/${profile?.passimage}`,
+                                                                    fileToShow: `data:image/jpeg;base64,${profile.passimage}`,
                                                                     day: profile?.passday,
                                                                     month: profile?.passmonth,
                                                                     year: profile?.passyear,
@@ -336,7 +339,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                             return (
                                                                 <Image
                                                                     style={{ width: 50, height: 50, borderRadius: 25, marginRight: '5%' }}
-                                                                    source={{ uri: `https://www.right-cars.com/uploads/pass/${profile?.passimage}` }}
+                                                                    source={{ uri: `data:image/jpeg;base64,${profile.passimage}` }}
                                                                 />
                                                             );
                                                         }}
@@ -368,7 +371,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                         onClick={() => {
                                                             navigation.navigate("SingleUpload", {
                                                                 fileType: FileTypeEnum.selfi,
-                                                                fileToShow: `https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}`,
+                                                                fileToShow: `data:image/jpeg;base64,${profile.selfiurl}`,
                                                             })
                                                         }}
                                                         nonEditable={true}
@@ -376,7 +379,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                             return (
                                                                 <Image
                                                                     style={{ width: 50, height: 50, borderRadius: 25, marginRight: '5%' }}
-                                                                    source={{ uri: `https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}` }}
+                                                                    source={{ uri: `data:image/jpeg;base64,${profile.selfiurl}` }}
                                                                 />
                                                             );
                                                         }}
@@ -403,7 +406,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                             if (profile?.vdr == 0) {
                                                                 navigation.navigate("SingleUpload", {
                                                                     fileType: FileTypeEnum.driving_license,
-                                                                    fileToShow: `https://www.right-cars.com/uploads/drlic/${profile?.drimage}`,
+                                                                    fileToShow: `data:image/jpeg;base64,${profile.drimage}`,
                                                                     day: profile?.drday,
                                                                     month: profile?.drmonth,
                                                                     year: profile?.dryear,
@@ -417,7 +420,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                             return (
                                                                 <Image
                                                                     style={{ width: 50, height: 50, borderRadius: 25, marginRight: '5%' }}
-                                                                    source={{ uri: `https://www.right-cars.com/uploads/drlic/${profile?.drimage}` }}
+                                                                    source={{ uri: `data:image/jpeg;base64,${profile.drimage}` }}
                                                                 />
                                                             );
                                                         }}

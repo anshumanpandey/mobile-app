@@ -28,6 +28,7 @@ import { CommonActions } from '@react-navigation/native';
 import { AppFontBold, AppFontRegular } from '../../constants/fonts'
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../../utils/i18n';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const DATE_FORMAT = 'MMM DD,YYYY'
 const formatDateService = new NativeDateService('en', { format: DATE_FORMAT });
@@ -258,7 +259,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         data.append("module_name", "FILE_UPLOAD");
                         data.append("file", {
                             ...file,
-                            uri: (Platform.OS==='android') ? file.uri : file.uri.replace('file://', '')
+                            uri: (Platform.OS === 'android') ? file.uri : file.uri.replace('file://', '')
                         });
                         data.append("fileType", currentFileType);
                         if (values.expDate) {
@@ -268,7 +269,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         data.append("docNumber", values.docNumber);
 
 
-                        sendFile({ data })
+                        /*sendFile({ data })
                             .then(r => {
                                 console.log(r.data)
                                 dispatchGlobalState({ type: 'profile', state: r.data })
@@ -280,7 +281,34 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 })
                                 setUploadPercent(0)
                             })
-                            .catch(r => console.log(r))
+                            .catch(r => console.log(r))*/
+                        const newProfile = {...profile}
+                        if (currentFileType == FileTypeEnum.passport) {
+                            newProfile.passimage = file?.data;
+                            newProfile.passport = values.docNumber
+                            newProfile.passday = values.expDate.format('DD')
+                            newProfile.passmonth = values.expDate.format('MM')
+                            newProfile.passyear = values.expDate.format('YYYY')
+                            newProfile.passcountry = values.fileCountry.cca2?.toLowerCase()
+                        }
+                        if (currentFileType == FileTypeEnum.driving_license) {
+                            newProfile.drimage = file?.data;
+                            newProfile.drlic = values.docNumber
+                            newProfile.drday = values.expDate.format('DD')
+                            newProfile.drmonth = values.expDate.format('MM')
+                            newProfile.dryear = values.expDate.format('YYYY')
+                            newProfile.drcountry = values.fileCountry.cca2?.toLowerCase()
+                        }
+                        if (currentFileType == FileTypeEnum.selfi) {
+                            newProfile.selfiurl = file?.data;
+                        }
+                        dispatchGlobalState({ type: 'profile', state: newProfile })
+                        dispatchFileState({ type: Actions.RESET, state: {} })
+                        setCurrentPosition(p => {
+                            resetForm({ touched: {}, errors: {} })
+                            console.log(`to step ${p + 1}`)
+                            return p + 1
+                        })
 
                         return
                     }
@@ -466,7 +494,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             )}
 
                             {(currentPosition == 1 || currentPosition == 2 || currentPosition == 3) && (
-                                <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1, backgroundColor: 'white'}}>
+                                <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1, backgroundColor: 'white' }}>
                                     {sendFileReq.loading && (
                                         <View style={{ backgroundColor: 'white', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                             <Progress.Circle
@@ -519,7 +547,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                             </TouchableOpacity>
                                             {currentFileType != FileTypeEnum.selfi && (
                                                 <>
-                                                    <Text style={{ fontSize: 15, marginBottom: '2%', marginLeft: '5%',alignSelf: 'flex-start' }} category='s2'>
+                                                    <Text style={{ fontSize: 15, marginBottom: '2%', marginLeft: '5%', alignSelf: 'flex-start' }} category='s2'>
                                                         {i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_EXPIRE_DATE_TAG).toString()}
                                                     </Text>
                                                     <Datepicker
@@ -538,9 +566,9 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                         onSelect={nextDate => setFieldValue("expDate", moment(nextDate))}
                                                         accessoryRight={() => <EntypoIcon style={{ color: errors.expDate && touched.expDate ? '#ffa5bc' : '#8F9BB3', textAlign: 'left' }} name="calendar" size={22} />}
                                                     />
-                                                    {errors.expDate && touched.expDate && <ErrorLabel style={{ marginLeft: '5%',alignSelf: 'flex-start' }} text={errors.expDate} />}
+                                                    {errors.expDate && touched.expDate && <ErrorLabel style={{ marginLeft: '5%', alignSelf: 'flex-start' }} text={errors.expDate} />}
 
-                                                    <Text style={{ fontSize: 15, marginBottom: '2%', marginLeft: '5%',alignSelf: 'flex-start' }} category='s2'>
+                                                    <Text style={{ fontSize: 15, marginBottom: '2%', marginLeft: '5%', alignSelf: 'flex-start' }} category='s2'>
                                                         {i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_DOCUMENT_NUMBER_TAG).toString()}
                                                     </Text>
                                                     <Input
@@ -553,9 +581,9 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                         onBlur={() => setFieldTouched('docNumber')}
                                                         placeholder={i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_DOCUMENT_NUMBER_PLACEHOLDER).toString()}
                                                     />
-                                                    {errors.docNumber && touched.docNumber && <ErrorLabel style={{ marginLeft: '5%',alignSelf: 'flex-start' }} text={errors.docNumber} />}
+                                                    {errors.docNumber && touched.docNumber && <ErrorLabel style={{ marginLeft: '5%', alignSelf: 'flex-start' }} text={errors.docNumber} />}
 
-                                                    <Text style={{ fontSize: 15, marginBottom: '2%', marginLeft: '5%',alignSelf: 'flex-start' }} category='s2'>
+                                                    <Text style={{ fontSize: 15, marginBottom: '2%', marginLeft: '5%', alignSelf: 'flex-start' }} category='s2'>
                                                         {i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_FILE_COUNTRY_TAG).toString()}
                                                     </Text>
                                                     <Layout style={{ marginBottom: '1%', width: '90%' }}>
@@ -578,7 +606,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                                 )}
                                                             </View>
                                                         </TouchableOpacity>
-                                                        {errors.fileCountry && touched.fileCountry && <ErrorLabel style={{ marginLeft: '5%',alignSelf: 'flex-start' }} text={errors.fileCountry} />}
+                                                        {errors.fileCountry && touched.fileCountry && <ErrorLabel style={{ marginLeft: '5%', alignSelf: 'flex-start' }} text={errors.fileCountry} />}
                                                         {showCountryModal && (
                                                             <CountryPicker
                                                                 containerButtonStyle={{
@@ -665,6 +693,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                         } else {
                                                             setShowCounterModal(false)
                                                             dispatchFileState({ type: currentFileType, state: { file: response } })
+                                                            //AsyncStorage.setItem(currentFileType, JSON.stringify(response))
                                                         }
                                                     });
                                                 } catch (error) {
