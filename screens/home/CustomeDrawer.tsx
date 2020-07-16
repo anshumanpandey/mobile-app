@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
     StyleSheet,
     TouchableOpacity,
@@ -6,7 +6,6 @@ import {
     FlatList,
     Alert,
 } from "react-native";
-import AsyncStorage from '@react-native-community/async-storage';
 
 import { Layout, Avatar, Text, Divider, Button, Modal, Card } from "@ui-kitten/components";
 import { LoginScreenProps } from "../../types";
@@ -19,7 +18,6 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import { AppFontRegular } from "../../constants/fonts";
 import i18n, { TRANSLATIONS_KEY } from "../../utils/i18n";
 import { CommonActions } from "@react-navigation/native";
-import { FileTypeEnum } from "./DocumentUpload/DocumentState";
 
 const menuData = [
     { name: i18n.t(TRANSLATIONS_KEY.MENU_ITEM_PRIVACY_POLICY), screenName: "Policy", iconName: 'shield',key: 'swwe' },
@@ -49,17 +47,7 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
 
     const wasDrawerOpen = useIsDrawerOpen();
 
-    const [selfie, setSelfie] = useState<null | {[k :string] : any} | boolean>(null);
-
     useEffect(() => {
-        AsyncStorage.getItem(FileTypeEnum.selfi)
-        .then(sel => {
-            if (sel) {
-                setSelfie(JSON.parse(sel))
-            } else {
-                setSelfie(false)
-            }
-        })
         if (hasFullProfile && hasAllFiles) {
             const found = menuData.find(i => i.key == "asd")
             if (!found) menuData.unshift({ name: "My Trips", screenName: "MyBookings", iconName: "car-side",iconSize: 30, resetHistory: true,key: 'asd' });
@@ -70,17 +58,17 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
         <>
             <View style={styles.container}>
                 <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
-                    <Layout style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',position: 'relative', borderBottomWidth: 1, borderBottomColor: 'grey', paddingBottom: '8%' }}>
-                        {selfie == false && (
+                    <Layout style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', borderBottomWidth: 1, borderBottomColor: 'grey', paddingBottom: '8%' }}>
+                        {profile?.selfiurl == "" && (
                             <Avatar
                                 style={{ width: 125, height: 125, }}
                                 source={require('../../image/rightcars.png')}
                             />
                         )}
-                        {selfie && typeof selfie == 'object' && selfie.data && (
+                        {profile?.selfiurl != "" && (
                             <Avatar
                                 style={{ width: 125, height: 125, }}
-                                source={{ uri: `data:image/jpeg;base64,${profile.selfiurl}` }}
+                                source={{ uri: `https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}` }}
                             />
                         )}
                         <Text onPress={() => navigation.navigate('Signup')} style={{ color: '#41d5fb' }}>
