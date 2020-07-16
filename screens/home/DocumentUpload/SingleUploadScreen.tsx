@@ -22,6 +22,7 @@ import MenuButton from '../../../partials/MenuButton';
 import i18n, { TRANSLATIONS_KEY } from '../../../utils/i18n';
 import { composeInitialProps } from 'react-i18next';
 import ErrorLabel from '../../../partials/ErrorLabel';
+import LoadingSpinner from '../../../partials/LoadingSpinner';
 
 const DATE_FORMAT = 'MMM DD,YYYY'
 const formatDateService = new NativeDateService('en', { format: DATE_FORMAT });
@@ -386,6 +387,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                 <Layout style={{ paddingTop: '2%' }}>
                                     <Button
                                         disabled={getFilesReq.loading || saving}
+                                        accessoryRight={getFilesReq.loading || saving ? LoadingSpinner : undefined}
                                         onPress={() => {
                                             const currentState = currenButtonState()
                                             console.log(currentState)
