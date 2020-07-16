@@ -58,7 +58,7 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
         <>
             <View style={styles.container}>
                 <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
-                    <Layout style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', borderBottomWidth: 1, borderBottomColor: 'grey', paddingBottom: '8%' }}>
+                    <Layout style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',position: 'relative', borderBottomWidth: 1, borderBottomColor: 'grey', paddingBottom: '8%' }}>
                         {profile?.selfiurl == "" && (
                             <Avatar
                                 style={{ width: 125, height: 125, }}
@@ -68,7 +68,7 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
                         {profile?.selfiurl != "" && (
                             <Avatar
                                 style={{ width: 125, height: 125, }}
-                                source={{ uri: `https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}` }}
+                                source={{ uri: `data:image/jpeg;base64,${profile.selfiurl}` }}
                             />
                         )}
                         <Text onPress={() => navigation.navigate('Signup')} style={{ color: '#41d5fb' }}>
