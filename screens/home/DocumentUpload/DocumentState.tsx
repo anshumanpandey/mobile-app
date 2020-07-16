@@ -5,7 +5,7 @@ import { ImagePickerResponse } from 'react-native-image-picker';
 export enum  FileTypeEnum {
     "passport" = "Passport",
     "driving_license" = "Driving License",
-    "selfi" = "Selfi"
+    "selfi" = "Selfie"
 }
 
 export enum Actions {
