@@ -199,8 +199,8 @@ export default () => {
                         onReturnLocationSelected={(l) => setReturnLocation(l)}
                     />
                     {inmediatePickup !== null && (
-                        <View style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-evenly' }}>
-                            <View>
+                        <View style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                            <View style={{ marginTop: '8%' }}>
                                 <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_DEPARTURE_TIME_TAG).toString()}</Text>
                                 <TouchableOpacity onPress={() => setShowDepartureDatepicker(true)}>
                                     <View style={{ borderTopWidth: 1, borderBottomWidth: 1 }}>
@@ -219,7 +219,7 @@ export default () => {
                                     <Layout style={{ height: '40%', padding: '3%' }}>
                                         <View style={{ height: '100%' }}>
                                             <Text style={{ textAlign: 'center', fontSize: 18, width: '100%', fontFamily: AppFontBold }}>
-                                                Departure Time
+                                                {i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_DEPARTURE_TIME_TAG).toString()}
                                             </Text>
                                             <DatePicker
                                                 style={{ width: currentWidth, alignSelf: 'center', flex: 1 }}
@@ -240,19 +240,19 @@ export default () => {
                                                 }}
                                             />
                                             <Text onPress={() => setShowDepartureDatepicker(false)} style={{ textAlign: 'center', fontSize: 18, width: '100%', fontFamily: AppFontBold }}>
-                                                Cancel
-                                        </Text>
+                                                {i18n.t(TRANSLATIONS_KEY.DONE_WORD).toString()}
+                                            </Text>
                                         </View>
                                     </Layout>
                                 </Modal>
                             )}
-                            <View>
-                            <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_TIME_TAG).toString()}</Text>
-                            <TouchableOpacity onPress={() => setShowReturnDatepicker(true)}>
-                                <View style={{ borderTopWidth: 1, borderBottomWidth: 1 }}>
-                                    <Text style={{ textAlign: 'center', fontSize: 24 }}>{moment(returnTime).format('ddd D H mm a')}</Text>
-                                </View>
-                            </TouchableOpacity>
+                            <View style={{ marginTop: '8%' }}>
+                                <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_TIME_TAG).toString()}</Text>
+                                <TouchableOpacity onPress={() => setShowReturnDatepicker(true)}>
+                                    <View style={{ borderTopWidth: 1, borderBottomWidth: 1 }}>
+                                        <Text style={{ textAlign: 'center', fontSize: 24 }}>{moment(returnTime).format('ddd D H mm a')}</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
                             {showReturnDatepicker && (
                                 <Modal
@@ -265,7 +265,7 @@ export default () => {
                                     <Layout style={{ height: '40%', padding: '3%' }}>
                                         <View style={{ height: '100%' }}>
                                             <Text style={{ textAlign: 'center', fontSize: 18, width: '100%', fontFamily: AppFontBold }}>
-                                                Return Time
+                                                {i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_TIME_TAG).toString()}
                                             </Text>
                                             <DatePicker
                                                 style={{ width: currentWidth, alignSelf: 'center', flex: 1 }}
@@ -274,7 +274,7 @@ export default () => {
                                                 onDateChange={(d) => setReturnTime(d)}
                                             />
                                             <Text onPress={() => setShowReturnDatepicker(false)} style={{ textAlign: 'center', fontSize: 18, width: '100%', fontFamily: AppFontBold }}>
-                                                Cancel
+                                                {i18n.t(TRANSLATIONS_KEY.DONE_WORD).toString()}
                                             </Text>
                                         </View>
                                     </Layout>

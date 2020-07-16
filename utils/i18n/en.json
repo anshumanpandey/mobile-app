@@ -26,6 +26,7 @@
     "EDIT_WORD": "Edit",
     "CAMERA_WORD": "Camera",
     "GALLERY_WORD": "Gallery",
+    "DONE_WORD": "Gallery",
 
     "ONLY_NUMBERS_ERRORS": "Can be only number",
 
@@ -73,8 +74,8 @@
     "NEW_BOOKING_RETURN_ON_SAME_LOCATION_TAG": "Return car on same location",
     "NEW_BOOKING_ENTER_ORIGIN_PLACEHOLDER": "Enter Origin",
     "NEW_BOOKING_RETURN_DESTINATION_PLACEHOLDER": "Enter Destination",
-    "NEW_BOOKING_DEPARTURE_TIME_TAG": "Departure Time",
-    "NEW_BOOKING_RETURN_TIME_TAG": "Return Time",
+    "NEW_BOOKING_DEPARTURE_TIME_TAG": "Pickup Time",
+    "NEW_BOOKING_RETURN_TIME_TAG": "Drop off Time",
 
     "NO_RESULT_TITLE": "No result",
     "NO_RESULT_SUB_TITLE": "Sorry there are no vehicles available in your immediate area",
