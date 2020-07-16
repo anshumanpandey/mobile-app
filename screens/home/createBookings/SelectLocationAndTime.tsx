@@ -126,11 +126,9 @@ export default () => {
                         case RESULTS.DENIED:
                             console.log('The permission has not been requested / is denied but requestable');
                             request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then((result) => {
-                                request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {
-                                    if (result == RESULTS.UNAVAILABLE) Alert.alert('This feature is not available (on this device / in this context)')
-                                    if (result == RESULTS.DENIED) Alert.alert(':(', 'You denied the permissions, allow the location, for us to do amazing things for you!')
-                                    if (result == RESULTS.BLOCKED) Alert.alert(':(', 'You blocked the permissions, allow the location, for us to do amazing things for you!')
-                                });
+                                if (result == RESULTS.UNAVAILABLE) Alert.alert('This Location feature is not available (on this device / in this context)')
+                                if (result == RESULTS.DENIED) Alert.alert(':(', 'You denied the Location permissions, allow the location, for us to do amazing things for you!')
+                                if (result == RESULTS.BLOCKED) Alert.alert(':(', 'You blocked the Location permissions, allow the location, for us to do amazing things for you!')
                             });
                             break;
                         case RESULTS.GRANTED:
