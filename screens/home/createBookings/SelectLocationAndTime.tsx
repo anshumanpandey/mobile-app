@@ -128,8 +128,8 @@ export default () => {
                             request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then((result) => {
                                 request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {
                                     if (result == RESULTS.UNAVAILABLE) Alert.alert('This feature is not available (on this device / in this context)')
-                                    if (result == RESULTS.DENIED) Alert.alert(':(', 'Please, allow the location, for us to do amazing things for you!')
-                                    if (result == RESULTS.BLOCKED) Alert.alert(':(', 'Please, allow the location, for us to do amazing things for you!')
+                                    if (result == RESULTS.DENIED) Alert.alert(':(', 'You denied the permissions, allow the location, for us to do amazing things for you!')
+                                    if (result == RESULTS.BLOCKED) Alert.alert(':(', 'You blocked the permissions, allow the location, for us to do amazing things for you!')
                                 });
                             });
                             break;
@@ -149,7 +149,7 @@ export default () => {
                             break;
                         case RESULTS.BLOCKED:
                             console.log('The permission is denied and not requestable anymore');
-                            Alert.alert(':(', 'Please, allow the location, for us to do amazing things for you!')
+                            Alert.alert(':(', 'Location is blocked, allow the location for us to do amazing things for you!')
                             break;
                     }
                 })
