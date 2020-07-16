@@ -64,11 +64,7 @@ export default () => {
                 internalcode: '32151',
                 locationname: 'Current Location',
             })
-            
-            console.log("GPSState.isAuthorized()", GPSState.isAuthorized())
-            if (!GPSState.isAuthorized()) {
-                GPSState.requestAuthorization(GPSState.AUTHORIZED_WHENINUSE)
-            }
+
             SystemSetting.isLocationEnabled()
                 .then((enable: boolean) => {
                     if (enable == false) {
