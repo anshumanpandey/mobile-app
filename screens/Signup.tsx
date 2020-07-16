@@ -100,6 +100,7 @@ export default () => {
                             if (!values.tele) {
                                 errors.tele = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD).toString();
                             } else if (values.tele.length > 10) {
+                                //TODO: fix translation
                                 errors.tele = 'Phone number can be max 10 digits';
                             }
 
