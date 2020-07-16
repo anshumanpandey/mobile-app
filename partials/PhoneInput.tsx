@@ -55,7 +55,7 @@ const PhoneInput: React.FC<Props> = ({ mobilecode, mobileNumber = "", onCodeChan
     return (
         <>
             <RNPhoneInput
-                style={{ borderWidth: 1, borderRadius: 10, padding: 15, ...styles }}
+                style={{ borderWidth: 1, borderRadius: 10, paddingHorizontal: 15, ...styles }}
                 textProps={{
                     placeholderTextColor: "#949494",
                     style: { color: '#000000' },

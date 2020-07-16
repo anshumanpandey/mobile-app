@@ -193,6 +193,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                             .then((res) => {
                                 dispatchGlobalState({ type: 'token', state: res.data.token })
                                 dispatchGlobalState({ type: 'profile', state: res.data })
+                                resetForm({ touched: {}, errors: {} })
                                 if (res.data.socialmedia == 1) {
                                     navigation.dispatch(
                                         CommonActions.reset({

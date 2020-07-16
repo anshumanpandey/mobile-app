@@ -87,7 +87,8 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
           <Autocomplete
             containerStyle={{ width: '100%' }}
             inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
-            listStyle={{ borderColor: 'white', maxHeight: 400 }}
+            listStyle={{ borderColor: 'white' }}
+            listContainerStyle={{ maxHeight: "100%" }}
             placeholder={i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_ENTER_ORIGIN_PLACEHOLDER).toString()}
             renderTextInput={(props) =>{
               return <TextInput {...props} placeholderTextColor="#949494" style={{ color: '#000000', fontFamily: AppFontBold, padding: '3%',fontSize: 16, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }} />
@@ -119,7 +120,8 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ hideReturnTog
             <Autocomplete
               containerStyle={{ width: '100%' }}
               inputContainerStyle={{ width: '100%', borderColor: 'white', borderBottomColor: 'black', borderBottomWidth: 1 }}
-              listStyle={{ borderColor: 'white', maxHeight: 400 }}
+              listStyle={{ borderColor: 'white' }}
+              listContainerStyle={{ maxHeight: "100%" }}
               placeholder={i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_DESTINATION_PLACEHOLDER).toString()}
               renderTextInput={(props) =>{
                 return <TextInput {...props} placeholderTextColor="#949494" style={{ color: '#000000', fontFamily: AppFontBold, padding: '3%',fontSize: 16, width: '100%', borderColor: 'white', borderBottomColor: '#E4E9F2', borderBottomWidth: 1 }} />
