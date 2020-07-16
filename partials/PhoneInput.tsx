@@ -54,8 +54,8 @@ const PhoneInput: React.FC<Props> = ({ mobilecode, mobileNumber = "", onCodeChan
 
     const iosStyles = {}
     if (Platform.OS == 'ios') {
-        iosStyles.paddingTop = 5
-        iosStyles.paddingBottom = 5
+        iosStyles.paddingTop = 15
+        iosStyles.paddingBottom = 15
     }
 
     return (
