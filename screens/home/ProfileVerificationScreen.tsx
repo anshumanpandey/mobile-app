@@ -269,46 +269,19 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         data.append("docNumber", values.docNumber);
 
 
-                        /*sendFile({ data })
-                            .then(r => {
-                                console.log(r.data)
-                                dispatchGlobalState({ type: 'profile', state: r.data })
-                                dispatchFileState({ type: Actions.RESET, state: {} })
-                                setCurrentPosition(p => {
-                                    resetForm({ touched: {}, errors: {} })
-                                    console.log(`to step ${p + 1}`)
-                                    return p + 1
-                                })
-                                setUploadPercent(0)
+                        sendFile({ data })
+                        .then(r => {
+                            console.log(r.data)
+                            dispatchGlobalState({ type: 'profile', state: r.data })
+                            dispatchFileState({ type: Actions.RESET, state: {} })
+                            setCurrentPosition(p => {
+                                resetForm({ touched: {}, errors: {} })
+                                console.log(`to step ${p + 1}`)
+                                return p + 1
                             })
-                            .catch(r => console.log(r))*/
-                        const newProfile = {...profile}
-                        if (currentFileType == FileTypeEnum.passport) {
-                            newProfile.passimage = file?.data;
-                            newProfile.passport = values.docNumber
-                            newProfile.passday = values.expDate.format('DD')
-                            newProfile.passmonth = values.expDate.format('MM')
-                            newProfile.passyear = values.expDate.format('YYYY')
-                            newProfile.passcountry = values.fileCountry.cca2?.toLowerCase()
-                        }
-                        if (currentFileType == FileTypeEnum.driving_license) {
-                            newProfile.drimage = file?.data;
-                            newProfile.drlic = values.docNumber
-                            newProfile.drday = values.expDate.format('DD')
-                            newProfile.drmonth = values.expDate.format('MM')
-                            newProfile.dryear = values.expDate.format('YYYY')
-                            newProfile.drcountry = values.fileCountry.cca2?.toLowerCase()
-                        }
-                        if (currentFileType == FileTypeEnum.selfi) {
-                            newProfile.selfiurl = file?.data;
-                        }
-                        dispatchGlobalState({ type: 'profile', state: newProfile })
-                        dispatchFileState({ type: Actions.RESET, state: {} })
-                        setCurrentPosition(p => {
-                            resetForm({ touched: {}, errors: {} })
-                            console.log(`to step ${p + 1}`)
-                            return p + 1
+                            setUploadPercent(0)
                         })
+                        .catch(r => console.log(r))
 
                         return
                     }
