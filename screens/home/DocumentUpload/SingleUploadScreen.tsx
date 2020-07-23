@@ -166,6 +166,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                 dispatchFileState({ type: Actions.RESET, state: {} })
                                 triggerChange(p => !p)
                                 setUploadPercent(0)
+                                setSaving(false)
                             })
                             .catch(r => console.log(r))
 
