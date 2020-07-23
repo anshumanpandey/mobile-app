@@ -14,6 +14,7 @@ import { TRANSLATIONS_KEY } from '../../../utils/i18n';
 const DocumentScreen = ({ navigation, route }) => {
   const { i18n } = useTranslation();
   const [details] = useCarDetailState("details");
+  const [isAllowing, setIsAllowing] = useCarDetailState("isAllowing");
 
   const [postReq, post] = useAxios({
     url: GRCGDS_BACKEND,
@@ -46,7 +47,8 @@ const DocumentScreen = ({ navigation, route }) => {
             disabled={postReq.loading}
             accessoryRight={postReq.loading ? LoadingSpinner : undefined}
             onPress={() => {
-              navigation.navigate("Activate", details);
+              setIsAllowing(false)
+              navigation.navigate("Home", details);
             }}
             size="giant"
             style={{

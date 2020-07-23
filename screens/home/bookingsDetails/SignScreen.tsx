@@ -46,10 +46,8 @@ const DocumentScreen = ({ navigation }) => {
                         setIsClean(false);
                     }}
                     onSaveEvent={(res) => {
-                        console.log(res)
-                        navigation.navigate('CompletedReport', {
+                        navigation.navigate('Report', {
                             signImagePath: `data:image/png;base64,${res.encoded}`,
-                            pictures: route.params.pictures
                         })
                     }}
                 />

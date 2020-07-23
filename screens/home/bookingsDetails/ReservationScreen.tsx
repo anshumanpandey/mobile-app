@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Layout, Text, Card } from '@ui-kitten/components';
+import { Layout, Text, Button } from '@ui-kitten/components';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { SafeAreaView, ScrollView, Image, Alert, View } from 'react-native';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
@@ -21,10 +21,16 @@ import Decimal from 'decimal.js';
 import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../../../utils/i18n';
+import GdprScreen from './GdprScreen';
+import InsuranceScreen from './InsuranceScreen';
 
 const DocumentScreen = () => {
   const route = useRoute();
   const { i18n } = useTranslation();
+  const [isAllowing, setIsAllowing] = useCarDetailState("isAllowing");
+  const navigation = useNavigation();
+
+  console.log(isAllowing)
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white', }}>
@@ -38,7 +44,7 @@ const DocumentScreen = () => {
               <View style={{ marginLeft: 'auto', marginRight: 'auto' }}>
                 <Text style={{ fontFamily: AppFontRegular, textAlign: 'center', textTransform: 'uppercase' }} category="h5">
                   {i18n.t(TRANSLATIONS_KEY.CONFIRMATION_WORD).toString()}
-              </Text>
+                </Text>
                 <Text style={{ textAlign: 'center', fontFamily: AppFontBold, fontSize: 22 }} >
                   {route.params.registratioNumber}{' '}
                 </Text>
@@ -53,7 +59,7 @@ const DocumentScreen = () => {
               <Layout style={{ marginBottom: '3%' }}>
                 <Text style={{ textAlign: 'center', color: 'grey', fontFamily: AppFontBold }} category="s1">
                   {i18n.t(TRANSLATIONS_KEY.DETAILS_PICKUP_LOCATION_TAG).toString()}
-                  </Text>
+                </Text>
                 <Text style={{ textAlign: 'center', fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.pickupLocation}
                 </Text>
@@ -62,7 +68,7 @@ const DocumentScreen = () => {
               <Layout style={{ marginBottom: '3%' }}>
                 <Text style={{ textAlign: 'center', color: 'grey', fontFamily: AppFontBold }} category="s1">
                   {i18n.t(TRANSLATIONS_KEY.DETAILS_DROP_LOCATION_TAG).toString()}
-              </Text>
+                </Text>
                 <Text style={{ textAlign: 'center', fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.dropOffLocation}
                 </Text>
@@ -73,7 +79,7 @@ const DocumentScreen = () => {
               <Layout style={{ marginBottom: '3%' }}>
                 <Text style={{ textAlign: 'center', color: 'grey', fontFamily: AppFontBold }} category="s1">
                   {i18n.t(TRANSLATIONS_KEY.DETAILS_PICKUP_LOCATION_TIME_TAG).toString()}
-                  </Text>
+                </Text>
                 <Text style={{ textAlign: 'center', fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.pickupTime.format('HH:mm')}
                 </Text>
@@ -82,7 +88,7 @@ const DocumentScreen = () => {
               <Layout style={{ marginBottom: '3%' }}>
                 <Text style={{ textAlign: 'center', color: 'grey', fontFamily: AppFontBold }} category="s1">
                   {i18n.t(TRANSLATIONS_KEY.DETAILS_DROP_LOCATION_TIME_TAG).toString()}
-              </Text>
+                </Text>
                 <Text style={{ textAlign: 'center', fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.dropoffTime.format('HH:mm')}
                 </Text>
@@ -102,14 +108,14 @@ const DocumentScreen = () => {
                   );
                 })}
                 <Text style={{ textAlign: 'left', fontFamily: AppFontBold }} category="s1">
-                {i18n.t(TRANSLATIONS_KEY.DETAILS_TOTAL_PRICE_TAG).toString()}
+                  {i18n.t(TRANSLATIONS_KEY.DETAILS_TOTAL_PRICE_TAG).toString()}
                 </Text>
                 <Text style={{ textAlign: 'left', fontFamily: AppFontBold }} category="s1">
                   {i18n.t(TRANSLATIONS_KEY.DETAILS_PAYABLE_COLLECTION_TAG).toString()}
                 </Text>
               </View>
 
-              <View style={{ marginLeft: '5%',display: 'flex', justifyContent: 'center'}}>
+              <View style={{ marginLeft: '5%', display: 'flex', justifyContent: 'center' }}>
                 <Text style={{ fontFamily: AppFontRegular, fontSize: 16 }}>
                   {route.params.currencyCode}{' '}
                   {route.params.finalCost}
@@ -141,10 +147,24 @@ const DocumentScreen = () => {
               <Text style={{ textAlign: 'center', color: 'grey', fontFamily: AppFontBold }} category="s1">
                 {i18n.t(TRANSLATIONS_KEY.DETAILS_PICKUP_INSTRUCTIONS_TAG).toString()}
               </Text>
-              <Text style={{ textAlign: 'center',fontFamily: AppFontRegular, fontSize: 18 }}>
+              <Text style={{ textAlign: 'center', fontFamily: AppFontRegular, fontSize: 18 }}>
                 {route.params.pickUpInstructions}
               </Text>
             </Layout>
+
+            {isAllowing && (
+              <Layout style={{ backgroundColor: '#00000000', flex: 1 }}>
+                <Button onPress={() => navigation.navigate("Sign")} size="giant" style={{ borderRadius: 10, backgroundColor: '#5ac8fa', borderColor: '#5ac8fa', paddingLeft: 20, paddingRight: 20, marginBottom: '2%' }}>
+                  {() => <Text style={{ fontFamily: AppFontRegular, color: 'white' }}>Accept</Text>}
+                </Button>
+                <Button onPress={() => {
+                  console.log("setIsAllowing")
+                  setIsAllowing(false)
+                }} size="giant" style={{ borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', paddingLeft: 20, paddingRight: 20 }}>
+                  {() => <Text style={{ fontFamily: AppFontRegular, color: 'white' }}>Decline</Text>}
+                </Button>
+              </Layout>
+            )}
           </View>
 
         </View>
@@ -159,6 +179,7 @@ const DocumentScreen = () => {
 const Tab = createBottomTabNavigator();
 export default function App({ navigation, route }) {
   const [, setDetails] = useCarDetailState("details");
+  const [isAllowing, setIsAllowing] = useCarDetailState("isAllowing");
   const { i18n } = useTranslation();
 
 
@@ -168,7 +189,7 @@ export default function App({ navigation, route }) {
 
   return (
     <Tab.Navigator tabBarOptions={{
-      style: { display: route.params.params.reservationStatus == 'Completed' || route.params.params.reservationStatus == 'Cancelled' ? 'none': 'flex'}
+      style: { display: isAllowing == true || route.params.params.reservationStatus == 'Completed' || route.params.params.reservationStatus == 'Cancelled' ? 'none' : 'flex' }
     }} >
       <Tab.Screen
         name="Home"
@@ -205,6 +226,22 @@ export default function App({ navigation, route }) {
       <Tab.Screen
         name="VerifyCancel"
         component={VerifyCancelCodeScreen}
+        options={{
+          tabBarButton: () => <></>,
+        }}
+      />
+
+      <Tab.Screen
+        name="GdprScreen"
+        component={GdprScreen}
+        options={{
+          tabBarButton: () => <></>,
+        }}
+      />
+
+      <Tab.Screen
+        name="InsuranceScreen"
+        component={InsuranceScreen}
         options={{
           tabBarButton: () => <></>,
         }}
@@ -269,12 +306,13 @@ export default function App({ navigation, route }) {
               <View style={{ width: '25%' }}>
                 <TouchableOpacity disabled={cannotCollect} style={{ height: '100%' }} onPress={() => {
                   if (cannotCollect) return
-                  navigation.navigate('Report', { ...route.params })
+                  setIsAllowing(true)
+                  navigation.navigate('GdprScreen', { ...route.params.params })
                 }}>
                   <View style={{ height: '100%', borderColor: 'rgba(0,0,0,0.2)', borderRightWidth: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
                     <MaterialIcons name="directions-car" style={{ color: cannotCollect ? '#41d5fb40' : '#41d5fb' }} size={24} />
                     <Text style={{ textAlign: 'center', color: 'gray', fontFamily: AppFontRegular, fontSize: 12, textTransform: 'uppercase' }}>
-                    {i18n.t(TRANSLATIONS_KEY.DETAILS_COLLECT_MENU_OPTION).toString()}
+                      {i18n.t(TRANSLATIONS_KEY.DETAILS_COLLECT_MENU_OPTION).toString()}
                     </Text>
                   </View>
 
@@ -300,7 +338,7 @@ export default function App({ navigation, route }) {
                   <View style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', borderColor: 'rgba(0,0,0,0.2)', borderRightWidth: 0, flexDirection: 'column' }}>
                     <MaterialIcons name="cancel" style={{ color: cannotCancel ? '#cf183040' : '#cf1830' }} size={24} />
                     <Text style={{ marginLeft: '5%', color: 'gray', fontFamily: AppFontRegular, fontSize: 12, textTransform: 'uppercase' }}>
-                    {i18n.t(TRANSLATIONS_KEY.DETAILS_CANCEL_MENU_OPTION).toString()}
+                      {i18n.t(TRANSLATIONS_KEY.DETAILS_CANCEL_MENU_OPTION).toString()}
                     </Text>
                   </View>
 

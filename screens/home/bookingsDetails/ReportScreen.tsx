@@ -13,6 +13,7 @@ import LoadingSpinner from '../../../partials/LoadingSpinner';
 import { useCarDetailState } from './detailsState';
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../../../utils/i18n';
+import { useRoute } from '@react-navigation/native';
 
 const imageArr = []
 
@@ -27,7 +28,8 @@ imageArr[7] = require('../../../image/car-8.jpg')
 
 const DocumentScreen = ({ navigation }) => {
   const { i18n } = useTranslation();
-  const maxPhotosAmount = 8
+  const { params } = useRoute<any>();
+  const maxPhotosAmount = 2
   const [pictures, setPictures] = useState<{ [k: number]: ImagePickerResponse }>({});
   const [currentPicktureIndex, setCurrentPicktureIndex] = useState(0);
   const [uploadPercent, setUploadPercent] = useState(0);
@@ -136,7 +138,7 @@ const DocumentScreen = ({ navigation }) => {
                   setCurrentPicktureIndex(p => {
                     const total = p + 1
                     if (total == maxPhotosAmount) {
-                      navigation.navigate("Agreement", { pictures })
+                      navigation.navigate("CompletedReport", { pictures, signImagePath: params.signImagePath })
                       return p;
                     }
                     return total
