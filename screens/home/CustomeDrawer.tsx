@@ -108,7 +108,7 @@ const DrawerItem = ({ navigation, name, iconName, screenName, iconSize, resetHis
             onPress={() => {
                 if (screenName) {
 
-                    if (resetHistory == true) {
+                    /*if (resetHistory == true) {
                         navigation.dispatch((state) => {
                             return CommonActions.reset({
                                 ...state,
@@ -122,7 +122,10 @@ const DrawerItem = ({ navigation, name, iconName, screenName, iconSize, resetHis
                         navigation.closeDrawer()
                     } else {
                         navigation.navigate(screenName)
-                    }
+                    }*/
+
+                    navigation.navigate(screenName)
+
                 } else {
                     onPress && onPress();
                 }
