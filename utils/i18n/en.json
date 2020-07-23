@@ -78,7 +78,7 @@
     "NEW_BOOKING_RETURN_TIME_TAG": "Drop off Time",
 
     "NO_RESULT_TITLE": "No result",
-    "NO_RESULT_SUB_TITLE": "Sorry there are no vehicles available in your immediate area",
+    "NO_RESULT_SUB_TITLE": "Sorry Please try again as no cars are available for selected dates and location.",
     "NO_RESULT_GO_BACK_BTN": "Go Back",
     "NO_RESULT_FETCHING_LOCATION_TAG": "Fetching your location...",
 

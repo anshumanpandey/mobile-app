@@ -42,31 +42,7 @@ const DocumentScreen = () => {
 
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-
-      <View style={{ display: 'flex', height: '100%', zIndex: -2 }}>
-        {currentLocation && <MapView
-          style={{ flex: 1 }}
-          initialCamera={{
-            center: {
-              latitude: currentLocation?.latitude ? currentLocation.latitude: 37.4308165178,
-              longitude: currentLocation?.longitude ? currentLocation.longitude : -122.160886388,
-            },
-            heading: 0,
-            pitch: 0,
-            zoom: 10,
-            altitude: 0,
-        }}
-          initialRegion={{
-            latitude: currentLocation?.latitude ? currentLocation.latitude: 37.4308165178,
-            longitude: currentLocation?.longitude ? currentLocation.longitude : -122.160886388,
-            latitudeDelta: 0.0,
-            longitudeDelta: 0.0
-          }}
-        >
-        </MapView>}
-
-      </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
 
       <Layout style={{ position: 'absolute',padding: '5%',backgroundColor: 'red', zIndex: 2, display: 'flex', flexDirection: 'row', backgroundColor: '#00000000', alignItems: 'center', justifyContent: 'center' }}>
         <MenuButton />
@@ -74,7 +50,7 @@ const DocumentScreen = () => {
 
 
 
-      <Layout style={{ padding: '5%',position: 'absolute',display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '15%', marginBottom: '10%' }}>
+      <Layout style={{ padding: '5%',position: 'absolute',display: 'flex', flexDirection: 'column', backgroundColor: 'white', marginTop: '15%', marginBottom: '10%' }}>
         <Text style={{ fontFamily: AppFontBold, textAlign: 'center' }} category="h5">
           {i18n.t(TRANSLATIONS_KEY.NO_RESULT_TITLE).toString()}:(
         </Text>
