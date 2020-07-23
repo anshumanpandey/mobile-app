@@ -66,15 +66,6 @@ const DocumentScreen = () => {
         >
         </MapView>}
 
-
-        {!currentLocation && (
-          <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <Text category="h4">
-              {i18n.t(TRANSLATIONS_KEY.NO_RESULT_FETCHING_LOCATION_TAG).toString()}
-            </Text>
-            <LoadingSpinner />
-          </View>
-        )}
       </View>
 
       <Layout style={{ position: 'absolute',padding: '5%',backgroundColor: 'red', zIndex: 2, display: 'flex', flexDirection: 'row', backgroundColor: '#00000000', alignItems: 'center', justifyContent: 'center' }}>
