@@ -29,7 +29,7 @@ imageArr[7] = require('../../../image/car-8.jpg')
 const DocumentScreen = ({ navigation }) => {
   const { i18n } = useTranslation();
   const { params } = useRoute<any>();
-  const maxPhotosAmount = 2
+  const maxPhotosAmount = 8
   const [pictures, setPictures] = useState<{ [k: number]: ImagePickerResponse }>({});
   const [currentPicktureIndex, setCurrentPicktureIndex] = useState(0);
   const [uploadPercent, setUploadPercent] = useState(0);
