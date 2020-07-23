@@ -30,7 +30,7 @@ const DocumentScreen = () => {
   const [isAllowing, setIsAllowing] = useCarDetailState("isAllowing");
   const navigation = useNavigation();
 
-  console.log(isAllowing)
+  if (!route.params) return <></>
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white', }}>

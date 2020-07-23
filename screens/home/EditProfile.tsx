@@ -325,7 +325,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                             if (profile?.vpass == 0) {
                                                                 navigation.navigate("SingleUpload", {
                                                                     fileType: FileTypeEnum.passport,
-                                                                    fileToShow: `data:image/jpeg;base64,${profile.passimage}`,
+                                                                    fileToShow: `${profile.passimage}`,
                                                                     day: profile?.passday,
                                                                     month: profile?.passmonth,
                                                                     year: profile?.passyear,
@@ -339,7 +339,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                             return (
                                                                 <Image
                                                                     style={{ width: 50, height: 50, borderRadius: 25, marginRight: '5%' }}
-                                                                    source={{ uri: `data:image/jpeg;base64,${profile.passimage}` }}
+                                                                    source={{ uri: `https://www.right-cars.com/uploads/pass/${profile?.passimage}` }}
                                                                 />
                                                             );
                                                         }}
@@ -371,7 +371,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                         onClick={() => {
                                                             navigation.navigate("SingleUpload", {
                                                                 fileType: FileTypeEnum.selfi,
-                                                                fileToShow: `data:image/jpeg;base64,${profile.selfiurl}`,
+                                                                fileToShow: `https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}`,
                                                             })
                                                         }}
                                                         nonEditable={true}
@@ -379,7 +379,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                             return (
                                                                 <Image
                                                                     style={{ width: 50, height: 50, borderRadius: 25, marginRight: '5%' }}
-                                                                    source={{ uri: `data:image/jpeg;base64,${profile.selfiurl}` }}
+                                                                    source={{ uri: `https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}` }}
                                                                 />
                                                             );
                                                         }}
@@ -406,7 +406,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                             if (profile?.vdr == 0) {
                                                                 navigation.navigate("SingleUpload", {
                                                                     fileType: FileTypeEnum.driving_license,
-                                                                    fileToShow: `data:image/jpeg;base64,${profile.drimage}`,
+                                                                    fileToShow: `${profile.drimage}`,
                                                                     day: profile?.drday,
                                                                     month: profile?.drmonth,
                                                                     year: profile?.dryear,
@@ -420,7 +420,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                             return (
                                                                 <Image
                                                                     style={{ width: 50, height: 50, borderRadius: 25, marginRight: '5%' }}
-                                                                    source={{ uri: `data:image/jpeg;base64,${profile.drimage}` }}
+                                                                    source={{ uri: `https://www.right-cars.com/uploads/drlic/${profile?.drimage}` }}
                                                                 />
                                                             );
                                                         }}

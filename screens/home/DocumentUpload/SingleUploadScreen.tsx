@@ -69,13 +69,13 @@ const DocumentScreen = ({ route, navigation }: Props) => {
     useFocusEffect(
         React.useCallback(() => {
             if (route.params.fileType == FileTypeEnum.passport) {
-                setFileToShow(`data:image/jpeg;base64,${profile?.passimage}`)
+                setFileToShow(`https://www.right-cars.com/uploads/pass/${profile?.passimage}`)
             }
             if (route.params.fileType == FileTypeEnum.driving_license) {
-                setFileToShow(`data:image/jpeg;base64,${profile?.drimage}`)
+                setFileToShow(`https://www.right-cars.com/uploads/drlic/${profile?.drimage}`)
             }
             if (route.params.fileType == FileTypeEnum.selfi) {
-                setFileToShow(`data:image/jpeg;base64,${profile?.selfiurl}`)
+                setFileToShow(`https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}`)
             }
             triggerChange(p => !p)
             getAllCountries(FlagType.FLAT)
@@ -151,7 +151,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                             data.append("docNumber", values.docNumber);
                         }
 
-                        /*sendFile({ data })
+                        sendFile({ data })
                             .then(r => {
                                 if (route.params.fileType == FileTypeEnum.passport) {
                                     setFileToShow(`https://www.right-cars.com/uploads/pass/${r.data?.passimage}`)
@@ -167,51 +167,7 @@ const DocumentScreen = ({ route, navigation }: Props) => {
                                 triggerChange(p => !p)
                                 setUploadPercent(0)
                             })
-                            .catch(r => console.log(r))*/
-
-                        setTimeout(() => {
-                            const newProfile = { ...profile }
-
-                            if (currentFileType == FileTypeEnum.passport) {
-                                if (file?.data){
-                                    newProfile.passimage = file?.data;
-                                    setFileToShow(`data:image/jpeg;base64,${file?.data}`)
-                                }
-                                newProfile.passport = values.docNumber
-                                newProfile.passday = values.expDate.format('DD')
-                                newProfile.passmonth = values.expDate.format('MM')
-                                newProfile.passyear = values.expDate.format('YYYY')
-                                newProfile.passcountry = currentCountryObj.cca2?.toLowerCase()
-                            }
-                            if (currentFileType == FileTypeEnum.driving_license) {
-                                if (file?.data){
-                                    newProfile.drimage = file?.data;
-                                    setFileToShow(`data:image/jpeg;base64,${file?.data}`)
-                                }
-                                newProfile.drlic = values.docNumber
-                                newProfile.drday = values.expDate.format('DD')
-                                newProfile.drmonth = values.expDate.format('MM')
-                                newProfile.dryear = values.expDate.format('YYYY')
-                                newProfile.drcountry = currentCountryObj.cca2?.toLowerCase()
-                            }
-                            if (currentFileType == FileTypeEnum.selfi) {
-                                if (file?.data){
-                                    newProfile.selfiurl = file?.data;
-                                    setFileToShow(`data:image/jpeg;base64,${file?.data}`)
-                                }
-                            }
-
-                            console.log("newProfile.passimage",newProfile.passimage != null)
-                            console.log("newProfile.drimage",newProfile.drimage != null)
-                            console.log("newProfile.selfiurl",newProfile.selfiurl != null)
-                            setSaving(false)
-
-                            dispatchGlobalState({ type: 'profile', state: newProfile })
-                            dispatchFileState({ type: Actions.RESET, state: {} })
-                            triggerChange(p => !p)
-                            setUploadPercent(0)
-                            setSaving(false)
-                        }, 0)
+                            .catch(r => console.log(r))
 
                     }}
                 >

@@ -52,7 +52,7 @@ const DocumentScreen = () => {
 
       <Layout style={{ padding: '5%',position: 'absolute',display: 'flex', flexDirection: 'column', backgroundColor: 'white', marginTop: '15%', marginBottom: '10%' }}>
         <Text style={{ fontFamily: AppFontBold, textAlign: 'center' }} category="h5">
-          {i18n.t(TRANSLATIONS_KEY.NO_RESULT_TITLE).toString()}:(
+          {i18n.t(TRANSLATIONS_KEY.NO_RESULT_TITLE).toString()}
         </Text>
         <Text style={{ color: '#8F9BB3', textAlign: 'center', marginBottom: '50%' }} category="h6">
           {i18n.t(TRANSLATIONS_KEY.NO_RESULT_SUB_TITLE).toString()}

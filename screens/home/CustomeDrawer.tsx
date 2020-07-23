@@ -18,7 +18,7 @@ import { useIsDrawerOpen } from "@react-navigation/drawer";
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { AppFontRegular } from "../../constants/fonts";
 import i18n, { TRANSLATIONS_KEY } from "../../utils/i18n";
-import { CommonActions } from "@react-navigation/native";
+import { CommonActions, useNavigationState } from "@react-navigation/native";
 
 const menuData = [
     { name: i18n.t(TRANSLATIONS_KEY.MENU_ITEM_MY_PROFILE), screenName: "EditProfile", iconName: 'account', key: 'sdwwe' },
@@ -72,7 +72,7 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
                         {profile?.selfiurl != "" && (
                             <Avatar
                                 style={{ width: 125, height: 125, }}
-                                source={{ uri: `data:image/jpeg;base64,${profile.selfiurl}` }}
+                                source={{ uri: `https://www.right-cars.com/uploads/selfi/${profile?.selfiurl}` }}
                             />
                         )}
                     </Layout>
@@ -101,6 +101,7 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
 }
 
 const DrawerItem = ({ navigation, name, iconName, screenName, iconSize, resetHistory, onPress }: StackScreenProps<LoginScreenProps> & { name: string, iconSize: number, resetHistory?: boolean, iconName: string, onPress?: () => void, screenName?: keyof LoginScreenProps }) => {
+
     return (
         <TouchableOpacity
             style={styles.menuItem}
@@ -108,14 +109,17 @@ const DrawerItem = ({ navigation, name, iconName, screenName, iconSize, resetHis
                 if (screenName) {
 
                     if (resetHistory == true) {
-                        navigation.dispatch(
-                            CommonActions.reset({
+                        navigation.dispatch((state) => {
+                            return CommonActions.reset({
+                                ...state,
                                 index: 0,
                                 routes: [
                                     { name: screenName },
+                                    ...state.routes
                                 ],
                             })
-                        );
+                        });
+                        navigation.closeDrawer()
                     } else {
                         navigation.navigate(screenName)
                     }
