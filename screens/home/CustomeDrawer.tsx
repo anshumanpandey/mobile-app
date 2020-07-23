@@ -21,6 +21,7 @@ import i18n, { TRANSLATIONS_KEY } from "../../utils/i18n";
 import { CommonActions } from "@react-navigation/native";
 
 const menuData = [
+    { name: i18n.t(TRANSLATIONS_KEY.MENU_ITEM_MY_PROFILE), screenName: "EditProfile", iconName: 'account', key: 'sdwwe' },
     { name: i18n.t(TRANSLATIONS_KEY.MENU_ITEM_PRIVACY_POLICY), screenName: "Policy", iconName: 'shield', key: 'swwe' },
     { name: i18n.t(TRANSLATIONS_KEY.MENU_ITEM_TERMS_CONDITIONS), screenName: "TermsConditions", iconName: 'file-document', key: 'sdsfwwe' },
     {
@@ -74,9 +75,6 @@ const DrawerMenu = ({ navigation }: { navigation: any }) => {
                                 source={{ uri: `data:image/jpeg;base64,${profile.selfiurl}` }}
                             />
                         )}
-                        <Text onPress={() => navigation.navigate('Signup')} style={{ color: '#41d5fb', marginTop: '5%' }}>
-                            My Profile
-                        </Text>
                     </Layout>
                 </TouchableOpacity>
 
