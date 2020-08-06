@@ -20,17 +20,6 @@ const DocumentScreen = ({ navigation }) => {
     const [isClean, setIsClean] = useState(true);
     const [profile] = useGlobalState('profile');
 
-    useFocusEffect(
-        React.useCallback(() => {
-            Orientation.lockToLandscape();
-            return () => {
-                Orientation.unlockAllOrientations()
-                signRef.current?.resetImage();
-                setIsClean(true)
-            }
-        }, [])
-    );
-
     return (
         <>
             <View style={[{ flex: 1 }]}>

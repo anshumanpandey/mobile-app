@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../../../utils/i18n';
 import GdprScreen from './GdprScreen';
 import InsuranceScreen from './InsuranceScreen';
+import MainTermsScreen from './MainTermsScreen';
 
 const DocumentScreen = () => {
   const route = useRoute();
@@ -246,6 +247,13 @@ export default function App({ navigation, route }) {
           tabBarButton: () => <></>,
         }}
       />
+      <Tab.Screen
+        name="MainTermsScreen"
+        component={MainTermsScreen}
+        options={{
+          tabBarButton: () => <></>,
+        }}
+      />
 
       <Tab.Screen
         name="Directions"
@@ -300,7 +308,8 @@ export default function App({ navigation, route }) {
         component={ReportScreen}
         options={{
           tabBarButton: () => {
-            const cannotCollect = route.params.params.pickupTime.isAfter(moment().add('h', 24)) && route.params.params.reservationStatus != 'Cancelled' && route.params.params.reservationStatus != 'Completed'
+            //const cannotCollect = route.params.params.pickupTime.isAfter(moment().add('h', 24)) && route.params.params.reservationStatus != 'Cancelled' && route.params.params.reservationStatus != 'Completed'
+            const cannotCollect = false
 
             return (
               <View style={{ width: '25%' }}>

@@ -14,6 +14,7 @@ import { TRANSLATIONS_KEY } from '../../../utils/i18n';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import * as Progress from 'react-native-progress';
 const xml2js = require('react-native-xml2js');
+import HTML from 'react-native-render-html';
 
 const InsuranceScreen = () => {
     const { params } = useRoute<any>();
@@ -43,8 +44,9 @@ const InsuranceScreen = () => {
 
     useEffect(() => {
         if (!data) return
+        console.log(data)
         xml2js.parseString(data, (err, result) => {
-            setGdprText(result.OTA_resdetmobRS.VehRetResRSCore[0].VehReservation[0].VehSegmentInfo[0].Insurance[0].Text[0])
+            setGdprText(result.OTA_resdetmobRS.VehRetResRSCore[0].VehReservation[0].VehSegmentInfo[0].MainTerms[0].Text[0])
         })
     }, [data])
 
@@ -67,10 +69,10 @@ const InsuranceScreen = () => {
 
                     {!loading && gdprText && (
                         <>
-                            <Text style={{ textAlign: 'center', fontSize: 34, marginBottom: '5%' }}>Insurance</Text>
-                            <Text style={{flexGrow: 1, textAlign: 'justify' }}>{gdprText}</Text>
+                            <Text style={{ textAlign: 'center', fontSize: 34, marginBottom: '5%' }}>Main Terms</Text>
+                                <HTML html={gdprText} />
                             <Layout style={{ marginTop: 'auto' }}>
-                                <Button onPress={() => navigation.navigate("MainTermsScreen", params)} size="giant" style={{ borderRadius: 10, backgroundColor: '#5ac8fa', borderColor: '#5ac8fa', paddingLeft: 20, paddingRight: 20, marginBottom: '2%' }}>
+                                <Button onPress={() => navigation.navigate("Home")} size="giant" style={{ borderRadius: 10, backgroundColor: '#5ac8fa', borderColor: '#5ac8fa', paddingLeft: 20, paddingRight: 20, marginBottom: '2%' }}>
                                     {() => <Text style={{ fontFamily: AppFontRegular, color: 'white' }}>Accept</Text>}
                                 </Button>
                                 <Button onPress={() => navigation.navigate("Home")} size="giant" style={{ borderRadius: 10, backgroundColor: '#cf1830', borderColor: '#cf1830', paddingLeft: 20, paddingRight: 20 }}>
