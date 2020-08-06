@@ -35,7 +35,7 @@ const GdprScreen = () => {
         resdetmob.xsd">
         <POS>
         <Source>
-        <RequestorID Type="MOBILE001" ID="1" ID_Name="RightCars" />
+        <RequestorID Type="1" ID="MOBILE001" ID_Name="RightCars" />
         </Source>
         </POS>
         <VehRetResRQCore>

@@ -1,6 +1,7 @@
 import { createGlobalState } from 'react-hooks-global-state';
 import { PricedEquip, VehVendorAvail } from '../../../types/SearchVehicleResponse';
 import moment from 'moment';
+import { setHours, setMinutes, addDays } from 'date-fns'
 
 export type LocationCode = {
     Branchid: string,
@@ -27,8 +28,8 @@ const initialCreatingBookingState: InitialState = {
     returnLocation: null,
     inmediatePickup: false,
     reservationNumber: null,
-    departureTime: moment().set({ hour: 10, minutes: 30, second: 0, millisecond: 0}).toDate(),
-    returnTime: moment().set({ hour: 10, minutes: 30, second: 0, millisecond: 0}).toDate(),
+    departureTime: setMinutes(setHours(new Date(), 10), 30),
+    returnTime: addDays(setMinutes(setHours(new Date(), 10), 30), 1),
     extras: [],
     vehicle: null,
     arrivalTime: '',

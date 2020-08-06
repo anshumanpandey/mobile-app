@@ -4,9 +4,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Text, Button } from '@ui-kitten/components';
 import { setHours, getHours, setMinutes, getMinutes } from 'date-fns'
 
-const RCDateTimePicker: React.FC<{ onChange: (dateTime: Date) => void, isVisible: boolean }> = ({ onChange, isVisible = false }) => {
-    const [time, setTime] = useState(new Date())
-    const [date, setDate] = useState(new Date())
+const RCDateTimePicker: React.FC<{ onChange: (dateTime: Date) => void, isVisible: boolean, date: Date }> = ({ onChange, date: dateValue, isVisible = false }) => {
+    const [time, setTime] = useState(dateValue)
+    const [date, setDate] = useState(dateValue)
     const [steps, setSteps] = useState(0);
 
     useEffect(() => {

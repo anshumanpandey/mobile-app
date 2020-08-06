@@ -225,6 +225,7 @@ export default () => {
                                     setReturnTime(moment(d).add('days', 1).toDate())
                                     setShowDepartureDatepicker(false)
                                 }}
+                                date={departureTime}
                                 isVisible={showDepartureDatepicker}
                             />
                             <View style={{ marginTop: '25%' }}>
@@ -236,6 +237,7 @@ export default () => {
                                 </TouchableOpacity>
                             </View>
                             <RCDateTimePicker
+                                date={returnTime}
                                 onChange={(d) => setReturnTime(d)}
                                 isVisible={showReturnDatepicker}
                             />
