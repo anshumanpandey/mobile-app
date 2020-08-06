@@ -32,6 +32,7 @@ const RCDateTimePicker: React.FC<{ onChange: (dateTime: Date) => void, isVisible
                 value={time}
                 mode={"time"}
                 is24Hour={false}
+                minuteInterval={30}
                 display="default"
                 onChange={(e, d) => {
                     if (d) {
