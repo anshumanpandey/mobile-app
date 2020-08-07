@@ -49,6 +49,9 @@ const DocumentScreen = ({ navigation }) => {
 
   const options = {
     title: 'Select Avatar',
+    maxWidth: 1000,
+    maxHeight: 1000,
+    compressImageQuality: 0.6,
     storageOptions: {
       skipBackup: true,
       path: 'images',
@@ -138,7 +141,7 @@ const DocumentScreen = ({ navigation }) => {
                   setCurrentPicktureIndex(p => {
                     const total = p + 1
                     if (total == maxPhotosAmount) {
-                      navigation.navigate("CompletedReport", { pictures, signImagePath: params.signImagePath })
+                      navigation.navigate("CompletedReport", { pictures, signImagePath: params.signImagePath, pathName: params.pathName })
                       return p;
                     }
                     return total

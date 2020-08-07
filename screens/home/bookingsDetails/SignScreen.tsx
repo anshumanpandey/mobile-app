@@ -30,6 +30,7 @@ const DocumentScreen = ({ navigation }) => {
                     style={[{ flex: 1 }]}
                     showNativeButtons={false}
                     showBorder={false}
+                    saveImageFileInExtStorage={true}
                     showTitleLabel={false}
                     onDragEvent={() => {
                         setIsClean(false);
@@ -37,6 +38,7 @@ const DocumentScreen = ({ navigation }) => {
                     onSaveEvent={(res) => {
                         navigation.navigate('Report', {
                             signImagePath: `data:image/png;base64,${res.encoded}`,
+                            pathName: res.pathName
                         })
                     }}
                 />

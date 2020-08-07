@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Layout, Text, Button, Input } from '@ui-kitten/components';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
 import { SafeAreaView, ScrollView, Image, TextInput, View, Platform } from 'react-native';
-import { CommonActions } from '@react-navigation/native';
+import { CommonActions, useFocusEffect } from '@react-navigation/native';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import useAxios from 'axios-hooks'
 import { useCarDetailState } from './detailsState';
@@ -21,6 +21,14 @@ const DocumentScreen = ({ navigation, route }) => {
     method: 'POST',
   }, { manual: true })
 
+  const [sendFileReq, sendFile] = useAxios({
+    url: `${GRCGDS_BACKEND}`,
+    method: 'POST',
+    onUploadProgress: (e) => {
+      var percentCompleted = Math.round((e.loaded * 100) / e.total)
+    }
+  }, { manual: true })
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <ScrollView keyboardShouldPersistTaps={"handled"} contentContainerStyle={{ flexGrow: 1, display: 'flex', backgroundColor: '#f7f9fc' }}>
@@ -30,7 +38,7 @@ const DocumentScreen = ({ navigation, route }) => {
           <Layout style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '10%', marginBottom: '10%' }}>
             <Text style={{ fontFamily: AppFontBold, marginBottom: '10%', textAlign: 'center' }} category="h3">
               {i18n.t(TRANSLATIONS_KEY.SIGN_OUR_AGREEMEN).toString()}
-          </Text>
+            </Text>
 
             <View>
               <Image
@@ -47,8 +55,21 @@ const DocumentScreen = ({ navigation, route }) => {
             disabled={postReq.loading}
             accessoryRight={postReq.loading ? LoadingSpinner : undefined}
             onPress={() => {
-              setIsAllowing(false)
-              navigation.navigate("Home", details);
+              const splittedString = route?.params.pathName.split('.')
+              const data = new FormData();
+
+              data.append("module_name", "SIGNATURE_UPLOAD");
+              data.append("resNumber", details?.registratioNumber);
+              data.append("file", {
+                name: `signature.${splittedString[splittedString.length - 1]}`,
+                type: `image/${splittedString[splittedString.length - 1]}`,
+                uri: (Platform.OS === 'android') ? `file://${route?.params.pathName}` : route?.params.pathName.replace('file://', '')
+              });
+
+              sendFile({data})
+              .then(r => navigation.navigate("Home", details))
+              .then(err => console.log(err))
+              //setIsAllowing(false)
             }}
             size="giant"
             style={{
