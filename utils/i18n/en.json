@@ -10,6 +10,7 @@
     "PRIVACY_POLICY_WORD": "Privacy Policy",
     "AND_WORD": "and",
     "CANCELLED_WORD": "Cancelled",
+    "CANCEL_WORD": "Cancel",
     "CONFIRMATION_WORD": "Confirmation",
     "CONFIRM_WORD": "Confirm",
     "HELP_WORD": "Help",
@@ -27,6 +28,7 @@
     "CAMERA_WORD": "Camera",
     "GALLERY_WORD": "Gallery",
     "DONE_WORD": "Done",
+    "ACTIVATE_WORD": "Activate",
 
     "ONLY_NUMBERS_ERRORS": "Can be only number",
 
@@ -275,5 +277,10 @@
 	"TERMS_AND_CONDITIONS_8_5": "8.5 Driver Age – The minimum age to rent with TL International Group Ltd T/A Right Cars depending on the country of collection please refer to the branch terms and conditions.",
 	"TERMS_AND_CONDITIONS_8_6": "8.6 Young Driver Surcharge – In most countries an extra fee will be charged for drivers under 25 years of age, these fees vary depending on country and vehicle type booked.",
 	"TERMS_AND_CONDITIONS_8_7": "8.7 Additional Driver(s) – Please be advised that if a second driver is requested, they must also be present when picking up the car, and have their original driving licence. An additional driver fee may be charged.",
-	"TERMS_AND_CONDITIONS_GO_BACK": "Go Back"
+    "TERMS_AND_CONDITIONS_GO_BACK": "Go Back",
+    
+	"REF_CODE_TITLE_SCREEN": "Please enter your activation code",
+	"REF_CODE_INPUT_TAG": "Code",
+	"REF_CODE_INPUT_PLACEHOLDER": "Your Reference Code",
+	"REF_CODE_HAS_CODE_TITLE": "Do you have an activation code?"
 }

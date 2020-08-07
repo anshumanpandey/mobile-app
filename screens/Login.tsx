@@ -217,7 +217,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         <Text style={{ color: 'black' }}>
                             {i18n.t(TRANSLATIONS_KEY.LOGIN_DONT_HAVE_ACCOUNT).toString()}{' '}
                         </Text>
-                        <Text onPress={() => navigation.navigate('Signup')} style={{ color: '#41d5fb' }}>
+                        <Text onPress={() => navigation.navigate('HasRefCodeScreen')} style={{ color: '#41d5fb' }}>
                             {i18n.t(TRANSLATIONS_KEY.LOGIN_SIGN_UP).toString()}
                         </Text>
                     </Layout>

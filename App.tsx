@@ -31,6 +31,8 @@ import { Alert } from 'react-native';
 import { AppState } from 'react-native'
 import BackgroundTimer from 'react-native-background-timer';
 import './utils/i18n';
+import RefCodeScreen from './screens/RefCodeScreen';
+import HasRefCodeScreen from './screens/HasRefCodeScreen';
 
 const Stack = createStackNavigator();
 
@@ -134,6 +136,7 @@ export default () => {
 
           {(!profile || profile.vphone != 1 || profile.vemail != 1 || !token) && (
             <>
+              <Stack.Screen name="HasRefCodeScreen" component={HasRefCodeScreen} />
               <Stack.Screen name="Login" component={Login} />
               <Stack.Screen name="Signup" component={Signup} />
               <Stack.Screen name="TwitterLogin" component={TwitterLoginScreen} />
@@ -143,6 +146,7 @@ export default () => {
               <Stack.Screen name="SuccessEmail" component={SuccessPhoneVerificationScreen} />
               <Stack.Screen name="SuccessForgotPassword" component={SuccessForgotPasswordScreen} />
               <Stack.Screen name="EmptyLoading" component={EmptyLoadingScreen} />
+              <Stack.Screen name="RefCode" component={RefCodeScreen} />
             </>
           )}
 

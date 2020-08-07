@@ -13,7 +13,7 @@ import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import useAxios from 'axios-hooks'
 import LoadingSpinner from '../partials/LoadingSpinner';
 import { dispatchGlobalState } from '../state';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import BackButton from '../partials/BackButton';
 import FacebookButton from '../partials/FacebookButton';
 import TwitterButton from '../partials/TwitterButton';
@@ -27,6 +27,7 @@ import { TRANSLATIONS_KEY } from '../utils/i18n';
 
 export default () => {
     const navigation = useNavigation();
+    const route = useRoute()
     const { i18n } = useTranslation();
 
     const [secureTextEntry, setSecureTextEntry] = useState(true);
@@ -85,7 +86,8 @@ export default () => {
                             countryCode: '',
                             confirmPassword: '',
                             company: '',
-                            vat: ''
+                            vat: '',
+                            refCode: route?.params?.refCode
                         }}
                         validate={(values) => {
                             const errors: { emailaddress?: string, password?: string, tele?: string } = {};
