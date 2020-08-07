@@ -136,7 +136,6 @@ export default () => {
 
           {(!profile || profile.vphone != 1 || profile.vemail != 1 || !token) && (
             <>
-              <Stack.Screen name="HasRefCodeScreen" component={HasRefCodeScreen} />
               <Stack.Screen name="Login" component={Login} />
               <Stack.Screen name="Signup" component={Signup} />
               <Stack.Screen name="TwitterLogin" component={TwitterLoginScreen} />
@@ -146,6 +145,7 @@ export default () => {
               <Stack.Screen name="SuccessEmail" component={SuccessPhoneVerificationScreen} />
               <Stack.Screen name="SuccessForgotPassword" component={SuccessForgotPasswordScreen} />
               <Stack.Screen name="EmptyLoading" component={EmptyLoadingScreen} />
+              <Stack.Screen name="HasRefCodeScreen" component={HasRefCodeScreen} />
               <Stack.Screen name="RefCode" component={RefCodeScreen} />
             </>
           )}
