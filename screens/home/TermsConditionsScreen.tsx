@@ -23,7 +23,7 @@ const DocumentScreen = () => {
 
         <ScrollView contentContainerStyle={{ display: 'flex', flexDirection: 'column', backgroundColor: '#00000000', marginTop: '10%', marginBottom: '10%' }}>
           <Text style={{ fontFamily: AppFontRegular, marginBottom: '5%', textAlign: 'center' }} category="h3">
-            {i18n.t(TRANSLATIONS_KEY.EDIT_PROFILE_SCREEN_TITLE).toString()}
+            {i18n.t(TRANSLATIONS_KEY.TERMS_AND_CONDITIONS_SCREEN_TITLE).toString()}
           </Text>
 
           <Text style={{ fontFamily: AppFontRegular, marginBottom: '5%', textAlign: 'left' }} category="h5">
