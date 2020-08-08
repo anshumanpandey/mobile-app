@@ -258,7 +258,7 @@ export default () => {
                                 </TouchableOpacity>
                             </View>
                             <View>
-                                <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_DEPARTURE_TIME_TAG).toString()}</Text>
+                                <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_TIME_TAG).toString()}</Text>
                                 <TouchableOpacity onPress={() => setShowReturnTimepicker(true)}>
                                     <View style={{ borderTopWidth: 1, borderBottomWidth: 1 }}>
                                         <Text style={{ textAlign: 'center', fontSize: 24 }}>{moment(returnTime).format("hh mm A")}</Text>
