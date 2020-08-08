@@ -51,7 +51,7 @@
 
 
     "CAR_LIST_ITEM_FUEL_POLICY": "Fuel policy",
-    "CAR_LIST_ITEM_FUEL_POLICY_LILE_TO_LIKE": "Like to like",
+    "CAR_LIST_ITEM_FUEL_POLICY_LILE_TO_LIKE": "Like to Like",
     "CAR_LIST_ITEM_MILEAGE": "Mileage",
     "CAR_LIST_ITEM_UNLIMITED": "Unlimited",
 
@@ -77,6 +77,7 @@
     "NEW_BOOKING_RETURN_ON_SAME_LOCATION_TAG": "Return car on same location",
     "NEW_BOOKING_ENTER_ORIGIN_PLACEHOLDER": "Enter Origin",
     "NEW_BOOKING_RETURN_DESTINATION_PLACEHOLDER": "Enter Destination",
+    "NEW_BOOKING_DEPARTURE_DATE_TAG": "Pickup Date",
     "NEW_BOOKING_DEPARTURE_TIME_TAG": "Pickup Time",
     "NEW_BOOKING_RETURN_TIME_TAG": "Drop off Time",
 

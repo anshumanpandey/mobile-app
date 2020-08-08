@@ -73,7 +73,7 @@ const TripCard: React.FC<TripCardProps> = (props) => {
             {props.reservationStatus == 'Cancelled' && (
               <Layout style={{ alignSelf: 'flex-end' }}>
                 <Text style={{ fontFamily: AppFontRegular,textAlign: 'right', color: 'red', textTransform: 'uppercase' }}>
-                  {i18n.t(TRANSLATIONS_KEY.TRIP_CAR_COST_TAG).toString()}
+                  {i18n.t(TRANSLATIONS_KEY.CANCELLED_WORD).toString()}
                 </Text>
               </Layout>
             )}
@@ -109,7 +109,7 @@ const TripCard: React.FC<TripCardProps> = (props) => {
             <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingTop: props.displayPreview == true && props.image_preview_url ? 0 : '5%', paddingBottom: '5%', paddingLeft: '5%', paddingRight: '5%', borderBottomLeftRadius: (props.upcoming || props.completed) ? 0 : 16, borderBottomRightRadius: (props.upcoming || props.completed) ? 0 : 16 }}>
               <Layout style={{ display: 'flex', flexDirection: 'row', width: '50%', alignSelf: 'flex-end' }}>
                 <Layout style={{ marginRight: '3%' }}>
-                  <Avatar style={{ borderRadius: 10 }} shape='square' source={props.keytype == "Keyless" ? require('../image/keyx.png') : require('../image/key.png')} />
+                  <Avatar style={{ borderRadius: 10 }} shape='square' source={props.keytype == "Keyless" ? require('../image/key.png') : require('../image/keyx.png')} />
                 </Layout>
                 <Layout>
                   <Text style={{ fontFamily: AppFontBold, fontSize: 15 }} category='h6'>{props.carName}</Text>

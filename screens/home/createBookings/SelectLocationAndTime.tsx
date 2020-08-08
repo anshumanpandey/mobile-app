@@ -24,9 +24,11 @@ import Orientation, { OrientationType } from 'react-native-orientation-locker';
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../../../utils/i18n';
 import BackButton from '../../../partials/BackButton';
-import RCDateTimePicker from '../../../partials/RCDateTimePicker';
+import RCDatePicker from '../../../partials/RCDatePicker';
+import { setHours, getHours, addHours, isAfter } from 'date-fns'
+import RCTimePicker from '../../../partials/RCTimePicker';
 
-const DATE_FORMAT = "DD MMM YYYY hh mm A"
+const DATE_FORMAT = "DD MMM YYYY"
 
 export default () => {
     const navigation = useNavigation();
@@ -38,8 +40,12 @@ export default () => {
     const [returnTime, setReturnTime] = useCreateBookingState("returnTime");
     const [currentLocation, setCurrentLocation] = useState(null);
     const [currentWidth, setCurrentWidth] = useState(Dimensions.get('window').width);
+
     const [showDepartureDatepicker, setShowDepartureDatepicker] = useState(false);
+    const [showDepartureTimepicker, setShowDepartureTimepicker] = useState(false);
+
     const [showReturnDatepicker, setShowReturnDatepicker] = useState(false);
+    const [showReturnTimepicker, setShowReturnTimepicker] = useState(false);
 
 
     const [{ data, loading, error }, doSearch] = useAxios<VehicleResponse>({
@@ -201,33 +207,49 @@ export default () => {
                     />
                     {inmediatePickup !== null && (
                         <View style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                            <View style={{ marginTop: '10%' }}>
-                                <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_DEPARTURE_TIME_TAG).toString()}</Text>
+                            <View>
+                                <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_DEPARTURE_DATE_TAG).toString()}</Text>
                                 <TouchableOpacity onPress={() => setShowDepartureDatepicker(true)}>
                                     <View style={{ borderTopWidth: 1, borderBottomWidth: 1 }}>
                                         <Text style={{ textAlign: 'center', fontSize: 24 }}>{moment(departureTime).format(DATE_FORMAT)}</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
-                            <RCDateTimePicker
+                            <View>
+                                <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_DEPARTURE_TIME_TAG).toString()}</Text>
+                                <TouchableOpacity onPress={() => setShowDepartureTimepicker(true)}>
+                                    <View style={{ borderTopWidth: 1, borderBottomWidth: 1 }}>
+                                        <Text style={{ textAlign: 'center', fontSize: 24 }}>{moment(departureTime).format("hh mm A")}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                            <RCDatePicker
                                 onChange={(d) => {
                                     if (inmediatePickup) {
-                                        const nowPlus24Hours = moment().utc().add('h', 24).set({ minutes: 0, seconds: 0 })
-                                        if (moment(d).isAfter(nowPlus24Hours)) {
-                                            setDepartureTime(nowPlus24Hours.toDate())
+                                        const nowPlus24Hours = addHours(new Date(), 24)
+                                        if (isAfter(d, nowPlus24Hours)) {
+                                            setDepartureTime(setHours(nowPlus24Hours, getHours(departureTime)))
                                         } else {
-                                            setDepartureTime(d)
+                                            setDepartureTime(setHours(d, getHours(departureTime)))
                                         }
                                     } else {
-                                        setDepartureTime(d)
+                                        setDepartureTime(setHours(d, getHours(departureTime)))
                                     }
-                                    setReturnTime(moment(d).add('days', 1).toDate())
+                                    setReturnTime(setHours(addHours(d, 24), getHours(returnTime)))
                                     setShowDepartureDatepicker(false)
                                 }}
                                 date={departureTime}
                                 isVisible={showDepartureDatepicker}
                             />
-                            <View style={{ marginTop: '25%' }}>
+                            <RCTimePicker
+                                date={departureTime}
+                                onChange={(d) => {
+                                    setDepartureTime(setHours(departureTime, getHours(d)))
+                                    setShowDepartureTimepicker(false)
+                                }}
+                                isVisible={showDepartureTimepicker}
+                            />
+                            <View style={{ marginTop: '10%' }}>
                                 <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_TIME_TAG).toString()}</Text>
                                 <TouchableOpacity onPress={() => setShowReturnDatepicker(true)}>
                                     <View style={{ borderTopWidth: 1, borderBottomWidth: 1 }}>
@@ -235,10 +257,29 @@ export default () => {
                                     </View>
                                 </TouchableOpacity>
                             </View>
-                            <RCDateTimePicker
+                            <View>
+                                <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_DEPARTURE_TIME_TAG).toString()}</Text>
+                                <TouchableOpacity onPress={() => setShowReturnTimepicker(true)}>
+                                    <View style={{ borderTopWidth: 1, borderBottomWidth: 1 }}>
+                                        <Text style={{ textAlign: 'center', fontSize: 24 }}>{moment(returnTime).format("hh mm A")}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                            <RCDatePicker
+                                onChange={(d) => {
+                                    setReturnTime(setHours(d, getHours(returnTime)))
+                                    setShowReturnDatepicker(false)
+                                }}
                                 date={returnTime}
-                                onChange={(d) => setReturnTime(d)}
                                 isVisible={showReturnDatepicker}
+                            />
+                            <RCTimePicker
+                                date={returnTime}
+                                onChange={(d) => {
+                                    setReturnTime(setHours(returnTime, getHours(d)))
+                                    setShowReturnTimepicker(false)
+                                }}
+                                isVisible={showReturnTimepicker}
                             />
                         </View>
                     )}
