@@ -276,7 +276,7 @@ export default () => {
                             <RCTimePicker
                                 date={returnTime}
                                 onChange={(d) => {
-                                    setReturnTime(setHours(returnTime, getHours(d)))
+                                    setReturnTime(setMinutes(setHours(returnTime, getHours(d)), getMinutes(d)))
                                     setShowReturnTimepicker(false)
                                 }}
                                 isVisible={showReturnTimepicker}
