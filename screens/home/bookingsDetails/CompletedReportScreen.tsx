@@ -4,26 +4,32 @@ import LoadingSpinner from '../../../partials/LoadingSpinner';
 import { SafeAreaView, ScrollView, Image, TextInput, View, Platform } from 'react-native';
 import { CommonActions, useFocusEffect } from '@react-navigation/native';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
-import useAxios from 'axios-hooks'
+import useAxios, { makeUseAxios } from 'axios-hooks'
 import { useCarDetailState } from './detailsState';
 import MenuButton from '../../../partials/MenuButton';
 import { AppFontBold, AppFontRegular } from '../../../constants/fonts'
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../../../utils/i18n';
+import { useGlobalState } from '../../../state';
+
+const useSimpleAxios = makeUseAxios({})
 
 const DocumentScreen = ({ navigation, route }) => {
   const { i18n } = useTranslation();
   const [details] = useCarDetailState("details");
   const [isAllowing, setIsAllowing] = useCarDetailState("isAllowing");
+  const [token] = useGlobalState("token")
 
-  const [postReq, post] = useAxios({
+  const [postReq, post] = useSimpleAxios({
     url: GRCGDS_BACKEND,
     method: 'POST',
+    headers: { Auth: `Bearer ${token}` },
   }, { manual: true })
 
   const [sendFileReq, sendFile] = useAxios({
     url: `${GRCGDS_BACKEND}`,
     method: 'POST',
+    validateStatus: () => true,
     onUploadProgress: (e) => {
       var percentCompleted = Math.round((e.loaded * 100) / e.total)
     }
@@ -67,9 +73,17 @@ const DocumentScreen = ({ navigation, route }) => {
               });
 
               sendFile({data})
+              .then(() => {
+                const data = {
+                  module_name: "GENERATE_PDF",
+                  image_format: splittedString[splittedString.length - 1],
+                  ...details
+                }
+                post({ data })
+              })
               .then(r => navigation.navigate("Home", details))
               .then(err => console.log(err))
-              //setIsAllowing(false)
+              setIsAllowing(false)
             }}
             size="giant"
             style={{

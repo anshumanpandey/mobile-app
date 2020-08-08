@@ -37,7 +37,6 @@ const DocumentScreen = () => {
       resetBookingCreationState()
       refetch()
         .then(r => {
-          console.log(r.data)
           setParsedResponse(r.data.map(i => {
             const storedData = storedBookings.find(a => a.reservationNumber == i.resnumber)
 
@@ -50,6 +49,7 @@ const DocumentScreen = () => {
               "pickupLocation": i.pLocation,
               "dropOffLocation": i.rLocation,
               pickupLocationPhoneNumber: i.pPhoneNumber,
+              dropoffLocationPhoneNumber: i.rPhoneNumber,
               "pickupTime": moment.utc(moment.unix(i.unixPTime)),
               "dropoffTime": moment.utc(moment.unix(i.unixRTime)),
               carName: `${i.carModel}\nOr Similar`,
