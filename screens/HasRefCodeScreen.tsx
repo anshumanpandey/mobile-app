@@ -5,7 +5,6 @@ import LoadingSpinner from '../partials/LoadingSpinner';
 import { useNavigation } from '@react-navigation/native';
 import BackButton from '../partials/BackButton';
 import useAxios from 'axios-hooks'
-import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import { AppFontBold, AppFontRegular } from '../constants/fonts'
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../utils/i18n';

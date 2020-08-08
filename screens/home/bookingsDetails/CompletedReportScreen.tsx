@@ -3,7 +3,6 @@ import { Layout, Text, Button, Input } from '@ui-kitten/components';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
 import { SafeAreaView, ScrollView, Image, TextInput, View, Platform } from 'react-native';
 import { CommonActions, useFocusEffect } from '@react-navigation/native';
-import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import useAxios, { makeUseAxios } from 'axios-hooks'
 import { useCarDetailState } from './detailsState';
 import MenuButton from '../../../partials/MenuButton';
@@ -21,13 +20,13 @@ const DocumentScreen = ({ navigation, route }) => {
   const [token] = useGlobalState("token")
 
   const [postReq, post] = useSimpleAxios({
-    url: GRCGDS_BACKEND,
+    url: `http://grcgds.com/mobileapp/index.php`,
     method: 'POST',
     headers: { Auth: `Bearer ${token}` },
   }, { manual: true })
 
   const [sendFileReq, sendFile] = useAxios({
-    url: `${GRCGDS_BACKEND}`,
+    url: `http://grcgds.com/mobileapp/index.php`,
     method: 'POST',
     validateStatus: () => true,
     onUploadProgress: (e) => {

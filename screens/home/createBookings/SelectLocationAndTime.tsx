@@ -15,7 +15,6 @@ import GetLocation from 'react-native-get-location'
 import SystemSetting from 'react-native-system-setting'
 import useAxios from 'axios-hooks'
 import moment from 'moment';
-import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import LoadingSpinner from '../../../partials/LoadingSpinner';
 import { VehicleResponse } from '../../../types/SearchVehicleResponse';
 import MenuButton from '../../../partials/MenuButton';
@@ -44,7 +43,7 @@ export default () => {
 
 
     const [{ data, loading, error }, doSearch] = useAxios<VehicleResponse>({
-        url: `${GRCGDS_BACKEND}/SEARCH_VEHICLE`,
+        url: `http://grcgds.com/mobileapp/index.php/SEARCH_VEHICLE`,
         method: 'GET',
         validateStatus: () => true
     }, { manual: true })

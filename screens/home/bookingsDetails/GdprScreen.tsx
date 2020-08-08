@@ -11,7 +11,6 @@ import MenuButton from '../../../partials/MenuButton';
 import { AppFontRegular } from '../../../constants/fonts';
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../../../utils/i18n';
-import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import * as Progress from 'react-native-progress';
 import { useCarDetailState } from './detailsState';
 const xml2js = require('react-native-xml2js');

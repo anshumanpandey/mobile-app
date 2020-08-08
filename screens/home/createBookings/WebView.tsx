@@ -5,7 +5,6 @@ import useAxios from 'axios-hooks'
 import { useCreateBookingState } from './CreateBookingState';
 import moment from 'moment';
 import { dispatchGlobalState, useGlobalState } from '../../../state';
-import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import { SafeAreaView } from 'react-native';
 
 const WebViewScreen = () => {
@@ -34,7 +33,7 @@ const WebViewScreen = () => {
     const [postDone, setPostDone] = useState(false);
 
     const [{ loading, error }, postCreation] = useAxios({
-        url: `${GRCGDS_BACKEND}`,
+        url: `http://grcgds.com/mobileapp/index.php`,
         method: 'POST',
     }, { manual: true })
 
