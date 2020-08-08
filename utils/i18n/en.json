@@ -79,6 +79,7 @@
     "NEW_BOOKING_RETURN_DESTINATION_PLACEHOLDER": "Enter Destination",
     "NEW_BOOKING_DEPARTURE_DATE_TAG": "Pickup Date",
     "NEW_BOOKING_DEPARTURE_TIME_TAG": "Pickup Time",
+    "NEW_BOOKING_RETURN_DATE_TAG": "Drop off Date",
     "NEW_BOOKING_RETURN_TIME_TAG": "Drop off Time",
 
     "NO_RESULT_TITLE": "No result",
