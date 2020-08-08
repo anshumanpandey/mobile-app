@@ -14,6 +14,7 @@ const RCDatePicker: React.FC<{ onChange: (dateTime: Date) => void, isVisible: bo
     if (Platform.OS == "ios") {
         return (
             <DateTimePickerModal
+                date={date}
                 isVisible={steps == 1}
                 mode="date"
                 onConfirm={(d) => {

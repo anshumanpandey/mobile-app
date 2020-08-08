@@ -14,6 +14,8 @@ const RCTimePicker: React.FC<{ onChange: (dateTime: Date) => void, isVisible: bo
     if (Platform.OS == "ios") {
         return (
             <DateTimePickerModal
+                date={time}
+                minuteInterval={30}
                 isVisible={steps == 1}
                 headerTextIOS="Pick a Time"
                 mode="time"
