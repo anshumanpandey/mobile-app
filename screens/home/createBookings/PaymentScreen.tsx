@@ -73,9 +73,9 @@ export default () => {
 
     const params = new URLSearchParams();
     params.append('grant_type', 'client_credentials');
-    const basic = base64.encode(`AcDoYg60CAk48yIdgpLTKR8h99G9sdv_Xmdg8jzd8HTla_01m29inTc7d-kT5MdRwYcnpq5GmrdXbt4A:ENs8H1feFUXDKdKOf3WZbqpFOempJlLR13ntsM7VwzuaJIzK-aRuRh_z9yVS2zuCldnTDyj19elOdZFO`)
+    const basic = base64.encode(`AXrYo6CvTv__6wTusNmIaoQzvoBIt4wWb1QkScA-P62hAKfLQO_1nYI_uoShp-RlRyPITUVrRM-GgpnG:EAYzzs-RvauyzjDc6_tB7ZklSNTnOvkurKWfaZr5SyMhvkw7CklvjdVEjIyQK170ICyIoCyBt0WV04Oa`)
     const [{ data, loading, error }, getAccessToken] = useAxios({
-        url: `https://api.sandbox.paypal.com/v1/oauth2/token`,
+        url: `https://api.paypal.com/v1/oauth2/token`,
         method: 'POST',
         params,
         headers: {
@@ -85,7 +85,7 @@ export default () => {
     }, { manual: true })
 
     const [, doPayment] = useAxios({
-        url: 'https://api.sandbox.paypal.com/v1/payments/payment',
+        url: 'https://api.paypal.com/v1/payments/payment',
         method: 'POST'
     }, { manual: true })
 

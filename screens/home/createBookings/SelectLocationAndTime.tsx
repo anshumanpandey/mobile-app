@@ -250,7 +250,7 @@ export default () => {
                                 isVisible={showDepartureTimepicker}
                             />
                             <View style={{ marginTop: '10%' }}>
-                                <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_TIME_TAG).toString()}</Text>
+                                <Text style={{ fontFamily: AppFontBold }}>{i18n.t(TRANSLATIONS_KEY.NEW_BOOKING_RETURN_DATE_TAG).toString()}</Text>
                                 <TouchableOpacity onPress={() => setShowReturnDatepicker(true)}>
                                     <View style={{ borderTopWidth: 1, borderBottomWidth: 1 }}>
                                         <Text style={{ textAlign: 'center', fontSize: 24 }}>{moment(returnTime).format(DATE_FORMAT)}</Text>
