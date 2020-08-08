@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../../../utils/i18n';
 import BackButton from '../../../partials/BackButton';
 import RCDatePicker from '../../../partials/RCDatePicker';
-import { setHours, getHours, addHours, isAfter } from 'date-fns'
+import { setHours, getHours, addHours, isAfter, setMinutes, getMinutes } from 'date-fns'
 import RCTimePicker from '../../../partials/RCTimePicker';
 
 const DATE_FORMAT = "DD MMM YYYY"
@@ -244,7 +244,7 @@ export default () => {
                             <RCTimePicker
                                 date={departureTime}
                                 onChange={(d) => {
-                                    setDepartureTime(setHours(departureTime, getHours(d)))
+                                    setDepartureTime(setMinutes(setHours(departureTime, getHours(d)), getMinutes(d)))
                                     setShowDepartureTimepicker(false)
                                 }}
                                 isVisible={showDepartureTimepicker}
@@ -267,7 +267,7 @@ export default () => {
                             </View>
                             <RCDatePicker
                                 onChange={(d) => {
-                                    setReturnTime(setHours(d, getHours(returnTime)))
+                                    setReturnTime(setMinutes(setHours(d, getHours(returnTime)), getMinutes(d)))
                                     setShowReturnDatepicker(false)
                                 }}
                                 date={returnTime}
