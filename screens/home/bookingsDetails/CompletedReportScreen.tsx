@@ -72,7 +72,7 @@ const DocumentScreen = ({ navigation, route }) => {
               });
 
               sendFile({data})
-              .then(() => {
+              .then((r) => {
                 const data = {
                   module_name: "GENERATE_PDF",
                   image_format: splittedString[splittedString.length - 1],

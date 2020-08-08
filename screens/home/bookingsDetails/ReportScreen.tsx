@@ -37,7 +37,7 @@ const DocumentScreen = ({ navigation }) => {
 
 
   const [postReq, post] = useAxios({
-    url: GRCGDS_BACKEND,
+    url: `http://grcgds.com/mobileapp/index.php`,
     method: 'POST',
     onUploadProgress: (e) => {
       console.log(e)
@@ -136,7 +136,7 @@ const DocumentScreen = ({ navigation }) => {
                 });
 
                 post({ data })
-                .then(() => {
+                .then((r) => {
                   setUploadPercent(0);
                   setCurrentPicktureIndex(p => {
                     const total = p + 1
