@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Platform } from 'react-native';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const RCTimePicker: React.FC<{ onChange: (dateTime: Date) => void, isVisible: boolean, date: Date }> = ({ onChange, date: dateValue, isVisible = false }) => {
     const [time, setTime] = useState(dateValue)
@@ -8,6 +10,26 @@ const RCTimePicker: React.FC<{ onChange: (dateTime: Date) => void, isVisible: bo
     useEffect(() => {
         if (isVisible == true) setSteps(1)
     }, [isVisible])
+
+    if (Platform.OS == "ios") {
+        return (
+            <DateTimePickerModal
+                isVisible={steps == 1}
+                headerTextIOS="Pick a Time"
+                mode="time"
+                onConfirm={(d) => {
+                    setSteps(0)
+                    if (d) {
+                        setTime(d)
+                        onChange(d)
+                    }
+                }}
+                onCancel={() => {
+                    setSteps(0)
+                }}
+            />
+        );
+    }
 
     return (
         <>
