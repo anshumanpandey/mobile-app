@@ -19,6 +19,7 @@ const DocumentScreen = () => {
 
   const [idxFocusInput, setIdxFocusInput] = React.useState<number>(-1);
   const [pin, setPin] = React.useState<Array<number>>([-1, -1, -1, -1]);
+  const [error , setError] = React.useState<string | null>(null);
   const [counter, setCounter] = React.useState(30);
 
   const [cancelReq, cancelBooking] = useAxios({
@@ -123,15 +124,22 @@ const DocumentScreen = () => {
         </Layout>
 
 
-        <Layout style={{ display: 'flex', flexDirection: 'row', height: '20%', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#00000000', marginTop: '15%', marginBottom: '15%' }}>
+        <Layout style={{ display: 'flex', flexDirection: 'row', height: '20%', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#00000000', marginTop: '15%' }}>
           <TextInput onBlur={() => { setIdxFocusInput(-1) }} onFocus={() => { setIdxFocusInput(0) }} ref={ref => inputs[0].current = ref} value={pin[0] !== -1 ? pin[0].toString() : ''} onKeyPress={(e) => { onInput(e) }} maxLength={1} style={{ textAlign: 'center', fontFamily: AppFontBold, borderColor: idxFocusInput == 0 ? '#41D5FB' : '#2f378c', borderWidth: 1, backgroundColor: 'white', borderRadius: 30, fontSize: 34, height: 80, width: '20%' }} />
           <TextInput onBlur={() => { setIdxFocusInput(-1) }} onFocus={() => { setIdxFocusInput(1) }} ref={ref => inputs[1].current = ref} value={pin[1] !== -1 ? pin[1].toString() : ''} onKeyPress={(e) => { onInput(e) }} maxLength={1} style={{ textAlign: 'center', fontFamily: AppFontBold, borderColor: idxFocusInput == 1 ? '#41D5FB' : '#2f378c', borderWidth: 1, backgroundColor: 'white', borderRadius: 30, fontSize: 34, height: 80, width: '20%' }} />
           <TextInput onBlur={() => { setIdxFocusInput(-1) }} onFocus={() => { setIdxFocusInput(2) }} ref={ref => inputs[2].current = ref} value={pin[2] !== -1 ? pin[2].toString() : ''} onKeyPress={(e) => { onInput(e) }} maxLength={1} style={{ textAlign: 'center', fontFamily: AppFontBold, borderColor: idxFocusInput == 2 ? '#41D5FB' : '#2f378c', borderWidth: 1, backgroundColor: 'white', borderRadius: 30, fontSize: 34, height: 80, width: '20%' }} />
           <TextInput onBlur={() => { setIdxFocusInput(-1) }} onFocus={() => { setIdxFocusInput(3) }} ref={ref => inputs[3].current = ref} value={pin[3] !== -1 ? pin[3].toString() : ''} onKeyPress={(e) => { onInput(e) }} maxLength={1} style={{ textAlign: 'center', fontFamily: AppFontBold, borderColor: idxFocusInput == 3 ? '#41D5FB' : '#2f378c', borderWidth: 1, backgroundColor: 'white', borderRadius: 30, fontSize: 34, height: 80, width: '20%' }} />
         </Layout>
+        {error && <Text style={{ color: 'red'}}>{error}</Text>}
 
         <Button
           onPress={() => {
+            if (pin.some(i => i == -1 )) {
+              setError("Code is required")
+              return
+            } else {
+              setError(null)
+            }
             callAPI({
               data: {
                 module_name: 'VERIFY_CANCEL_CODE',
@@ -156,6 +164,7 @@ const DocumentScreen = () => {
           disabled={cancelReq.loading}
           accessoryRight={cancelReq.loading ? LoadingSpinner : undefined}
           style={{
+            marginTop: '15%',
             backgroundColor: cancelReq.loading == false ? '#41d5fb' : '#e4e9f2',
             borderColor: cancelReq.loading == false ? '#41d5fb' : '#e4e9f2',
             marginBottom: '15%',
