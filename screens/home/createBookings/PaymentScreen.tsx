@@ -73,7 +73,7 @@ export default () => {
 
     const params = new URLSearchParams();
     params.append('grant_type', 'client_credentials');
-    const basic = base64.encode(`AXrYo6CvTv__6wTusNmIaoQzvoBIt4wWb1QkScA-P62hAKfLQO_1nYI_uoShp-RlRyPITUVrRM-GgpnG:EAYzzs-RvauyzjDc6_tB7ZklSNTnOvkurKWfaZr5SyMhvkw7CklvjdVEjIyQK170ICyIoCyBt0WV04Oa`)
+    const basic = base64.encode(`AcfO5vyIR0TVL7suCJZYRyQe4DWREqtPeIc0VqTSdIWidz-OWtnyufCKUYmfHE7Sm0TLdwhWw3K5Cg2y:EJ8Mupf6iYRBd6qiWhOdam0r0HpwSUaRGgypfbvUgHgRKIbvbBE72zhrqWSlAbyrl_-GKTa8arfDXp_3`)
     const [{ data, loading, error }, getAccessToken] = useAxios({
         url: `https://api.paypal.com/v1/oauth2/token`,
         method: 'POST',
