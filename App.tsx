@@ -34,6 +34,15 @@ import './utils/i18n';
 import RefCodeScreen from './screens/RefCodeScreen';
 import HasRefCodeScreen from './screens/HasRefCodeScreen';
 
+if (!Object.fromEntries) {
+  Object.fromEntries = Object.fromEntries || function(arr) {
+    return arr.reduce(function(acc, curr) {
+        acc[curr[0]] = curr[1];
+        return acc;
+    }, {});
+  };
+}
+
 const Stack = createStackNavigator();
 
 export default () => {
