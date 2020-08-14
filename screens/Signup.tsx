@@ -253,19 +253,6 @@ export default () => {
                                 .then(() => navigation.navigate('Home'))
                                 .catch((error) => console.log("Login fail with error: " + error))
                         }} />
-
-                        <TwitterButton onPress={() => {
-                            axiosInstance({
-                                method: "POST",
-                                url: GRCGDS_BACKEND,
-                                data: { module_name: "LOGIN_WITH_TWITTER" }
-                            })
-                                .then(res => {
-                                    navigation.navigate('TwitterLogin', res.data)
-                                })
-                                .catch(err => console.log(err))
-
-                        }} />
                     </Layout>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '5%', flexWrap: 'wrap' }}>

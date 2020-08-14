@@ -198,19 +198,6 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     navigation.navigate('Login')
                                 })
                         }} />
-
-                        <TwitterButton onPress={() => {
-                            axiosInstance({
-                                method: "POST",
-                                url: GRCGDS_BACKEND,
-                                data: { module_name: "LOGIN_WITH_TWITTER" }
-                            })
-                                .then(res => {
-                                    navigation.navigate('TwitterLogin', res.data)
-                                })
-                                .catch(err => console.log(err))
-
-                        }} />
                     </Layout>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10%' }}>
