@@ -68,9 +68,7 @@
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to save photos to your photo gallery</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>
-		Allow Right Cars to access your camera and gallery photos? This allows you to take pictures of your documents and upload to our platform which are required to use this app. It also allows you to take car damage pictures when you collect the vehicle.
-	</string>
+	<string>Allow Right Cars to access your camera and gallery photos? This allows you to take pictures of your documents and upload to our platform which are required to use this app. It also allows you to take car damage pictures when you collect the vehicle.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
