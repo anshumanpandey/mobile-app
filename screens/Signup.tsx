@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Text, Input, Button, Toggle } from '@ui-kitten/components';
-import { TouchableWithoutFeedback, ImageProps, ScrollView, SafeAreaView } from 'react-native';
+import { TouchableWithoutFeedback, ImageProps, ScrollView, SafeAreaView, Platform } from 'react-native';
 import { Formik } from 'formik';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { RenderProp } from '@ui-kitten/components/devsupport';
@@ -16,6 +16,12 @@ import { dispatchGlobalState } from '../state';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import BackButton from '../partials/BackButton';
 import FacebookButton from '../partials/FacebookButton';
+import appleAuth, {
+    AppleButton,
+    AppleAuthError,
+    AppleAuthRequestOperation,
+    AppleAuthRequestScope,
+} from '@invertase/react-native-apple-authentication';
 import TwitterButton from '../partials/TwitterButton';
 import { LoginManager, GraphRequest, GraphRequestManager } from "react-native-fbsdk";
 import { handlePermissionPromt, handleUserData } from '../utils/FacebookAuth';
@@ -23,6 +29,8 @@ import { axiosInstance } from '../utils/AxiosBootstrap';
 import { AppFontBold, AppFontRegular } from '../constants/fonts'
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../utils/i18n';
+import { HandleAppleLoginResponse } from '../utils/HandleAppleLoginResponse';
+import userHasFullProfile from '../utils/userHasFullProfile';
 
 
 export default () => {
@@ -55,6 +63,33 @@ export default () => {
             <Icon style={{ color: secureTextEntry ? '#e4e9f2' : 'black' }} name={secureTextEntry ? 'eye' : 'eye-slash'} size={30} />
         </TouchableWithoutFeedback>
     );
+
+    const handleResponse = async () => {
+        HandleAppleLoginResponse()
+            .then(appleAuthRequestResponse => {
+                console.log(appleAuthRequestResponse)
+                const data = {
+                    module_name: "LOGIN_WITH_APPLE",
+                    email: appleAuthRequestResponse.email
+                }
+                doLogin({ data, method: 'POST' })
+                    .then(({ data: userData }) => {
+                        console.log(userData)
+                        dispatchGlobalState({ type: 'token', state: userData.token })
+                        dispatchGlobalState({ type: 'profile', state: userData })
+                        if (userData.token && !userHasFullProfile(userData)) {
+                            navigation.navigate('Home')
+                        } else if (userData.twoauth != 0) {
+                            dispatchGlobalState({ type: 'profile', state: userData })
+                            navigation.navigate('Opt')
+                        } else {
+                            if (userData.vphone != 1) navigation.navigate('Opt')
+                            if (userData.vemail != 1) navigation.navigate('VerifyEmail')
+                            if (userData.vphone == 1 && userData.vemail == 1) navigation.navigate('Home')
+                        }
+                    })
+            })
+    }
 
     return (
         <SafeAreaView style={{ flex: 1 }} >
@@ -246,13 +281,22 @@ export default () => {
                     </Text>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                        <FacebookButton onPress={() => {
+                        <FacebookButton  isSmall={Platform.select({ android: false, ios:  true })} onPress={() => {
                             LoginManager.logInWithPermissions(["public_profile", "email"])
                                 .then(handlePermissionPromt)
                                 .then(handleUserData)
                                 .then(() => navigation.navigate('Home'))
                                 .catch((error) => console.log("Login fail with error: " + error))
                         }} />
+                        <AppleButton
+                            buttonStyle={AppleButton.Style.WHITE}
+                            buttonType={AppleButton.Type.SIGN_IN}
+                            style={{
+                                width: 160, // You must specify a width
+                                height: 45, // You must specify a height
+                            }}
+                            onPress={() => handleResponse()}
+                        />
                     </Layout>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '5%', flexWrap: 'wrap' }}>

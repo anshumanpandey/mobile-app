@@ -13,6 +13,12 @@ import { NonLoginScreenProps, LoginScreenProps } from '../types';
 import LoadingSpinner from '../partials/LoadingSpinner';
 import FacebookButton from '../partials/FacebookButton';
 import TwitterButton from '../partials/TwitterButton';
+import appleAuth, {
+    AppleButton,
+    AppleAuthError,
+    AppleAuthRequestOperation,
+    AppleAuthRequestScope,
+} from '@invertase/react-native-apple-authentication';
 import ErrorLabel from '../partials/ErrorLabel';
 import { LoginManager } from "react-native-fbsdk";
 import { handlePermissionPromt, handleUserData } from '../utils/FacebookAuth';
@@ -22,6 +28,7 @@ import * as Progress from 'react-native-progress';
 import { AppFontBold, AppFontRegular } from '../constants/fonts'
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../utils/i18n';
+import { HandleAppleLoginResponse } from '../utils/HandleAppleLoginResponse';
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
     const { i18n } = useTranslation();
@@ -44,19 +51,47 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
         </TouchableWithoutFeedback>
     );
 
+    const handleResponse = async () => {
+        HandleAppleLoginResponse()
+            .then(appleAuthRequestResponse => {
+                console.log(appleAuthRequestResponse)
+                const data = {
+                    module_name: "LOGIN_WITH_APPLE",
+                    email: appleAuthRequestResponse.email
+                }
+                doLogin({ data, method: 'POST' })
+                    .then(({ data: userData }) => {
+                        console.log(userData)
+                        dispatchGlobalState({ type: 'token', state: userData.token })
+                        dispatchGlobalState({ type: 'profile', state: userData })
+                        if (userData.token && !userHasFullProfile(userData)) {
+                            navigation.navigate('Home')
+                        } else if (userData.twoauth != 0) {
+                            dispatchGlobalState({ type: 'profile', state: userData })
+                            navigation.navigate('Opt')
+                        } else {
+                            if (userData.vphone != 1) navigation.navigate('Opt')
+                            if (userData.vemail != 1) navigation.navigate('VerifyEmail')
+                            if (userData.vphone == 1 && userData.vemail == 1) navigation.navigate('Home')
+                        }
+                        setLoadingLogin(false)
+                    })
+            })
+    }
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
             {loadingLogin && (
-                <View style={{ backgroundColor: 'rgba(255,255,255,0.85)',display: 'flex',justifyContent: 'center', alignItems: 'center',position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, zIndex: 4}}>
-                <Progress.Circle
-                    showsText={true}
-                    textStyle={{ color: "#41d5fb" }}
-                    color={"#41d5fb"}
-                    borderWidth={4}
-                    size={150}
-                    indeterminate={true}
-                />
-            </View>
+                <View style={{ backgroundColor: 'rgba(255,255,255,0.85)', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, zIndex: 4 }}>
+                    <Progress.Circle
+                        showsText={true}
+                        textStyle={{ color: "#41d5fb" }}
+                        color={"#41d5fb"}
+                        borderWidth={4}
+                        size={150}
+                        indeterminate={true}
+                    />
+                </View>
             )}
             <ScrollView keyboardShouldPersistTaps={"handled"} >
 
@@ -165,7 +200,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     </Text>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                        <FacebookButton onPress={() => {
+                        <FacebookButton isSmall={Platform.select({ android: false, ios: true })} onPress={() => {
                             if (Platform.OS === "android") {
                                 LoginManager.setLoginBehavior("web_only")
                             }
@@ -198,6 +233,15 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     navigation.navigate('Login')
                                 })
                         }} />
+                        <AppleButton
+                            buttonStyle={AppleButton.Style.WHITE}
+                            buttonType={AppleButton.Type.SIGN_IN}
+                            style={{
+                                width: 160, // You must specify a width
+                                height: 45, // You must specify a height
+                            }}
+                            onPress={() => handleResponse()}
+                        />
                     </Layout>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10%' }}>
