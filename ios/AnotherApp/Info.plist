@@ -60,13 +60,13 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>This app requires access to the camera.</string>
+	<string>Allow Right Cars to access your camera and gallery photos? This allows you to take pictures of your documents and upload to our platform which are required to use this app. It also allows you to take car damage pictures when you collect the vehicle.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Allow Right Cars to access your location while you are using the app? This allows us to identify your current location and in case you book immediate pickup we can lookup your location and pick you up form your current location.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow Right Cars to access your camera and gallery photos? This allows you to take pictures of your documents and upload to our platform which are required to use this app. It also allows you to take car damage pictures when you collect the vehicle.</string>
+	<string>Allow Right Cars to access your location while you are using the app? This allows us to identify your current location and in case you book immediate pickup we can lookup your location and pick you up form your current location.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to save photos to your photo gallery</string>
+	<string>Allow Right Cars to access your camera and gallery photos? This allows you to take pictures of your documents and upload to our platform which are required to use this app. It also allows you to take car damage pictures when you collect the vehicle.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allow Right Cars to access your camera and gallery photos? This allows you to take pictures of your documents and upload to our platform which are required to use this app. It also allows you to take car damage pictures when you collect the vehicle.</string>
 	<key>UIAppFonts</key>
