@@ -742,6 +742,11 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
+"@invertase/react-native-apple-authentication@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@invertase/react-native-apple-authentication/-/react-native-apple-authentication-1.1.2.tgz#cf86364d89030f0b9970d04468fde2d204cab5df"
+  integrity sha512-eRwLOyxPtAP0ZEy1iaBf+Sle7upBnyqOkeXgScWNKLKsb4r6+6I6CvMuHNdMZ9ObSdUfAVgAbj5L09TbJRw0hQ==
+
 "@jest/console@^24.7.1", "@jest/console@^24.9.0":
   version "24.9.0"
   resolved "https://registry.yarnpkg.com/@jest/console/-/console-24.9.0.tgz#79b1bc06fb74a8cfb01cbdedf945584b1b9707f0"
@@ -3137,7 +3142,7 @@ fbjs-scripts@^1.1.0:
     semver "^5.1.0"
     through2 "^2.0.0"
 
-fbjs@^0.8.3, fbjs@^0.8.9:
+fbjs@^0.8.9:
   version "0.8.17"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.17.tgz#c4d598ead6949112653d6588b01a5cdcd9f90fdd"
   integrity sha1-xNWY6taUkRJlPWWIsBpc3Nn5D90=
@@ -4723,9 +4728,9 @@ lodash.unescape@4.0.1:
   integrity sha1-vyJJiGzlFM2hEvrpIYzcBlIR/Jw=
 
 lodash@^4.0.0, lodash@^4.17.10, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.4, lodash@^4.3.0:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+  version "4.17.20"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
+  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
 log-symbols@^2.2.0:
   version "2.2.0"
@@ -5958,10 +5963,10 @@ react-native-keyevent@^0.2.8:
   resolved "https://registry.yarnpkg.com/react-native-keyevent/-/react-native-keyevent-0.2.8.tgz#f6c035bf17b8d8221e546e85e430cd1d3021c5d7"
   integrity sha512-tqZwJXDpAL7rBUGRAz4AaoAyQkaWA7k1Bq+l7P4GLsWAD7g0z/KSAOMY3cJanLYJxr4+t4FEZ8seA1YQ/7kchg==
 
-react-native-login-twitter@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/react-native-login-twitter/-/react-native-login-twitter-3.0.2.tgz#5f3de9114c51d867b09b4bc3ef69c6ced742fc82"
-  integrity sha512-pJVnC5ruhND6BuzB332aUIW7ncmTrB087AmUylb7UcnkCdxxVuLAEeNdblvS+2pnDeV+dpzucnmLClzRZL6lUw==
+react-native-login-twitter@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-login-twitter/-/react-native-login-twitter-3.0.3.tgz#40b358d8946b15e3c6a3411b40b08197536afe88"
+  integrity sha512-MZqvcH1GONncDkplCXuTXeIPO2KlXoX/1/Iuuc1G3iDPjeUUHW3OqrOhSOw1Rv1tm/iUS/KgSmjd2l648e85sw==
 
 react-native-maps-directions@^1.8.0:
   version "1.8.0"
@@ -6128,13 +6133,6 @@ react-native-windows@^0.62.0-0:
     username "^5.1.0"
     uuid "^3.3.2"
     xml-parser "^1.2.1"
-
-react-native-wkwebview-reborn@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-wkwebview-reborn/-/react-native-wkwebview-reborn-2.0.0.tgz#59e29eb3fada6efccd6c41f43f523ff89920c91b"
-  integrity sha512-upHQ471Wv4uV1/t6ZivYQVm05NyLRKZW8es/EdBl7UCdDoDVWD+1RBhu70ACPyW8EjX1DpMgK0SZvA4o0dt+8w==
-  dependencies:
-    fbjs "^0.8.3"
 
 react-native-xml2js@^1.0.3:
   version "1.0.3"
