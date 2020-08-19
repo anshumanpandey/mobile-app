@@ -17,12 +17,12 @@ export const handlePermissionPromt = (result: LoginResult) => {
     return result
 }
 
-export const handleUserData = async (response: LoginResult) => {
+export const handleUserData = async (response: LoginResult, refCode?: string) => {
     const access = await AccessToken.getCurrentAccessToken()
     return axiosInstance({
         url: `${GRCGDS_BACKEND}`,
         method: 'POST',
-        data: {token: access.accessToken, module_name: 'LOGIN_WITH_FACEBOOK'}
+        data: {token: access.accessToken, module_name: 'LOGIN_WITH_FACEBOOK', refCode }
     })
         .then((res) => {
             dispatchGlobalState({ type: 'token', state: res.data.token })

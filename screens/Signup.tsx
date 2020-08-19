@@ -70,7 +70,8 @@ export default () => {
                 console.log(appleAuthRequestResponse)
                 const data = {
                     module_name: "LOGIN_WITH_APPLE",
-                    email: appleAuthRequestResponse.email
+                    email: appleAuthRequestResponse.email,
+                    refCode: route?.params?.refCode
                 }
                 doLogin({ data, method: 'POST' })
                     .then(({ data: userData }) => {
@@ -284,7 +285,7 @@ export default () => {
                         <FacebookButton  isSmall={Platform.select({ android: false, ios:  true })} onPress={() => {
                             LoginManager.logInWithPermissions(["public_profile", "email"])
                                 .then(handlePermissionPromt)
-                                .then(handleUserData)
+                                .then((data) => handleUserData(data, route?.params?.refCode))
                                 .then(() => navigation.navigate('Home'))
                                 .catch((error) => console.log("Login fail with error: " + error))
                         }} />
