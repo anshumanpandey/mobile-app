@@ -199,8 +199,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         {i18n.t(TRANSLATIONS_KEY.LOGIN_OR_SOCIAL_LOGIN).toString()}
                     </Text>
 
-                    <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                        <FacebookButton isSmall={Platform.select({ android: false, ios: true })} onPress={() => {
+                    <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
+                        <FacebookButton isSmall={false} onPress={() => {
                             if (Platform.OS === "android") {
                                 LoginManager.setLoginBehavior("web_only")
                             }
@@ -234,10 +234,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 })
                         }} />
                         <AppleButton
-                            buttonStyle={AppleButton.Style.WHITE}
+                            buttonStyle={AppleButton.Style.BLACK}
                             buttonType={AppleButton.Type.SIGN_IN}
                             style={{
-                                width: 160, // You must specify a width
+                                marginTop: "2%",
+                                width: '90%', // You must specify a width
                                 height: 45, // You must specify a height
                             }}
                             onPress={() => handleResponse()}

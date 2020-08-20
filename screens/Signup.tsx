@@ -281,8 +281,8 @@ export default () => {
                         {i18n.t(TRANSLATIONS_KEY.REGISTER_OR_SOCIAL).toString()}
                     </Text>
 
-                    <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                        <FacebookButton  isSmall={Platform.select({ android: false, ios:  true })} onPress={() => {
+                    <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', flexWrap:'wrap' }}>
+                        <FacebookButton isSmall={false} onPress={() => {
                             LoginManager.logInWithPermissions(["public_profile", "email"])
                                 .then(handlePermissionPromt)
                                 .then((data) => handleUserData(data, route?.params?.refCode))

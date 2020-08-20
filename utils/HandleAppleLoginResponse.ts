@@ -31,15 +31,15 @@ export const HandleAppleLoginResponse = async () => {
         if (error.code === AppleAuthError.CANCELED) {
         }
         if (error.code === AppleAuthError.FAILED) {
-            Alert.alert('Touch ID wrong');
+            Alert.alert('FAILED Touch ID wrong');
         }
         if (error.code === AppleAuthError.INVALID_RESPONSE) {
-            Alert.alert('Touch ID wrong');
+            Alert.alert('INVALID_RESPONSE Touch ID wrong');
         }
         if (error.code === AppleAuthError.NOT_HANDLED) {
         }
         if (error.code === AppleAuthError.UNKNOWN) {
-            Alert.alert('Touch ID wrong');
+            Alert.alert('UNKNOW Touch ID wrong');
         }
         throw new Error(error.code)
     }
