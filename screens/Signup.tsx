@@ -290,10 +290,11 @@ export default () => {
                                 .catch((error) => console.log("Login fail with error: " + error))
                         }} />
                         <AppleButton
-                            buttonStyle={AppleButton.Style.WHITE}
+                            buttonStyle={AppleButton.Style.BLACK}
                             buttonType={AppleButton.Type.SIGN_IN}
                             style={{
-                                width: 160, // You must specify a width
+                                marginTop: '2%',
+                                width: '90%', // You must specify a width
                                 height: 45, // You must specify a height
                             }}
                             onPress={() => handleResponse()}
