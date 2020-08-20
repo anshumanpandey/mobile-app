@@ -5,6 +5,7 @@ import appleAuth, {
     AppleAuthRequestScope,
 } from '@invertase/react-native-apple-authentication';
 import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export const HandleAppleLoginResponse = async () => {
     try {
@@ -19,6 +20,11 @@ export const HandleAppleLoginResponse = async () => {
 
         if (appleAuthRequestResponse['realUserStatus']) {
             console.log(appleAuthRequestResponse)
+            if (appleAuthRequestResponse.email){
+                await AsyncStorage.setItem('appleEmail', appleAuthRequestResponse.email)
+            } else if (await AsyncStorage.getItem('appleEmail')) {
+                appleAuthRequestResponse.email = await AsyncStorage.getItem('appleEmail')
+            }
             const data = {
                 module_name: "LOGIN_WITH_APPLE",
                 email: appleAuthRequestResponse.email
