@@ -191,6 +191,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                 onSubmit={(values, { resetForm }) => {
                     if (currentPosition == 0 && !hasFullProfile) {
                         if (!values.mobilecode) values.mobilecode = '+1';
+                        if (!values.mobilenumber) values.mobilecode = '';
 
                         doLogin({ data: { ...values, module_name: "EDIT_PROFILE" } })
                             .then((res) => {

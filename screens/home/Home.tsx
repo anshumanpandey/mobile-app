@@ -89,7 +89,7 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
     useEffect(() => {
         async function checkPhone() {
             const isApple = await AsyncStorage.getItem('appleEmail')
-            if (isApple == null && profile && profile.mobilenumber != "" && profile.mobilecode != "" && profile.vphone != 1) {
+            if (profile && ((isApple != null && profile.mobilenumber != "" && profile.mobilecode != "") || (isApple == null && profile.mobilenumber != "" && profile.mobilecode != "" && profile.vphone != 1))) {
                 console.log("mobilenumber", profile.mobilenumber)
                 console.log("mobilecode", profile.mobilecode)
                 console.log("vphone", profile.vphone)
