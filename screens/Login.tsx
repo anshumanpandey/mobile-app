@@ -65,7 +65,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         dispatchGlobalState({ type: 'token', state: userData.token })
                         dispatchGlobalState({ type: 'profile', state: userData })
                         if (userData.token && !userHasFullProfile(userData)) {
-                            navigation.navigate('Home')
+                            navigation.navigate('Home', { screen: "ProfileVerification", params: { appleSignIn: true } })
                         } else if (userData.twoauth != 0) {
                             dispatchGlobalState({ type: 'profile', state: userData })
                             navigation.navigate('Opt')

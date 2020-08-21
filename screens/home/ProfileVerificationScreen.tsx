@@ -24,7 +24,7 @@ import moment from 'moment';
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
 import { axiosInstance } from '../../utils/AxiosBootstrap';
 import * as Progress from 'react-native-progress';
-import { CommonActions } from '@react-navigation/native';
+import { CommonActions, useRoute } from '@react-navigation/native';
 import { AppFontBold, AppFontRegular } from '../../constants/fonts'
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../../utils/i18n';
@@ -35,6 +35,8 @@ const formatDateService = new NativeDateService('en', { format: DATE_FORMAT });
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
     const { i18n } = useTranslation();
+    const route = useRoute();
+
     const labels = [
         i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_PROFILE_STEP),
         i18n.t(TRANSLATIONS_KEY.PROFILE_VERIFICATION_PASSPORT_STEP),
@@ -157,7 +159,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                 }}
                 validate={(values) => {
                     const errors: { [k: string]: string } = {};
-                    if (currentPosition == 0) {
+                    if (currentPosition == 0 && !route.params.appleSignIn) {
                         if (!values.mobilenumber) {
                             errors.mobilenumber = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD)
                         } else if (new RegExp(/^\d+$/).test(values.mobilenumber) == false) {
