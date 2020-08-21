@@ -30,6 +30,7 @@ import userHasFullProfile from '../../utils/userHasFullProfile';
 import userHasAllFiles from '../../utils/userHasAllFiles';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import useAxios from 'axios-hooks'
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Drawer = createDrawerNavigator();
 export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
@@ -86,25 +87,30 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
     }, [])
 
     useEffect(() => {
-        if (profile && profile.mobilenumber != "" && profile.mobilecode != "" && profile.vphone != 1) {
-            console.log("mobilenumber", profile.mobilenumber)
-            console.log("mobilecode", profile.mobilecode)
-            console.log("vphone", profile.vphone)
-
-            const found = screens.find(item => item.name === 'Opt')
-
-            if (found) {
-                screens = [found,...screens.filter(item => item.name !== 'Opt'),]
-            } else {
-                screens.unshift({ name: 'Opt', screen: <Drawer.Screen name="VerifyEmail" component={VerifyPhoneScreen} /> });
+        async function checkPhone() {
+            const isApple = await AsyncStorage.getItem('appleEmail')
+            if (isApple == null && profile && profile.mobilenumber != "" && profile.mobilecode != "" && profile.vphone != 1) {
+                console.log("mobilenumber", profile.mobilenumber)
+                console.log("mobilecode", profile.mobilecode)
+                console.log("vphone", profile.vphone)
+    
+                const found = screens.find(item => item.name === 'Opt')
+    
+                if (found) {
+                    screens = [found,...screens.filter(item => item.name !== 'Opt'),]
+                } else {
+                    screens.unshift({ name: 'Opt', screen: <Drawer.Screen name="VerifyEmail" component={VerifyPhoneScreen} /> });
+                }
+    
             }
-
-        }
-        if (profile && profile.vemail == 0) {
-            if (!screens.find(i => i.name == 'VerifyEmail')) {
-                screens.unshift({ name: 'VerifyEmail', screen: <Drawer.Screen name="VerifyEmail" component={VerifyEmailScreen} /> });
+            if (profile && profile.vemail == 0) {
+                if (!screens.find(i => i.name == 'VerifyEmail')) {
+                    screens.unshift({ name: 'VerifyEmail', screen: <Drawer.Screen name="VerifyEmail" component={VerifyEmailScreen} /> });
+                }
             }
-        }
+          }
+      
+          checkPhone()
     }, [profile])
 
     return (
