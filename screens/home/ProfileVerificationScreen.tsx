@@ -159,7 +159,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                 }}
                 validate={(values) => {
                     const errors: { [k: string]: string } = {};
-                    if (currentPosition == 0 && !route.params.appleSignIn) {
+                    if (currentPosition == 0 && !route?.params?.appleSignIn) {
                         if (!values.mobilenumber) {
                             errors.mobilenumber = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD)
                         } else if (new RegExp(/^\d+$/).test(values.mobilenumber) == false) {
