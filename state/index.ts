@@ -37,6 +37,7 @@ const normalReducer = (state: any, action: { type: string, state?: any }): Initi
         case 'logout': {
             AsyncStorage.removeItem('token')
             AsyncStorage.removeItem('profile')
+            AsyncStorage.removeItem('appleLogin')
             return { ...state, token: null, profile: null };
         }
         case 'error': {
