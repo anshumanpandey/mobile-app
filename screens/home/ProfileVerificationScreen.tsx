@@ -24,7 +24,7 @@ import moment from 'moment';
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
 import { axiosInstance } from '../../utils/AxiosBootstrap';
 import * as Progress from 'react-native-progress';
-import { CommonActions, useRoute } from '@react-navigation/native';
+import { CommonActions, useRoute, useFocusEffect } from '@react-navigation/native';
 import { AppFontBold, AppFontRegular } from '../../constants/fonts'
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../../utils/i18n';
@@ -82,6 +82,14 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     const hasAllFiles = userHasAllFiles(profile || {})
     const [asCompany, setAsCompany] = useState(false);
     const [showCounterModal, setShowCounterModal] = useState(false)
+
+    useFocusEffect(
+        React.useCallback(() => {
+            if (route?.params?.step) { 
+                setCurrentPosition(route?.params?.step)
+            }
+        }, [])
+    );
 
     useEffectSkipInitialRender(() => {
         async function resolveCurrentStep() {
@@ -220,7 +228,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                 {
                                                     name: 'Opt',
                                                     params: {
-                                                        onSuccess: () => navigation.navigate("ProfileVerification"),
+                                                        onSuccess: () => navigation.navigate("ProfileVerification", { step: 2 }),
                                                         onLater: () => {
                                                             dispatchGlobalState({ type: 'logout' })
                                                             navigation.dispatch(
