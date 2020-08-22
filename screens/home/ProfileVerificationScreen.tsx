@@ -82,15 +82,14 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     const hasAllFiles = userHasAllFiles(profile || {})
     const [asCompany, setAsCompany] = useState(false);
     const [showCounterModal, setShowCounterModal] = useState(false)
-    console.log("params 0",route)
 
     useFocusEffect(
         React.useCallback(() => {
-            console.log("params",route?.params)
+            console.log("params useFocusEffect",route?.params)
             if (route?.params?.forceStep) { 
                 setCurrentPosition(route?.params?.forceStep)
             }
-        }, [navigation])
+        }, [route])
     );
 
     useEffectSkipInitialRender(() => {
