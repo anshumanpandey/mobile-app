@@ -121,7 +121,7 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
             const hasFullProfile = userHasFullProfile(profile || {})
 
             if ((hasFullProfile && hasAllFiles && isApple == false) || (hasAllFiles && isApple == true)) {
-                screens.push(...allScreens)
+                screens = allScreens
                 screens.unshift({ name: 'MyBookings', screen: <Drawer.Screen name="MyBookings" component={MyTripsScreens} /> })
             }
         }
