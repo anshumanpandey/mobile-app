@@ -32,9 +32,10 @@ import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import useAxios from 'axios-hooks'
 import isAppleLogin from '../../utils/isAppleLogin';
 
-let screens: any[] = []
 
 const Drawer = createDrawerNavigator();
+
+let screens: any[] = [ { name: 'ProfileVerification', screen: <Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} /> } ]
 const allScreens = [
     { name: 'CreateBooking', screen: <Drawer.Screen name="CreateBooking" component={SelectLocation} /> },
     { name: 'Location', screen: <Drawer.Screen name="Location" component={LocalitationScreen} /> },
@@ -70,8 +71,6 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
 
         console.log("hasFullProfile", hasFullProfile)
         console.log('hasAllFiles', hasAllFiles)
-
-        screens.unshift({ name: 'ProfileVerification', screen: <Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} /> });
 
         if (hasFullProfile && hasAllFiles) {
             screens.push(...allScreens)
