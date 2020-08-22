@@ -119,7 +119,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
             return { btnTxt: i18n.t(TRANSLATIONS_KEY.NEXT_WORD), disable: false }
         }
 
-        if (currentPosition == 0 && !hasFullProfile) {
+        if (currentPosition == 0 && !hasFullProfile && !route?.params?.appleSignIn) {
             return { btnTxt: i18n.t(TRANSLATIONS_KEY.SAVE_NEXT_WORD), disable: false }
         }
 
@@ -623,7 +623,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
                             <Button
                                 accessoryRight={loading ? LoadingSpinner : undefined}
-                                disabled={loading || sendFileReq.loading || resolveFormState().disable}
+                                disabled={loading || sendFileReq.loading || resolveFormState().disable }
                                 onPress={(e) => {
                                     handleSubmit()
                                     const cb = resolveFormState().cb
