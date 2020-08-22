@@ -88,7 +88,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
             if (route?.params?.step) { 
                 setCurrentPosition(route?.params?.step)
             }
-        }, [])
+        }, [route?.params])
     );
 
     useEffectSkipInitialRender(() => {
