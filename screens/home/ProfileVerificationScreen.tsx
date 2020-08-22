@@ -231,7 +231,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                     name: 'Opt',
                                                     params: {
                                                         onSuccess: () => {
-                                                            navigation.navigate('Home', { screen: "ProfileVerification", params: { appleSignIn: true } })
+                                                            navigation.navigate('Home', { screen: "ProfileVerification", params: { forceStep: true } })
                                                         },
                                                         onLater: () => {
                                                             dispatchGlobalState({ type: 'logout' })
