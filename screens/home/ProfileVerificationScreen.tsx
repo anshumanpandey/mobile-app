@@ -102,7 +102,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                 setCurrentFileType(FileTypeEnum.passport)
             }
     
-            if (!hasFullProfile && await isAppleLogin()) {
+            const isApple = await isAppleLogin()
+            if (!hasFullProfile && isApple == false) {
                 setCurrentPosition(0)
             }
         }
