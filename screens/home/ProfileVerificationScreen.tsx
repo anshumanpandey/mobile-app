@@ -84,6 +84,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
     useEffect(() => {
         async function resolveCurrentStep() {
+            console.log('resolving resolveCurrentStep')
             if (hasAllFiles) {
                 setCurrentPosition(4)
             }
@@ -112,10 +113,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
 
     const resolveFormState = () => {
+        console.log('resolving resolveFormState')
         if (currentPosition == 4) {
             return { btnTxt: i18n.t(TRANSLATIONS_KEY.OK_WORD), disable: false, cb: () => navigation.navigate("MyBookings") }
         }
-        if (currentPosition == 0 && hasFullProfile) {
+        if (currentPosition == 0 && hasFullProfile && route?.params?.appleSignIn) {
             return { btnTxt: i18n.t(TRANSLATIONS_KEY.NEXT_WORD), disable: false }
         }
 
