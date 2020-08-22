@@ -85,11 +85,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
     useFocusEffect(
         React.useCallback(() => {
-            console.log(route?.params)
+            console.log("params",route?.params)
             if (route?.params?.step) { 
                 setCurrentPosition(route?.params?.step)
             }
-        }, [route?.params])
+        }, [route])
     );
 
     useEffectSkipInitialRender(() => {
@@ -229,7 +229,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                 {
                                                     name: 'Opt',
                                                     params: {
-                                                        onSuccess: () => navigation.navigate("ProfileVerification", { step: 2 }),
+                                                        onSuccess: () => navigation.navigate("ProfileVerification", { step: 1 }),
                                                         onLater: () => {
                                                             dispatchGlobalState({ type: 'logout' })
                                                             navigation.dispatch(
