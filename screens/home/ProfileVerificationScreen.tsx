@@ -85,6 +85,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
     useFocusEffect(
         React.useCallback(() => {
+            console.log(route?.params)
             if (route?.params?.step) { 
                 setCurrentPosition(route?.params?.step)
             }
