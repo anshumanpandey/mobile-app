@@ -87,8 +87,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     useFocusEffect(
         React.useCallback(() => {
             console.log("params",route?.params)
-            if (route?.params?.step) { 
-                setCurrentPosition(route?.params?.step)
+            if (route?.params?.forceStep) { 
+                setCurrentPosition(route?.params?.forceStep)
             }
         }, [navigation])
     );
@@ -234,7 +234,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                             navigation.dispatch(
                                                                 CommonActions.navigate({
                                                                   name: 'ProfileVerification',
-                                                                  params: {step: 1 },
+                                                                  params: { forceStep: 1 },
                                                                 })
                                                               );
                                                         },
