@@ -125,7 +125,7 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
                 screens.unshift({ name: 'MyBookings', screen: <Drawer.Screen name="MyBookings" component={MyTripsScreens} /> })
             }
         }
-
+        checkFullProfile()
         checkPhone()
     }, [profile])
 
