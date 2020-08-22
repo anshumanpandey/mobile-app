@@ -117,7 +117,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     const resolveFormState = () => {
         console.log('resolving resolveFormState')
         if (currentPosition == 4) {
-            return { btnTxt: i18n.t(TRANSLATIONS_KEY.OK_WORD), disable: false, cb: () => navigation.navigate("MyBookings") }
+            return { btnTxt: i18n.t(TRANSLATIONS_KEY.OK_WORD), disable: false, cb: () => navigation.navigate("Home", { screen: "MyBookings" }) }
         }
         if (currentPosition == 0 && hasFullProfile) {
             return { btnTxt: i18n.t(TRANSLATIONS_KEY.NEXT_WORD), disable: false }
