@@ -31,6 +31,7 @@ import userHasAllFiles from '../../utils/userHasAllFiles';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import useAxios from 'axios-hooks'
 import isAppleLogin from '../../utils/isAppleLogin';
+import useEffectSkipInitialRender from '../../utils/UseEffectSkipInitialRender';
 
 
 const Drawer = createDrawerNavigator();
@@ -113,7 +114,10 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
                 }
             }
         }
+        checkPhone()
+    }, [profile])
 
+    useEffectSkipInitialRender(() => {
         async function checkFullProfile() {
             const isApple = await isAppleLogin()
             const hasAllFiles = userHasAllFiles(profile || {})
@@ -124,7 +128,6 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
             }
         }
         checkFullProfile()
-        checkPhone()
     }, [profile])
 
     return (
