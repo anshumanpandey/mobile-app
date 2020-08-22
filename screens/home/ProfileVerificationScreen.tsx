@@ -230,7 +230,14 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                 {
                                                     name: 'Opt',
                                                     params: {
-                                                        onSuccess: () => navigation.navigate({ screen: "ProfileVerification", params: { step: 1 } }),
+                                                        onSuccess: () => {
+                                                            navigation.dispatch(
+                                                                CommonActions.navigate({
+                                                                  name: 'ProfileVerification',
+                                                                  params: {step: 1 },
+                                                                })
+                                                              );
+                                                        },
                                                         onLater: () => {
                                                             dispatchGlobalState({ type: 'logout' })
                                                             navigation.dispatch(
