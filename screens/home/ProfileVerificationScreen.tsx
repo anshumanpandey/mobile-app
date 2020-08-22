@@ -30,6 +30,7 @@ import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../../utils/i18n';
 import AsyncStorage from '@react-native-community/async-storage';
 import isAppleLogin from '../../utils/isAppleLogin';
+import useEffectSkipInitialRender from '../../utils/UseEffectSkipInitialRender';
 
 const DATE_FORMAT = 'MMM DD,YYYY'
 const formatDateService = new NativeDateService('en', { format: DATE_FORMAT });
@@ -82,7 +83,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     const [asCompany, setAsCompany] = useState(false);
     const [showCounterModal, setShowCounterModal] = useState(false)
 
-    useEffect(() => {
+    useEffectSkipInitialRender(() => {
         async function resolveCurrentStep() {
             console.log('resolving resolveCurrentStep')
             if (hasAllFiles) {
