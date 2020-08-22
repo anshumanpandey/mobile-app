@@ -82,7 +82,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     const hasAllFiles = userHasAllFiles(profile || {})
     const [asCompany, setAsCompany] = useState(false);
     const [showCounterModal, setShowCounterModal] = useState(false)
-    console.log("params 0",route?.params)
+    console.log("params 0",route)
 
     useFocusEffect(
         React.useCallback(() => {
@@ -230,7 +230,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                                 {
                                                     name: 'Opt',
                                                     params: {
-                                                        onSuccess: () => navigation.navigate("ProfileVerification", { step: 1 }),
+                                                        onSuccess: () => navigation.navigate("ProfileVerification", { params: { step: 1 } }),
                                                         onLater: () => {
                                                             dispatchGlobalState({ type: 'logout' })
                                                             navigation.dispatch(
