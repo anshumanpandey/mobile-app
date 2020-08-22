@@ -29,6 +29,7 @@ import { AppFontBold, AppFontRegular } from '../../constants/fonts'
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../../utils/i18n';
 import AsyncStorage from '@react-native-community/async-storage';
+import isAppleLogin from '../../utils/isAppleLogin';
 
 const DATE_FORMAT = 'MMM DD,YYYY'
 const formatDateService = new NativeDateService('en', { format: DATE_FORMAT });
@@ -82,26 +83,30 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     const [showCounterModal, setShowCounterModal] = useState(false)
 
     useEffect(() => {
-        if (hasAllFiles) {
-            setCurrentPosition(4)
-        }
-        if (profile?.selfiurl == "") {
-            setCurrentPosition(3)
-            setCurrentFileType(FileTypeEnum.selfi)
+        async function resolveCurrentStep() {
+            if (hasAllFiles) {
+                setCurrentPosition(4)
+            }
+            if (profile?.selfiurl == "") {
+                setCurrentPosition(3)
+                setCurrentFileType(FileTypeEnum.selfi)
+            }
+    
+            if (profile?.drimage == "") {
+                setCurrentPosition(2)
+                setCurrentFileType(FileTypeEnum.driving_license)
+            }
+            if (profile?.passimage == "") {
+                setCurrentPosition(1)
+                setCurrentFileType(FileTypeEnum.passport)
+            }
+    
+            if (!hasFullProfile && await isAppleLogin()) {
+                setCurrentPosition(0)
+            }
         }
 
-        if (profile?.drimage == "") {
-            setCurrentPosition(2)
-            setCurrentFileType(FileTypeEnum.driving_license)
-        }
-        if (profile?.passimage == "") {
-            setCurrentPosition(1)
-            setCurrentFileType(FileTypeEnum.passport)
-        }
-
-        if (!hasFullProfile) {
-            setCurrentPosition(0)
-        }
+        resolveCurrentStep()
 
     }, [currentPosition])
 
@@ -198,7 +203,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 dispatchGlobalState({ type: 'token', state: res.data.token })
                                 dispatchGlobalState({ type: 'profile', state: res.data })
                                 resetForm({ touched: {}, errors: {} })
-                                if (res.data.socialmedia == 1) {
+                                if (res.data.socialmedia == 1 && res.data.vphone != 1) {
                                     navigation.dispatch(
                                         CommonActions.reset({
                                             index: 0,

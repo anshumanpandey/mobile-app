@@ -31,6 +31,7 @@ import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../utils/i18n';
 import { HandleAppleLoginResponse } from '../utils/HandleAppleLoginResponse';
 import userHasFullProfile from '../utils/userHasFullProfile';
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 export default () => {
@@ -154,7 +155,9 @@ export default () => {
                             data.module_name = "REGISTER"
 
                             doRegister({ data: { ...data, asCompany } })
-                                .then((res) => {
+                                .then(async (res) => {
+                                    await AsyncStorage.removeItem('appleLogin')
+
                                     console.log(res.data)
                                     const data = {
                                         username: values.emailaddress,
@@ -285,7 +288,10 @@ export default () => {
                         <FacebookButton isSmall={false} onPress={() => {
                             LoginManager.logInWithPermissions(["public_profile", "email"])
                                 .then(handlePermissionPromt)
-                                .then((data) => handleUserData(data, route?.params?.refCode))
+                                .then(async (data) => {
+                                    await AsyncStorage.removeItem('appleLogin')
+                                    handleUserData(data, route?.params?.refCode)
+                                })
                                 .then(() => navigation.navigate('Home'))
                                 .catch((error) => console.log("Login fail with error: " + error))
                         }} />

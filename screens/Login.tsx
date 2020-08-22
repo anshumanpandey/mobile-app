@@ -126,6 +126,10 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 module_name: "LOGIN"
                             }
                             doLogin({ data, method: 'POST' })
+                                .then(async (res) => {
+                                    await AsyncStorage.removeItem('appleLogin')
+                                    return res
+                                })
                                 .then((res) => {
                                     console.log(res.data)
                                     if (res.data.twoauth != 0) {
@@ -205,7 +209,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 LoginManager.setLoginBehavior("web_only")
                             }
                             LoginManager.logInWithPermissions(["public_profile", "email"])
-                                .then((r) => {
+                                .then(async(r) => {
+                                    await AsyncStorage.removeItem('appleLogin')
                                     setLoadingLogin(true)
                                     return r
                                 })

@@ -30,9 +30,29 @@ import userHasFullProfile from '../../utils/userHasFullProfile';
 import userHasAllFiles from '../../utils/userHasAllFiles';
 import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import useAxios from 'axios-hooks'
-import AsyncStorage from '@react-native-community/async-storage';
+import isAppleLogin from '../../utils/isAppleLogin';
+
+let screens: any[] = []
 
 const Drawer = createDrawerNavigator();
+const allScreens = [
+    { name: 'CreateBooking', screen: <Drawer.Screen name="CreateBooking" component={SelectLocation} /> },
+    { name: 'Location', screen: <Drawer.Screen name="Location" component={LocalitationScreen} /> },
+    { name: 'Reservation', screen: <Drawer.Screen name="Reservation" component={ReservationScreen} /> },
+    { name: 'Damage', screen: <Drawer.Screen name="Damage" component={DamageScreen} /> },
+    { name: 'NoPicturDamage', screen: <Drawer.Screen name="NoPicturDamage" component={NoPictureDamageScreen} /> },
+    { name: 'Activate', screen: <Drawer.Screen name="Activate" component={ActivateScreen} /> },
+    { name: 'Notifications', screen: <Drawer.Screen name="Notifications" component={NotificationScreen} /> },
+    { name: 'EditProfile', screen: <Drawer.Screen name="EditProfile" component={EditProfile} /> },
+    { name: 'Documents', screen: <Drawer.Screen name="Documents" component={DocumentScreen} /> },
+    { name: 'SingleUpload', screen: <Drawer.Screen name="SingleUpload" component={SingleUploadScreen} /> },
+    { name: 'Sign', screen: <Drawer.Screen name="Sign" component={SignScreen} /> },
+    { name: 'EndRental', screen: <Drawer.Screen name="EndRental" component={EndRentalScreen} /> },
+    { name: 'Policy', screen: <Drawer.Screen name="Policy" component={PolicyScreen} /> },
+    { name: 'TermsConditions', screen: <Drawer.Screen name="TermsConditions" component={TermsConditionsScreen} /> },
+    { name: 'NoResult', screen: <Drawer.Screen name="NoResult" component={NoResultScreen} /> },
+    { name: 'Faq', screen: <Drawer.Screen name="Faq" component={FaqScreen} /> },
+]
 export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
     const [profile] = useGlobalState('profile')
     const [{ data, loading, error }, doVerify] = useAxios({
@@ -40,38 +60,23 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
         method: 'POST'
     }, { manual: true })
 
-    let screens = [
-        { name: "CompletedUpload", screen: <Drawer.Screen name="CompletedUpload" component={CompletedUploadScreen} /> },
-    ]
+    if (screens.length == 0) {
+        screens = [
+            { name: "CompletedUpload", screen: <Drawer.Screen name="CompletedUpload" component={CompletedUploadScreen} /> },
+        ]
 
-    const hasAllFiles = userHasAllFiles(profile || {})
-    const hasFullProfile = userHasFullProfile(profile || {})
+        const hasAllFiles = userHasAllFiles(profile || {})
+        const hasFullProfile = userHasFullProfile(profile || {})
 
-    console.log("hasFullProfile",hasFullProfile)
-    console.log('hasAllFiles',hasAllFiles)
+        console.log("hasFullProfile", hasFullProfile)
+        console.log('hasAllFiles', hasAllFiles)
 
-    screens.unshift({ name: 'ProfileVerification', screen: <Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} /> });
+        screens.unshift({ name: 'ProfileVerification', screen: <Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} /> });
 
-    if (hasFullProfile && hasAllFiles) {
-        screens.push(
-            { name: 'CreateBooking', screen: <Drawer.Screen name="CreateBooking" component={SelectLocation} /> },
-            { name: 'Location', screen: <Drawer.Screen name="Location" component={LocalitationScreen} /> },
-            { name: 'Reservation', screen: <Drawer.Screen name="Reservation" component={ReservationScreen} /> },
-            { name: 'Damage', screen: <Drawer.Screen name="Damage" component={DamageScreen} /> },
-            { name: 'NoPicturDamage', screen: <Drawer.Screen name="NoPicturDamage" component={NoPictureDamageScreen} /> },
-            { name: 'Activate', screen: <Drawer.Screen name="Activate" component={ActivateScreen} /> },
-            { name: 'Notifications', screen: <Drawer.Screen name="Notifications" component={NotificationScreen} /> },
-            { name: 'EditProfile', screen: <Drawer.Screen name="EditProfile" component={EditProfile} /> },
-            { name: 'Documents', screen: <Drawer.Screen name="Documents" component={DocumentScreen} /> },
-            { name: 'SingleUpload', screen: <Drawer.Screen name="SingleUpload" component={SingleUploadScreen} /> },
-            { name: 'Sign', screen: <Drawer.Screen name="Sign" component={SignScreen} /> },
-            { name: 'EndRental', screen: <Drawer.Screen name="EndRental" component={EndRentalScreen} /> },
-            { name: 'Policy', screen: <Drawer.Screen name="Policy" component={PolicyScreen} /> },
-            { name: 'TermsConditions', screen: <Drawer.Screen name="TermsConditions" component={TermsConditionsScreen} /> },
-            { name: 'NoResult', screen: <Drawer.Screen name="NoResult" component={NoResultScreen} /> },
-            { name: 'Faq', screen: <Drawer.Screen name="Faq" component={FaqScreen} /> },
-        )
-        screens.unshift({ name: 'MyBookings', screen: <Drawer.Screen name="MyBookings" component={MyTripsScreens} /> })
+        if (hasFullProfile && hasAllFiles) {
+            screens.push(...allScreens)
+            screens.unshift({ name: 'MyBookings', screen: <Drawer.Screen name="MyBookings" component={MyTripsScreens} /> })
+        }
     }
 
     useEffect(() => {
@@ -88,29 +93,40 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
 
     useEffect(() => {
         async function checkPhone() {
-            const isApple = await AsyncStorage.getItem('appleEmail')
-            if (profile && ((isApple != null && profile.mobilenumber != "" && profile.mobilecode != "") || (isApple == null && profile.mobilenumber != "" && profile.mobilecode != "" && profile.vphone != 1))) {
+            const isApple = await isAppleLogin()
+            if (profile && ((isApple == true && profile.mobilenumber != "" && profile.mobilecode != "") || (isApple == false && profile.mobilenumber != "" && profile.mobilecode != "" && profile.vphone != 1))) {
                 console.log("mobilenumber", profile.mobilenumber)
                 console.log("mobilecode", profile.mobilecode)
                 console.log("vphone", profile.vphone)
-    
+
                 const found = screens.find(item => item.name === 'Opt')
-    
+
                 if (found) {
-                    screens = [found,...screens.filter(item => item.name !== 'Opt'),]
+                    screens = [found, ...screens.filter(item => item.name !== 'Opt'),]
                 } else {
                     screens.unshift({ name: 'Opt', screen: <Drawer.Screen name="VerifyEmail" component={VerifyPhoneScreen} /> });
                 }
-    
+
             }
             if (profile && profile.vemail == 0) {
                 if (!screens.find(i => i.name == 'VerifyEmail')) {
                     screens.unshift({ name: 'VerifyEmail', screen: <Drawer.Screen name="VerifyEmail" component={VerifyEmailScreen} /> });
                 }
             }
-          }
-      
-          checkPhone()
+        }
+
+        async function checkFullProfile() {
+            const isApple = await isAppleLogin()
+            const hasAllFiles = userHasAllFiles(profile || {})
+            const hasFullProfile = userHasFullProfile(profile || {})
+
+            if ((hasFullProfile && hasAllFiles && isApple == false) || (hasAllFiles && isApple == true)) {
+                screens.push(...allScreens)
+                screens.unshift({ name: 'MyBookings', screen: <Drawer.Screen name="MyBookings" component={MyTripsScreens} /> })
+            }
+        }
+
+        checkPhone()
     }, [profile])
 
     return (

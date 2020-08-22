@@ -20,6 +20,8 @@ export const HandleAppleLoginResponse = async () => {
 
         if (appleAuthRequestResponse['realUserStatus']) {
             console.log(appleAuthRequestResponse)
+            await AsyncStorage.setItem('appleLogin', "true")
+
             if (appleAuthRequestResponse.email){
                 await AsyncStorage.setItem('appleEmail', appleAuthRequestResponse.email)
             } else if (await AsyncStorage.getItem('appleEmail')) {
