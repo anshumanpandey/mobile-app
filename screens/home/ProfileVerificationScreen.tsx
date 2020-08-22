@@ -119,11 +119,15 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
         if (currentPosition == 4) {
             return { btnTxt: i18n.t(TRANSLATIONS_KEY.OK_WORD), disable: false, cb: () => navigation.navigate("MyBookings") }
         }
-        if (currentPosition == 0 && hasFullProfile && route?.params?.appleSignIn) {
+        if (currentPosition == 0 && hasFullProfile) {
             return { btnTxt: i18n.t(TRANSLATIONS_KEY.NEXT_WORD), disable: false }
         }
 
-        if (currentPosition == 0 && !hasFullProfile && !route?.params?.appleSignIn) {
+        if (currentPosition == 0 && route?.params?.appleSignIn) {
+            return { btnTxt: i18n.t(TRANSLATIONS_KEY.SAVE_NEXT_WORD), disable: false }
+        }
+
+        if (currentPosition == 0 && !hasFullProfile) {
             return { btnTxt: i18n.t(TRANSLATIONS_KEY.SAVE_NEXT_WORD), disable: false }
         }
 
@@ -166,9 +170,10 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     company: '',
                     vat: '',
                 }}
-                validate={(values) => {
+                validate={async (values) => {
                     const errors: { [k: string]: string } = {};
-                    if (currentPosition == 0 && !route?.params?.appleSignIn) {
+                    const isApple = await isAppleLogin()
+                    if (currentPosition == 0 && isApple == false) {
                         if (!values.mobilenumber) {
                             errors.mobilenumber = i18n.t(TRANSLATIONS_KEY.REQUIRED_WORD)
                         } else if (new RegExp(/^\d+$/).test(values.mobilenumber) == false) {
