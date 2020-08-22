@@ -125,6 +125,11 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
 
             if ((hasFullProfile && hasAllFiles && isApple == false) || (hasAllFiles && isApple == true)) {
                 screens = [{ name: 'MyBookings', screen: <Drawer.Screen name="MyBookings" component={MyTripsScreens} /> }, ...allScreens]
+            } else {
+                screens = [
+                    { name: 'ProfileVerification', screen: <Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} /> },
+                    { name: "CompletedUpload", screen: <Drawer.Screen name="CompletedUpload" component={CompletedUploadScreen} /> },
+                ]
             }
         }
         checkFullProfile()
