@@ -221,7 +221,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 dispatchGlobalState({ type: 'token', state: res.data.token })
                                 dispatchGlobalState({ type: 'profile', state: res.data })
                                 resetForm({ touched: {}, errors: {} })
-                                if (res.data.socialmedia == 1 && res.data.vphone != 1) {
+                                if (res.data.socialmedia == 1 && res.data.vphone == 0) {
                                     navigation.dispatch(
                                         CommonActions.reset({
                                             index: 0,
