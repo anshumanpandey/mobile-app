@@ -72,7 +72,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         } else {
                             if (userData.vphone != 1) navigation.navigate('Opt')
                             if (userData.vemail != 1) navigation.navigate('VerifyEmail')
-                            if (userData.vphone == 1 && userData.vemail == 1) navigation.navigate('Home', { screen: "MyBookings", })
+                            if (userData.vphone == 1 && userData.vemail == 1) navigation.navigate('Home')
                         }
                         setLoadingLogin(false)
                     })
@@ -140,7 +140,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         dispatchGlobalState({ type: 'profile', state: res.data })
                                         if (res.data.vphone != 1) navigation.navigate('Opt')
                                         if (res.data.vemail != 1) navigation.navigate('VerifyEmail')
-                                        if (res.data.vphone == 1 && res.data.vemail == 1) navigation.navigate('Home')
+                                        if (res.data.vphone == 1 && res.data.vemail == 1) navigation.navigate('Home', { screen: "MyBookings"})
                                     }
                                 })
                         }}
