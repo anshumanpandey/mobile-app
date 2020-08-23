@@ -62,7 +62,7 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
         method: 'POST'
     }, { manual: true })
 
-    if (screens.length == 0) {
+    if (screens.length == 1) {
         screens = [
             { name: "CompletedUpload", screen: <Drawer.Screen name="CompletedUpload" component={CompletedUploadScreen} /> },
         ]
