@@ -72,7 +72,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         } else {
                             if (userData.vphone != 1) navigation.navigate('Opt')
                             if (userData.vemail != 1) navigation.navigate('VerifyEmail')
-                            if (userData.vphone == 1 && userData.vemail == 1) navigation.navigate('Home')
+                            if (userData.vphone == 1 && userData.vemail == 1) navigation.navigate('Home', { screen: "MyBookings", })
                         }
                         setLoadingLogin(false)
                     })
