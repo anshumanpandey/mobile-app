@@ -32,6 +32,7 @@ import { GRCGDS_BACKEND } from 'react-native-dotenv';
 import useAxios from 'axios-hooks'
 import isAppleLogin from '../../utils/isAppleLogin';
 import useEffectSkipInitialRender from '../../utils/UseEffectSkipInitialRender';
+import isAppleUser from '../../utils/isAppleUser';
 
 
 const Drawer = createDrawerNavigator();
@@ -72,10 +73,13 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
 
         console.log("hasFullProfile", hasFullProfile)
         console.log('hasAllFiles', hasAllFiles)
+        console.log('isAppleUser', isAppleUser(profile))
 
-        if (hasFullProfile && hasAllFiles) {
+        if ((hasFullProfile && hasAllFiles) || (hasAllFiles && isAppleUser(profile))) {
             screens.push(...allScreens)
             screens.unshift({ name: 'MyBookings', screen: <Drawer.Screen name="MyBookings" component={MyTripsScreens} /> })
+        } else {
+            screens = [ { name: 'ProfileVerification', screen: <Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} /> } ]
         }
     }
 
@@ -123,7 +127,9 @@ export default ({ navigation }: StackScreenProps<LoginScreenProps>) => {
             const hasAllFiles = userHasAllFiles(profile || {})
             const hasFullProfile = userHasFullProfile(profile || {})
 
-            if ((hasFullProfile && hasAllFiles && isApple == false) || (hasAllFiles && isApple == true)) {
+            if (profile === null) {
+                screens = [{ name: 'ProfileVerification', screen: <Drawer.Screen name="ProfileVerification" component={ProfileVerificationScreen} /> }]
+            } else if ((hasFullProfile && hasAllFiles && isApple == false) || (hasAllFiles && isApple == true)) {
                 screens = [{ name: 'MyBookings', screen: <Drawer.Screen name="MyBookings" component={MyTripsScreens} /> }, ...allScreens]
             } else {
                 screens = [

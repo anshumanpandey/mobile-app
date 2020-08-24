@@ -76,7 +76,9 @@ export default () => {
                                     CommonActions.reset({
                                         index: 1,
                                         routes: [
-                                            { name: 'Home' },
+                                            { name: 'Home', state: {
+                                                routes: [ { name: "MyBookings"} ]
+                                            } },
                                         ],
                                     })
                                 );
