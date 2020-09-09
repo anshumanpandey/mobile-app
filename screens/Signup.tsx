@@ -100,7 +100,7 @@ export default () => {
                     <Layout style={{ paddingBottom: '5%' }}>
                         <Layout style={{ flex: 1, paddingTop: '3%', paddingBottom: '2%', display: 'flex', flexDirection: 'row' }}>
                             <BackButton />
-                            <Text style={{ textAlign: 'left', paddingLeft: '3%',fontSize: 25, marginBottom: '3%', fontFamily: AppFontBold }} category='s2'>
+                            <Text style={{ textAlign: 'left', paddingLeft: '3%', fontSize: 25, marginBottom: '3%', fontFamily: AppFontBold }} category='s2'>
                                 {i18n.t(TRANSLATIONS_KEY.REGISTER_SCREEN_TITLE).toString()}
                             </Text>
                         </Layout>
@@ -284,7 +284,7 @@ export default () => {
                         {i18n.t(TRANSLATIONS_KEY.REGISTER_OR_SOCIAL).toString()}
                     </Text>
 
-                    <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', flexWrap:'wrap' }}>
+                    <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
                         <FacebookButton isSmall={false} onPress={() => {
                             LoginManager.logInWithPermissions(["public_profile", "email"])
                                 .then(handlePermissionPromt)
@@ -295,23 +295,25 @@ export default () => {
                                 .then(() => navigation.navigate('Home'))
                                 .catch((error) => console.log("Login fail with error: " + error))
                         }} />
-                        <AppleButton
-                            buttonStyle={AppleButton.Style.BLACK}
-                            buttonType={AppleButton.Type.SIGN_IN}
-                            style={{
-                                marginTop: '2%',
-                                width: '90%', // You must specify a width
-                                height: 45, // You must specify a height
-                            }}
-                            onPress={() => handleResponse()}
-                        />
+                        {Platform.OS == "ios" && (
+                            <AppleButton
+                                buttonStyle={AppleButton.Style.BLACK}
+                                buttonType={AppleButton.Type.SIGN_IN}
+                                style={{
+                                    marginTop: '2%',
+                                    width: '90%', // You must specify a width
+                                    height: 45, // You must specify a height
+                                }}
+                                onPress={() => handleResponse()}
+                            />
+                        )}
                     </Layout>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '5%', flexWrap: 'wrap' }}>
-                        <Text style={{ fontFamily: AppFontRegular,color: 'black' }}>{i18n.t(TRANSLATIONS_KEY.REGISTER_BY_CLICK_YOU_ACCEPT).toString()}</Text>
-                        <Text style={{ fontFamily: AppFontRegular,color: '#41d5fb' }}>{i18n.t(TRANSLATIONS_KEY.REGISTER_TERM_COND).toString()} </Text>
-                        <Text style={{ fontFamily: AppFontRegular,color: 'black' }}>{i18n.t(TRANSLATIONS_KEY.REGISTER_AS_WELL).toString()} </Text>
-                        <Text style={{ fontFamily: AppFontRegular,color: '#41d5fb' }}>{i18n.t(TRANSLATIONS_KEY.REGISTER_PRIVACY).toString()}</Text>
+                        <Text style={{ fontFamily: AppFontRegular, color: 'black' }}>{i18n.t(TRANSLATIONS_KEY.REGISTER_BY_CLICK_YOU_ACCEPT).toString()}</Text>
+                        <Text style={{ fontFamily: AppFontRegular, color: '#41d5fb' }}>{i18n.t(TRANSLATIONS_KEY.REGISTER_TERM_COND).toString()} </Text>
+                        <Text style={{ fontFamily: AppFontRegular, color: 'black' }}>{i18n.t(TRANSLATIONS_KEY.REGISTER_AS_WELL).toString()} </Text>
+                        <Text style={{ fontFamily: AppFontRegular, color: '#41d5fb' }}>{i18n.t(TRANSLATIONS_KEY.REGISTER_PRIVACY).toString()}</Text>
                     </Layout>
                 </Layout>
             </ScrollView>

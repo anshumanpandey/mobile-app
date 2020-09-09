@@ -9,7 +9,7 @@
     "start:reset-cache": "react-native start --reset-cache",
     "test": "jest",
     "lint": "eslint .",
-    "android:log": "adb logcat -s APP:V",
+    "android:log": "adb logcat com.anotherapp:D *:W",
     "build:debug": "react-native run-android --variant=release"
   },
   "dependencies": {

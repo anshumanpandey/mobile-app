@@ -71,7 +71,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                         } else {
                             if (userData.vphone != 1) navigation.navigate('Opt')
                             if (userData.vemail != 1) navigation.navigate('VerifyEmail')
-                            if (userData.vphone == 1 && userData.vemail == 1) navigation.navigate('Home', { screen: "MyBookings"})
+                            if (userData.vphone == 1 && userData.vemail == 1) navigation.navigate('Home', { screen: "MyBookings" })
                         }
                         setLoadingLogin(false)
                     })
@@ -139,7 +139,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                         dispatchGlobalState({ type: 'profile', state: res.data })
                                         if (res.data.vphone != 1) navigation.navigate('Opt')
                                         if (res.data.vemail != 1) navigation.navigate('VerifyEmail')
-                                        if (res.data.vphone == 1 && res.data.vemail == 1) navigation.navigate('Home', { screen: "MyBookings"})
+                                        if (res.data.vphone == 1 && res.data.vemail == 1) navigation.navigate('Home', { screen: "MyBookings" })
                                     }
                                 })
                         }}
@@ -208,7 +208,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                 LoginManager.setLoginBehavior("web_only")
                             }
                             LoginManager.logInWithPermissions(["public_profile", "email"])
-                                .then(async(r) => {
+                                .then(async (r) => {
                                     await AsyncStorage.removeItem('appleLogin')
                                     setLoadingLogin(true)
                                     return r
@@ -237,16 +237,18 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                                     navigation.navigate('Login')
                                 })
                         }} />
-                        <AppleButton
-                            buttonStyle={AppleButton.Style.BLACK}
-                            buttonType={AppleButton.Type.SIGN_IN}
-                            style={{
-                                marginTop: "2%",
-                                width: '90%', // You must specify a width
-                                height: 45, // You must specify a height
-                            }}
-                            onPress={() => handleResponse()}
-                        />
+                        {Platform.OS == "ios" && (
+                            <AppleButton
+                                buttonStyle={AppleButton.Style.BLACK}
+                                buttonType={AppleButton.Type.SIGN_IN}
+                                style={{
+                                    marginTop: "2%",
+                                    width: '90%', // You must specify a width
+                                    height: 45, // You must specify a height
+                                }}
+                                onPress={() => handleResponse()}
+                            />
+                        )}
                     </Layout>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10%' }}>
