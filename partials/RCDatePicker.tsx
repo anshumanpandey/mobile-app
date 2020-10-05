@@ -39,6 +39,7 @@ const RCDatePicker: React.FC<{ onChange: (dateTime: Date) => void, isVisible: bo
                     mode={"date"}
                     is24Hour={false}
                     display="default"
+                    onTouchCancel={() => setSteps(0)}
                     onChange={(e, d) => {
                         setSteps(0)
                         if (d) {
