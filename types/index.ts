@@ -34,4 +34,5 @@ export type GrcgdsLocation = {
     "locationname": string,
     "locationvariation": string,
     "country": string
+    clientId?: string
 }

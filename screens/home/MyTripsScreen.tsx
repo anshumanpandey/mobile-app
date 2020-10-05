@@ -28,7 +28,7 @@ const DocumentScreen = () => {
   const [completedTrips, setCompletedTrips] = useState(null);
 
   const [{ loading }, refetch] = useAxios({
-    url: `http://grcgds.com/mobileapp/index.php?module_name=GET_BOOKINGS`,
+    url: `${GRCGDS_BACKEND}?module_name=GET_BOOKINGS`,
     method: 'GET',
   }, { manual: true })
 
@@ -68,7 +68,7 @@ const DocumentScreen = () => {
   );
 
   const [locationReq, doSearch] = useAxios({
-    url: `http://grcgds.com/mobileapp/index.php`,
+    url: `http://grcgds.com/mobiletest/index.php`,
     params: { module_name: 'LOCATION_SEARCH' }
   })
 

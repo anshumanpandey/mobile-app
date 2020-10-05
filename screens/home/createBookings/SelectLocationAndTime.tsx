@@ -2,8 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Text, Input, Button, Select, SelectItem, Popover, List, Toggle } from '@ui-kitten/components';
 import { SafeAreaView, ScrollView, View, TouchableHighlight, TouchableOpacity, Dimensions, Alert } from 'react-native';
-import DatePicker from 'react-native-date-picker'
-import Modal from 'react-native-modal';
+import { GRCGDS_BACKEND } from 'react-native-dotenv'
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useCreateBookingState } from './CreateBookingState';
 import TimeCheckbox from '../../../partials/TimeCheckbox';
@@ -49,7 +48,7 @@ export default () => {
 
 
     const [{ data, loading, error }, doSearch] = useAxios<VehicleResponse>({
-        url: `http://grcgds.com/mobileapp/index.php/SEARCH_VEHICLE`,
+        url: GRCGDS_BACKEND,
         method: 'GET',
         validateStatus: () => true
     }, { manual: true })
@@ -295,21 +294,25 @@ export default () => {
                                 setReturnLocation(originLocation)
                             }
 
-                            doSearch({
-                                params: {
-                                    module_name: "SEARCH_VEHICLE",
+                            const params = {
+                                module_name: "SEARCH_VEHICLE",
 
-                                    pickup_date: moment(departureTime).format(`YYYY-MM-DD`),
-                                    pickup_time: moment(departureTime).format(`HH:ss`),
+                                pickup_date: moment(departureTime).format(`YYYY-MM-DD`),
+                                pickup_time: moment(departureTime).format(`HH:ss`),
 
-                                    dropoff_date: moment(returnTime).format(`YYYY-MM-DD`),
-                                    dropoff_time: moment(returnTime).format(`HH:ss`),
+                                dropoff_date: moment(returnTime).format(`YYYY-MM-DD`),
+                                dropoff_time: moment(returnTime).format(`HH:ss`),
 
-                                    pickup_location: originLocation.internalcode,
-                                    dropoff_location: returnLocation ? returnLocation.internalcode : originLocation.internalcode,
-                                }
-                            })
+                                pickup_location: originLocation.internalcode,
+                                dropoff_location: returnLocation ? returnLocation.internalcode : originLocation.internalcode,
+                            }
+
+                            console.log(params)
+
+                            doSearch({ params })
                                 .then(res => {
+                                    console.log(res.data.VehAvailRSCore)
+                                    console.log(res.data.VehAvailRSCore.VehVendorAvails.length)
                                     if (res.data.VehAvailRSCore.VehVendorAvails.length == 0) {
                                         navigation.navigate("NoResult");
                                     } else {
