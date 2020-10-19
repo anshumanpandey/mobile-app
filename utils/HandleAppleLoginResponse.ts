@@ -6,6 +6,7 @@ import appleAuth, {
 } from '@invertase/react-native-apple-authentication';
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import JwtDecode from 'jwt-decode';
 
 export const HandleAppleLoginResponse = async () => {
     try {
@@ -24,12 +25,12 @@ export const HandleAppleLoginResponse = async () => {
 
             if (appleAuthRequestResponse.email){
                 await AsyncStorage.setItem('appleEmail', appleAuthRequestResponse.email)
+            } else if (appleAuthRequestResponse.identityToken) {
+                const decodedData = JwtDecode(appleAuthRequestResponse.identityToken)
+                //@ts-expect-error
+                appleAuthRequestResponse.email = decodedData.email
             } else if (await AsyncStorage.getItem('appleEmail')) {
                 appleAuthRequestResponse.email = await AsyncStorage.getItem('appleEmail')
-            }
-            const data = {
-                module_name: "LOGIN_WITH_APPLE",
-                email: appleAuthRequestResponse.email
             }
             return appleAuthRequestResponse
         } else {
