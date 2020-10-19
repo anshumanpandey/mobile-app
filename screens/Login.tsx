@@ -29,6 +29,10 @@ import { AppFontBold, AppFontRegular } from '../constants/fonts'
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../utils/i18n';
 import { HandleAppleLoginResponse } from '../utils/HandleAppleLoginResponse';
+import {
+    GoogleSignin,
+} from '@react-native-community/google-signin';
+import GoogleButton from '../partials/GoogleButton';
 
 export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScreenProps>) => {
     const { i18n } = useTranslation();
@@ -50,6 +54,18 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
             <Icon style={{ color: secureTextEntry ? '#e4e9f2' : 'black' }} name={secureTextEntry ? 'eye' : 'eye-slash'} size={30} />
         </TouchableWithoutFeedback>
     );
+
+    useEffect(() => {
+        GoogleSignin.configure({
+            scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile            webClientId: '649794082123-gr5fnvurecb3j473qnltnpnkcp8d4r9d.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+            offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+            hostedDomain: '', // specifies a hosted domain restriction
+            loginHint: '', // [iOS] The user's ID, or email address, to be prefilled in the authentication UI if possible. [See docs here](https://developers.google.com/identity/sign-in/ios/api/interface_g_i_d_sign_in.html#a0a68c7504c31ab0b728432565f6e33fd)
+            forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
+            accountName: '', // [Android] specifies an account name on the device that should be used
+            iosClientId: '', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
+        });
+    }, [])
 
     const handleResponse = async () => {
         HandleAppleLoginResponse()
@@ -203,6 +219,32 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                     </Text>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
+                        <GoogleButton
+                            style={{ marginBottom: '2%' }}
+                            isSmall={false}
+                            onPress={async () => {
+                                if (await GoogleSignin.hasPlayServices()) {
+                                    const userInfo = await GoogleSignin.signIn();
+                                    console.log(userInfo)
+                                    doLogin({ data: { email: userInfo.user.email, module_name: "LOGIN_WITH_GOOGLE" }})
+                                    .then((res) => {
+                                        console.log(res.data)
+                                        if (res.data.twoauth != 0) {
+                                            dispatchGlobalState({ type: 'profile', state: res.data })
+                                            navigation.navigate('Opt')
+                                        } else {
+                                            dispatchGlobalState({ type: 'token', state: res.data.token })
+                                            dispatchGlobalState({ type: 'profile', state: res.data })
+                                            if (res.data.vphone != 1) navigation.navigate('Opt')
+                                            if (res.data.vemail != 1) navigation.navigate('VerifyEmail')
+                                            if (res.data.vphone == 1 && res.data.vemail == 1) navigation.navigate('Home', { screen: "MyBookings" })
+                                        }
+                                    })
+                                } else {
+                                    Alert.alert("Error", "Google Play Services not available")
+                                }
+                            }}
+                        />
                         <FacebookButton isSmall={false} onPress={() => {
                             if (Platform.OS === "android") {
                                 LoginManager.setLoginBehavior("web_only")

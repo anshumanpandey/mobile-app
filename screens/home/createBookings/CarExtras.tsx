@@ -40,7 +40,7 @@ export default () => {
                     <MenuButton />
                     <BackButton />
                 </View>
-                <Layout>
+                <Layout style={{ flexGrow: 1 }}>
                     <CarItem style={{ marginBottom: '5%' }} centerCarName={true} vehicle={{
                         ...route.params.vehicle,
                         TotalCharge: {
@@ -53,10 +53,11 @@ export default () => {
                         }
                         }} />
 
-                    <Text style={{ marginBottom: '5%' }}>
-                        {i18n.t(TRANSLATIONS_KEY.CAR_EXTRAS_TAG).toString()}
-                    </Text>
-
+                    {route.params.vehicle.PricedEquips.length != 0 && (
+                        <Text style={{ marginBottom: '5%' }}>
+                            {i18n.t(TRANSLATIONS_KEY.CAR_EXTRAS_TAG).toString()}
+                        </Text>
+                    )}
                     {route.params.vehicle.PricedEquips.map(equip => {
                         const found = selectedExtras.find(i =>i.Equipment.vendorEquipID == equip.Equipment.vendorEquipID)
                         const currentPrice = found ? found.amount*equip.Charge.Amount: null;
@@ -81,7 +82,7 @@ export default () => {
                         );
                     })}
 
-                    <Layout style={{ marginTop: '5%' }}>
+                    <Layout style={{ marginTop: 'auto' }}>
                         <Button
                             onPress={() => navigation.navigate('Payment', { vehicle: route.params.vehicle })}
                             size="giant" style={{

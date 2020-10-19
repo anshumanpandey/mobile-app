@@ -18,20 +18,20 @@ import BackButton from '../partials/BackButton';
 import FacebookButton from '../partials/FacebookButton';
 import appleAuth, {
     AppleButton,
-    AppleAuthError,
-    AppleAuthRequestOperation,
-    AppleAuthRequestScope,
 } from '@invertase/react-native-apple-authentication';
 import TwitterButton from '../partials/TwitterButton';
 import { LoginManager, GraphRequest, GraphRequestManager } from "react-native-fbsdk";
 import { handlePermissionPromt, handleUserData } from '../utils/FacebookAuth';
-import { axiosInstance } from '../utils/AxiosBootstrap';
 import { AppFontBold, AppFontRegular } from '../constants/fonts'
 import { useTranslation } from 'react-i18next';
 import { TRANSLATIONS_KEY } from '../utils/i18n';
 import { HandleAppleLoginResponse } from '../utils/HandleAppleLoginResponse';
 import userHasFullProfile from '../utils/userHasFullProfile';
 import AsyncStorage from '@react-native-community/async-storage';
+import GoogleButton from '../partials/GoogleButton';
+import {
+    GoogleSignin,
+} from '@react-native-community/google-signin';
 
 
 export default () => {
@@ -285,6 +285,32 @@ export default () => {
                     </Text>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
+                        <GoogleButton
+                            style={{ marginBottom: '2%' }}
+                            isSmall={false}
+                            onPress={async () => {
+                                if (await GoogleSignin.hasPlayServices()) {
+                                    const userInfo = await GoogleSignin.signIn();
+                                    console.log(userInfo)
+                                    doLogin({ data: { email: userInfo.user.email, module_name: "LOGIN_WITH_GOOGLE", refCode: route?.params?.refCode } })
+                                        .then((res) => {
+                                            console.log(res.data)
+                                            if (res.data.twoauth != 0) {
+                                                dispatchGlobalState({ type: 'profile', state: res.data })
+                                                navigation.navigate('Opt')
+                                            } else {
+                                                dispatchGlobalState({ type: 'token', state: res.data.token })
+                                                dispatchGlobalState({ type: 'profile', state: res.data })
+                                                if (res.data.vphone != 1) navigation.navigate('Opt')
+                                                if (res.data.vemail != 1) navigation.navigate('VerifyEmail')
+                                                if (res.data.vphone == 1 && res.data.vemail == 1) navigation.navigate('Home', { screen: "MyBookings" })
+                                            }
+                                        })
+                                } else {
+                                    Alert.alert("Error", "Google Play Services not available")
+                                }
+                            }}
+                        />
                         <FacebookButton isSmall={false} onPress={() => {
                             LoginManager.logInWithPermissions(["public_profile", "email"])
                                 .then(handlePermissionPromt)
