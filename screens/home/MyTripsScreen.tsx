@@ -67,11 +67,6 @@ const DocumentScreen = () => {
     }, [])
   );
 
-  const [locationReq, doSearch] = useAxios({
-    url: `http://grcgds.com/mobiletest/index.php`,
-    params: { module_name: 'LOCATION_SEARCH' }
-  })
-
   useEffect(() => {
     if (locationReq.data) {
       try {

@@ -85,8 +85,8 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
     useFocusEffect(
         React.useCallback(() => {
-            console.log("params useFocusEffect",route?.params)
-            if (route?.params?.forceStep) { 
+            console.log("params useFocusEffect", route?.params)
+            if (route?.params?.forceStep) {
                 setCurrentPosition(route?.params?.forceStep)
             }
         }, [route])
@@ -95,6 +95,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
     useEffectSkipInitialRender(() => {
         async function resolveCurrentStep() {
             console.log('resolving resolveCurrentStep')
+            console.log('hasAllFiles', hasAllFiles)
             if (hasAllFiles) {
                 setCurrentPosition(4)
             }
@@ -102,7 +103,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                 setCurrentPosition(3)
                 setCurrentFileType(FileTypeEnum.selfi)
             }
-    
+
             if (profile?.drimage == "") {
                 setCurrentPosition(2)
                 setCurrentFileType(FileTypeEnum.driving_license)
@@ -111,9 +112,9 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
                 setCurrentPosition(1)
                 setCurrentFileType(FileTypeEnum.passport)
             }
-    
+
             const isApple = await isAppleLogin()
-            if (!hasFullProfile && isApple == false) {
+            if (!hasFullProfile && isApple == false && Platform.OS == "android") {
                 setCurrentPosition(0)
             }
         }
@@ -124,11 +125,11 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
 
     const resolveFormState = () => {
-        console.log('resolving resolveFormState')
+        console.log('resolving resolveFormState', currentPosition, hasFullProfile, hasAllFiles, currentPosition)
         if (currentPosition == 4) {
             return { btnTxt: i18n.t(TRANSLATIONS_KEY.OK_WORD), disable: false, cb: () => navigation.navigate("Home", { screen: "MyBookings" }) }
         }
-        if (currentPosition == 0 && hasFullProfile) {
+        if (currentPosition == 0 && hasFullProfile && hasAllFiles) {
             return { btnTxt: i18n.t(TRANSLATIONS_KEY.NEXT_WORD), disable: false }
         }
 
@@ -136,7 +137,7 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
             return { btnTxt: i18n.t(TRANSLATIONS_KEY.SAVE_NEXT_WORD), disable: false }
         }
 
-        if (currentPosition == 0 && !hasFullProfile) {
+        if (currentPosition == 0 && (!hasFullProfile || !hasAllFiles)) {
             return { btnTxt: i18n.t(TRANSLATIONS_KEY.SAVE_NEXT_WORD), disable: false }
         }
 
@@ -212,53 +213,59 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
                 }}
                 onSubmit={(values, { resetForm }) => {
-                    if (currentPosition == 0 && !hasFullProfile) {
-                        if (!values.mobilecode) values.mobilecode = '+1';
-                        if (!values.mobilenumber) values.mobilecode = '';
+                    console.log("onSubmit", currentPosition)
+                    if (currentPosition == 0) {
+                        if (!hasFullProfile) {
+                            if (!values.mobilecode) values.mobilecode = '+1';
+                            if (!values.mobilenumber) values.mobilecode = '';
 
-                        doLogin({ data: { ...values, module_name: "EDIT_PROFILE" } })
-                            .then((res) => {
-                                dispatchGlobalState({ type: 'token', state: res.data.token })
-                                dispatchGlobalState({ type: 'profile', state: res.data })
-                                resetForm({ touched: {}, errors: {} })
-                                if (res.data.socialmedia != 0 && res.data.vphone == 0) {
-                                    navigation.dispatch(
-                                        CommonActions.reset({
-                                            index: 0,
-                                            routes: [
-                                                {
-                                                    name: 'Opt',
-                                                    params: {
-                                                        onSuccess: () => {
-                                                            navigation.navigate('Home', { screen: "ProfileVerification", params: { forceStep: 1 } })
-                                                        },
-                                                        onLater: () => {
-                                                            dispatchGlobalState({ type: 'logout' })
-                                                            navigation.dispatch(
-                                                                CommonActions.reset({
-                                                                    index: 0,
-                                                                    routes: [{ name: 'Login' }],
-                                                                })
-                                                            )
-                                                        },
-                                                        onUnbackpress: () => {
-                                                            dispatchGlobalState({ type: 'logout' })
-                                                            navigation.dispatch(
-                                                                CommonActions.reset({
-                                                                    index: 0,
-                                                                    routes: [{ name: 'Login' }],
-                                                                })
-                                                            )
+                            doLogin({ data: { ...values, module_name: "EDIT_PROFILE" } })
+                                .then((res) => {
+                                    dispatchGlobalState({ type: 'token', state: res.data.token })
+                                    dispatchGlobalState({ type: 'profile', state: res.data })
+                                    resetForm({ touched: {}, errors: {} })
+                                    if (res.data.socialmedia != 0 && res.data.vphone == 0) {
+                                        navigation.dispatch(
+                                            CommonActions.reset({
+                                                index: 0,
+                                                routes: [
+                                                    {
+                                                        name: 'Opt',
+                                                        params: {
+                                                            onSuccess: () => {
+                                                                navigation.navigate('Home', { screen: "ProfileVerification", params: { forceStep: 1 } })
+                                                            },
+                                                            onLater: () => {
+                                                                dispatchGlobalState({ type: 'logout' })
+                                                                navigation.dispatch(
+                                                                    CommonActions.reset({
+                                                                        index: 0,
+                                                                        routes: [{ name: 'Login' }],
+                                                                    })
+                                                                )
+                                                            },
+                                                            onUnbackpress: () => {
+                                                                dispatchGlobalState({ type: 'logout' })
+                                                                navigation.dispatch(
+                                                                    CommonActions.reset({
+                                                                        index: 0,
+                                                                        routes: [{ name: 'Login' }],
+                                                                    })
+                                                                )
+                                                            }
                                                         }
-                                                    }
-                                                },
-                                            ],
-                                        })
-                                    );
-                                }
-                                setCurrentPosition(1)
-                            })
-                            .catch(err => console.log(err))
+                                                    },
+                                                ],
+                                            })
+                                        );
+                                    }
+                                    setCurrentPosition(1)
+                                })
+                                .catch(err => console.log(err))
+                        } else {
+                            setCurrentPosition(1)
+                        }
+
                         return
                     }
 
@@ -298,18 +305,18 @@ export default ({ navigation }: StackScreenProps<NonLoginScreenProps & LoginScre
 
 
                         sendFile({ data })
-                        .then(r => {
-                            console.log(r.data)
-                            dispatchGlobalState({ type: 'profile', state: r.data })
-                            dispatchFileState({ type: Actions.RESET, state: {} })
-                            setCurrentPosition(p => {
-                                resetForm({ touched: {}, errors: {} })
-                                console.log(`to step ${p + 1}`)
-                                return p + 1
+                            .then(r => {
+                                console.log("sendFile", r.data)
+                                dispatchGlobalState({ type: 'profile', state: r.data })
+                                dispatchFileState({ type: Actions.RESET, state: {} })
+                                setCurrentPosition(p => {
+                                    resetForm({ touched: {}, errors: {} })
+                                    console.log(`to step ${p + 1}`)
+                                    return p + 1
+                                })
+                                setUploadPercent(0)
                             })
-                            setUploadPercent(0)
-                        })
-                        .catch(r => console.log(r))
+                            .catch(r => console.log(r))
 
                         return
                     }

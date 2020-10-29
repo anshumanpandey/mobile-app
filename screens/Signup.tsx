@@ -285,32 +285,6 @@ export default () => {
                     </Text>
 
                     <Layout style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
-                        <GoogleButton
-                            style={{ marginBottom: '2%' }}
-                            isSmall={false}
-                            onPress={async () => {
-                                if (await GoogleSignin.hasPlayServices()) {
-                                    const userInfo = await GoogleSignin.signIn();
-                                    console.log(userInfo)
-                                    doLogin({ data: { email: userInfo.user.email, module_name: "LOGIN_WITH_GOOGLE", refCode: route?.params?.refCode } })
-                                        .then((res) => {
-                                            console.log(res.data)
-                                            if (res.data.twoauth != 0) {
-                                                dispatchGlobalState({ type: 'profile', state: res.data })
-                                                navigation.navigate('Opt')
-                                            } else {
-                                                dispatchGlobalState({ type: 'token', state: res.data.token })
-                                                dispatchGlobalState({ type: 'profile', state: res.data })
-                                                if (res.data.vphone != 1) navigation.navigate('Opt')
-                                                if (res.data.vemail != 1) navigation.navigate('VerifyEmail')
-                                                if (res.data.vphone == 1 && res.data.vemail == 1) navigation.navigate('Home', { screen: "MyBookings" })
-                                            }
-                                        })
-                                } else {
-                                    Alert.alert("Error", "Google Play Services not available")
-                                }
-                            }}
-                        />
                         <FacebookButton isSmall={false} onPress={() => {
                             LoginManager.logInWithPermissions(["public_profile", "email"])
                                 .then(handlePermissionPromt)
