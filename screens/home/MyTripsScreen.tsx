@@ -68,17 +68,6 @@ const DocumentScreen = () => {
   );
 
   useEffect(() => {
-    if (locationReq.data) {
-      try {
-        const jsonStringData = JSON.stringify(locationReq.data);
-        AsyncStorage.setItem('locationsData', jsonStringData)
-      } catch (error) {
-        console.log('We fail to save location data: ' + error.toString())
-      }
-    }
-  }, [locationReq.loading]);
-
-  useEffect(() => {
     setTimeout(() => {
       const sortedBookings = parsedResponse.sort(function (left, right) {
         return moment.utc(left.pickupTime).diff(moment.utc(right.pickupTime))
