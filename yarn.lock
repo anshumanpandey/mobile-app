@@ -742,6 +742,11 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
+"@invertase/react-native-apple-authentication@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@invertase/react-native-apple-authentication/-/react-native-apple-authentication-1.1.2.tgz#cf86364d89030f0b9970d04468fde2d204cab5df"
+  integrity sha512-eRwLOyxPtAP0ZEy1iaBf+Sle7upBnyqOkeXgScWNKLKsb4r6+6I6CvMuHNdMZ9ObSdUfAVgAbj5L09TbJRw0hQ==
+
 "@jest/console@^24.7.1", "@jest/console@^24.9.0":
   version "24.9.0"
   resolved "https://registry.yarnpkg.com/@jest/console/-/console-24.9.0.tgz#79b1bc06fb74a8cfb01cbdedf945584b1b9707f0"
@@ -1661,12 +1666,12 @@ axios-hooks@^1.10.0:
     "@babel/runtime" "7.9.2"
     lru-cache "5.1.1"
 
-axios@^0.19.2:
-  version "0.19.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
-  integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
+axios@^0.21.1:
+  version "0.21.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
+  integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
   dependencies:
-    follow-redirects "1.5.10"
+    follow-redirects "^1.10.0"
 
 babel-code-frame@^6.26.0:
   version "6.26.0"
@@ -2429,13 +2434,6 @@ debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8:
   dependencies:
     ms "2.0.0"
 
-debug@=3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
-  integrity sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==
-  dependencies:
-    ms "2.0.0"
-
 debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.1.1.tgz#3b72260255109c6b589cee050f1d516139664791"
@@ -3137,7 +3135,7 @@ fbjs-scripts@^1.1.0:
     semver "^5.1.0"
     through2 "^2.0.0"
 
-fbjs@^0.8.3, fbjs@^0.8.9:
+fbjs@^0.8.9:
   version "0.8.17"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.17.tgz#c4d598ead6949112653d6588b01a5cdcd9f90fdd"
   integrity sha1-xNWY6taUkRJlPWWIsBpc3Nn5D90=
@@ -3268,12 +3266,10 @@ flatted@^2.0.0:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-2.0.2.tgz#4575b21e2bcee7434aa9be662f4b7b5f9c2b5138"
   integrity sha512-r5wGx7YeOwNWNlCA0wQ86zKyDLMQr+/RB8xy74M4hTphfmjlijTSSXGuH8rnvKZnfT9i+75zmd8jcKdMR4O6jA==
 
-follow-redirects@1.5.10:
-  version "1.5.10"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
-  integrity sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==
-  dependencies:
-    debug "=3.1.0"
+follow-redirects@^1.10.0:
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.13.1.tgz#5f69b813376cee4fd0474a3aba835df04ab763b7"
+  integrity sha512-SSG5xmZh1mkPGyKzjZP8zLjltIfpW32Y5QpdNJyjcfGxK3qo3NDDkZOZSFiGn1A6SclQxY9GzEwAHQ3dmYRWpg==
 
 for-in@^1.0.2:
   version "1.0.2"
@@ -5958,10 +5954,10 @@ react-native-keyevent@^0.2.8:
   resolved "https://registry.yarnpkg.com/react-native-keyevent/-/react-native-keyevent-0.2.8.tgz#f6c035bf17b8d8221e546e85e430cd1d3021c5d7"
   integrity sha512-tqZwJXDpAL7rBUGRAz4AaoAyQkaWA7k1Bq+l7P4GLsWAD7g0z/KSAOMY3cJanLYJxr4+t4FEZ8seA1YQ/7kchg==
 
-react-native-login-twitter@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/react-native-login-twitter/-/react-native-login-twitter-3.0.2.tgz#5f3de9114c51d867b09b4bc3ef69c6ced742fc82"
-  integrity sha512-pJVnC5ruhND6BuzB332aUIW7ncmTrB087AmUylb7UcnkCdxxVuLAEeNdblvS+2pnDeV+dpzucnmLClzRZL6lUw==
+react-native-login-twitter@^3.0.3:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-login-twitter/-/react-native-login-twitter-3.0.4.tgz#33bbbe9b37713468f919fb99853ce51b43616470"
+  integrity sha512-mA54vK+FlttXEYH05oUA72OVr8KN1Lo8t8/WoGn3RSrAvuaFab6rjje8Pp9nwRWLZPSLckdd3XAGJ4WKH97Smw==
 
 react-native-maps-directions@^1.8.0:
   version "1.8.0"
@@ -6128,13 +6124,6 @@ react-native-windows@^0.62.0-0:
     username "^5.1.0"
     uuid "^3.3.2"
     xml-parser "^1.2.1"
-
-react-native-wkwebview-reborn@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-wkwebview-reborn/-/react-native-wkwebview-reborn-2.0.0.tgz#59e29eb3fada6efccd6c41f43f523ff89920c91b"
-  integrity sha512-upHQ471Wv4uV1/t6ZivYQVm05NyLRKZW8es/EdBl7UCdDoDVWD+1RBhu70ACPyW8EjX1DpMgK0SZvA4o0dt+8w==
-  dependencies:
-    fbjs "^0.8.3"
 
 react-native-xml2js@^1.0.3:
   version "1.0.3"
