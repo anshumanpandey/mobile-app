@@ -51,7 +51,7 @@
     "react": "16.11.0",
     "react-hooks-global-state": "^1.0.0",
     "react-i18next": "^11.7.0",
-    "react-native": "0.62.2",
+    "react-native": "0.62.3",
     "react-native-autocomplete-input": "^4.2.0",
     "react-native-background-timer": "^2.2.0",
     "react-native-base64": "^0.0.2",
